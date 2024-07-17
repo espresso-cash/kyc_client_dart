@@ -19,6 +19,8 @@ class KycPartnerClient {
   SimpleKeyPair? _authKeyPair;
   String _authPublicKey = '';
 
+  String get authPublicKey => _authPublicKey;
+
   Future<void> init() async {
     _authKeyPair = await Ed25519().newKeyPairFromSeed(
       base58decode('8ui6TQMfAudigNuKycopDyZ6irMeS7DTSe73d2gzv1Hz'),
