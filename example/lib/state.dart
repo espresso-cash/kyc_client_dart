@@ -1,6 +1,8 @@
+import 'package:cryptography/cryptography.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:kyc_client_dart/kyc_client_dart.dart';
+import 'package:solana/base58.dart';
 
 import 'package:solana/solana.dart';
 
@@ -75,10 +77,15 @@ class PartnerAppState extends ChangeNotifier {
   late KycPartnerClient _client;
 
   Future<void> createPartner() async {
-    _client = KycPartnerClient();
+    final keyPair = await Ed25519().newKeyPairFromSeed(
+      base58decode('8ui6TQMfAudigNuKycopDyZ6irMeS7DTSe73d2gzv1Hz'),
+    );
+    _client = KycPartnerClient(authKeyPair: keyPair);
 
-    await _client.init();
-    _authPublicKey = _client.authPublicKey;
+    _authPublicKey = await keyPair
+        .extractPublicKey()
+        .then((value) => value.bytes)
+        .then(base58encode);
 
     notifyListeners();
   }
@@ -92,17 +99,21 @@ class PartnerAppState extends ChangeNotifier {
   Future<void> fetchData(String secretKey, String userPK) async {
     final keys = ['email', 'name'];
 
-    final data = await _client.getData(
-      keys: keys,
-      userPK: userPK,
-      secretKey: secretKey,
-    );
+    try {
+      final data = await _client.getData(
+        keys: keys,
+        userPK: userPK,
+        secretKey: secretKey,
+      );
 
-    _email = data['email'] ?? '-';
-    _name = data['name'] ?? '-';
+      _email = data['email'] ?? '-';
+      _name = data['name'] ?? '-';
 
-    // _url = await _client.createDownloadUrl('passport');
+      // _url = await _client.createDownloadUrl('passport');
 
-    notifyListeners();
+      notifyListeners();
+    } catch (ex) {
+      print(ex);
+    }
   }
 }

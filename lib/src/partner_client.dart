@@ -2,34 +2,31 @@ import 'dart:convert';
 
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
-import 'package:http/http.dart';
-import 'package:kyc_client_dart/src/config.dart';
+import 'package:kyc_client_dart/src/data/client.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/x25519.dart';
 import 'package:solana/base58.dart';
 
 class KycPartnerClient {
-  KycPartnerClient({this.baseUrl = serverUrl});
+  KycPartnerClient({
+    required this.authKeyPair,
+    this.baseUrl,
+  });
+
+  final SimpleKeyPair authKeyPair;
   final String? baseUrl;
 
+  late String _authPublicKey;
+
   late String _token;
+  late KycApiClient _apiClient;
 
-  late SimpleKeyPair? _authKeyPair;
-  String _authPublicKey = '';
-
-  String get authPublicKey => _authPublicKey;
-
-  Future<void> init() async {
-    _authKeyPair = await Ed25519().newKeyPairFromSeed(
-      base58decode('8ui6TQMfAudigNuKycopDyZ6irMeS7DTSe73d2gzv1Hz'),
-    );
-    _authPublicKey = await _authKeyPair!
+  Future<void> generateAuthToken(String partnerToken) async {
+    _authPublicKey = await authKeyPair
         .extractPublicKey()
         .then((value) => value.bytes)
         .then(base58encode);
-  }
 
-  Future<void> generateAuthToken(String partnerToken) async {
     final partnerTokenData = jwt.JWT(
       {'delegated': partnerToken},
       issuer: _authPublicKey,
@@ -37,11 +34,13 @@ class KycPartnerClient {
 
     _token = partnerTokenData.sign(
       jwt.EdDSAPrivateKey(
-        await _authKeyPair!.extractPrivateKeyBytes() +
+        await authKeyPair.extractPrivateKeyBytes() +
             base58decode(_authPublicKey),
       ),
       algorithm: jwt.JWTAlgorithm.EdDSA,
     );
+
+    _apiClient = KycApiClient(_token, baseUrl: baseUrl);
   }
 
   Future<Map<String, String>> getData({
@@ -49,19 +48,8 @@ class KycPartnerClient {
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await post(
-      Uri.parse('$baseUrl/v1/getData'),
-      headers: {
-        'Authorization': 'Bearer $_token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'keys': keys,
-      }),
-    );
-
-    // ignore: avoid_dynamic_calls
-    final data = json.decode(response.body)['data'] as Map<String, dynamic>;
+    final response =
+        await _apiClient.getData({'keys': keys}).then((e) => e.data);
 
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
@@ -69,7 +57,13 @@ class KycPartnerClient {
     final Map<String, String> results = {};
 
     for (final key in keys) {
-      final signedDataRaw = data[key] as String;
+      final signedDataRaw = response[key];
+
+      if (signedDataRaw == null) {
+        results[key] = '';
+        continue;
+      }
+
       final signedMessage =
           SignedMessage.fromList(signedMessage: base64Decode(signedDataRaw));
       final result =
@@ -89,36 +83,44 @@ class KycPartnerClient {
 
   Future<void> setValidationResult({
     required String key,
-    required Map<String, dynamic> value,
+    required Map<String, String> value,
   }) async {
-    final response = await post(
-      Uri.parse('$baseUrl/v1/setValidationResult'),
-      headers: {
-        'Authorization': 'Bearer $_token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'keys': value,
-      }),
-    );
+    final Map<String, String> encryptedData = {};
 
-    print(response); //TODO
+    value.forEach((key, value) {
+      // final signed = _encryptAndSign(utf8.encode(value));
+      //TODO encrypt and sign
+
+      encryptedData[key] = base64Encode(utf8.encode(value));
+    });
+
+    await _apiClient.setValidationResult({key: json.encode(value)});
   }
 
-  Future<String> createDownloadUrl(String filename) async {
-    final response = await post(
-      Uri.parse('$baseUrl/v1/createDownloadUrl'),
-      headers: {
-        'Authorization': 'Bearer $_token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'fileName': filename,
-      }),
-    );
+  Future<Map<String, dynamic>> getValidationResult({
+    required String key,
+    required String validatorPK,
+  }) async {
+    final response = await _apiClient
+        .getValidationResult(
+          ValidationRequestDto(
+            key: key,
+            validatorPK: validatorPK,
+          ),
+        )
+        .then((e) => e.data);
 
-    final data = json.decode(response.body) as Map<String, dynamic>;
+    //TODO
 
-    return data['data'] as String;
+    print(response);
+
+    return {};
+  }
+
+  Future<String> download(String filename) async {
+    final downloadUrl = await _apiClient
+        .createDownloadUrl({'fileName': filename}).then((e) => e.data);
+    //TODO
+    return downloadUrl;
   }
 }

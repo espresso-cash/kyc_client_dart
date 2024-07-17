@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:kyc_client_dart/kyc_client_dart.dart';
-import 'package:kyc_client_dart/src/config.dart';
 import 'package:kyc_client_dart/src/data/intercetor.dart';
+import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'client.freezed.dart';
 part 'client.g.dart';
+
+const serverUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app';
 
 @RestApi(baseUrl: serverUrl)
 abstract class KycApiClient {
@@ -25,10 +27,21 @@ abstract class KycApiClient {
   Future<void> setData(@Body() Map<String, String> data);
 
   @POST('/v1/getData')
-  Future<Map<String, String>> getData(@Body() Map<String, dynamic> body);
+  Future<GetDataResultDto> getData(@Body() Map<String, dynamic> body);
+
+  @POST('/v1/createUploadUrl')
+  Future<KycUrlDto> createUploadUrl(@Body() Map<String, dynamic> body);
 
   @POST('/v1/createDownloadUrl')
-  Future<DownloadUrlDto> createUploadUrl(@Body() Map<String, dynamic> body);
+  Future<KycUrlDto> createDownloadUrl(@Body() Map<String, dynamic> body);
+
+  @POST('/v1/setValidationResult')
+  Future<void> setValidationResult(@Body() Map<String, String> body);
+
+  @POST('/v1/getValidationResult')
+  Future<ValidationResultDto> getValidationResult(
+    @Body() ValidationRequestDto request,
+  );
 }
 
 @freezed
@@ -56,11 +69,42 @@ class PartnerModelDto with _$PartnerModelDto {
 }
 
 @freezed
-class DownloadUrlDto with _$DownloadUrlDto {
-  const factory DownloadUrlDto({
+class KycUrlDto with _$KycUrlDto {
+  const factory KycUrlDto({
     required String data,
-  }) = _DownloadUrlDto;
+  }) = _KycUrlDto;
 
-  factory DownloadUrlDto.fromJson(Map<String, dynamic> json) =>
-      _$DownloadUrlDtoFromJson(json);
+  factory KycUrlDto.fromJson(Map<String, dynamic> json) =>
+      _$KycUrlDtoFromJson(json);
+}
+
+@freezed
+class GetDataResultDto with _$GetDataResultDto {
+  const factory GetDataResultDto({
+    required Map<String, String> data,
+  }) = _GetDataResultDto;
+
+  factory GetDataResultDto.fromJson(Map<String, dynamic> json) =>
+      _$GetDataResultDtoFromJson(json);
+}
+
+@freezed
+class ValidationResultDto with _$ValidationResultDto {
+  const factory ValidationResultDto({
+    required Map<String, dynamic> data,
+  }) = _ValidationResultDto;
+
+  factory ValidationResultDto.fromJson(Map<String, dynamic> json) =>
+      _$ValidationResultDtoFromJson(json);
+}
+
+@freezed
+class ValidationRequestDto with _$ValidationRequestDto {
+  const factory ValidationRequestDto({
+    required String key,
+    required String validatorPK,
+  }) = _ValidationRequestDto;
+
+  factory ValidationRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$ValidationRequestDtoFromJson(json);
 }

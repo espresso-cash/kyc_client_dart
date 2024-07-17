@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:http/http.dart';
-import 'package:kyc_client_dart/src/config.dart';
 import 'package:kyc_client_dart/src/data/client.dart';
 import 'package:kyc_client_dart/src/models/partner.dart';
 import 'package:pinenacl/ed25519.dart' hide Signature;
@@ -18,7 +17,7 @@ typedef SignRequest = Future<Signature> Function(Iterable<int> data);
 
 class KycUserClient {
   KycUserClient({
-    this.baseUrl = serverUrl,
+    this.baseUrl,
     required this.sign,
   });
 
@@ -145,7 +144,8 @@ class KycUserClient {
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await _apiClient.getData({'keys': keys});
+    final response =
+        await _apiClient.getData({'keys': keys}).then((e) => e.data);
 
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
@@ -177,7 +177,7 @@ class KycUserClient {
     return results;
   }
 
-  Future<bool> uploadFile(File file, String filename) async {
+  Future<bool> upload(File file, String filename) async {
     try {
       final uploadUrl = await _apiClient
           .createUploadUrl({'fileName': filename}).then((e) => e.data);

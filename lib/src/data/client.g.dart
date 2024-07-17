@@ -38,15 +38,52 @@ Map<String, dynamic> _$$PartnerModelDtoImplToJson(
       'partner': instance.partner,
     };
 
-_$DownloadUrlDtoImpl _$$DownloadUrlDtoImplFromJson(Map<String, dynamic> json) =>
-    _$DownloadUrlDtoImpl(
+_$KycUrlDtoImpl _$$KycUrlDtoImplFromJson(Map<String, dynamic> json) =>
+    _$KycUrlDtoImpl(
       data: json['data'] as String,
     );
 
-Map<String, dynamic> _$$DownloadUrlDtoImplToJson(
-        _$DownloadUrlDtoImpl instance) =>
+Map<String, dynamic> _$$KycUrlDtoImplToJson(_$KycUrlDtoImpl instance) =>
     <String, dynamic>{
       'data': instance.data,
+    };
+
+_$GetDataResultDtoImpl _$$GetDataResultDtoImplFromJson(
+        Map<String, dynamic> json) =>
+    _$GetDataResultDtoImpl(
+      data: Map<String, String>.from(json['data'] as Map),
+    );
+
+Map<String, dynamic> _$$GetDataResultDtoImplToJson(
+        _$GetDataResultDtoImpl instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+    };
+
+_$ValidationResultDtoImpl _$$ValidationResultDtoImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ValidationResultDtoImpl(
+      data: json['data'] as Map<String, dynamic>,
+    );
+
+Map<String, dynamic> _$$ValidationResultDtoImplToJson(
+        _$ValidationResultDtoImpl instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+    };
+
+_$ValidationRequestDtoImpl _$$ValidationRequestDtoImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ValidationRequestDtoImpl(
+      key: json['key'] as String,
+      validatorPK: json['validatorPK'] as String,
+    );
+
+Map<String, dynamic> _$$ValidationRequestDtoImplToJson(
+        _$ValidationRequestDtoImpl instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'validatorPK': instance.validatorPK,
     };
 
 // **************************************************************************
@@ -145,14 +182,14 @@ class _KycApiClient implements KycApiClient {
   }
 
   @override
-  Future<Map<String, String>> getData(Map<String, dynamic> body) async {
+  Future<GetDataResultDto> getData(Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<Map<String, String>>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<GetDataResultDto>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -168,19 +205,47 @@ class _KycApiClient implements KycApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = _result.data!.cast<String, String>();
+    final _value = GetDataResultDto.fromJson(_result.data!);
     return _value;
   }
 
   @override
-  Future<DownloadUrlDto> createUploadUrl(Map<String, dynamic> body) async {
+  Future<KycUrlDto> createUploadUrl(Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<DownloadUrlDto>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<KycUrlDto>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v1/createUploadUrl',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = KycUrlDto.fromJson(_result.data!);
+    return _value;
+  }
+
+  @override
+  Future<KycUrlDto> createDownloadUrl(Map<String, dynamic> body) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<KycUrlDto>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -196,7 +261,61 @@ class _KycApiClient implements KycApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = DownloadUrlDto.fromJson(_result.data!);
+    final _value = KycUrlDto.fromJson(_result.data!);
+    return _value;
+  }
+
+  @override
+  Future<void> setValidationResult(Map<String, String> body) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/setValidationResult',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<ValidationResultDto> getValidationResult(
+      ValidationRequestDto request) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(request.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ValidationResultDto>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v1/getValidationResult',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = ValidationResultDto.fromJson(_result.data!);
     return _value;
   }
 
