@@ -198,4 +198,21 @@ class KycUserClient {
 
     return results;
   }
+
+  Future<String> createUploadUrl(String filename) async {
+    final response = await post(
+      Uri.parse('$baseUrl/v1/createDownloadUrl'),
+      headers: {
+        'Authorization': 'Bearer $_token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'fileName': filename,
+      }),
+    );
+
+    final data = json.decode(response.body) as Map<String, dynamic>;
+
+    return data['data'] as String;
+  }
 }

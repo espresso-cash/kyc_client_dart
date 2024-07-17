@@ -12,7 +12,7 @@ class KycPartnerClient {
   KycPartnerClient({this.baseUrl = serverUrl});
   final String? baseUrl;
 
-  late String _authToken;
+  late String _token;
 
   late SimpleKeyPair? _authKeyPair;
   String _authPublicKey = '';
@@ -35,7 +35,7 @@ class KycPartnerClient {
       issuer: _authPublicKey,
     );
 
-    _authToken = partnerTokenData.sign(
+    _token = partnerTokenData.sign(
       jwt.EdDSAPrivateKey(
         await _authKeyPair!.extractPrivateKeyBytes() +
             base58decode(_authPublicKey),
@@ -52,7 +52,7 @@ class KycPartnerClient {
     final response = await post(
       Uri.parse('$baseUrl/v1/getData'),
       headers: {
-        'Authorization': 'Bearer $_authToken',
+        'Authorization': 'Bearer $_token',
         'Content-Type': 'application/json',
       },
       body: json.encode({
@@ -94,7 +94,7 @@ class KycPartnerClient {
     final response = await post(
       Uri.parse('$baseUrl/v1/setValidationResult'),
       headers: {
-        'Authorization': 'Bearer $_authToken',
+        'Authorization': 'Bearer $_token',
         'Content-Type': 'application/json',
       },
       body: json.encode({
@@ -103,5 +103,22 @@ class KycPartnerClient {
     );
 
     print(response); //TODO
+  }
+
+  Future<String> createDownloadUrl(String filename) async {
+    final response = await post(
+      Uri.parse('$baseUrl/v1/createDownloadUrl'),
+      headers: {
+        'Authorization': 'Bearer $_token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'fileName': filename,
+      }),
+    );
+
+    final data = json.decode(response.body) as Map<String, dynamic>;
+
+    return data['data'] as String;
   }
 }

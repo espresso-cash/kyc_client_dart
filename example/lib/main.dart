@@ -159,6 +159,21 @@ class _MyHomePageState extends State<MyHomePage> {
                       const _Divider(),
                       const SizedBox(height: 16),
                       ValueField(
+                        title: 'Upload Url',
+                        value: state.uploadUrl ?? '',
+                      ),
+                      Consumer<PartnerAppState>(
+                        builder: (context, partnerState, child) =>
+                            ElevatedButton(
+                          onPressed: () =>
+                              context.read<WalletAppState>().fetchUploadUrl(),
+                          child: const Text('Fetch Upload Url'),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const _Divider(),
+                      const SizedBox(height: 16),
+                      ValueField(
                         title: 'Partner Info',
                         value: state.partnerInfo != null
                             ? '${state.partnerInfo?.name} (${state.partnerInfo?.publicKey})'
@@ -218,6 +233,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       ValueField(
                         title: 'Name',
                         value: state.name,
+                      ),
+                      ValueField(
+                        title: 'Download Url',
+                        value: state.url,
                       ),
                     ],
                   ),
