@@ -1,15 +1,14 @@
 import 'dart:convert';
 
 import 'package:cryptography/cryptography.dart' hide SecretBox;
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:http/http.dart';
 import 'package:kyc_client_dart/src/config.dart';
 import 'package:kyc_client_dart/src/partner.dart';
-
 import 'package:pinenacl/ed25519.dart' hide Signature;
 import 'package:pinenacl/x25519.dart';
 import 'package:solana/base58.dart';
 import 'package:solana/solana.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 
 export 'partner.dart';
 
@@ -107,8 +106,9 @@ class KycUserClient {
     );
 
     final data = json.decode(response.body) as Map<String, dynamic>;
+    final partner = data['partner'] as Map<String, dynamic>;
 
-    return PartnerModel.fromJson(data['partner']);
+    return PartnerModel.fromJson(partner);
   }
 
   Future<String> generatePartnerToken(String partnerPK) async {
@@ -138,7 +138,7 @@ class KycUserClient {
       ),
     );
 
-    Map<String, String> encryptedData = {};
+    final Map<String, String> encryptedData = {};
 
     data.forEach((key, value) {
       final encrypted = box.encrypt(utf8.encode(value));
@@ -180,7 +180,7 @@ class KycUserClient {
 
     final Map<String, String> results = {};
 
-    for (var key in keys) {
+    for (final key in keys) {
       final signedDataRaw = data[key] as String;
       final signedMessage =
           SignedMessage.fromList(signedMessage: base64Decode(signedDataRaw));

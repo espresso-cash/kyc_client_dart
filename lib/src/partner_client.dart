@@ -1,22 +1,20 @@
-import 'package:cryptography/cryptography.dart' hide SecretBox;
-import 'package:kyc_client_dart/src/config.dart';
 import 'dart:convert';
 
+import 'package:cryptography/cryptography.dart' hide SecretBox;
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:http/http.dart';
-
+import 'package:kyc_client_dart/src/config.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/x25519.dart';
 import 'package:solana/base58.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 
 class KycPartnerClient {
-  final String? baseUrl;
-
   KycPartnerClient({this.baseUrl = serverUrl});
+  final String? baseUrl;
 
   late String _authToken;
 
-  SimpleKeyPair? _authKeyPair;
+  late SimpleKeyPair? _authKeyPair;
   String _authPublicKey = '';
 
   String get authPublicKey => _authPublicKey;
@@ -70,7 +68,7 @@ class KycPartnerClient {
 
     final Map<String, String> results = {};
 
-    for (var key in keys) {
+    for (final key in keys) {
       final signedDataRaw = data[key] as String;
       final signedMessage =
           SignedMessage.fromList(signedMessage: base64Decode(signedDataRaw));
@@ -103,5 +101,7 @@ class KycPartnerClient {
         'keys': value,
       }),
     );
+
+    print(response); //TODO
   }
 }
