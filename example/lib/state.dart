@@ -99,21 +99,17 @@ class PartnerAppState extends ChangeNotifier {
   Future<void> fetchData(String secretKey, String userPK) async {
     final keys = ['email', 'name'];
 
-    try {
-      final data = await _client.getData(
-        keys: keys,
-        userPK: userPK,
-        secretKey: secretKey,
-      );
+    final data = await _client.getData(
+      keys: keys,
+      userPK: userPK,
+      secretKey: secretKey,
+    );
 
-      _email = data['email'] ?? '-';
-      _name = data['name'] ?? '-';
+    _email = data['email'] ?? '-';
+    _name = data['name'] ?? '-';
 
-      // _url = await _client.createDownloadUrl('passport');
+    // _url = await _client.createDownloadUrl('passport');
 
-      notifyListeners();
-    } catch (ex) {
-      print(ex);
-    }
+    notifyListeners();
   }
 }

@@ -110,7 +110,7 @@ class KycPartnerClient {
         )
         .then((e) => e.data);
 
-    //TODO
+    //TODO decrypt and verify
 
     print(response);
 
@@ -120,7 +120,8 @@ class KycPartnerClient {
   Future<String> download(String filename) async {
     final downloadUrl = await _apiClient
         .createDownloadUrl({'fileName': filename}).then((e) => e.data);
-    //TODO
+
+    //TODO download, and decrypt
     return downloadUrl;
   }
 }
