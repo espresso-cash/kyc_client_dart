@@ -16,9 +16,7 @@ class KycUserClient {
   KycUserClient({
     this.baseUrl = serverUrl,
     required this.sign,
-  }) {
-    _init();
-  }
+  });
 
   final String? baseUrl;
   final SignRequest sign;
@@ -38,7 +36,7 @@ class KycUserClient {
   String get authPublicKey => _authPublicKey;
   String get rawSecretKey => _rawSecretKey;
 
-  Future<void> _init() async {
+  Future<void> init() async {
     final seed = await sign(utf8.encode(_seedMessage))
         .then((value) => Uint8List.fromList(value.bytes.sublist(0, 32)));
 
