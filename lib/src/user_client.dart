@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
@@ -39,6 +40,9 @@ class KycUserClient {
   String get authPublicKey => _authPublicKey;
   String get rawSecretKey => _rawSecretKey;
 
+  late SecretBox _secretBox;
+  late SigningKey _signingKey;
+
   Future<void> init() async {
     final seed = await sign(utf8.encode(_seedMessage))
         .then((value) => Uint8List.fromList(value.bytes.sublist(0, 32)));
@@ -74,6 +78,14 @@ class KycUserClient {
     final sealedBox = SealedBox(encryptionPK);
     _encryptedSecretKey = base64Encode(
       sealedBox.encrypt(Uint8List.fromList(await _secretKey.extractBytes())),
+    );
+
+    _secretBox = SecretBox(Uint8List.fromList(await _secretKey.extractBytes()));
+    _signingKey = SigningKey.fromValidBytes(
+      Uint8List.fromList(
+        await _authKeyPair.extractPrivateKeyBytes() +
+            (await _authKeyPair.extractPublicKey()).bytes,
+      ),
     );
   }
 
@@ -129,20 +141,11 @@ class KycUserClient {
   }
 
   Future<void> setData({required Map<String, String> data}) async {
-    final box = SecretBox(Uint8List.fromList(await _secretKey.extractBytes()));
-
-    final signingKey = SigningKey.fromValidBytes(
-      Uint8List.fromList(
-        await _authKeyPair.extractPrivateKeyBytes() +
-            (await _authKeyPair.extractPublicKey()).bytes,
-      ),
-    );
-
     final Map<String, String> encryptedData = {};
 
     data.forEach((key, value) {
-      final encrypted = box.encrypt(utf8.encode(value));
-      final signed = signingKey.sign(Uint8List.fromList(encrypted));
+      final signed = _encryptAndSign(utf8.encode(value));
+
       encryptedData[key] = base64Encode(signed);
     });
 
@@ -214,5 +217,39 @@ class KycUserClient {
     final data = json.decode(response.body) as Map<String, dynamic>;
 
     return data['data'] as String;
+  }
+
+  Future<bool> uploadFile(File file, String url) async {
+    try {
+      final bytes = await file.readAsBytes();
+      final signed = _encryptAndSign(bytes);
+
+      final response = await put(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          'Content-Length': bytes.length.toString(),
+        },
+        body: signed,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print('Failed to upload file. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        return false;
+      }
+    } on Exception catch (e) {
+      print('Error uploading file: $e');
+
+      return false;
+    }
+  }
+
+  SignedMessage _encryptAndSign(Uint8List data) {
+    final encrypted = _secretBox.encrypt(data);
+    final signed = _signingKey.sign(Uint8List.fromList(encrypted));
+    return signed;
   }
 }
