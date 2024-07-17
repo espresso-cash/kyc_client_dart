@@ -10,7 +10,6 @@ class WalletAppState extends ChangeNotifier {
   String get rawSecretKey => _rawSecretKey;
   String get partnerToken => _partnerToken;
   PartnerModel? get partnerInfo => _partnerInfo;
-  String? get uploadUrl => _uploadUrl;
 
   Ed25519HDKeyPair? _wallet;
 
@@ -19,7 +18,6 @@ class WalletAppState extends ChangeNotifier {
   late String _rawSecretKey = '';
 
   PartnerModel? _partnerInfo;
-  String? _uploadUrl;
 
   late KycUserClient _client;
 
@@ -49,12 +47,6 @@ class WalletAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchUploadUrl() async {
-    _uploadUrl = await _client.createUploadUrl('passport');
-
-    notifyListeners();
-  }
-
   Future<void> fetchPartnerInfo(String partnerPK) async {
     _partnerInfo = await _client.getPartnerInfo(partnerPK: partnerPK);
 
@@ -75,12 +67,10 @@ class PartnerAppState extends ChangeNotifier {
   String get authPublicKey => _authPublicKey;
   String get email => _email;
   String get name => _name;
-  String get url => _url;
 
   late String _authPublicKey = '';
   late String _email = '';
   late String _name = '';
-  late String _url = '';
 
   late KycPartnerClient _client;
 
@@ -111,7 +101,7 @@ class PartnerAppState extends ChangeNotifier {
     _email = data['email'] ?? '-';
     _name = data['name'] ?? '-';
 
-    _url = await _client.createDownloadUrl('passport');
+    // _url = await _client.createDownloadUrl('passport');
 
     notifyListeners();
   }

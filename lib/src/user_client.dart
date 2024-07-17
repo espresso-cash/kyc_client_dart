@@ -5,13 +5,14 @@ import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:http/http.dart';
 import 'package:kyc_client_dart/src/config.dart';
-import 'package:kyc_client_dart/src/partner.dart';
+import 'package:kyc_client_dart/src/data/client.dart';
+import 'package:kyc_client_dart/src/models/partner.dart';
 import 'package:pinenacl/ed25519.dart' hide Signature;
 import 'package:pinenacl/x25519.dart';
 import 'package:solana/base58.dart';
 import 'package:solana/solana.dart';
 
-export 'partner.dart';
+export 'models/partner.dart';
 
 typedef SignRequest = Future<Signature> Function(Iterable<int> data);
 
@@ -42,6 +43,8 @@ class KycUserClient {
 
   late SecretBox _secretBox;
   late SigningKey _signingKey;
+
+  late KycApiClient _apiClient;
 
   Future<void> init() async {
     final seed = await sign(utf8.encode(_seedMessage))
@@ -87,41 +90,26 @@ class KycUserClient {
             (await _authKeyPair.extractPublicKey()).bytes,
       ),
     );
+
+    _apiClient = KycApiClient(_token, baseUrl: baseUrl);
   }
 
   Future<void> initStorage({required String walletAddress}) async {
     final proofSignature = await sign(utf8.encode(_proofMessage));
 
-    await post(
-      Uri.parse('$baseUrl/v1/initStorage'),
-      headers: {
-        'Authorization': 'Bearer $_token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'walletAddress': walletAddress,
-        'message': _seedMessage,
-        'encryptedSecretKey': _encryptedSecretKey,
-        'walletProofMessage': _proofMessage,
-        'walletProofSignature': proofSignature.toBase58(),
-      }),
+    await _apiClient.initStorage(
+      InitStorageRequest(
+        walletAddress: walletAddress,
+        message: _seedMessage,
+        encryptedSecretKey: _encryptedSecretKey,
+        walletProofMessage: _proofMessage,
+        walletProofSignature: proofSignature.toBase58(),
+      ),
     );
   }
 
-  Future<PartnerModel> getPartnerInfo({required String partnerPK}) async {
-    final response = await post(
-      Uri.parse('$baseUrl/v1/partners/$partnerPK'),
-      headers: {
-        'Authorization': 'Bearer $_token',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    final data = json.decode(response.body) as Map<String, dynamic>;
-    final partner = data['partner'] as Map<String, dynamic>;
-
-    return PartnerModel.fromJson(partner);
-  }
+  Future<PartnerModel> getPartnerInfo({required String partnerPK}) async =>
+      _apiClient.getPartnerInfo(partnerPK).then((e) => e.partner);
 
   Future<String> generatePartnerToken(String partnerPK) async {
     final tokenData = jwt.JWT(
@@ -149,14 +137,7 @@ class KycUserClient {
       encryptedData[key] = base64Encode(signed);
     });
 
-    await post(
-      Uri.parse('$baseUrl/v1/setData'),
-      headers: {
-        'Authorization': 'Bearer $_token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode(encryptedData),
-    );
+    await _apiClient.setData(encryptedData);
   }
 
   Future<Map<String, String>> getData({
@@ -164,19 +145,7 @@ class KycUserClient {
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await post(
-      Uri.parse('$baseUrl/v1/getData'),
-      headers: {
-        'Authorization': 'Bearer $_token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'keys': keys,
-      }),
-    );
-
-    // ignore: avoid_dynamic_calls
-    final data = json.decode(response.body)['data'] as Map<String, dynamic>;
+    final response = await _apiClient.getData({'keys': keys});
 
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
@@ -184,7 +153,13 @@ class KycUserClient {
     final Map<String, String> results = {};
 
     for (final key in keys) {
-      final signedDataRaw = data[key] as String;
+      final signedDataRaw = response[key];
+
+      if (signedDataRaw == null) {
+        results[key] = '';
+        continue;
+      }
+
       final signedMessage =
           SignedMessage.fromList(signedMessage: base64Decode(signedDataRaw));
       final result =
@@ -202,30 +177,16 @@ class KycUserClient {
     return results;
   }
 
-  Future<String> createUploadUrl(String filename) async {
-    final response = await post(
-      Uri.parse('$baseUrl/v1/createDownloadUrl'),
-      headers: {
-        'Authorization': 'Bearer $_token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'fileName': filename,
-      }),
-    );
-
-    final data = json.decode(response.body) as Map<String, dynamic>;
-
-    return data['data'] as String;
-  }
-
-  Future<bool> uploadFile(File file, String url) async {
+  Future<bool> uploadFile(File file, String filename) async {
     try {
+      final uploadUrl = await _apiClient
+          .createUploadUrl({'fileName': filename}).then((e) => e.data);
+
       final bytes = await file.readAsBytes();
       final signed = _encryptAndSign(bytes);
 
       final response = await put(
-        Uri.parse(url),
+        Uri.parse(uploadUrl),
         headers: {
           'Content-Type': 'application/octet-stream',
           'Content-Length': bytes.length.toString(),
@@ -233,16 +194,8 @@ class KycUserClient {
         body: signed,
       );
 
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        print('Failed to upload file. Status code: ${response.statusCode}');
-        print('Response body: ${response.body}');
-        return false;
-      }
-    } on Exception catch (e) {
-      print('Error uploading file: $e');
-
+      return response.statusCode == 200;
+    } on Exception {
       return false;
     }
   }
