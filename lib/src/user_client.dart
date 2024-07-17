@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:http/http.dart';
 import 'package:kyc_client_dart/src/config.dart';
+import 'package:kyc_client_dart/src/partner.dart';
 
 import 'package:pinenacl/ed25519.dart' hide Signature;
 import 'package:pinenacl/x25519.dart';
 import 'package:solana/base58.dart';
 import 'package:solana/solana.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
+
+export 'partner.dart';
 
 typedef SignRequest = Future<Signature> Function(Iterable<int> data);
 
@@ -27,6 +30,7 @@ class KycUserClient {
   late SimpleKeyPair _authKeyPair;
   String _authPublicKey = '';
   String _token = '';
+
   late SimpleKeyPair _encryptionKeyPair;
   late SecretKey _secretKey;
 
@@ -86,15 +90,15 @@ class KycUserClient {
       body: json.encode({
         'walletAddress': walletAddress,
         'message': _seedMessage,
-        'encryptedSecretKey': _proofMessage,
+        'encryptedSecretKey': _encryptedSecretKey,
         'walletProofMessage': _proofMessage,
         'walletProofSignature': proofSignature.toBase58(),
       }),
     );
   }
 
-  Future<String> getPartnerInfo({required String partnerPK}) async {
-    await post(
+  Future<PartnerModel> getPartnerInfo({required String partnerPK}) async {
+    final response = await post(
       Uri.parse('$baseUrl/v1/partners/$partnerPK'),
       headers: {
         'Authorization': 'Bearer $_token',
@@ -102,9 +106,9 @@ class KycUserClient {
       },
     );
 
-    //TODO
+    final data = json.decode(response.body) as Map<String, dynamic>;
 
-    return '';
+    return PartnerModel.fromJson(data['partner']);
   }
 
   Future<String> generatePartnerToken(String partnerPK) async {
