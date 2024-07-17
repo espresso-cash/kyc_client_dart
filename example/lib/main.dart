@@ -60,6 +60,14 @@ class _MyHomePageState extends State<MyHomePage> {
     partnerState.generateAuthToken(walletState.partnerToken);
   }
 
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -118,11 +126,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           _nameController,
                         ]),
                         builder: (context, child) => ElevatedButton(
-                          onPressed: () {
-                            context.read<WalletAppState>().updateData(
+                          onPressed: () async {
+                            await context.read<WalletAppState>().updateData(
                                   email: _emailController.text,
                                   name: _nameController.text,
                                 );
+
+                            _showSnackBar('User data updated');
                           },
                           child: const Text('Update User Data'),
                         ),
