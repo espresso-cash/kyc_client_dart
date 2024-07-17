@@ -74,7 +74,7 @@ class KycUserClient {
     );
   }
 
-  void initStorage({required String walletAddress}) async {
+  Future<void> initStorage({required String walletAddress}) async {
     final proofSignature = await sign(utf8.encode(_proofMessage));
 
     await post(
