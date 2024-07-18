@@ -185,7 +185,7 @@ class KycUserClient {
       Uri.parse(uploadUrl),
       headers: {
         'Content-Type': 'application/octet-stream',
-        'Content-Length': file.length.toString(),
+        'Content-Length': signed.length.toString(),
       },
       body: signed,
     );
