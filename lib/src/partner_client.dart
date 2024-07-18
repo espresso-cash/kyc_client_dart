@@ -89,7 +89,6 @@ class KycPartnerClient {
     final Map<String, String> encryptedData = {};
 
     value.forEach((key, value) {
-      // final signed = _encryptAndSign(utf8.encode(value));
       //TODO encrypt and sign
 
       encryptedData[key] = base64Encode(utf8.encode(value));
@@ -113,9 +112,7 @@ class KycPartnerClient {
 
     //TODO decrypt and verify
 
-    print(response);
-
-    return {};
+    return response;
   }
 
   Future<Uint8List> download({

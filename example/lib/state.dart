@@ -82,11 +82,13 @@ class PartnerAppState extends ChangeNotifier {
   String get email => _email;
   String get name => _name;
   XFile? get file => _file;
+  Map<String, dynamic>? get result => _result;
 
   late String _authPublicKey = '';
   late String _email = '';
   late String _name = '';
   XFile? _file;
+  Map<String, dynamic>? _result;
 
   late KycPartnerClient _client;
 
@@ -107,6 +109,26 @@ class PartnerAppState extends ChangeNotifier {
   Future<void> generateAuthToken(String partnerToken) async {
     await _client.generateAuthToken(partnerToken);
 
+    notifyListeners();
+  }
+
+  Future<void> setValidationResult(String message) async {
+    await _client.setValidationResult(
+      key: 'result',
+      value: {
+        'message': message,
+        'kyc': 'confirmed',
+      },
+    );
+  }
+
+  Future<void> getValidationResult() async {
+    final response = await _client.getValidationResult(
+      key: 'result',
+      validatorPK: _authPublicKey,
+    );
+
+    _result = response;
     notifyListeners();
   }
 

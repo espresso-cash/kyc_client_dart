@@ -3,8 +3,15 @@ import 'package:kyc_sharing_client/shared.dart';
 import 'package:kyc_sharing_client/state.dart';
 import 'package:provider/provider.dart';
 
-class PartnerView extends StatelessWidget {
+class PartnerView extends StatefulWidget {
   const PartnerView({super.key});
+
+  @override
+  State<PartnerView> createState() => _PartnerViewState();
+}
+
+class _PartnerViewState extends State<PartnerView> {
+  final _messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
@@ -25,6 +32,40 @@ class PartnerView extends StatelessWidget {
               ),
               const CustomDivider(),
               const SizedBox(height: 16),
+              ValueTextfield(
+                controller: _messageController,
+                title: 'Validation Result',
+              ),
+              const SizedBox(height: 16),
+              ListenableBuilder(
+                listenable: _messageController,
+                builder: (context, child) => ElevatedButton(
+                  onPressed: () async {
+                    await context.read<PartnerAppState>().setValidationResult(
+                          _messageController.text,
+                        );
+
+                    if (!context.mounted) return;
+
+                    showSnackBar(context, message: 'Validation Result updated');
+                  },
+                  child: const Text('Update Validation Result'),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ValueField(
+                title: 'Result',
+                value: state.result != null ? state.result.toString() : '',
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  await context.read<PartnerAppState>().getValidationResult();
+                },
+                child: const Text('Fetch Validation Result'),
+              ),
+              const SizedBox(height: 16),
+              const CustomDivider(),
+              const SizedBox(height: 16),
               Consumer<WalletAppState>(
                 builder: (context, walletState, child) => ElevatedButton(
                   onPressed: () => context.read<PartnerAppState>().fetchData(
@@ -43,11 +84,7 @@ class PartnerView extends StatelessWidget {
                 title: 'Name',
                 value: state.name,
               ),
-              if (state.file case final image?)
-                SizedBox(
-                  height: 200,
-                  child: Image.network(image.path),
-                ),
+              if (state.file case final image?) Image.network(image.path),
             ],
           ),
         ),

@@ -35,14 +35,6 @@ class _UserViewState extends State<UserView> {
     partnerState.generateAuthToken(walletState.partnerToken);
   }
 
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -97,13 +89,17 @@ class _UserViewState extends State<UserView> {
                 ]),
                 builder: (context, child) => ElevatedButton(
                   onPressed: () async {
+                    showSnackBar(context, message: 'Updating...');
+
                     await context.read<WalletAppState>().updateData(
                           email: _emailController.text,
                           name: _nameController.text,
                           file: _file,
                         );
 
-                    _showSnackBar('User data updated');
+                    if (!context.mounted) return;
+
+                    showSnackBar(context, message: 'User data updated');
                   },
                   child: const Text('Update User Data'),
                 ),

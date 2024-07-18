@@ -104,3 +104,11 @@ class CustomDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Divider(height: 16);
 }
+
+void showSnackBar(BuildContext context, {required String message}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+    ),
+  );
+}
