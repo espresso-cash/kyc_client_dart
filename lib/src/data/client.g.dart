@@ -38,12 +38,23 @@ Map<String, dynamic> _$$PartnerModelDtoImplToJson(
       'partner': instance.partner,
     };
 
-_$KycUrlDtoImpl _$$KycUrlDtoImplFromJson(Map<String, dynamic> json) =>
-    _$KycUrlDtoImpl(
+_$UploadUrlDtoImpl _$$UploadUrlDtoImplFromJson(Map<String, dynamic> json) =>
+    _$UploadUrlDtoImpl(
+      url: json['url'] as String,
+    );
+
+Map<String, dynamic> _$$UploadUrlDtoImplToJson(_$UploadUrlDtoImpl instance) =>
+    <String, dynamic>{
+      'url': instance.url,
+    };
+
+_$DownloadUrlDtoImpl _$$DownloadUrlDtoImplFromJson(Map<String, dynamic> json) =>
+    _$DownloadUrlDtoImpl(
       data: json['data'] as String,
     );
 
-Map<String, dynamic> _$$KycUrlDtoImplToJson(_$KycUrlDtoImpl instance) =>
+Map<String, dynamic> _$$DownloadUrlDtoImplToJson(
+        _$DownloadUrlDtoImpl instance) =>
     <String, dynamic>{
       'data': instance.data,
     };
@@ -210,14 +221,14 @@ class _KycApiClient implements KycApiClient {
   }
 
   @override
-  Future<KycUrlDto> createUploadUrl(Map<String, dynamic> body) async {
+  Future<UploadUrlDto> createUploadUrl(Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<KycUrlDto>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<UploadUrlDto>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -233,19 +244,19 @@ class _KycApiClient implements KycApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = KycUrlDto.fromJson(_result.data!);
+    final _value = UploadUrlDto.fromJson(_result.data!);
     return _value;
   }
 
   @override
-  Future<KycUrlDto> createDownloadUrl(Map<String, dynamic> body) async {
+  Future<DownloadUrlDto> createDownloadUrl(Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<KycUrlDto>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<DownloadUrlDto>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -261,7 +272,7 @@ class _KycApiClient implements KycApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = KycUrlDto.fromJson(_result.data!);
+    final _value = DownloadUrlDto.fromJson(_result.data!);
     return _value;
   }
 

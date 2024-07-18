@@ -419,43 +419,193 @@ abstract class _PartnerModelDto implements PartnerModelDto {
       throw _privateConstructorUsedError;
 }
 
-KycUrlDto _$KycUrlDtoFromJson(Map<String, dynamic> json) {
-  return _KycUrlDto.fromJson(json);
+UploadUrlDto _$UploadUrlDtoFromJson(Map<String, dynamic> json) {
+  return _UploadUrlDto.fromJson(json);
 }
 
 /// @nodoc
-mixin _$KycUrlDto {
-  String get data => throw _privateConstructorUsedError;
+mixin _$UploadUrlDto {
+  String get url => throw _privateConstructorUsedError;
 
-  /// Serializes this KycUrlDto to a JSON map.
+  /// Serializes this UploadUrlDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of KycUrlDto
+  /// Create a copy of UploadUrlDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $KycUrlDtoCopyWith<KycUrlDto> get copyWith =>
+  $UploadUrlDtoCopyWith<UploadUrlDto> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $KycUrlDtoCopyWith<$Res> {
-  factory $KycUrlDtoCopyWith(KycUrlDto value, $Res Function(KycUrlDto) then) =
-      _$KycUrlDtoCopyWithImpl<$Res, KycUrlDto>;
+abstract class $UploadUrlDtoCopyWith<$Res> {
+  factory $UploadUrlDtoCopyWith(
+          UploadUrlDto value, $Res Function(UploadUrlDto) then) =
+      _$UploadUrlDtoCopyWithImpl<$Res, UploadUrlDto>;
   @useResult
-  $Res call({String data});
+  $Res call({String url});
 }
 
 /// @nodoc
-class _$KycUrlDtoCopyWithImpl<$Res, $Val extends KycUrlDto>
-    implements $KycUrlDtoCopyWith<$Res> {
-  _$KycUrlDtoCopyWithImpl(this._value, this._then);
+class _$UploadUrlDtoCopyWithImpl<$Res, $Val extends UploadUrlDto>
+    implements $UploadUrlDtoCopyWith<$Res> {
+  _$UploadUrlDtoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of KycUrlDto
+  /// Create a copy of UploadUrlDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? url = null,
+  }) {
+    return _then(_value.copyWith(
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$UploadUrlDtoImplCopyWith<$Res>
+    implements $UploadUrlDtoCopyWith<$Res> {
+  factory _$$UploadUrlDtoImplCopyWith(
+          _$UploadUrlDtoImpl value, $Res Function(_$UploadUrlDtoImpl) then) =
+      __$$UploadUrlDtoImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String url});
+}
+
+/// @nodoc
+class __$$UploadUrlDtoImplCopyWithImpl<$Res>
+    extends _$UploadUrlDtoCopyWithImpl<$Res, _$UploadUrlDtoImpl>
+    implements _$$UploadUrlDtoImplCopyWith<$Res> {
+  __$$UploadUrlDtoImplCopyWithImpl(
+      _$UploadUrlDtoImpl _value, $Res Function(_$UploadUrlDtoImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of UploadUrlDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? url = null,
+  }) {
+    return _then(_$UploadUrlDtoImpl(
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$UploadUrlDtoImpl implements _UploadUrlDto {
+  const _$UploadUrlDtoImpl({required this.url});
+
+  factory _$UploadUrlDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UploadUrlDtoImplFromJson(json);
+
+  @override
+  final String url;
+
+  @override
+  String toString() {
+    return 'UploadUrlDto(url: $url)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UploadUrlDtoImpl &&
+            (identical(other.url, url) || other.url == url));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, url);
+
+  /// Create a copy of UploadUrlDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UploadUrlDtoImplCopyWith<_$UploadUrlDtoImpl> get copyWith =>
+      __$$UploadUrlDtoImplCopyWithImpl<_$UploadUrlDtoImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UploadUrlDtoImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _UploadUrlDto implements UploadUrlDto {
+  const factory _UploadUrlDto({required final String url}) = _$UploadUrlDtoImpl;
+
+  factory _UploadUrlDto.fromJson(Map<String, dynamic> json) =
+      _$UploadUrlDtoImpl.fromJson;
+
+  @override
+  String get url;
+
+  /// Create a copy of UploadUrlDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UploadUrlDtoImplCopyWith<_$UploadUrlDtoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+DownloadUrlDto _$DownloadUrlDtoFromJson(Map<String, dynamic> json) {
+  return _DownloadUrlDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$DownloadUrlDto {
+  String get data => throw _privateConstructorUsedError;
+
+  /// Serializes this DownloadUrlDto to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of DownloadUrlDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $DownloadUrlDtoCopyWith<DownloadUrlDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $DownloadUrlDtoCopyWith<$Res> {
+  factory $DownloadUrlDtoCopyWith(
+          DownloadUrlDto value, $Res Function(DownloadUrlDto) then) =
+      _$DownloadUrlDtoCopyWithImpl<$Res, DownloadUrlDto>;
+  @useResult
+  $Res call({String data});
+}
+
+/// @nodoc
+class _$DownloadUrlDtoCopyWithImpl<$Res, $Val extends DownloadUrlDto>
+    implements $DownloadUrlDtoCopyWith<$Res> {
+  _$DownloadUrlDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of DownloadUrlDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -472,32 +622,32 @@ class _$KycUrlDtoCopyWithImpl<$Res, $Val extends KycUrlDto>
 }
 
 /// @nodoc
-abstract class _$$KycUrlDtoImplCopyWith<$Res>
-    implements $KycUrlDtoCopyWith<$Res> {
-  factory _$$KycUrlDtoImplCopyWith(
-          _$KycUrlDtoImpl value, $Res Function(_$KycUrlDtoImpl) then) =
-      __$$KycUrlDtoImplCopyWithImpl<$Res>;
+abstract class _$$DownloadUrlDtoImplCopyWith<$Res>
+    implements $DownloadUrlDtoCopyWith<$Res> {
+  factory _$$DownloadUrlDtoImplCopyWith(_$DownloadUrlDtoImpl value,
+          $Res Function(_$DownloadUrlDtoImpl) then) =
+      __$$DownloadUrlDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String data});
 }
 
 /// @nodoc
-class __$$KycUrlDtoImplCopyWithImpl<$Res>
-    extends _$KycUrlDtoCopyWithImpl<$Res, _$KycUrlDtoImpl>
-    implements _$$KycUrlDtoImplCopyWith<$Res> {
-  __$$KycUrlDtoImplCopyWithImpl(
-      _$KycUrlDtoImpl _value, $Res Function(_$KycUrlDtoImpl) _then)
+class __$$DownloadUrlDtoImplCopyWithImpl<$Res>
+    extends _$DownloadUrlDtoCopyWithImpl<$Res, _$DownloadUrlDtoImpl>
+    implements _$$DownloadUrlDtoImplCopyWith<$Res> {
+  __$$DownloadUrlDtoImplCopyWithImpl(
+      _$DownloadUrlDtoImpl _value, $Res Function(_$DownloadUrlDtoImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of KycUrlDto
+  /// Create a copy of DownloadUrlDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? data = null,
   }) {
-    return _then(_$KycUrlDtoImpl(
+    return _then(_$DownloadUrlDtoImpl(
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
@@ -508,25 +658,25 @@ class __$$KycUrlDtoImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$KycUrlDtoImpl implements _KycUrlDto {
-  const _$KycUrlDtoImpl({required this.data});
+class _$DownloadUrlDtoImpl implements _DownloadUrlDto {
+  const _$DownloadUrlDtoImpl({required this.data});
 
-  factory _$KycUrlDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$KycUrlDtoImplFromJson(json);
+  factory _$DownloadUrlDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$DownloadUrlDtoImplFromJson(json);
 
   @override
   final String data;
 
   @override
   String toString() {
-    return 'KycUrlDto(data: $data)';
+    return 'DownloadUrlDto(data: $data)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$KycUrlDtoImpl &&
+            other is _$DownloadUrlDtoImpl &&
             (identical(other.data, data) || other.data == data));
   }
 
@@ -534,36 +684,38 @@ class _$KycUrlDtoImpl implements _KycUrlDto {
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  /// Create a copy of KycUrlDto
+  /// Create a copy of DownloadUrlDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$KycUrlDtoImplCopyWith<_$KycUrlDtoImpl> get copyWith =>
-      __$$KycUrlDtoImplCopyWithImpl<_$KycUrlDtoImpl>(this, _$identity);
+  _$$DownloadUrlDtoImplCopyWith<_$DownloadUrlDtoImpl> get copyWith =>
+      __$$DownloadUrlDtoImplCopyWithImpl<_$DownloadUrlDtoImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$KycUrlDtoImplToJson(
+    return _$$DownloadUrlDtoImplToJson(
       this,
     );
   }
 }
 
-abstract class _KycUrlDto implements KycUrlDto {
-  const factory _KycUrlDto({required final String data}) = _$KycUrlDtoImpl;
+abstract class _DownloadUrlDto implements DownloadUrlDto {
+  const factory _DownloadUrlDto({required final String data}) =
+      _$DownloadUrlDtoImpl;
 
-  factory _KycUrlDto.fromJson(Map<String, dynamic> json) =
-      _$KycUrlDtoImpl.fromJson;
+  factory _DownloadUrlDto.fromJson(Map<String, dynamic> json) =
+      _$DownloadUrlDtoImpl.fromJson;
 
   @override
   String get data;
 
-  /// Create a copy of KycUrlDto
+  /// Create a copy of DownloadUrlDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$KycUrlDtoImplCopyWith<_$KycUrlDtoImpl> get copyWith =>
+  _$$DownloadUrlDtoImplCopyWith<_$DownloadUrlDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

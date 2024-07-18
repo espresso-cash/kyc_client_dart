@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:http/http.dart';
@@ -177,27 +175,22 @@ class KycUserClient {
     return results;
   }
 
-  Future<bool> upload(File file, String filename) async {
-    try {
-      final uploadUrl = await _apiClient
-          .createUploadUrl({'fileName': filename}).then((e) => e.data);
+  Future<bool> upload({required Uint8List file, required String name}) async {
+    final uploadUrl =
+        await _apiClient.createUploadUrl({'fileName': name}).then((e) => e.url);
 
-      final bytes = await file.readAsBytes();
-      final signed = _encryptAndSign(bytes);
+    final signed = _encryptAndSign(file);
 
-      final response = await put(
-        Uri.parse(uploadUrl),
-        headers: {
-          'Content-Type': 'application/octet-stream',
-          'Content-Length': bytes.length.toString(),
-        },
-        body: signed,
-      );
+    final response = await put(
+      Uri.parse(uploadUrl),
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        'Content-Length': file.length.toString(),
+      },
+      body: signed,
+    );
 
-      return response.statusCode == 200;
-    } on Exception {
-      return false;
-    }
+    return response.statusCode == 200;
   }
 
   SignedMessage _encryptAndSign(Uint8List data) {

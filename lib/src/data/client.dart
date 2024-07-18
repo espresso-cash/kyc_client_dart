@@ -30,10 +30,10 @@ abstract class KycApiClient {
   Future<GetDataResultDto> getData(@Body() Map<String, dynamic> body);
 
   @POST('/v1/createUploadUrl')
-  Future<KycUrlDto> createUploadUrl(@Body() Map<String, dynamic> body);
+  Future<UploadUrlDto> createUploadUrl(@Body() Map<String, dynamic> body);
 
   @POST('/v1/createDownloadUrl')
-  Future<KycUrlDto> createDownloadUrl(@Body() Map<String, dynamic> body);
+  Future<DownloadUrlDto> createDownloadUrl(@Body() Map<String, dynamic> body);
 
   @POST('/v1/setValidationResult')
   Future<void> setValidationResult(@Body() Map<String, String> body);
@@ -69,13 +69,23 @@ class PartnerModelDto with _$PartnerModelDto {
 }
 
 @freezed
-class KycUrlDto with _$KycUrlDto {
-  const factory KycUrlDto({
-    required String data,
-  }) = _KycUrlDto;
+class UploadUrlDto with _$UploadUrlDto {
+  const factory UploadUrlDto({
+    required String url,
+  }) = _UploadUrlDto;
 
-  factory KycUrlDto.fromJson(Map<String, dynamic> json) =>
-      _$KycUrlDtoFromJson(json);
+  factory UploadUrlDto.fromJson(Map<String, dynamic> json) =>
+      _$UploadUrlDtoFromJson(json);
+}
+
+@freezed
+class DownloadUrlDto with _$DownloadUrlDto {
+  const factory DownloadUrlDto({
+    required String data,
+  }) = _DownloadUrlDto;
+
+  factory DownloadUrlDto.fromJson(Map<String, dynamic> json) =>
+      _$DownloadUrlDtoFromJson(json);
 }
 
 @freezed

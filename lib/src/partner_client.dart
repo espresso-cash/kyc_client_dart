@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
+import 'package:http/http.dart';
 import 'package:kyc_client_dart/src/data/client.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/x25519.dart';
@@ -117,11 +118,29 @@ class KycPartnerClient {
     return {};
   }
 
-  Future<String> download(String filename) async {
+  Future<Uint8List> download({
+    required String filename,
+    required String userPK,
+    required String secretKey,
+  }) async {
     final downloadUrl = await _apiClient
         .createDownloadUrl({'fileName': filename}).then((e) => e.data);
 
-    //TODO download, and decrypt
-    return downloadUrl;
+    final response = await get(Uri.parse(downloadUrl));
+    final encryptedData = response.bodyBytes;
+
+    final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
+    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+
+    final signedMessage = SignedMessage.fromList(signedMessage: encryptedData);
+    final result = verifyKey.verifySignedMessage(signedMessage: signedMessage);
+
+    if (!result) throw Exception('Invalid signature');
+
+    final data = base64Encode(signedMessage.message);
+    final decrypted =
+        box.decrypt(EncryptedMessage.fromList(base64Decode(data)));
+
+    return decrypted;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cross_file/cross_file.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter/foundation.dart';
 
@@ -55,13 +56,24 @@ class WalletAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateData({required String email, required String name}) async {
+  Future<void> updateData({
+    required String email,
+    required String name,
+    XFile? file,
+  }) async {
     await _client.setData(
       data: {
         'email': email,
         'name': name,
       },
     );
+
+    if (file != null) {
+      await _client.upload(
+        file: await file.readAsBytes(),
+        name: 'passport',
+      );
+    }
   }
 }
 
@@ -69,10 +81,12 @@ class PartnerAppState extends ChangeNotifier {
   String get authPublicKey => _authPublicKey;
   String get email => _email;
   String get name => _name;
+  XFile? get file => _file;
 
   late String _authPublicKey = '';
   late String _email = '';
   late String _name = '';
+  XFile? _file;
 
   late KycPartnerClient _client;
 
@@ -108,7 +122,13 @@ class PartnerAppState extends ChangeNotifier {
     _email = data['email'] ?? '-';
     _name = data['name'] ?? '-';
 
-    // _url = await _client.createDownloadUrl('passport');
+    final file = await _client.download(
+      filename: 'passport',
+      userPK: userPK,
+      secretKey: secretKey,
+    );
+
+    _file = XFile.fromData(file);
 
     notifyListeners();
   }

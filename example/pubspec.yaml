@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   cryptography: ^2.7.0
+  cross_file: ^0.3.4+1
+  file_picker: ^8.0.6
   flutter:
     sdk: flutter
   http: ^1.2.1
