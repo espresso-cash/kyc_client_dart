@@ -1,11 +1,13 @@
 import 'dart:convert';
 
-import 'package:cryptography/cryptography.dart' hide SecretBox;
+import 'package:cryptography/cryptography.dart' hide Hash, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:http/http.dart';
 import 'package:kyc_client_dart/src/data/client.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/x25519.dart';
+import 'package:pinenacl/api.dart';
+import 'package:pinenacl/digests.dart';
 import 'package:solana/base58.dart';
 
 class KycPartnerClient {
@@ -139,5 +141,15 @@ class KycPartnerClient {
         box.decrypt(EncryptedMessage.fromList(base64Decode(data)));
 
     return decrypted;
+  }
+
+  Future<String> hash(String value) async {
+    const hex = Base16Encoder.instance;
+
+    const hasher = Hash.blake2b;
+    final hash = hex.encode(hasher(value));
+
+    print('Hash: $hash');
+    return hash;
   }
 }
