@@ -143,13 +143,23 @@ class KycPartnerClient {
     return decrypted;
   }
 
-  Future<String> hash(String value) async {
+  Future<void> validateField(String key, String validatedField) async {
+    final Map<String, String> value = {
+      'hash': await _hash(validatedField),
+      'date': DateTime.now().toIso8601String(),
+    };
+    await setValidationResult(
+      key: key,
+      value: value,
+    );
+  }
+
+  Future<String> _hash(String value) async {
     const hex = Base16Encoder.instance;
 
     const hasher = Hash.blake2b;
     final hash = hex.encode(hasher(value));
 
-    print('Hash: $hash');
     return hash;
   }
 }
