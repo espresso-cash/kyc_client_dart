@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:http/http.dart';
@@ -106,7 +107,9 @@ class KycUserClient {
   }
 
   Future<PartnerModel> getPartnerInfo({required String partnerPK}) async =>
-      _apiClient.getPartnerInfo(partnerPK).then((e) => e.partner);
+      _apiClient
+          .getPartnerInfo(GetPartnerInfoRequestDto(id: partnerPK))
+          .then((e) => e);
 
   Future<String> generatePartnerToken(String partnerPK) async {
     final tokenData = jwt.JWT(
@@ -126,15 +129,15 @@ class KycUserClient {
   }
 
   Future<void> setData({required Map<String, String> data}) async {
-    final Map<String, String> encryptedData = {};
+    final List<DataItem> encryptedData = [];
 
     data.forEach((key, value) {
       final signed = _encryptAndSign(utf8.encode(value));
 
-      encryptedData[key] = base64Encode(signed);
+      encryptedData.add(DataItem(key: key, value: base64Encode(signed)));
     });
 
-    await _apiClient.setData(encryptedData);
+    await _apiClient.setData(SetDataRequestDto(data: encryptedData));
   }
 
   Future<Map<String, String>> getData({
@@ -151,15 +154,16 @@ class KycUserClient {
     final Map<String, String> results = {};
 
     for (final key in keys) {
-      final signedDataRaw = response[key];
+      final signedDataRaw = response.firstWhereOrNull((e) => e.key == key);
 
       if (signedDataRaw == null) {
         results[key] = '';
         continue;
       }
 
-      final signedMessage =
-          SignedMessage.fromList(signedMessage: base64Decode(signedDataRaw));
+      final signedMessage = SignedMessage.fromList(
+        signedMessage: base64Decode(signedDataRaw.value),
+      );
       final result =
           verifyKey.verifySignedMessage(signedMessage: signedMessage);
 

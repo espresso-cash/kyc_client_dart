@@ -20,11 +20,13 @@ abstract class KycApiClient {
   @POST('/v1/initStorage')
   Future<void> initStorage(@Body() InitStorageRequest request);
 
-  @POST('/v1/partners/{partnerPK}')
-  Future<PartnerModelDto> getPartnerInfo(@Path() String partnerPK);
+  @POST('/v1/getPartnerInfo')
+  Future<PartnerModel> getPartnerInfo(
+    @Body() GetPartnerInfoRequestDto request,
+  );
 
   @POST('/v1/setData')
-  Future<void> setData(@Body() Map<String, String> data);
+  Future<void> setData(@Body() SetDataRequestDto request);
 
   @POST('/v1/getData')
   Future<GetDataResultDto> getData(@Body() Map<String, dynamic> body);
@@ -59,13 +61,34 @@ class InitStorageRequest with _$InitStorageRequest {
 }
 
 @freezed
-class PartnerModelDto with _$PartnerModelDto {
-  const factory PartnerModelDto({
-    required PartnerModel partner,
-  }) = _PartnerModelDto;
+class GetPartnerInfoRequestDto with _$GetPartnerInfoRequestDto {
+  const factory GetPartnerInfoRequestDto({
+    required String id,
+  }) = _GetPartnerInfoRequestDto;
 
-  factory PartnerModelDto.fromJson(Map<String, dynamic> json) =>
-      _$PartnerModelDtoFromJson(json);
+  factory GetPartnerInfoRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$GetPartnerInfoRequestDtoFromJson(json);
+}
+
+@freezed
+class SetDataRequestDto with _$SetDataRequestDto {
+  const factory SetDataRequestDto({
+    required List<DataItem> data,
+  }) = _SetDataRequestDto;
+
+  factory SetDataRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$SetDataRequestDtoFromJson(json);
+}
+
+@freezed
+class DataItem with _$DataItem {
+  const factory DataItem({
+    required String key,
+    required String value,
+  }) = _DataItem;
+
+  factory DataItem.fromJson(Map<String, dynamic> json) =>
+      _$DataItemFromJson(json);
 }
 
 @freezed
@@ -91,7 +114,7 @@ class DownloadUrlDto with _$DownloadUrlDto {
 @freezed
 class GetDataResultDto with _$GetDataResultDto {
   const factory GetDataResultDto({
-    required Map<String, String> data,
+    required List<DataItem> data,
   }) = _GetDataResultDto;
 
   factory GetDataResultDto.fromJson(Map<String, dynamic> json) =>

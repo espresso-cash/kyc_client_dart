@@ -26,16 +26,42 @@ Map<String, dynamic> _$$InitStorageRequestImplToJson(
       'walletProofSignature': instance.walletProofSignature,
     };
 
-_$PartnerModelDtoImpl _$$PartnerModelDtoImplFromJson(
+_$GetPartnerInfoRequestDtoImpl _$$GetPartnerInfoRequestDtoImplFromJson(
         Map<String, dynamic> json) =>
-    _$PartnerModelDtoImpl(
-      partner: PartnerModel.fromJson(json['partner'] as Map<String, dynamic>),
+    _$GetPartnerInfoRequestDtoImpl(
+      id: json['id'] as String,
     );
 
-Map<String, dynamic> _$$PartnerModelDtoImplToJson(
-        _$PartnerModelDtoImpl instance) =>
+Map<String, dynamic> _$$GetPartnerInfoRequestDtoImplToJson(
+        _$GetPartnerInfoRequestDtoImpl instance) =>
     <String, dynamic>{
-      'partner': instance.partner,
+      'id': instance.id,
+    };
+
+_$SetDataRequestDtoImpl _$$SetDataRequestDtoImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SetDataRequestDtoImpl(
+      data: (json['data'] as List<dynamic>)
+          .map((e) => DataItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$SetDataRequestDtoImplToJson(
+        _$SetDataRequestDtoImpl instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+    };
+
+_$DataItemImpl _$$DataItemImplFromJson(Map<String, dynamic> json) =>
+    _$DataItemImpl(
+      key: json['key'] as String,
+      value: json['value'] as String,
+    );
+
+Map<String, dynamic> _$$DataItemImplToJson(_$DataItemImpl instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'value': instance.value,
     };
 
 _$UploadUrlDtoImpl _$$UploadUrlDtoImplFromJson(Map<String, dynamic> json) =>
@@ -62,7 +88,9 @@ Map<String, dynamic> _$$DownloadUrlDtoImplToJson(
 _$GetDataResultDtoImpl _$$GetDataResultDtoImplFromJson(
         Map<String, dynamic> json) =>
     _$GetDataResultDtoImpl(
-      data: Map<String, String>.from(json['data'] as Map),
+      data: (json['data'] as List<dynamic>)
+          .map((e) => DataItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$GetDataResultDtoImplToJson(
@@ -141,20 +169,21 @@ class _KycApiClient implements KycApiClient {
   }
 
   @override
-  Future<PartnerModelDto> getPartnerInfo(String partnerPK) async {
+  Future<PartnerModel> getPartnerInfo(GetPartnerInfoRequestDto request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = <String, dynamic>{};
+    _data.addAll(request.toJson());
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<PartnerModelDto>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<PartnerModel>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/v1/partners/${partnerPK}',
+              '/v1/getPartnerInfo',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -163,17 +192,17 @@ class _KycApiClient implements KycApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = PartnerModelDto.fromJson(_result.data!);
+    final _value = PartnerModel.fromJson(_result.data!);
     return _value;
   }
 
   @override
-  Future<void> setData(Map<String, String> data) async {
+  Future<void> setData(SetDataRequestDto request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(data);
+    _data.addAll(request.toJson());
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'POST',
       headers: _headers,

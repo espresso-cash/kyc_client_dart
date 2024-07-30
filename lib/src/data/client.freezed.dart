@@ -253,169 +253,483 @@ abstract class _InitStorageRequest implements InitStorageRequest {
       throw _privateConstructorUsedError;
 }
 
-PartnerModelDto _$PartnerModelDtoFromJson(Map<String, dynamic> json) {
-  return _PartnerModelDto.fromJson(json);
+GetPartnerInfoRequestDto _$GetPartnerInfoRequestDtoFromJson(
+    Map<String, dynamic> json) {
+  return _GetPartnerInfoRequestDto.fromJson(json);
 }
 
 /// @nodoc
-mixin _$PartnerModelDto {
-  PartnerModel get partner => throw _privateConstructorUsedError;
+mixin _$GetPartnerInfoRequestDto {
+  String get id => throw _privateConstructorUsedError;
 
-  /// Serializes this PartnerModelDto to a JSON map.
+  /// Serializes this GetPartnerInfoRequestDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of PartnerModelDto
+  /// Create a copy of GetPartnerInfoRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $PartnerModelDtoCopyWith<PartnerModelDto> get copyWith =>
+  $GetPartnerInfoRequestDtoCopyWith<GetPartnerInfoRequestDto> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $PartnerModelDtoCopyWith<$Res> {
-  factory $PartnerModelDtoCopyWith(
-          PartnerModelDto value, $Res Function(PartnerModelDto) then) =
-      _$PartnerModelDtoCopyWithImpl<$Res, PartnerModelDto>;
+abstract class $GetPartnerInfoRequestDtoCopyWith<$Res> {
+  factory $GetPartnerInfoRequestDtoCopyWith(GetPartnerInfoRequestDto value,
+          $Res Function(GetPartnerInfoRequestDto) then) =
+      _$GetPartnerInfoRequestDtoCopyWithImpl<$Res, GetPartnerInfoRequestDto>;
   @useResult
-  $Res call({PartnerModel partner});
-
-  $PartnerModelCopyWith<$Res> get partner;
+  $Res call({String id});
 }
 
 /// @nodoc
-class _$PartnerModelDtoCopyWithImpl<$Res, $Val extends PartnerModelDto>
-    implements $PartnerModelDtoCopyWith<$Res> {
-  _$PartnerModelDtoCopyWithImpl(this._value, this._then);
+class _$GetPartnerInfoRequestDtoCopyWithImpl<$Res,
+        $Val extends GetPartnerInfoRequestDto>
+    implements $GetPartnerInfoRequestDtoCopyWith<$Res> {
+  _$GetPartnerInfoRequestDtoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of PartnerModelDto
+  /// Create a copy of GetPartnerInfoRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? partner = null,
+    Object? id = null,
   }) {
     return _then(_value.copyWith(
-      partner: null == partner
-          ? _value.partner
-          : partner // ignore: cast_nullable_to_non_nullable
-              as PartnerModel,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
-
-  /// Create a copy of PartnerModelDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $PartnerModelCopyWith<$Res> get partner {
-    return $PartnerModelCopyWith<$Res>(_value.partner, (value) {
-      return _then(_value.copyWith(partner: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
-abstract class _$$PartnerModelDtoImplCopyWith<$Res>
-    implements $PartnerModelDtoCopyWith<$Res> {
-  factory _$$PartnerModelDtoImplCopyWith(_$PartnerModelDtoImpl value,
-          $Res Function(_$PartnerModelDtoImpl) then) =
-      __$$PartnerModelDtoImplCopyWithImpl<$Res>;
+abstract class _$$GetPartnerInfoRequestDtoImplCopyWith<$Res>
+    implements $GetPartnerInfoRequestDtoCopyWith<$Res> {
+  factory _$$GetPartnerInfoRequestDtoImplCopyWith(
+          _$GetPartnerInfoRequestDtoImpl value,
+          $Res Function(_$GetPartnerInfoRequestDtoImpl) then) =
+      __$$GetPartnerInfoRequestDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({PartnerModel partner});
-
-  @override
-  $PartnerModelCopyWith<$Res> get partner;
+  $Res call({String id});
 }
 
 /// @nodoc
-class __$$PartnerModelDtoImplCopyWithImpl<$Res>
-    extends _$PartnerModelDtoCopyWithImpl<$Res, _$PartnerModelDtoImpl>
-    implements _$$PartnerModelDtoImplCopyWith<$Res> {
-  __$$PartnerModelDtoImplCopyWithImpl(
-      _$PartnerModelDtoImpl _value, $Res Function(_$PartnerModelDtoImpl) _then)
+class __$$GetPartnerInfoRequestDtoImplCopyWithImpl<$Res>
+    extends _$GetPartnerInfoRequestDtoCopyWithImpl<$Res,
+        _$GetPartnerInfoRequestDtoImpl>
+    implements _$$GetPartnerInfoRequestDtoImplCopyWith<$Res> {
+  __$$GetPartnerInfoRequestDtoImplCopyWithImpl(
+      _$GetPartnerInfoRequestDtoImpl _value,
+      $Res Function(_$GetPartnerInfoRequestDtoImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of PartnerModelDto
+  /// Create a copy of GetPartnerInfoRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? partner = null,
+    Object? id = null,
   }) {
-    return _then(_$PartnerModelDtoImpl(
-      partner: null == partner
-          ? _value.partner
-          : partner // ignore: cast_nullable_to_non_nullable
-              as PartnerModel,
+    return _then(_$GetPartnerInfoRequestDtoImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$PartnerModelDtoImpl implements _PartnerModelDto {
-  const _$PartnerModelDtoImpl({required this.partner});
+class _$GetPartnerInfoRequestDtoImpl implements _GetPartnerInfoRequestDto {
+  const _$GetPartnerInfoRequestDtoImpl({required this.id});
 
-  factory _$PartnerModelDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$PartnerModelDtoImplFromJson(json);
+  factory _$GetPartnerInfoRequestDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$GetPartnerInfoRequestDtoImplFromJson(json);
 
   @override
-  final PartnerModel partner;
+  final String id;
 
   @override
   String toString() {
-    return 'PartnerModelDto(partner: $partner)';
+    return 'GetPartnerInfoRequestDto(id: $id)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PartnerModelDtoImpl &&
-            (identical(other.partner, partner) || other.partner == partner));
+            other is _$GetPartnerInfoRequestDtoImpl &&
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, partner);
+  int get hashCode => Object.hash(runtimeType, id);
 
-  /// Create a copy of PartnerModelDto
+  /// Create a copy of GetPartnerInfoRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$PartnerModelDtoImplCopyWith<_$PartnerModelDtoImpl> get copyWith =>
-      __$$PartnerModelDtoImplCopyWithImpl<_$PartnerModelDtoImpl>(
-          this, _$identity);
+  _$$GetPartnerInfoRequestDtoImplCopyWith<_$GetPartnerInfoRequestDtoImpl>
+      get copyWith => __$$GetPartnerInfoRequestDtoImplCopyWithImpl<
+          _$GetPartnerInfoRequestDtoImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PartnerModelDtoImplToJson(
+    return _$$GetPartnerInfoRequestDtoImplToJson(
       this,
     );
   }
 }
 
-abstract class _PartnerModelDto implements PartnerModelDto {
-  const factory _PartnerModelDto({required final PartnerModel partner}) =
-      _$PartnerModelDtoImpl;
+abstract class _GetPartnerInfoRequestDto implements GetPartnerInfoRequestDto {
+  const factory _GetPartnerInfoRequestDto({required final String id}) =
+      _$GetPartnerInfoRequestDtoImpl;
 
-  factory _PartnerModelDto.fromJson(Map<String, dynamic> json) =
-      _$PartnerModelDtoImpl.fromJson;
+  factory _GetPartnerInfoRequestDto.fromJson(Map<String, dynamic> json) =
+      _$GetPartnerInfoRequestDtoImpl.fromJson;
 
   @override
-  PartnerModel get partner;
+  String get id;
 
-  /// Create a copy of PartnerModelDto
+  /// Create a copy of GetPartnerInfoRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$PartnerModelDtoImplCopyWith<_$PartnerModelDtoImpl> get copyWith =>
+  _$$GetPartnerInfoRequestDtoImplCopyWith<_$GetPartnerInfoRequestDtoImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+SetDataRequestDto _$SetDataRequestDtoFromJson(Map<String, dynamic> json) {
+  return _SetDataRequestDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SetDataRequestDto {
+  List<DataItem> get data => throw _privateConstructorUsedError;
+
+  /// Serializes this SetDataRequestDto to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SetDataRequestDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SetDataRequestDtoCopyWith<SetDataRequestDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SetDataRequestDtoCopyWith<$Res> {
+  factory $SetDataRequestDtoCopyWith(
+          SetDataRequestDto value, $Res Function(SetDataRequestDto) then) =
+      _$SetDataRequestDtoCopyWithImpl<$Res, SetDataRequestDto>;
+  @useResult
+  $Res call({List<DataItem> data});
+}
+
+/// @nodoc
+class _$SetDataRequestDtoCopyWithImpl<$Res, $Val extends SetDataRequestDto>
+    implements $SetDataRequestDtoCopyWith<$Res> {
+  _$SetDataRequestDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SetDataRequestDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_value.copyWith(
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as List<DataItem>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SetDataRequestDtoImplCopyWith<$Res>
+    implements $SetDataRequestDtoCopyWith<$Res> {
+  factory _$$SetDataRequestDtoImplCopyWith(_$SetDataRequestDtoImpl value,
+          $Res Function(_$SetDataRequestDtoImpl) then) =
+      __$$SetDataRequestDtoImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({List<DataItem> data});
+}
+
+/// @nodoc
+class __$$SetDataRequestDtoImplCopyWithImpl<$Res>
+    extends _$SetDataRequestDtoCopyWithImpl<$Res, _$SetDataRequestDtoImpl>
+    implements _$$SetDataRequestDtoImplCopyWith<$Res> {
+  __$$SetDataRequestDtoImplCopyWithImpl(_$SetDataRequestDtoImpl _value,
+      $Res Function(_$SetDataRequestDtoImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SetDataRequestDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$SetDataRequestDtoImpl(
+      data: null == data
+          ? _value._data
+          : data // ignore: cast_nullable_to_non_nullable
+              as List<DataItem>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SetDataRequestDtoImpl implements _SetDataRequestDto {
+  const _$SetDataRequestDtoImpl({required final List<DataItem> data})
+      : _data = data;
+
+  factory _$SetDataRequestDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SetDataRequestDtoImplFromJson(json);
+
+  final List<DataItem> _data;
+  @override
+  List<DataItem> get data {
+    if (_data is EqualUnmodifiableListView) return _data;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_data);
+  }
+
+  @override
+  String toString() {
+    return 'SetDataRequestDto(data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SetDataRequestDtoImpl &&
+            const DeepCollectionEquality().equals(other._data, _data));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
+
+  /// Create a copy of SetDataRequestDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SetDataRequestDtoImplCopyWith<_$SetDataRequestDtoImpl> get copyWith =>
+      __$$SetDataRequestDtoImplCopyWithImpl<_$SetDataRequestDtoImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SetDataRequestDtoImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SetDataRequestDto implements SetDataRequestDto {
+  const factory _SetDataRequestDto({required final List<DataItem> data}) =
+      _$SetDataRequestDtoImpl;
+
+  factory _SetDataRequestDto.fromJson(Map<String, dynamic> json) =
+      _$SetDataRequestDtoImpl.fromJson;
+
+  @override
+  List<DataItem> get data;
+
+  /// Create a copy of SetDataRequestDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SetDataRequestDtoImplCopyWith<_$SetDataRequestDtoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+DataItem _$DataItemFromJson(Map<String, dynamic> json) {
+  return _DataItem.fromJson(json);
+}
+
+/// @nodoc
+mixin _$DataItem {
+  String get key => throw _privateConstructorUsedError;
+  String get value => throw _privateConstructorUsedError;
+
+  /// Serializes this DataItem to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of DataItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $DataItemCopyWith<DataItem> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $DataItemCopyWith<$Res> {
+  factory $DataItemCopyWith(DataItem value, $Res Function(DataItem) then) =
+      _$DataItemCopyWithImpl<$Res, DataItem>;
+  @useResult
+  $Res call({String key, String value});
+}
+
+/// @nodoc
+class _$DataItemCopyWithImpl<$Res, $Val extends DataItem>
+    implements $DataItemCopyWith<$Res> {
+  _$DataItemCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of DataItem
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? key = null,
+    Object? value = null,
+  }) {
+    return _then(_value.copyWith(
+      key: null == key
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String,
+      value: null == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$DataItemImplCopyWith<$Res>
+    implements $DataItemCopyWith<$Res> {
+  factory _$$DataItemImplCopyWith(
+          _$DataItemImpl value, $Res Function(_$DataItemImpl) then) =
+      __$$DataItemImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String key, String value});
+}
+
+/// @nodoc
+class __$$DataItemImplCopyWithImpl<$Res>
+    extends _$DataItemCopyWithImpl<$Res, _$DataItemImpl>
+    implements _$$DataItemImplCopyWith<$Res> {
+  __$$DataItemImplCopyWithImpl(
+      _$DataItemImpl _value, $Res Function(_$DataItemImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DataItem
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? key = null,
+    Object? value = null,
+  }) {
+    return _then(_$DataItemImpl(
+      key: null == key
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String,
+      value: null == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$DataItemImpl implements _DataItem {
+  const _$DataItemImpl({required this.key, required this.value});
+
+  factory _$DataItemImpl.fromJson(Map<String, dynamic> json) =>
+      _$$DataItemImplFromJson(json);
+
+  @override
+  final String key;
+  @override
+  final String value;
+
+  @override
+  String toString() {
+    return 'DataItem(key: $key, value: $value)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DataItemImpl &&
+            (identical(other.key, key) || other.key == key) &&
+            (identical(other.value, value) || other.value == value));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, key, value);
+
+  /// Create a copy of DataItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DataItemImplCopyWith<_$DataItemImpl> get copyWith =>
+      __$$DataItemImplCopyWithImpl<_$DataItemImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$DataItemImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _DataItem implements DataItem {
+  const factory _DataItem(
+      {required final String key,
+      required final String value}) = _$DataItemImpl;
+
+  factory _DataItem.fromJson(Map<String, dynamic> json) =
+      _$DataItemImpl.fromJson;
+
+  @override
+  String get key;
+  @override
+  String get value;
+
+  /// Create a copy of DataItem
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$DataItemImplCopyWith<_$DataItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -725,7 +1039,7 @@ GetDataResultDto _$GetDataResultDtoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$GetDataResultDto {
-  Map<String, String> get data => throw _privateConstructorUsedError;
+  List<DataItem> get data => throw _privateConstructorUsedError;
 
   /// Serializes this GetDataResultDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -743,7 +1057,7 @@ abstract class $GetDataResultDtoCopyWith<$Res> {
           GetDataResultDto value, $Res Function(GetDataResultDto) then) =
       _$GetDataResultDtoCopyWithImpl<$Res, GetDataResultDto>;
   @useResult
-  $Res call({Map<String, String> data});
+  $Res call({List<DataItem> data});
 }
 
 /// @nodoc
@@ -767,7 +1081,7 @@ class _$GetDataResultDtoCopyWithImpl<$Res, $Val extends GetDataResultDto>
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
+              as List<DataItem>,
     ) as $Val);
   }
 }
@@ -780,7 +1094,7 @@ abstract class _$$GetDataResultDtoImplCopyWith<$Res>
       __$$GetDataResultDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Map<String, String> data});
+  $Res call({List<DataItem> data});
 }
 
 /// @nodoc
@@ -802,7 +1116,7 @@ class __$$GetDataResultDtoImplCopyWithImpl<$Res>
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
+              as List<DataItem>,
     ));
   }
 }
@@ -810,18 +1124,18 @@ class __$$GetDataResultDtoImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$GetDataResultDtoImpl implements _GetDataResultDto {
-  const _$GetDataResultDtoImpl({required final Map<String, String> data})
+  const _$GetDataResultDtoImpl({required final List<DataItem> data})
       : _data = data;
 
   factory _$GetDataResultDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$GetDataResultDtoImplFromJson(json);
 
-  final Map<String, String> _data;
+  final List<DataItem> _data;
   @override
-  Map<String, String> get data {
-    if (_data is EqualUnmodifiableMapView) return _data;
+  List<DataItem> get data {
+    if (_data is EqualUnmodifiableListView) return _data;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_data);
+    return EqualUnmodifiableListView(_data);
   }
 
   @override
@@ -860,14 +1174,14 @@ class _$GetDataResultDtoImpl implements _GetDataResultDto {
 }
 
 abstract class _GetDataResultDto implements GetDataResultDto {
-  const factory _GetDataResultDto({required final Map<String, String> data}) =
+  const factory _GetDataResultDto({required final List<DataItem> data}) =
       _$GetDataResultDtoImpl;
 
   factory _GetDataResultDto.fromJson(Map<String, dynamic> json) =
       _$GetDataResultDtoImpl.fromJson;
 
   @override
-  Map<String, String> get data;
+  List<DataItem> get data;
 
   /// Create a copy of GetDataResultDto
   /// with the given fields replaced by the non-null parameter values.

@@ -6,6 +6,7 @@ environment:
   sdk: ^3.4.3
 
 dependencies:
+  collection: ^1.19.0
   cryptography: ^2.7.0
   dart_jsonwebtoken: ^2.14.0
   dio: ^5.4.0
