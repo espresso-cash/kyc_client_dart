@@ -111,16 +111,6 @@ class GetDataResultDto with _$GetDataResultDto {
       _$GetDataResultDtoFromJson(json);
 }
 
-// @freezed
-// class ValidationResultDto with _$ValidationResultDto {
-//   const factory ValidationResultDto({
-//     required Map<String, dynamic> data,
-//   }) = _ValidationResultDto;
-
-//   factory ValidationResultDto.fromJson(Map<String, dynamic> json) =>
-//       _$ValidationResultDtoFromJson(json);
-// }
-
 @freezed
 class ValidationRequestDto with _$ValidationRequestDto {
   const factory ValidationRequestDto({
