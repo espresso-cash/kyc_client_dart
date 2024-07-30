@@ -32,16 +32,18 @@ abstract class KycApiClient {
   Future<GetDataResultDto> getData(@Body() Map<String, dynamic> body);
 
   @POST('/v1/createUploadUrl')
-  Future<UploadUrlDto> createUploadUrl(@Body() Map<String, dynamic> body);
+  Future<FileUrlResponseDto> createUploadUrl(@Body() Map<String, dynamic> body);
 
   @POST('/v1/createDownloadUrl')
-  Future<DownloadUrlDto> createDownloadUrl(@Body() Map<String, dynamic> body);
+  Future<FileUrlResponseDto> createDownloadUrl(
+    @Body() Map<String, dynamic> body,
+  );
 
   @POST('/v1/setValidationResult')
-  Future<void> setValidationResult(@Body() Map<String, String> body);
+  Future<void> setValidationResult(@Body() DataEntry request);
 
   @POST('/v1/getValidationResult')
-  Future<ValidationResultDto> getValidationResult(
+  Future<DataEntry> getValidationResult(
     @Body() ValidationRequestDto request,
   );
 }
@@ -73,7 +75,7 @@ class GetPartnerInfoRequestDto with _$GetPartnerInfoRequestDto {
 @freezed
 class SetDataRequestDto with _$SetDataRequestDto {
   const factory SetDataRequestDto({
-    required List<DataItem> data,
+    required List<DataEntry> data,
   }) = _SetDataRequestDto;
 
   factory SetDataRequestDto.fromJson(Map<String, dynamic> json) =>
@@ -81,55 +83,45 @@ class SetDataRequestDto with _$SetDataRequestDto {
 }
 
 @freezed
-class DataItem with _$DataItem {
-  const factory DataItem({
+class DataEntry with _$DataEntry {
+  const factory DataEntry({
     required String key,
     required String value,
-  }) = _DataItem;
+  }) = _DataEntry;
 
-  factory DataItem.fromJson(Map<String, dynamic> json) =>
-      _$DataItemFromJson(json);
+  factory DataEntry.fromJson(Map<String, dynamic> json) =>
+      _$DataEntryFromJson(json);
 }
 
 @freezed
-class UploadUrlDto with _$UploadUrlDto {
-  const factory UploadUrlDto({
+class FileUrlResponseDto with _$FileUrlResponseDto {
+  const factory FileUrlResponseDto({
     required String url,
-  }) = _UploadUrlDto;
+  }) = _FileUrlResponseDto;
 
-  factory UploadUrlDto.fromJson(Map<String, dynamic> json) =>
-      _$UploadUrlDtoFromJson(json);
-}
-
-@freezed
-class DownloadUrlDto with _$DownloadUrlDto {
-  const factory DownloadUrlDto({
-    required String data,
-  }) = _DownloadUrlDto;
-
-  factory DownloadUrlDto.fromJson(Map<String, dynamic> json) =>
-      _$DownloadUrlDtoFromJson(json);
+  factory FileUrlResponseDto.fromJson(Map<String, dynamic> json) =>
+      _$FileUrlResponseDtoFromJson(json);
 }
 
 @freezed
 class GetDataResultDto with _$GetDataResultDto {
   const factory GetDataResultDto({
-    required List<DataItem> data,
+    required List<DataEntry> data,
   }) = _GetDataResultDto;
 
   factory GetDataResultDto.fromJson(Map<String, dynamic> json) =>
       _$GetDataResultDtoFromJson(json);
 }
 
-@freezed
-class ValidationResultDto with _$ValidationResultDto {
-  const factory ValidationResultDto({
-    required Map<String, dynamic> data,
-  }) = _ValidationResultDto;
+// @freezed
+// class ValidationResultDto with _$ValidationResultDto {
+//   const factory ValidationResultDto({
+//     required Map<String, dynamic> data,
+//   }) = _ValidationResultDto;
 
-  factory ValidationResultDto.fromJson(Map<String, dynamic> json) =>
-      _$ValidationResultDtoFromJson(json);
-}
+//   factory ValidationResultDto.fromJson(Map<String, dynamic> json) =>
+//       _$ValidationResultDtoFromJson(json);
+// }
 
 @freezed
 class ValidationRequestDto with _$ValidationRequestDto {

@@ -415,7 +415,7 @@ SetDataRequestDto _$SetDataRequestDtoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SetDataRequestDto {
-  List<DataItem> get data => throw _privateConstructorUsedError;
+  List<DataEntry> get data => throw _privateConstructorUsedError;
 
   /// Serializes this SetDataRequestDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -433,7 +433,7 @@ abstract class $SetDataRequestDtoCopyWith<$Res> {
           SetDataRequestDto value, $Res Function(SetDataRequestDto) then) =
       _$SetDataRequestDtoCopyWithImpl<$Res, SetDataRequestDto>;
   @useResult
-  $Res call({List<DataItem> data});
+  $Res call({List<DataEntry> data});
 }
 
 /// @nodoc
@@ -457,7 +457,7 @@ class _$SetDataRequestDtoCopyWithImpl<$Res, $Val extends SetDataRequestDto>
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<DataItem>,
+              as List<DataEntry>,
     ) as $Val);
   }
 }
@@ -470,7 +470,7 @@ abstract class _$$SetDataRequestDtoImplCopyWith<$Res>
       __$$SetDataRequestDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<DataItem> data});
+  $Res call({List<DataEntry> data});
 }
 
 /// @nodoc
@@ -492,7 +492,7 @@ class __$$SetDataRequestDtoImplCopyWithImpl<$Res>
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<DataItem>,
+              as List<DataEntry>,
     ));
   }
 }
@@ -500,15 +500,15 @@ class __$$SetDataRequestDtoImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$SetDataRequestDtoImpl implements _SetDataRequestDto {
-  const _$SetDataRequestDtoImpl({required final List<DataItem> data})
+  const _$SetDataRequestDtoImpl({required final List<DataEntry> data})
       : _data = data;
 
   factory _$SetDataRequestDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$SetDataRequestDtoImplFromJson(json);
 
-  final List<DataItem> _data;
+  final List<DataEntry> _data;
   @override
-  List<DataItem> get data {
+  List<DataEntry> get data {
     if (_data is EqualUnmodifiableListView) return _data;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_data);
@@ -550,14 +550,14 @@ class _$SetDataRequestDtoImpl implements _SetDataRequestDto {
 }
 
 abstract class _SetDataRequestDto implements SetDataRequestDto {
-  const factory _SetDataRequestDto({required final List<DataItem> data}) =
+  const factory _SetDataRequestDto({required final List<DataEntry> data}) =
       _$SetDataRequestDtoImpl;
 
   factory _SetDataRequestDto.fromJson(Map<String, dynamic> json) =
       _$SetDataRequestDtoImpl.fromJson;
 
   @override
-  List<DataItem> get data;
+  List<DataEntry> get data;
 
   /// Create a copy of SetDataRequestDto
   /// with the given fields replaced by the non-null parameter values.
@@ -567,44 +567,44 @@ abstract class _SetDataRequestDto implements SetDataRequestDto {
       throw _privateConstructorUsedError;
 }
 
-DataItem _$DataItemFromJson(Map<String, dynamic> json) {
-  return _DataItem.fromJson(json);
+DataEntry _$DataEntryFromJson(Map<String, dynamic> json) {
+  return _DataEntry.fromJson(json);
 }
 
 /// @nodoc
-mixin _$DataItem {
+mixin _$DataEntry {
   String get key => throw _privateConstructorUsedError;
   String get value => throw _privateConstructorUsedError;
 
-  /// Serializes this DataItem to a JSON map.
+  /// Serializes this DataEntry to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of DataItem
+  /// Create a copy of DataEntry
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $DataItemCopyWith<DataItem> get copyWith =>
+  $DataEntryCopyWith<DataEntry> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $DataItemCopyWith<$Res> {
-  factory $DataItemCopyWith(DataItem value, $Res Function(DataItem) then) =
-      _$DataItemCopyWithImpl<$Res, DataItem>;
+abstract class $DataEntryCopyWith<$Res> {
+  factory $DataEntryCopyWith(DataEntry value, $Res Function(DataEntry) then) =
+      _$DataEntryCopyWithImpl<$Res, DataEntry>;
   @useResult
   $Res call({String key, String value});
 }
 
 /// @nodoc
-class _$DataItemCopyWithImpl<$Res, $Val extends DataItem>
-    implements $DataItemCopyWith<$Res> {
-  _$DataItemCopyWithImpl(this._value, this._then);
+class _$DataEntryCopyWithImpl<$Res, $Val extends DataEntry>
+    implements $DataEntryCopyWith<$Res> {
+  _$DataEntryCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of DataItem
+  /// Create a copy of DataEntry
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -626,25 +626,25 @@ class _$DataItemCopyWithImpl<$Res, $Val extends DataItem>
 }
 
 /// @nodoc
-abstract class _$$DataItemImplCopyWith<$Res>
-    implements $DataItemCopyWith<$Res> {
-  factory _$$DataItemImplCopyWith(
-          _$DataItemImpl value, $Res Function(_$DataItemImpl) then) =
-      __$$DataItemImplCopyWithImpl<$Res>;
+abstract class _$$DataEntryImplCopyWith<$Res>
+    implements $DataEntryCopyWith<$Res> {
+  factory _$$DataEntryImplCopyWith(
+          _$DataEntryImpl value, $Res Function(_$DataEntryImpl) then) =
+      __$$DataEntryImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String key, String value});
 }
 
 /// @nodoc
-class __$$DataItemImplCopyWithImpl<$Res>
-    extends _$DataItemCopyWithImpl<$Res, _$DataItemImpl>
-    implements _$$DataItemImplCopyWith<$Res> {
-  __$$DataItemImplCopyWithImpl(
-      _$DataItemImpl _value, $Res Function(_$DataItemImpl) _then)
+class __$$DataEntryImplCopyWithImpl<$Res>
+    extends _$DataEntryCopyWithImpl<$Res, _$DataEntryImpl>
+    implements _$$DataEntryImplCopyWith<$Res> {
+  __$$DataEntryImplCopyWithImpl(
+      _$DataEntryImpl _value, $Res Function(_$DataEntryImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of DataItem
+  /// Create a copy of DataEntry
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -652,7 +652,7 @@ class __$$DataItemImplCopyWithImpl<$Res>
     Object? key = null,
     Object? value = null,
   }) {
-    return _then(_$DataItemImpl(
+    return _then(_$DataEntryImpl(
       key: null == key
           ? _value.key
           : key // ignore: cast_nullable_to_non_nullable
@@ -667,11 +667,11 @@ class __$$DataItemImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$DataItemImpl implements _DataItem {
-  const _$DataItemImpl({required this.key, required this.value});
+class _$DataEntryImpl implements _DataEntry {
+  const _$DataEntryImpl({required this.key, required this.value});
 
-  factory _$DataItemImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DataItemImplFromJson(json);
+  factory _$DataEntryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$DataEntryImplFromJson(json);
 
   @override
   final String key;
@@ -680,14 +680,14 @@ class _$DataItemImpl implements _DataItem {
 
   @override
   String toString() {
-    return 'DataItem(key: $key, value: $value)';
+    return 'DataEntry(key: $key, value: $value)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DataItemImpl &&
+            other is _$DataEntryImpl &&
             (identical(other.key, key) || other.key == key) &&
             (identical(other.value, value) || other.value == value));
   }
@@ -696,81 +696,81 @@ class _$DataItemImpl implements _DataItem {
   @override
   int get hashCode => Object.hash(runtimeType, key, value);
 
-  /// Create a copy of DataItem
+  /// Create a copy of DataEntry
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$DataItemImplCopyWith<_$DataItemImpl> get copyWith =>
-      __$$DataItemImplCopyWithImpl<_$DataItemImpl>(this, _$identity);
+  _$$DataEntryImplCopyWith<_$DataEntryImpl> get copyWith =>
+      __$$DataEntryImplCopyWithImpl<_$DataEntryImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DataItemImplToJson(
+    return _$$DataEntryImplToJson(
       this,
     );
   }
 }
 
-abstract class _DataItem implements DataItem {
-  const factory _DataItem(
+abstract class _DataEntry implements DataEntry {
+  const factory _DataEntry(
       {required final String key,
-      required final String value}) = _$DataItemImpl;
+      required final String value}) = _$DataEntryImpl;
 
-  factory _DataItem.fromJson(Map<String, dynamic> json) =
-      _$DataItemImpl.fromJson;
+  factory _DataEntry.fromJson(Map<String, dynamic> json) =
+      _$DataEntryImpl.fromJson;
 
   @override
   String get key;
   @override
   String get value;
 
-  /// Create a copy of DataItem
+  /// Create a copy of DataEntry
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DataItemImplCopyWith<_$DataItemImpl> get copyWith =>
+  _$$DataEntryImplCopyWith<_$DataEntryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-UploadUrlDto _$UploadUrlDtoFromJson(Map<String, dynamic> json) {
-  return _UploadUrlDto.fromJson(json);
+FileUrlResponseDto _$FileUrlResponseDtoFromJson(Map<String, dynamic> json) {
+  return _FileUrlResponseDto.fromJson(json);
 }
 
 /// @nodoc
-mixin _$UploadUrlDto {
+mixin _$FileUrlResponseDto {
   String get url => throw _privateConstructorUsedError;
 
-  /// Serializes this UploadUrlDto to a JSON map.
+  /// Serializes this FileUrlResponseDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of UploadUrlDto
+  /// Create a copy of FileUrlResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $UploadUrlDtoCopyWith<UploadUrlDto> get copyWith =>
+  $FileUrlResponseDtoCopyWith<FileUrlResponseDto> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UploadUrlDtoCopyWith<$Res> {
-  factory $UploadUrlDtoCopyWith(
-          UploadUrlDto value, $Res Function(UploadUrlDto) then) =
-      _$UploadUrlDtoCopyWithImpl<$Res, UploadUrlDto>;
+abstract class $FileUrlResponseDtoCopyWith<$Res> {
+  factory $FileUrlResponseDtoCopyWith(
+          FileUrlResponseDto value, $Res Function(FileUrlResponseDto) then) =
+      _$FileUrlResponseDtoCopyWithImpl<$Res, FileUrlResponseDto>;
   @useResult
   $Res call({String url});
 }
 
 /// @nodoc
-class _$UploadUrlDtoCopyWithImpl<$Res, $Val extends UploadUrlDto>
-    implements $UploadUrlDtoCopyWith<$Res> {
-  _$UploadUrlDtoCopyWithImpl(this._value, this._then);
+class _$FileUrlResponseDtoCopyWithImpl<$Res, $Val extends FileUrlResponseDto>
+    implements $FileUrlResponseDtoCopyWith<$Res> {
+  _$FileUrlResponseDtoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of UploadUrlDto
+  /// Create a copy of FileUrlResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -787,32 +787,32 @@ class _$UploadUrlDtoCopyWithImpl<$Res, $Val extends UploadUrlDto>
 }
 
 /// @nodoc
-abstract class _$$UploadUrlDtoImplCopyWith<$Res>
-    implements $UploadUrlDtoCopyWith<$Res> {
-  factory _$$UploadUrlDtoImplCopyWith(
-          _$UploadUrlDtoImpl value, $Res Function(_$UploadUrlDtoImpl) then) =
-      __$$UploadUrlDtoImplCopyWithImpl<$Res>;
+abstract class _$$FileUrlResponseDtoImplCopyWith<$Res>
+    implements $FileUrlResponseDtoCopyWith<$Res> {
+  factory _$$FileUrlResponseDtoImplCopyWith(_$FileUrlResponseDtoImpl value,
+          $Res Function(_$FileUrlResponseDtoImpl) then) =
+      __$$FileUrlResponseDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String url});
 }
 
 /// @nodoc
-class __$$UploadUrlDtoImplCopyWithImpl<$Res>
-    extends _$UploadUrlDtoCopyWithImpl<$Res, _$UploadUrlDtoImpl>
-    implements _$$UploadUrlDtoImplCopyWith<$Res> {
-  __$$UploadUrlDtoImplCopyWithImpl(
-      _$UploadUrlDtoImpl _value, $Res Function(_$UploadUrlDtoImpl) _then)
+class __$$FileUrlResponseDtoImplCopyWithImpl<$Res>
+    extends _$FileUrlResponseDtoCopyWithImpl<$Res, _$FileUrlResponseDtoImpl>
+    implements _$$FileUrlResponseDtoImplCopyWith<$Res> {
+  __$$FileUrlResponseDtoImplCopyWithImpl(_$FileUrlResponseDtoImpl _value,
+      $Res Function(_$FileUrlResponseDtoImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of UploadUrlDto
+  /// Create a copy of FileUrlResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? url = null,
   }) {
-    return _then(_$UploadUrlDtoImpl(
+    return _then(_$FileUrlResponseDtoImpl(
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -823,25 +823,25 @@ class __$$UploadUrlDtoImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UploadUrlDtoImpl implements _UploadUrlDto {
-  const _$UploadUrlDtoImpl({required this.url});
+class _$FileUrlResponseDtoImpl implements _FileUrlResponseDto {
+  const _$FileUrlResponseDtoImpl({required this.url});
 
-  factory _$UploadUrlDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UploadUrlDtoImplFromJson(json);
+  factory _$FileUrlResponseDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$FileUrlResponseDtoImplFromJson(json);
 
   @override
   final String url;
 
   @override
   String toString() {
-    return 'UploadUrlDto(url: $url)';
+    return 'FileUrlResponseDto(url: $url)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UploadUrlDtoImpl &&
+            other is _$FileUrlResponseDtoImpl &&
             (identical(other.url, url) || other.url == url));
   }
 
@@ -849,187 +849,38 @@ class _$UploadUrlDtoImpl implements _UploadUrlDto {
   @override
   int get hashCode => Object.hash(runtimeType, url);
 
-  /// Create a copy of UploadUrlDto
+  /// Create a copy of FileUrlResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$UploadUrlDtoImplCopyWith<_$UploadUrlDtoImpl> get copyWith =>
-      __$$UploadUrlDtoImplCopyWithImpl<_$UploadUrlDtoImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$UploadUrlDtoImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _UploadUrlDto implements UploadUrlDto {
-  const factory _UploadUrlDto({required final String url}) = _$UploadUrlDtoImpl;
-
-  factory _UploadUrlDto.fromJson(Map<String, dynamic> json) =
-      _$UploadUrlDtoImpl.fromJson;
-
-  @override
-  String get url;
-
-  /// Create a copy of UploadUrlDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UploadUrlDtoImplCopyWith<_$UploadUrlDtoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-DownloadUrlDto _$DownloadUrlDtoFromJson(Map<String, dynamic> json) {
-  return _DownloadUrlDto.fromJson(json);
-}
-
-/// @nodoc
-mixin _$DownloadUrlDto {
-  String get data => throw _privateConstructorUsedError;
-
-  /// Serializes this DownloadUrlDto to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of DownloadUrlDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $DownloadUrlDtoCopyWith<DownloadUrlDto> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $DownloadUrlDtoCopyWith<$Res> {
-  factory $DownloadUrlDtoCopyWith(
-          DownloadUrlDto value, $Res Function(DownloadUrlDto) then) =
-      _$DownloadUrlDtoCopyWithImpl<$Res, DownloadUrlDto>;
-  @useResult
-  $Res call({String data});
-}
-
-/// @nodoc
-class _$DownloadUrlDtoCopyWithImpl<$Res, $Val extends DownloadUrlDto>
-    implements $DownloadUrlDtoCopyWith<$Res> {
-  _$DownloadUrlDtoCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of DownloadUrlDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? data = null,
-  }) {
-    return _then(_value.copyWith(
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$DownloadUrlDtoImplCopyWith<$Res>
-    implements $DownloadUrlDtoCopyWith<$Res> {
-  factory _$$DownloadUrlDtoImplCopyWith(_$DownloadUrlDtoImpl value,
-          $Res Function(_$DownloadUrlDtoImpl) then) =
-      __$$DownloadUrlDtoImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String data});
-}
-
-/// @nodoc
-class __$$DownloadUrlDtoImplCopyWithImpl<$Res>
-    extends _$DownloadUrlDtoCopyWithImpl<$Res, _$DownloadUrlDtoImpl>
-    implements _$$DownloadUrlDtoImplCopyWith<$Res> {
-  __$$DownloadUrlDtoImplCopyWithImpl(
-      _$DownloadUrlDtoImpl _value, $Res Function(_$DownloadUrlDtoImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of DownloadUrlDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? data = null,
-  }) {
-    return _then(_$DownloadUrlDtoImpl(
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$DownloadUrlDtoImpl implements _DownloadUrlDto {
-  const _$DownloadUrlDtoImpl({required this.data});
-
-  factory _$DownloadUrlDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DownloadUrlDtoImplFromJson(json);
-
-  @override
-  final String data;
-
-  @override
-  String toString() {
-    return 'DownloadUrlDto(data: $data)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DownloadUrlDtoImpl &&
-            (identical(other.data, data) || other.data == data));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, data);
-
-  /// Create a copy of DownloadUrlDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$DownloadUrlDtoImplCopyWith<_$DownloadUrlDtoImpl> get copyWith =>
-      __$$DownloadUrlDtoImplCopyWithImpl<_$DownloadUrlDtoImpl>(
+  _$$FileUrlResponseDtoImplCopyWith<_$FileUrlResponseDtoImpl> get copyWith =>
+      __$$FileUrlResponseDtoImplCopyWithImpl<_$FileUrlResponseDtoImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DownloadUrlDtoImplToJson(
+    return _$$FileUrlResponseDtoImplToJson(
       this,
     );
   }
 }
 
-abstract class _DownloadUrlDto implements DownloadUrlDto {
-  const factory _DownloadUrlDto({required final String data}) =
-      _$DownloadUrlDtoImpl;
+abstract class _FileUrlResponseDto implements FileUrlResponseDto {
+  const factory _FileUrlResponseDto({required final String url}) =
+      _$FileUrlResponseDtoImpl;
 
-  factory _DownloadUrlDto.fromJson(Map<String, dynamic> json) =
-      _$DownloadUrlDtoImpl.fromJson;
+  factory _FileUrlResponseDto.fromJson(Map<String, dynamic> json) =
+      _$FileUrlResponseDtoImpl.fromJson;
 
   @override
-  String get data;
+  String get url;
 
-  /// Create a copy of DownloadUrlDto
+  /// Create a copy of FileUrlResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DownloadUrlDtoImplCopyWith<_$DownloadUrlDtoImpl> get copyWith =>
+  _$$FileUrlResponseDtoImplCopyWith<_$FileUrlResponseDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1039,7 +890,7 @@ GetDataResultDto _$GetDataResultDtoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$GetDataResultDto {
-  List<DataItem> get data => throw _privateConstructorUsedError;
+  List<DataEntry> get data => throw _privateConstructorUsedError;
 
   /// Serializes this GetDataResultDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1057,7 +908,7 @@ abstract class $GetDataResultDtoCopyWith<$Res> {
           GetDataResultDto value, $Res Function(GetDataResultDto) then) =
       _$GetDataResultDtoCopyWithImpl<$Res, GetDataResultDto>;
   @useResult
-  $Res call({List<DataItem> data});
+  $Res call({List<DataEntry> data});
 }
 
 /// @nodoc
@@ -1081,7 +932,7 @@ class _$GetDataResultDtoCopyWithImpl<$Res, $Val extends GetDataResultDto>
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<DataItem>,
+              as List<DataEntry>,
     ) as $Val);
   }
 }
@@ -1094,7 +945,7 @@ abstract class _$$GetDataResultDtoImplCopyWith<$Res>
       __$$GetDataResultDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<DataItem> data});
+  $Res call({List<DataEntry> data});
 }
 
 /// @nodoc
@@ -1116,7 +967,7 @@ class __$$GetDataResultDtoImplCopyWithImpl<$Res>
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<DataItem>,
+              as List<DataEntry>,
     ));
   }
 }
@@ -1124,15 +975,15 @@ class __$$GetDataResultDtoImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$GetDataResultDtoImpl implements _GetDataResultDto {
-  const _$GetDataResultDtoImpl({required final List<DataItem> data})
+  const _$GetDataResultDtoImpl({required final List<DataEntry> data})
       : _data = data;
 
   factory _$GetDataResultDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$GetDataResultDtoImplFromJson(json);
 
-  final List<DataItem> _data;
+  final List<DataEntry> _data;
   @override
-  List<DataItem> get data {
+  List<DataEntry> get data {
     if (_data is EqualUnmodifiableListView) return _data;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_data);
@@ -1174,178 +1025,20 @@ class _$GetDataResultDtoImpl implements _GetDataResultDto {
 }
 
 abstract class _GetDataResultDto implements GetDataResultDto {
-  const factory _GetDataResultDto({required final List<DataItem> data}) =
+  const factory _GetDataResultDto({required final List<DataEntry> data}) =
       _$GetDataResultDtoImpl;
 
   factory _GetDataResultDto.fromJson(Map<String, dynamic> json) =
       _$GetDataResultDtoImpl.fromJson;
 
   @override
-  List<DataItem> get data;
+  List<DataEntry> get data;
 
   /// Create a copy of GetDataResultDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetDataResultDtoImplCopyWith<_$GetDataResultDtoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-ValidationResultDto _$ValidationResultDtoFromJson(Map<String, dynamic> json) {
-  return _ValidationResultDto.fromJson(json);
-}
-
-/// @nodoc
-mixin _$ValidationResultDto {
-  Map<String, dynamic> get data => throw _privateConstructorUsedError;
-
-  /// Serializes this ValidationResultDto to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ValidationResultDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ValidationResultDtoCopyWith<ValidationResultDto> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ValidationResultDtoCopyWith<$Res> {
-  factory $ValidationResultDtoCopyWith(
-          ValidationResultDto value, $Res Function(ValidationResultDto) then) =
-      _$ValidationResultDtoCopyWithImpl<$Res, ValidationResultDto>;
-  @useResult
-  $Res call({Map<String, dynamic> data});
-}
-
-/// @nodoc
-class _$ValidationResultDtoCopyWithImpl<$Res, $Val extends ValidationResultDto>
-    implements $ValidationResultDtoCopyWith<$Res> {
-  _$ValidationResultDtoCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of ValidationResultDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? data = null,
-  }) {
-    return _then(_value.copyWith(
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$ValidationResultDtoImplCopyWith<$Res>
-    implements $ValidationResultDtoCopyWith<$Res> {
-  factory _$$ValidationResultDtoImplCopyWith(_$ValidationResultDtoImpl value,
-          $Res Function(_$ValidationResultDtoImpl) then) =
-      __$$ValidationResultDtoImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({Map<String, dynamic> data});
-}
-
-/// @nodoc
-class __$$ValidationResultDtoImplCopyWithImpl<$Res>
-    extends _$ValidationResultDtoCopyWithImpl<$Res, _$ValidationResultDtoImpl>
-    implements _$$ValidationResultDtoImplCopyWith<$Res> {
-  __$$ValidationResultDtoImplCopyWithImpl(_$ValidationResultDtoImpl _value,
-      $Res Function(_$ValidationResultDtoImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ValidationResultDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? data = null,
-  }) {
-    return _then(_$ValidationResultDtoImpl(
-      data: null == data
-          ? _value._data
-          : data // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$ValidationResultDtoImpl implements _ValidationResultDto {
-  const _$ValidationResultDtoImpl({required final Map<String, dynamic> data})
-      : _data = data;
-
-  factory _$ValidationResultDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ValidationResultDtoImplFromJson(json);
-
-  final Map<String, dynamic> _data;
-  @override
-  Map<String, dynamic> get data {
-    if (_data is EqualUnmodifiableMapView) return _data;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_data);
-  }
-
-  @override
-  String toString() {
-    return 'ValidationResultDto(data: $data)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ValidationResultDtoImpl &&
-            const DeepCollectionEquality().equals(other._data, _data));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
-
-  /// Create a copy of ValidationResultDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ValidationResultDtoImplCopyWith<_$ValidationResultDtoImpl> get copyWith =>
-      __$$ValidationResultDtoImplCopyWithImpl<_$ValidationResultDtoImpl>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ValidationResultDtoImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _ValidationResultDto implements ValidationResultDto {
-  const factory _ValidationResultDto(
-      {required final Map<String, dynamic> data}) = _$ValidationResultDtoImpl;
-
-  factory _ValidationResultDto.fromJson(Map<String, dynamic> json) =
-      _$ValidationResultDtoImpl.fromJson;
-
-  @override
-  Map<String, dynamic> get data;
-
-  /// Create a copy of ValidationResultDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ValidationResultDtoImplCopyWith<_$ValidationResultDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

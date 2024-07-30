@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:cryptography/cryptography.dart' hide Hash, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:http/http.dart';
+import 'package:kyc_client_dart/kyc_client_dart.dart';
 import 'package:kyc_client_dart/src/data/client.dart';
 import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
@@ -47,12 +48,13 @@ class KycPartnerClient {
   }
 
   Future<Map<String, String>> getData({
-    required List<String> keys,
+    required List<DataInfoKeys> keys,
     required String userPK,
     required String secretKey,
   }) async {
-    final response =
-        await _apiClient.getData({'keys': keys}).then((e) => e.data);
+    final response = await _apiClient.getData(
+      {'keys': keys.map((e) => e.value).toList()},
+    ).then((e) => e.data);
 
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
@@ -60,10 +62,11 @@ class KycPartnerClient {
     final Map<String, String> results = {};
 
     for (final key in keys) {
-      final signedDataRaw = response.firstWhereOrNull((e) => e.key == key);
+      final signedDataRaw =
+          response.firstWhereOrNull((e) => e.key == key.value);
 
       if (signedDataRaw == null) {
-        results[key] = '';
+        results[key.value] = '';
         continue;
       }
 
@@ -79,52 +82,46 @@ class KycPartnerClient {
       final decrypted =
           box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-      results[key] = utf8.decode(decrypted);
+      results[key.value] = utf8.decode(decrypted);
     }
 
     return results;
   }
 
   Future<void> setValidationResult({
-    required String key,
-    required Map<String, String> value,
+    required ValidationResultKeys key,
+    required String value,
   }) async {
-    final Map<String, String> encryptedData = {};
-
-    value.forEach((key, value) {
-      //TODO encrypt and sign
-
-      encryptedData[key] = base64Encode(utf8.encode(value));
-    });
-
-    await _apiClient.setValidationResult({key: json.encode(value)});
+    //TODO encrypt and sign
+    await _apiClient.setValidationResult(
+      DataEntry(key: key.value, value: base64Encode(utf8.encode(value))),
+    );
   }
 
-  Future<Map<String, dynamic>> getValidationResult({
-    required String key,
+  Future<String> getValidationResult({
+    required ValidationResultKeys key,
     required String validatorPK,
   }) async {
     final response = await _apiClient
         .getValidationResult(
           ValidationRequestDto(
-            key: key,
+            key: key.value,
             validatorPK: validatorPK,
           ),
         )
-        .then((e) => e.data);
+        .then((e) => e.value);
 
     //TODO decrypt and verify
-
     return response;
   }
 
   Future<Uint8List> download({
-    required String filename,
+    required DataFileKeys key,
     required String userPK,
     required String secretKey,
   }) async {
     final downloadUrl = await _apiClient
-        .createDownloadUrl({'fileName': filename}).then((e) => e.data);
+        .createDownloadUrl({'fileName': key.value}).then((e) => e.url);
 
     final response = await get(Uri.parse(downloadUrl));
     final encryptedData = response.bodyBytes;
@@ -144,14 +141,13 @@ class KycPartnerClient {
     return decrypted;
   }
 
-  Future<void> validateField(String key, String validatedField) async {
-    final Map<String, String> value = {
-      'hash': await _hash(validatedField),
-      'date': DateTime.now().toIso8601String(),
-    };
+  Future<void> validateField(
+    ValidationResultKeys key,
+    String validatedField,
+  ) async {
     await setValidationResult(
       key: key,
-      value: value,
+      value: await _hash(validatedField),
     );
   }
 

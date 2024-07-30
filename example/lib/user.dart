@@ -74,7 +74,7 @@ class _UserViewState extends State<UserView> {
               const SizedBox(height: 8),
               ValueTextfield(
                 controller: _nameController,
-                title: 'Name',
+                title: 'Phone',
               ),
               const SizedBox(height: 8),
               ValueFilePicker(

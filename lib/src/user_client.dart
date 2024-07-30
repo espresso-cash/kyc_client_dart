@@ -1,9 +1,11 @@
 import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:http/http.dart';
 import 'package:kyc_client_dart/src/data/client.dart';
+import 'package:kyc_client_dart/src/models/keys.dart';
 import 'package:kyc_client_dart/src/models/partner.dart';
 import 'package:pinenacl/ed25519.dart' hide Signature;
 import 'package:pinenacl/x25519.dart';
@@ -128,20 +130,20 @@ class KycUserClient {
     );
   }
 
-  Future<void> setData({required Map<String, String> data}) async {
-    final List<DataItem> encryptedData = [];
+  Future<void> setData({required Map<DataInfoKeys, String> data}) async {
+    final List<DataEntry> encryptedData = [];
 
     data.forEach((key, value) {
       final signed = _encryptAndSign(utf8.encode(value));
 
-      encryptedData.add(DataItem(key: key, value: base64Encode(signed)));
+      encryptedData.add(DataEntry(key: key.value, value: base64Encode(signed)));
     });
 
     await _apiClient.setData(SetDataRequestDto(data: encryptedData));
   }
 
   Future<Map<String, String>> getData({
-    required List<String> keys,
+    required List<DataInfoKeys> keys,
     required String userPK,
     required String secretKey,
   }) async {
@@ -154,10 +156,11 @@ class KycUserClient {
     final Map<String, String> results = {};
 
     for (final key in keys) {
-      final signedDataRaw = response.firstWhereOrNull((e) => e.key == key);
+      final signedDataRaw =
+          response.firstWhereOrNull((e) => e.key == key.value);
 
       if (signedDataRaw == null) {
-        results[key] = '';
+        results[key.value] = '';
         continue;
       }
 
@@ -173,15 +176,19 @@ class KycUserClient {
       final decrypted =
           box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-      results[key] = utf8.decode(decrypted);
+      results[key.value] = utf8.decode(decrypted);
     }
 
     return results;
   }
 
-  Future<bool> upload({required Uint8List file, required String name}) async {
-    final uploadUrl =
-        await _apiClient.createUploadUrl({'fileName': name}).then((e) => e.url);
+  Future<bool> upload({
+    required Uint8List file,
+    required DataFileKeys key,
+  }) async {
+    final uploadUrl = await _apiClient.createUploadUrl(
+      {'fileName': key.value},
+    ).then((e) => e.url);
 
     final signed = _encryptAndSign(file);
 

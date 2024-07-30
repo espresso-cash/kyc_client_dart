@@ -55,7 +55,9 @@ class _PartnerViewState extends State<PartnerView> {
               const SizedBox(height: 16),
               ValueField(
                 title: 'Result',
-                value: state.result != null ? state.result.toString() : '',
+                value: state.validationResult != null
+                    ? state.validationResult.toString()
+                    : '',
               ),
               ElevatedButton(
                 onPressed: () async {
@@ -81,8 +83,8 @@ class _PartnerViewState extends State<PartnerView> {
                 value: state.email,
               ),
               ValueField(
-                title: 'Name',
-                value: state.name,
+                title: 'Phone',
+                value: state.phone,
               ),
               if (state.file case final image?) Image.network(image.path),
             ],

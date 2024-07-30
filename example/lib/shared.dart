@@ -70,7 +70,7 @@ class ValueFilePicker extends StatefulWidget {
   final ValueChanged<XFile?> onFileSelected;
 
   @override
-  _ValueFilePickerState createState() => _ValueFilePickerState();
+  State<ValueFilePicker> createState() => _ValueFilePickerState();
 }
 
 class _ValueFilePickerState extends State<ValueFilePicker> {

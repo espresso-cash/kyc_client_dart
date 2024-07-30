@@ -42,7 +42,7 @@ _$SetDataRequestDtoImpl _$$SetDataRequestDtoImplFromJson(
         Map<String, dynamic> json) =>
     _$SetDataRequestDtoImpl(
       data: (json['data'] as List<dynamic>)
-          .map((e) => DataItem.fromJson(e as Map<String, dynamic>))
+          .map((e) => DataEntry.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -52,61 +52,40 @@ Map<String, dynamic> _$$SetDataRequestDtoImplToJson(
       'data': instance.data,
     };
 
-_$DataItemImpl _$$DataItemImplFromJson(Map<String, dynamic> json) =>
-    _$DataItemImpl(
+_$DataEntryImpl _$$DataEntryImplFromJson(Map<String, dynamic> json) =>
+    _$DataEntryImpl(
       key: json['key'] as String,
       value: json['value'] as String,
     );
 
-Map<String, dynamic> _$$DataItemImplToJson(_$DataItemImpl instance) =>
+Map<String, dynamic> _$$DataEntryImplToJson(_$DataEntryImpl instance) =>
     <String, dynamic>{
       'key': instance.key,
       'value': instance.value,
     };
 
-_$UploadUrlDtoImpl _$$UploadUrlDtoImplFromJson(Map<String, dynamic> json) =>
-    _$UploadUrlDtoImpl(
+_$FileUrlResponseDtoImpl _$$FileUrlResponseDtoImplFromJson(
+        Map<String, dynamic> json) =>
+    _$FileUrlResponseDtoImpl(
       url: json['url'] as String,
     );
 
-Map<String, dynamic> _$$UploadUrlDtoImplToJson(_$UploadUrlDtoImpl instance) =>
+Map<String, dynamic> _$$FileUrlResponseDtoImplToJson(
+        _$FileUrlResponseDtoImpl instance) =>
     <String, dynamic>{
       'url': instance.url,
-    };
-
-_$DownloadUrlDtoImpl _$$DownloadUrlDtoImplFromJson(Map<String, dynamic> json) =>
-    _$DownloadUrlDtoImpl(
-      data: json['data'] as String,
-    );
-
-Map<String, dynamic> _$$DownloadUrlDtoImplToJson(
-        _$DownloadUrlDtoImpl instance) =>
-    <String, dynamic>{
-      'data': instance.data,
     };
 
 _$GetDataResultDtoImpl _$$GetDataResultDtoImplFromJson(
         Map<String, dynamic> json) =>
     _$GetDataResultDtoImpl(
       data: (json['data'] as List<dynamic>)
-          .map((e) => DataItem.fromJson(e as Map<String, dynamic>))
+          .map((e) => DataEntry.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$$GetDataResultDtoImplToJson(
         _$GetDataResultDtoImpl instance) =>
-    <String, dynamic>{
-      'data': instance.data,
-    };
-
-_$ValidationResultDtoImpl _$$ValidationResultDtoImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ValidationResultDtoImpl(
-      data: json['data'] as Map<String, dynamic>,
-    );
-
-Map<String, dynamic> _$$ValidationResultDtoImplToJson(
-        _$ValidationResultDtoImpl instance) =>
     <String, dynamic>{
       'data': instance.data,
     };
@@ -250,14 +229,14 @@ class _KycApiClient implements KycApiClient {
   }
 
   @override
-  Future<UploadUrlDto> createUploadUrl(Map<String, dynamic> body) async {
+  Future<FileUrlResponseDto> createUploadUrl(Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<UploadUrlDto>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<FileUrlResponseDto>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -273,19 +252,20 @@ class _KycApiClient implements KycApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = UploadUrlDto.fromJson(_result.data!);
+    final _value = FileUrlResponseDto.fromJson(_result.data!);
     return _value;
   }
 
   @override
-  Future<DownloadUrlDto> createDownloadUrl(Map<String, dynamic> body) async {
+  Future<FileUrlResponseDto> createDownloadUrl(
+      Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<DownloadUrlDto>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<FileUrlResponseDto>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -301,17 +281,17 @@ class _KycApiClient implements KycApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = DownloadUrlDto.fromJson(_result.data!);
+    final _value = FileUrlResponseDto.fromJson(_result.data!);
     return _value;
   }
 
   @override
-  Future<void> setValidationResult(Map<String, String> body) async {
+  Future<void> setValidationResult(DataEntry request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(body);
+    _data.addAll(request.toJson());
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'POST',
       headers: _headers,
@@ -331,15 +311,14 @@ class _KycApiClient implements KycApiClient {
   }
 
   @override
-  Future<ValidationResultDto> getValidationResult(
-      ValidationRequestDto request) async {
+  Future<DataEntry> getValidationResult(ValidationRequestDto request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(request.toJson());
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ValidationResultDto>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<DataEntry>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -355,7 +334,7 @@ class _KycApiClient implements KycApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = ValidationResultDto.fromJson(_result.data!);
+    final _value = DataEntry.fromJson(_result.data!);
     return _value;
   }
 

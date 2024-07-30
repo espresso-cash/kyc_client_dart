@@ -63,15 +63,15 @@ class WalletAppState extends ChangeNotifier {
   }) async {
     await _client.setData(
       data: {
-        'email': email,
-        'name': name,
+        DataInfoKeys.email: email,
+        DataInfoKeys.phone: name,
       },
     );
 
     if (file != null) {
       await _client.upload(
         file: await file.readAsBytes(),
-        name: 'passport',
+        key: DataFileKeys.photo,
       );
     }
   }
@@ -80,15 +80,15 @@ class WalletAppState extends ChangeNotifier {
 class PartnerAppState extends ChangeNotifier {
   String get authPublicKey => _authPublicKey;
   String get email => _email;
-  String get name => _name;
+  String get phone => _phone;
   XFile? get file => _file;
-  Map<String, dynamic>? get result => _result;
+  String? get validationResult => _result;
 
   late String _authPublicKey = '';
   late String _email = '';
-  late String _name = '';
+  late String _phone = '';
   XFile? _file;
-  Map<String, dynamic>? _result;
+  String? _result;
 
   late KycPartnerClient _client;
 
@@ -113,18 +113,19 @@ class PartnerAppState extends ChangeNotifier {
   }
 
   Future<void> setValidationResult(String message) async {
-    await _client.setValidationResult(
-      key: 'result',
-      value: {
-        'message': message,
-        'kyc': 'confirmed',
-      },
-    );
+    try {
+      await _client.setValidationResult(
+        key: ValidationResultKeys.smileId,
+        value: message,
+      );
+    } catch (ex) {
+      print(ex);
+    }
   }
 
   Future<void> getValidationResult() async {
     final response = await _client.getValidationResult(
-      key: 'result',
+      key: ValidationResultKeys.smileId,
       validatorPK: _authPublicKey,
     );
 
@@ -133,7 +134,7 @@ class PartnerAppState extends ChangeNotifier {
   }
 
   Future<void> fetchData(String secretKey, String userPK) async {
-    final keys = ['email', 'name'];
+    final keys = [DataInfoKeys.email, DataInfoKeys.phone];
 
     final data = await _client.getData(
       keys: keys,
@@ -141,11 +142,13 @@ class PartnerAppState extends ChangeNotifier {
       secretKey: secretKey,
     );
 
-    _email = data['email'] ?? '-';
-    _name = data['name'] ?? '-';
+    _email = data[DataInfoKeys.email.value] ?? '-';
+    _phone = data[DataInfoKeys.phone.value] ?? '-';
+
+    notifyListeners();
 
     final file = await _client.download(
-      filename: 'passport',
+      key: DataFileKeys.photo,
       userPK: userPK,
       secretKey: secretKey,
     );
