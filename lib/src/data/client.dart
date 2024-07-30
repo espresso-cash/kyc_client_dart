@@ -43,9 +43,7 @@ abstract class KycApiClient {
   Future<void> setValidationResult(@Body() DataEntry request);
 
   @POST('/v1/getValidationResult')
-  Future<DataEntry> getValidationResult(
-    @Body() ValidationRequestDto request,
-  );
+  Future<DataEntry> getValidationResult(@Body() ValidationRequestDto request);
 }
 
 @freezed
