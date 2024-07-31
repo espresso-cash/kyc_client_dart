@@ -120,17 +120,13 @@ class PartnerAppState extends ChangeNotifier {
   }
 
   Future<void> getValidationResult() async {
-    try {
-      final response = await _client.getValidationResult(
-        key: ValidationResultKeys.smileId,
-        validatorPK: _authPublicKey,
-      );
+    final response = await _client.getValidationResult(
+      key: ValidationResultKeys.smileId,
+      validatorPK: _authPublicKey,
+    );
 
-      _result = response;
-      notifyListeners();
-    } catch (ex) {
-      print(ex);
-    }
+    _result = response;
+    notifyListeners();
   }
 
   Future<void> fetchData(String secretKey, String userPK) async {

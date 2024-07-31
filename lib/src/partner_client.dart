@@ -111,7 +111,7 @@ class KycPartnerClient {
         )
         .then((e) => e.value);
 
-    // Decrypt and verify
+    //TODO Decrypt and verify
     return utf8.decode(base64Decode(response));
   }
 
