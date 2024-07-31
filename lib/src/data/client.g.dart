@@ -94,14 +94,14 @@ _$ValidationRequestDtoImpl _$$ValidationRequestDtoImplFromJson(
         Map<String, dynamic> json) =>
     _$ValidationRequestDtoImpl(
       key: json['key'] as String,
-      validatorPK: json['validatorPK'] as String,
+      validator: json['validator'] as String,
     );
 
 Map<String, dynamic> _$$ValidationRequestDtoImplToJson(
         _$ValidationRequestDtoImpl instance) =>
     <String, dynamic>{
       'key': instance.key,
-      'validatorPK': instance.validatorPK,
+      'validator': instance.validator,
     };
 
 // **************************************************************************

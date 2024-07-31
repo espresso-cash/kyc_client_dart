@@ -1049,7 +1049,7 @@ ValidationRequestDto _$ValidationRequestDtoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ValidationRequestDto {
   String get key => throw _privateConstructorUsedError;
-  String get validatorPK => throw _privateConstructorUsedError;
+  String get validator => throw _privateConstructorUsedError;
 
   /// Serializes this ValidationRequestDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1067,7 +1067,7 @@ abstract class $ValidationRequestDtoCopyWith<$Res> {
           $Res Function(ValidationRequestDto) then) =
       _$ValidationRequestDtoCopyWithImpl<$Res, ValidationRequestDto>;
   @useResult
-  $Res call({String key, String validatorPK});
+  $Res call({String key, String validator});
 }
 
 /// @nodoc
@@ -1087,16 +1087,16 @@ class _$ValidationRequestDtoCopyWithImpl<$Res,
   @override
   $Res call({
     Object? key = null,
-    Object? validatorPK = null,
+    Object? validator = null,
   }) {
     return _then(_value.copyWith(
       key: null == key
           ? _value.key
           : key // ignore: cast_nullable_to_non_nullable
               as String,
-      validatorPK: null == validatorPK
-          ? _value.validatorPK
-          : validatorPK // ignore: cast_nullable_to_non_nullable
+      validator: null == validator
+          ? _value.validator
+          : validator // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -1110,7 +1110,7 @@ abstract class _$$ValidationRequestDtoImplCopyWith<$Res>
       __$$ValidationRequestDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String key, String validatorPK});
+  $Res call({String key, String validator});
 }
 
 /// @nodoc
@@ -1127,16 +1127,16 @@ class __$$ValidationRequestDtoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? key = null,
-    Object? validatorPK = null,
+    Object? validator = null,
   }) {
     return _then(_$ValidationRequestDtoImpl(
       key: null == key
           ? _value.key
           : key // ignore: cast_nullable_to_non_nullable
               as String,
-      validatorPK: null == validatorPK
-          ? _value.validatorPK
-          : validatorPK // ignore: cast_nullable_to_non_nullable
+      validator: null == validator
+          ? _value.validator
+          : validator // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -1146,7 +1146,7 @@ class __$$ValidationRequestDtoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ValidationRequestDtoImpl implements _ValidationRequestDto {
   const _$ValidationRequestDtoImpl(
-      {required this.key, required this.validatorPK});
+      {required this.key, required this.validator});
 
   factory _$ValidationRequestDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$ValidationRequestDtoImplFromJson(json);
@@ -1154,11 +1154,11 @@ class _$ValidationRequestDtoImpl implements _ValidationRequestDto {
   @override
   final String key;
   @override
-  final String validatorPK;
+  final String validator;
 
   @override
   String toString() {
-    return 'ValidationRequestDto(key: $key, validatorPK: $validatorPK)';
+    return 'ValidationRequestDto(key: $key, validator: $validator)';
   }
 
   @override
@@ -1167,13 +1167,13 @@ class _$ValidationRequestDtoImpl implements _ValidationRequestDto {
         (other.runtimeType == runtimeType &&
             other is _$ValidationRequestDtoImpl &&
             (identical(other.key, key) || other.key == key) &&
-            (identical(other.validatorPK, validatorPK) ||
-                other.validatorPK == validatorPK));
+            (identical(other.validator, validator) ||
+                other.validator == validator));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, key, validatorPK);
+  int get hashCode => Object.hash(runtimeType, key, validator);
 
   /// Create a copy of ValidationRequestDto
   /// with the given fields replaced by the non-null parameter values.
@@ -1196,7 +1196,7 @@ class _$ValidationRequestDtoImpl implements _ValidationRequestDto {
 abstract class _ValidationRequestDto implements ValidationRequestDto {
   const factory _ValidationRequestDto(
       {required final String key,
-      required final String validatorPK}) = _$ValidationRequestDtoImpl;
+      required final String validator}) = _$ValidationRequestDtoImpl;
 
   factory _ValidationRequestDto.fromJson(Map<String, dynamic> json) =
       _$ValidationRequestDtoImpl.fromJson;
@@ -1204,7 +1204,7 @@ abstract class _ValidationRequestDto implements ValidationRequestDto {
   @override
   String get key;
   @override
-  String get validatorPK;
+  String get validator;
 
   /// Create a copy of ValidationRequestDto
   /// with the given fields replaced by the non-null parameter values.

@@ -106,13 +106,13 @@ class KycPartnerClient {
         .getValidationResult(
           ValidationRequestDto(
             key: key.value,
-            validatorPK: validatorPK,
+            validator: validatorPK,
           ),
         )
         .then((e) => e.value);
 
-    //TODO decrypt and verify
-    return response;
+    // Decrypt and verify
+    return utf8.decode(base64Decode(response));
   }
 
   Future<Uint8List> download({

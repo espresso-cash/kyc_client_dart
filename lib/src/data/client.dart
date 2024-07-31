@@ -115,7 +115,7 @@ class GetDataResultDto with _$GetDataResultDto {
 class ValidationRequestDto with _$ValidationRequestDto {
   const factory ValidationRequestDto({
     required String key,
-    required String validatorPK,
+    required String validator,
   }) = _ValidationRequestDto;
 
   factory ValidationRequestDto.fromJson(Map<String, dynamic> json) =>
