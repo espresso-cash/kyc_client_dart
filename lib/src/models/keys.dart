@@ -16,7 +16,15 @@ enum ValidationResultKeys {
 enum DataInfoKeys {
   unspecified('DATA_INFO_UNSPECIFIED'),
   email('DATA_INFO_EMAIL'),
-  phone('DATA_INFO_PHONE');
+  phone('DATA_INFO_PHONE'),
+  jobId('DATA_INFO_JOB_ID'),
+  firstName('DATA_INFO_FIRST_NAME'),
+  middleName('DATA_INFO_MIDDLE_NAME'),
+  lastName('DATA_INFO_LAST_NAME'),
+  dateOfBirth('DATA_INFO_DOB'),
+  countryCode('DATA_INFO_COUNTRY_CODE'),
+  idType('DATA_INFO_ID_TYPE'),
+  idNumber('DATA_INFO_ID_NUMBER');
 
   const DataInfoKeys(this.value);
 
