@@ -25,7 +25,18 @@ class KycPartnerClient {
   late String _token;
   late KycApiClient _apiClient;
 
-  Future<void> generateAuthToken(String partnerToken) async {
+  late SecretBox _secretBox;
+  late SigningKey _signingKey;
+
+  Future<void> init({
+    required String partnerToken,
+    required String secretKey,
+  }) async {
+    await _generateAuthToken(partnerToken);
+    await _initializeEncryption(secretKey);
+  }
+
+  Future<void> _generateAuthToken(String partnerToken) async {
     _authPublicKey = await authKeyPair
         .extractPublicKey()
         .then((value) => value.bytes)
@@ -92,15 +103,18 @@ class KycPartnerClient {
     required ValidationResultKeys key,
     required String value,
   }) async {
-    //TODO encrypt and sign
+    final valueBytes = utf8.encode(value);
+    final signedEncrypted = _encryptAndSign(Uint8List.fromList(valueBytes));
+
     await _apiClient.setValidationResult(
-      DataEntry(key: key.value, value: base64Encode(utf8.encode(value))),
+      DataEntry(key: key.value, value: base64Encode(signedEncrypted.toList())),
     );
   }
 
   Future<String> getValidationResult({
     required ValidationResultKeys key,
     required String validatorPK,
+    required String secretKey,
   }) async {
     final response = await _apiClient
         .getValidationResult(
@@ -111,8 +125,17 @@ class KycPartnerClient {
         )
         .then((e) => e.value);
 
-    //TODO Decrypt and verify
-    return utf8.decode(base64Decode(response));
+    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+
+    final signedMessage = SignedMessage.fromList(
+      signedMessage: base64Decode(response),
+    );
+
+    final encryptedData = base64Encode(signedMessage.message);
+    final decrypted =
+        box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
+
+    return utf8.decode(decrypted);
   }
 
   Future<Uint8List> download({
@@ -158,5 +181,21 @@ class KycPartnerClient {
     final hash = hex.encode(hasher(value));
 
     return hash;
+  }
+
+  Future<void> _initializeEncryption(String secretKey) async {
+    final secretKeyBytes = base58decode(secretKey);
+    _secretBox = SecretBox(Uint8List.fromList(secretKeyBytes));
+    _signingKey = SigningKey.fromValidBytes(
+      Uint8List.fromList(
+        await authKeyPair.extractPrivateKeyBytes() +
+            base58decode(_authPublicKey),
+      ),
+    );
+  }
+
+  SignedMessage _encryptAndSign(Uint8List data) {
+    final encrypted = _secretBox.encrypt(data);
+    return _signingKey.sign(Uint8List.fromList(encrypted));
   }
 }

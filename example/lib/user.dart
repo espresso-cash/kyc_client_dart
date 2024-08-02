@@ -32,7 +32,11 @@ class _UserViewState extends State<UserView> {
   void _handlePartnerTokenGenerated() {
     final partnerState = context.read<PartnerAppState>();
     final walletState = context.read<WalletAppState>();
-    partnerState.generateAuthToken(walletState.partnerToken);
+
+    partnerState.generateAuthToken(
+      walletState.partnerToken,
+      walletState.rawSecretKey,
+    );
   }
 
   @override

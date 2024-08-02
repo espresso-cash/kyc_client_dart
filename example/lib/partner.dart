@@ -61,7 +61,12 @@ class _PartnerViewState extends State<PartnerView> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  await context.read<PartnerAppState>().getValidationResult();
+                  final walletState = context.read<WalletAppState>();
+
+                  await context.read<PartnerAppState>().getValidationResult(
+                        secretKey: walletState.rawSecretKey,
+                        userPK: walletState.authPublicKey,
+                      );
                 },
                 child: const Text('Fetch Validation Result'),
               ),

@@ -106,8 +106,8 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> generateAuthToken(String partnerToken) async {
-    await _client.generateAuthToken(partnerToken);
+  Future<void> generateAuthToken(String partnerToken, String secretKey) async {
+    await _client.init(partnerToken: partnerToken, secretKey: secretKey);
 
     notifyListeners();
   }
@@ -119,14 +119,22 @@ class PartnerAppState extends ChangeNotifier {
     );
   }
 
-  Future<void> getValidationResult() async {
-    final response = await _client.getValidationResult(
-      key: ValidationResultKeys.smileId,
-      validatorPK: _authPublicKey,
-    );
+  Future<void> getValidationResult({
+    required String secretKey,
+    required String userPK,
+  }) async {
+    try {
+      final response = await _client.getValidationResult(
+        key: ValidationResultKeys.smileId,
+        validatorPK: _authPublicKey,
+        secretKey: secretKey,
+      );
 
-    _result = response;
-    notifyListeners();
+      _result = response;
+      notifyListeners();
+    } catch (ex) {
+      print(ex);
+    }
   }
 
   Future<void> fetchData(String secretKey, String userPK) async {
