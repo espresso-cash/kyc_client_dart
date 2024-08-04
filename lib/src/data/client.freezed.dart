@@ -1213,3 +1213,221 @@ abstract class _ValidationRequestDto implements ValidationRequestDto {
   _$$ValidationRequestDtoImplCopyWith<_$ValidationRequestDtoImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
+
+GetInfoResponse _$GetInfoResponseFromJson(Map<String, dynamic> json) {
+  return _GetInfoResponse.fromJson(json);
+}
+
+/// @nodoc
+mixin _$GetInfoResponse {
+  String get encryptedSecretKey => throw _privateConstructorUsedError;
+  String get message => throw _privateConstructorUsedError;
+  String get publicKey => throw _privateConstructorUsedError;
+  String get walletAddress => throw _privateConstructorUsedError;
+
+  /// Serializes this GetInfoResponse to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of GetInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $GetInfoResponseCopyWith<GetInfoResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $GetInfoResponseCopyWith<$Res> {
+  factory $GetInfoResponseCopyWith(
+          GetInfoResponse value, $Res Function(GetInfoResponse) then) =
+      _$GetInfoResponseCopyWithImpl<$Res, GetInfoResponse>;
+  @useResult
+  $Res call(
+      {String encryptedSecretKey,
+      String message,
+      String publicKey,
+      String walletAddress});
+}
+
+/// @nodoc
+class _$GetInfoResponseCopyWithImpl<$Res, $Val extends GetInfoResponse>
+    implements $GetInfoResponseCopyWith<$Res> {
+  _$GetInfoResponseCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of GetInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? encryptedSecretKey = null,
+    Object? message = null,
+    Object? publicKey = null,
+    Object? walletAddress = null,
+  }) {
+    return _then(_value.copyWith(
+      encryptedSecretKey: null == encryptedSecretKey
+          ? _value.encryptedSecretKey
+          : encryptedSecretKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      publicKey: null == publicKey
+          ? _value.publicKey
+          : publicKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletAddress: null == walletAddress
+          ? _value.walletAddress
+          : walletAddress // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$GetInfoResponseImplCopyWith<$Res>
+    implements $GetInfoResponseCopyWith<$Res> {
+  factory _$$GetInfoResponseImplCopyWith(_$GetInfoResponseImpl value,
+          $Res Function(_$GetInfoResponseImpl) then) =
+      __$$GetInfoResponseImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String encryptedSecretKey,
+      String message,
+      String publicKey,
+      String walletAddress});
+}
+
+/// @nodoc
+class __$$GetInfoResponseImplCopyWithImpl<$Res>
+    extends _$GetInfoResponseCopyWithImpl<$Res, _$GetInfoResponseImpl>
+    implements _$$GetInfoResponseImplCopyWith<$Res> {
+  __$$GetInfoResponseImplCopyWithImpl(
+      _$GetInfoResponseImpl _value, $Res Function(_$GetInfoResponseImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of GetInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? encryptedSecretKey = null,
+    Object? message = null,
+    Object? publicKey = null,
+    Object? walletAddress = null,
+  }) {
+    return _then(_$GetInfoResponseImpl(
+      encryptedSecretKey: null == encryptedSecretKey
+          ? _value.encryptedSecretKey
+          : encryptedSecretKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      publicKey: null == publicKey
+          ? _value.publicKey
+          : publicKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletAddress: null == walletAddress
+          ? _value.walletAddress
+          : walletAddress // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$GetInfoResponseImpl implements _GetInfoResponse {
+  const _$GetInfoResponseImpl(
+      {required this.encryptedSecretKey,
+      required this.message,
+      required this.publicKey,
+      required this.walletAddress});
+
+  factory _$GetInfoResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$GetInfoResponseImplFromJson(json);
+
+  @override
+  final String encryptedSecretKey;
+  @override
+  final String message;
+  @override
+  final String publicKey;
+  @override
+  final String walletAddress;
+
+  @override
+  String toString() {
+    return 'GetInfoResponse(encryptedSecretKey: $encryptedSecretKey, message: $message, publicKey: $publicKey, walletAddress: $walletAddress)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GetInfoResponseImpl &&
+            (identical(other.encryptedSecretKey, encryptedSecretKey) ||
+                other.encryptedSecretKey == encryptedSecretKey) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.publicKey, publicKey) ||
+                other.publicKey == publicKey) &&
+            (identical(other.walletAddress, walletAddress) ||
+                other.walletAddress == walletAddress));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, encryptedSecretKey, message, publicKey, walletAddress);
+
+  /// Create a copy of GetInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$GetInfoResponseImplCopyWith<_$GetInfoResponseImpl> get copyWith =>
+      __$$GetInfoResponseImplCopyWithImpl<_$GetInfoResponseImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$GetInfoResponseImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _GetInfoResponse implements GetInfoResponse {
+  const factory _GetInfoResponse(
+      {required final String encryptedSecretKey,
+      required final String message,
+      required final String publicKey,
+      required final String walletAddress}) = _$GetInfoResponseImpl;
+
+  factory _GetInfoResponse.fromJson(Map<String, dynamic> json) =
+      _$GetInfoResponseImpl.fromJson;
+
+  @override
+  String get encryptedSecretKey;
+  @override
+  String get message;
+  @override
+  String get publicKey;
+  @override
+  String get walletAddress;
+
+  /// Create a copy of GetInfoResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GetInfoResponseImplCopyWith<_$GetInfoResponseImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
