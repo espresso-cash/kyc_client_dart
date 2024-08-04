@@ -26,7 +26,10 @@ class WalletAppState extends ChangeNotifier {
 
   Future<void> createWallet() async {
     _partnerToken = '';
-    _wallet = await Ed25519HDKeyPair.random();
+    // _wallet = await Ed25519HDKeyPair.random();
+    _wallet = await Ed25519HDKeyPair.fromMnemonic(
+      'add Mnemonic',
+    );
 
     _client = KycUserClient(
       sign: (data) async {
@@ -35,8 +38,7 @@ class WalletAppState extends ChangeNotifier {
       },
     );
 
-    await _client.init();
-    await _client.initStorage(walletAddress: _wallet!.publicKey.toString());
+    await _client.init(walletAddress: _wallet!.publicKey.toString());
 
     _rawSecretKey = _client.rawSecretKey;
     _authPublicKey = _client.authPublicKey;
@@ -123,18 +125,14 @@ class PartnerAppState extends ChangeNotifier {
     required String secretKey,
     required String userPK,
   }) async {
-    try {
-      final response = await _client.getValidationResult(
-        key: ValidationResultKeys.smileId,
-        validatorPK: _authPublicKey,
-        secretKey: secretKey,
-      );
+    final response = await _client.getValidationResult(
+      key: ValidationResultKeys.smileId,
+      validatorPK: _authPublicKey,
+      secretKey: secretKey,
+    );
 
-      _result = response;
-      notifyListeners();
-    } catch (ex) {
-      print(ex);
-    }
+    _result = response;
+    notifyListeners();
   }
 
   Future<void> fetchData(String secretKey, String userPK) async {
