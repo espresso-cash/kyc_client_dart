@@ -144,7 +144,10 @@ class KycUserClient {
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await _apiClient.getData({'keys': keys});
+    final response = await _apiClient.getData(
+      {'keys': keys.map((e) => e.value).toList()},
+    ).then((e) => e.data);
+
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 
@@ -152,7 +155,8 @@ class KycUserClient {
       await Future.wait(
         keys.map((key) async {
           final signedDataRaw =
-              response.data.firstWhereOrNull((e) => e.key == key.value);
+              response.firstWhereOrNull((e) => e.key == key.value);
+
           if (signedDataRaw == null) return MapEntry(key.value, '');
 
           final signedMessage = SignedMessage.fromList(
