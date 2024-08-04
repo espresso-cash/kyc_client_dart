@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:kyc_client_dart/src/data/client.dart';
 import 'package:kyc_client_dart/src/models/keys.dart';
@@ -46,12 +47,23 @@ class KycUserClient {
   String get authPublicKey => _authPublicKey;
   String get rawSecretKey => _rawSecretKey;
 
-  Future<void> init() async {
+  Future<void> init({required String walletAddress}) async {
     final seed = await _generateSeed();
     await _initializeKeys(seed);
     await _initializeToken();
-    await _initializeEncryption(seed);
     _initializeApiClient();
+
+    String? encryptedSecretKey;
+    try {
+      final getInfo = await _apiClient.getInfo();
+      encryptedSecretKey = getInfo.encryptedSecretKey;
+      await _initializeEncryption(seed, encryptedSecretKey: encryptedSecretKey);
+    } on DioException catch (e) {
+      if (e.response?.statusCode != 404) rethrow;
+
+      await _initializeEncryption(seed);
+      await _initStorage(walletAddress: walletAddress);
+    }
   }
 
   Future<Uint8List> _generateSeed() async {
@@ -77,19 +89,28 @@ class KycUserClient {
     );
   }
 
-  Future<void> _initializeEncryption(Uint8List seed) async {
-    _secretKey = await Chacha20.poly1305Aead().newSecretKey();
-    _rawSecretKey = base58encode(await _secretKey.extractBytes());
+  Future<void> _initializeEncryption(
+    Uint8List seed, {
+    String? encryptedSecretKey,
+  }) async {
     _encryptionKeyPair = await X25519().newKeyPairFromSeed(seed);
     final encryptionSK = PrivateKey(
       Uint8List.fromList(await _encryptionKeyPair.extractPrivateKeyBytes()),
     );
-    final encryptionPK = encryptionSK.publicKey;
-    final sealedBox = SealedBox(encryptionPK);
+    final sealedBox = SealedBox(encryptionSK);
+
+    if (encryptedSecretKey == null) {
+      _secretKey = await Chacha20.poly1305Aead().newSecretKey();
+    } else {
+      _secretKey = SecretKey(
+        sealedBox.decrypt(base64Decode(encryptedSecretKey)),
+      );
+    }
+
+    _rawSecretKey = base58encode(await _secretKey.extractBytes());
     _encryptedSecretKey = base64Encode(
       sealedBox.encrypt(Uint8List.fromList(await _secretKey.extractBytes())),
     );
-
     _secretBox = SecretBox(Uint8List.fromList(await _secretKey.extractBytes()));
     _signingKey = SigningKey.fromValidBytes(
       Uint8List.fromList(
@@ -103,7 +124,7 @@ class KycUserClient {
     _apiClient = KycApiClient(_token, baseUrl: baseUrl);
   }
 
-  Future<void> initStorage({required String walletAddress}) async {
+  Future<void> _initStorage({required String walletAddress}) async {
     final proofSignature = await sign(utf8.encode(_proofMessage));
     await _apiClient.initStorage(
       InitStorageRequest(
