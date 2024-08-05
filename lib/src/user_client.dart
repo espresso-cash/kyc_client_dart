@@ -216,6 +216,32 @@ class KycUserClient {
     return response.statusCode == 200;
   }
 
+  Future<Uint8List> download({
+    required DataFileKeys key,
+    required String userPK,
+    required String secretKey,
+  }) async {
+    final downloadUrl = await _apiClient
+        .createDownloadUrl({'fileName': key.value}).then((e) => e.url);
+
+    final response = await http.get(Uri.parse(downloadUrl));
+    final encryptedData = response.bodyBytes;
+
+    final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
+    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+
+    final signedMessage = SignedMessage.fromList(signedMessage: encryptedData);
+    final result = verifyKey.verifySignedMessage(signedMessage: signedMessage);
+
+    if (!result) throw Exception('Invalid signature');
+
+    final data = base64Encode(signedMessage.message);
+    final decrypted =
+        box.decrypt(EncryptedMessage.fromList(base64Decode(data)));
+
+    return decrypted;
+  }
+
   SignedMessage _encryptAndSign(Uint8List data) {
     final encrypted = _secretBox.encrypt(data);
     return _signingKey.sign(Uint8List.fromList(encrypted));
