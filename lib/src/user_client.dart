@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:kyc_client_dart/src/data/client.dart';
 import 'package:kyc_client_dart/src/models/keys.dart';
@@ -46,12 +47,23 @@ class KycUserClient {
   String get authPublicKey => _authPublicKey;
   String get rawSecretKey => _rawSecretKey;
 
-  Future<void> init() async {
+  Future<void> init({required String walletAddress}) async {
     final seed = await _generateSeed();
     await _initializeKeys(seed);
     await _initializeToken();
-    await _initializeEncryption(seed);
     _initializeApiClient();
+
+    String? encryptedSecretKey;
+    try {
+      final getInfo = await _apiClient.getInfo();
+      encryptedSecretKey = getInfo.encryptedSecretKey;
+      await _initializeEncryption(seed, encryptedSecretKey: encryptedSecretKey);
+    } on DioException catch (e) {
+      if (e.response?.statusCode != 404) rethrow;
+
+      await _initializeEncryption(seed);
+      await _initStorage(walletAddress: walletAddress);
+    }
   }
 
   Future<Uint8List> _generateSeed() async {
@@ -77,19 +89,28 @@ class KycUserClient {
     );
   }
 
-  Future<void> _initializeEncryption(Uint8List seed) async {
-    _secretKey = await Chacha20.poly1305Aead().newSecretKey();
-    _rawSecretKey = base58encode(await _secretKey.extractBytes());
+  Future<void> _initializeEncryption(
+    Uint8List seed, {
+    String? encryptedSecretKey,
+  }) async {
     _encryptionKeyPair = await X25519().newKeyPairFromSeed(seed);
     final encryptionSK = PrivateKey(
       Uint8List.fromList(await _encryptionKeyPair.extractPrivateKeyBytes()),
     );
-    final encryptionPK = encryptionSK.publicKey;
-    final sealedBox = SealedBox(encryptionPK);
+    final sealedBox = SealedBox(encryptionSK);
+
+    if (encryptedSecretKey == null) {
+      _secretKey = await Chacha20.poly1305Aead().newSecretKey();
+    } else {
+      _secretKey = SecretKey(
+        sealedBox.decrypt(base64Decode(encryptedSecretKey)),
+      );
+    }
+
+    _rawSecretKey = base58encode(await _secretKey.extractBytes());
     _encryptedSecretKey = base64Encode(
       sealedBox.encrypt(Uint8List.fromList(await _secretKey.extractBytes())),
     );
-
     _secretBox = SecretBox(Uint8List.fromList(await _secretKey.extractBytes()));
     _signingKey = SigningKey.fromValidBytes(
       Uint8List.fromList(
@@ -103,7 +124,7 @@ class KycUserClient {
     _apiClient = KycApiClient(_token, baseUrl: baseUrl);
   }
 
-  Future<void> initStorage({required String walletAddress}) async {
+  Future<void> _initStorage({required String walletAddress}) async {
     final proofSignature = await sign(utf8.encode(_proofMessage));
     await _apiClient.initStorage(
       InitStorageRequest(
@@ -144,7 +165,10 @@ class KycUserClient {
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await _apiClient.getData({'keys': keys});
+    final response = await _apiClient.getData(
+      {'keys': keys.map((e) => e.value).toList()},
+    ).then((e) => e.data);
+
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 
@@ -152,7 +176,8 @@ class KycUserClient {
       await Future.wait(
         keys.map((key) async {
           final signedDataRaw =
-              response.data.firstWhereOrNull((e) => e.key == key.value);
+              response.firstWhereOrNull((e) => e.key == key.value);
+
           if (signedDataRaw == null) return MapEntry(key.value, '');
 
           final signedMessage = SignedMessage.fromList(
@@ -189,6 +214,32 @@ class KycUserClient {
     );
 
     return response.statusCode == 200;
+  }
+
+  Future<Uint8List> download({
+    required DataFileKeys key,
+    required String userPK,
+    required String secretKey,
+  }) async {
+    final downloadUrl = await _apiClient
+        .createDownloadUrl({'fileName': key.value}).then((e) => e.url);
+
+    final response = await http.get(Uri.parse(downloadUrl));
+    final encryptedData = response.bodyBytes;
+
+    final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
+    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+
+    final signedMessage = SignedMessage.fromList(signedMessage: encryptedData);
+    final result = verifyKey.verifySignedMessage(signedMessage: signedMessage);
+
+    if (!result) throw Exception('Invalid signature');
+
+    final data = base64Encode(signedMessage.message);
+    final decrypted =
+        box.decrypt(EncryptedMessage.fromList(base64Decode(data)));
+
+    return decrypted;
   }
 
   SignedMessage _encryptAndSign(Uint8List data) {

@@ -44,6 +44,9 @@ abstract class KycApiClient {
 
   @POST('/v1/getValidationResult')
   Future<DataEntry> getValidationResult(@Body() ValidationRequestDto request);
+
+  @POST('/v1/getInfo')
+  Future<GetInfoResponse> getInfo();
 }
 
 @freezed
@@ -120,4 +123,17 @@ class ValidationRequestDto with _$ValidationRequestDto {
 
   factory ValidationRequestDto.fromJson(Map<String, dynamic> json) =>
       _$ValidationRequestDtoFromJson(json);
+}
+
+@freezed
+class GetInfoResponse with _$GetInfoResponse {
+  const factory GetInfoResponse({
+    required String encryptedSecretKey,
+    required String message,
+    required String publicKey,
+    required String walletAddress,
+  }) = _GetInfoResponse;
+
+  factory GetInfoResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetInfoResponseFromJson(json);
 }

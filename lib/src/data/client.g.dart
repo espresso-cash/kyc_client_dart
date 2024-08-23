@@ -104,6 +104,24 @@ Map<String, dynamic> _$$ValidationRequestDtoImplToJson(
       'validator': instance.validator,
     };
 
+_$GetInfoResponseImpl _$$GetInfoResponseImplFromJson(
+        Map<String, dynamic> json) =>
+    _$GetInfoResponseImpl(
+      encryptedSecretKey: json['encryptedSecretKey'] as String,
+      message: json['message'] as String,
+      publicKey: json['publicKey'] as String,
+      walletAddress: json['walletAddress'] as String,
+    );
+
+Map<String, dynamic> _$$GetInfoResponseImplToJson(
+        _$GetInfoResponseImpl instance) =>
+    <String, dynamic>{
+      'encryptedSecretKey': instance.encryptedSecretKey,
+      'message': instance.message,
+      'publicKey': instance.publicKey,
+      'walletAddress': instance.walletAddress,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -335,6 +353,33 @@ class _KycApiClient implements KycApiClient {
               baseUrl,
             ))));
     final _value = DataEntry.fromJson(_result.data!);
+    return _value;
+  }
+
+  @override
+  Future<GetInfoResponse> getInfo() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<GetInfoResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v1/getInfo',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = GetInfoResponse.fromJson(_result.data!);
     return _value;
   }
 
