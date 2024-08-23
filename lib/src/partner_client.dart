@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:cryptography/cryptography.dart' hide Hash, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
+import 'package:dio/dio.dart';
 import 'package:http/http.dart';
-import 'package:kyc_client_dart/kyc_client_dart.dart';
-import 'package:kyc_client_dart/src/data/client.dart';
+import 'package:kyc_client_dart/src/api/export.dart';
+import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/x25519.dart';
@@ -23,7 +23,7 @@ class KycPartnerClient {
   late String _authPublicKey;
 
   late String _token;
-  late KycApiClient _apiClient;
+  late KycServiceClient _apiClient;
 
   late SecretBox _secretBox;
   late SigningKey _signingKey;
@@ -55,7 +55,8 @@ class KycPartnerClient {
       algorithm: jwt.JWTAlgorithm.EdDSA,
     );
 
-    _apiClient = KycApiClient(_token, baseUrl: baseUrl);
+    final dio = Dio()..interceptors.add(AuthInterceptor(_token));
+    _apiClient = KycServiceClient(dio, baseUrl: baseUrl);
   }
 
   Future<Map<String, String>> getData({
@@ -100,14 +101,21 @@ class KycPartnerClient {
   }
 
   Future<void> setValidationResult({
-    required ValidationResultKeys key,
     required String value,
+    required V1ValidationData value,
   }) async {
     final valueBytes = utf8.encode(value);
     final signedEncrypted = _encryptAndSign(Uint8List.fromList(valueBytes));
 
-    await _apiClient.setValidationResult(
-      DataEntry(key: key.value, value: base64Encode(signedEncrypted.toList())),
+    await _apiClient.kycServiceSetValidationResult(
+      // DataEntry(key: key.value, value: base64Encode(signedEncrypted.toList())),
+      body: const V1SetValidationResultRequest(
+        data: V1ValidationData(
+          email: '',
+          phone: '',
+          kycSmileId: '',
+        ),
+      ),
     );
   }
 

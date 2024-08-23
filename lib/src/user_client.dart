@@ -5,8 +5,8 @@ import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:kyc_client_dart/src/data/client.dart';
-import 'package:kyc_client_dart/src/models/keys.dart';
+import 'package:kyc_client_dart/src/api/export.dart';
+import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/models/partner.dart';
 import 'package:pinenacl/ed25519.dart' hide Signature;
 import 'package:pinenacl/x25519.dart';
@@ -42,7 +42,7 @@ class KycUserClient {
   late final SigningKey _signingKey;
 
   // API client
-  late final KycApiClient _apiClient;
+  late final KycServiceClient _apiClient;
 
   String get authPublicKey => _authPublicKey;
   String get rawSecretKey => _rawSecretKey;
@@ -55,7 +55,8 @@ class KycUserClient {
 
     String? encryptedSecretKey;
     try {
-      final getInfo = await _apiClient.getInfo();
+      final getInfo =
+          await _apiClient.kycServiceGetInfo(body: V1GetInfoRequest);
       encryptedSecretKey = getInfo.encryptedSecretKey;
       await _initializeEncryption(seed, encryptedSecretKey: encryptedSecretKey);
     } on DioException catch (e) {
@@ -121,13 +122,14 @@ class KycUserClient {
   }
 
   void _initializeApiClient() {
-    _apiClient = KycApiClient(_token, baseUrl: baseUrl);
+    final dio = Dio()..interceptors.add(AuthInterceptor(_token));
+    _apiClient = KycServiceClient(dio, baseUrl: baseUrl);
   }
 
   Future<void> _initStorage({required String walletAddress}) async {
     final proofSignature = await sign(utf8.encode(_proofMessage));
-    await _apiClient.initStorage(
-      InitStorageRequest(
+    await _apiClient.kycServiceInitStorage(
+      body: V1InitStorageRequest(
         walletAddress: walletAddress,
         message: _seedMessage,
         encryptedSecretKey: _encryptedSecretKey,
@@ -137,8 +139,9 @@ class KycUserClient {
     );
   }
 
-  Future<PartnerModel> getPartnerInfo({required String partnerPK}) =>
-      _apiClient.getPartnerInfo(GetPartnerInfoRequestDto(id: partnerPK));
+  Future<PartnerModel> getPartnerInfo({required String partnerPK}) => _apiClient
+      .kycServiceGetPartnerInfo(body: V1GetPartnerInfoRequest(id: partnerPK))
+      .then((e) => PartnerModel.fromJson(e.toJson()));
 
   Future<String> generatePartnerToken(String partnerPK) async {
     final tokenData = jwt.JWT({'issuedFor': partnerPK}, issuer: _authPublicKey);
@@ -151,23 +154,42 @@ class KycUserClient {
     );
   }
 
-  Future<void> setData({required Map<DataInfoKeys, String> data}) async {
-    final encryptedData = data.entries.map((entry) {
-      final signed = _encryptAndSign(utf8.encode(entry.value));
-      return DataEntry(key: entry.key.value, value: base64Encode(signed));
-    }).toList();
+  Future<void> setData({required Map<String, String> data}) async {
+    final encryptedData = Map.fromEntries(
+      data.entries.map((entry) {
+        final signed = _encryptAndSign(utf8.encode(entry.value)).toList();
+        return MapEntry(entry.key, base64Encode(signed));
+      }),
+    );
 
-    await _apiClient.setData(SetDataRequestDto(data: encryptedData));
+    await _apiClient.kycServiceSetData(
+      body: V1SetDataRequest(
+        data: V1UserData(
+          email: encryptedData['email'] ?? '',
+          phone: encryptedData['phone'] ?? '',
+          firstName: encryptedData['firstName'] ?? '',
+          middleName: encryptedData['middleName'] ?? '',
+          lastName: encryptedData['lastName'] ?? '',
+          dob: encryptedData['dob'] ?? '',
+          countryCode: encryptedData['countryCode'] ?? '',
+          idType: encryptedData['idType'] ?? '',
+          idNumber: encryptedData['idNumber'] ?? '',
+          photoIdCard: encryptedData['photoIdCard'] ?? '',
+          photoSelfie: encryptedData['photoSelfie'] ?? '',
+        ),
+      ),
+    );
   }
 
   Future<Map<String, String>> getData({
-    required List<DataInfoKeys> keys,
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await _apiClient.getData(
-      {'keys': keys.map((e) => e.value).toList()},
-    ).then((e) => e.data);
+    final response = await _apiClient
+        .kycServiceGetData(
+          body: V1GetDataRequest,
+        )
+        .then((e) => e.data.toJson());
 
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
@@ -190,57 +212,61 @@ class KycUserClient {
           final encryptedData = base64Encode(signedMessage.message);
           final decrypted = box
               .decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
+
           return MapEntry(key.value, utf8.decode(decrypted));
         }),
       ),
     );
   }
 
-  Future<bool> upload({
-    required Uint8List file,
-    required DataFileKeys key,
-  }) async {
-    final uploadUrl = await _apiClient
-        .createUploadUrl({'fileName': key.value}).then((e) => e.url);
-    final signed = _encryptAndSign(file);
+  // Future<bool> upload({
+  //   required Uint8List file,
+  //   // required DataFileKeys key,
+  // }) async {
+  //   return true;
 
-    final response = await http.put(
-      Uri.parse(uploadUrl),
-      headers: {
-        'Content-Type': 'application/octet-stream',
-        'Content-Length': signed.length.toString(),
-      },
-      body: signed,
-    );
+  // final uploadUrl = await _apiClient
+  //     .createUploadUrl({'fileName': key.value}).then((e) => e.url);
+  // final signed = _encryptAndSign(file);
 
-    return response.statusCode == 200;
-  }
+  // final response = await http.put(
+  //   Uri.parse(uploadUrl),
+  //   headers: {
+  //     'Content-Type': 'application/octet-stream',
+  //     'Content-Length': signed.length.toString(),
+  //   },
+  //   body: signed,
+  // );
 
-  Future<Uint8List> download({
-    required DataFileKeys key,
-    required String userPK,
-    required String secretKey,
-  }) async {
-    final downloadUrl = await _apiClient
-        .createDownloadUrl({'fileName': key.value}).then((e) => e.url);
+  // return response.statusCode == 200;
+  // }
 
-    final response = await http.get(Uri.parse(downloadUrl));
-    final encryptedData = response.bodyBytes;
+  // Future<Uint8List> download({
+  //   // required DataFileKeys key,
+  //   required String userPK,
+  //   required String secretKey,
+  // }) async {
+  //   return Uint8List(0);
+  // final downloadUrl = await _apiClient
+  //     .createDownloadUrl({'fileName': key.value}).then((e) => e.url);
 
-    final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
-    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+  // final response = await http.get(Uri.parse(downloadUrl));
+  // final encryptedData = response.bodyBytes;
 
-    final signedMessage = SignedMessage.fromList(signedMessage: encryptedData);
-    final result = verifyKey.verifySignedMessage(signedMessage: signedMessage);
+  // final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
+  // final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 
-    if (!result) throw Exception('Invalid signature');
+  // final signedMessage = SignedMessage.fromList(signedMessage: encryptedData);
+  // final result = verifyKey.verifySignedMessage(signedMessage: signedMessage);
 
-    final data = base64Encode(signedMessage.message);
-    final decrypted =
-        box.decrypt(EncryptedMessage.fromList(base64Decode(data)));
+  // if (!result) throw Exception('Invalid signature');
 
-    return decrypted;
-  }
+  // final data = base64Encode(signedMessage.message);
+  // final decrypted =
+  //     box.decrypt(EncryptedMessage.fromList(base64Decode(data)));
+
+  // return decrypted;
+  // }
 
   SignedMessage _encryptAndSign(Uint8List data) {
     final encrypted = _secretBox.encrypt(data);

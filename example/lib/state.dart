@@ -36,6 +36,7 @@ class WalletAppState extends ChangeNotifier {
         final signature = await _wallet!.sign(data);
         return signature;
       },
+      baseUrl: 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
     );
 
     await _client.init(walletAddress: _wallet!.publicKey.toString());
@@ -65,8 +66,8 @@ class WalletAppState extends ChangeNotifier {
   }) async {
     await _client.setData(
       data: {
-        DataInfoKeys.email: email,
-        DataInfoKeys.phone: name,
+        'email': email,
+        'phone': name,
       },
     );
 
