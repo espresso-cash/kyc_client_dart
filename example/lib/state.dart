@@ -26,7 +26,10 @@ class WalletAppState extends ChangeNotifier {
 
   Future<void> createWallet() async {
     _partnerToken = '';
-    _wallet = await Ed25519HDKeyPair.random();
+    // _wallet = await Ed25519HDKeyPair.random();
+    _wallet = await Ed25519HDKeyPair.fromMnemonic(
+      'add Mnemonic',
+    );
 
     _client = KycUserClient(
       sign: (data) async {
