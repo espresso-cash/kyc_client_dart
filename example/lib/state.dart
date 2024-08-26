@@ -26,10 +26,11 @@ class WalletAppState extends ChangeNotifier {
 
   Future<void> createWallet() async {
     _partnerToken = '';
-    // _wallet = await Ed25519HDKeyPair.random();
-    _wallet = await Ed25519HDKeyPair.fromMnemonic(
-      'add Mnemonic',
-    );
+    _wallet = await Ed25519HDKeyPair.random();
+
+    // _wallet = await Ed25519HDKeyPair.fromMnemonic(
+    //   'add Mnemonic',
+    // );
 
     _client = KycUserClient(
       sign: (data) async {
@@ -64,26 +65,13 @@ class WalletAppState extends ChangeNotifier {
     required String name,
     XFile? file,
   }) async {
-    try {
-      await _client.setData(
-        data: V1UserData(
-          email: email,
-          phone: name,
-          firstName: '',
-          middleName: '',
-          lastName: '',
-          dob: '',
-          countryCode: '',
-          idType: '',
-          idNumber: '',
-          photoIdCard: '',
-          photoSelfie: '',
-        ),
-        photoSelfie: await file?.readAsBytes(),
-      );
-    } catch (ex) {
-      print(ex);
-    }
+    await _client.setData(
+      data: V1UserData(
+        email: email,
+        phone: name,
+      ),
+      photoSelfie: await file?.readAsBytes(),
+    );
   }
 }
 
@@ -164,6 +152,8 @@ class PartnerAppState extends ChangeNotifier {
         userPK: userPK,
         secretKey: secretKey,
       );
+
+      print(data);
 
       _email = data['email'] ?? '-';
       _phone = data['phone'] ?? '-';

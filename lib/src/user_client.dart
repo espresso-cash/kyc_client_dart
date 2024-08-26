@@ -157,10 +157,12 @@ class KycUserClient {
   }) async {
     final encryptedData = Map.fromEntries(
       data.toJson().entries.map((entry) {
-        final value = entry.value as String;
-        final signedData = value.isEmpty
-            ? value
-            : base64Encode(_encryptAndSign(utf8.encode(value)).toList());
+        final value = entry.value as String?;
+
+        if (value == null) return MapEntry(entry.key, null);
+
+        final signedData =
+            base64Encode(_encryptAndSign(utf8.encode(value)).toList());
         return MapEntry(entry.key, signedData);
       }),
     );
@@ -170,34 +172,35 @@ class KycUserClient {
       photo = base64Encode(_encryptAndSign(photoSelfie));
     }
 
-    await _apiClient.kycServiceSetData(
-      body: V1SetDataRequest(
-        data: V1UserData(
-          email: encryptedData['email'] ?? '',
-          phone: encryptedData['phone'] ?? '',
-          firstName: encryptedData['firstName'] ?? '',
-          middleName: encryptedData['middleName'] ?? '',
-          lastName: encryptedData['lastName'] ?? '',
-          dob: encryptedData['dob'] ?? '',
-          countryCode: encryptedData['countryCode'] ?? '',
-          idType: encryptedData['idType'] ?? '',
-          idNumber: encryptedData['idNumber'] ?? '',
-          photoIdCard: encryptedData['photoIdCard'] ?? '',
-          photoSelfie: photo ?? '',
+    try {
+      await _apiClient.kycServiceSetData(
+        body: V1SetDataRequest(
+          data: V1UserData(
+            email: encryptedData['email'],
+            phone: encryptedData['phone'],
+            firstName: encryptedData['firstName'],
+            middleName: encryptedData['middleName'],
+            lastName: encryptedData['lastName'],
+            dob: encryptedData['dob'],
+            countryCode: encryptedData['countryCode'],
+            idType: encryptedData['idType'],
+            idNumber: encryptedData['idNumber'],
+            photoIdCard: photo,
+            photoSelfie: photo,
+          ),
         ),
-      ),
-    );
+      );
+    } catch (ex) {
+      print(ex);
+    }
   }
 
   Future<Map<String, String>> getData({
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await _apiClient
-        .kycServiceGetData(
-          body: V1GetDataRequest,
-        )
-        .then((e) => e.data.toJson());
+    final response =
+        await _apiClient.kycServiceGetData().then((e) => e.data.toJson());
 
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));

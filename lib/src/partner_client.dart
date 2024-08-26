@@ -63,11 +63,8 @@ class KycPartnerClient {
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await _apiClient
-        .kycServiceGetData(
-          body: V1GetDataRequest,
-        )
-        .then((e) => e.data.toJson());
+    final response =
+        await _apiClient.kycServiceGetData().then((e) => e.data.toJson());
 
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
