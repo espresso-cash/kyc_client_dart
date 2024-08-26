@@ -53,7 +53,7 @@ class KycUserClient {
 
     String? encryptedSecretKey;
     try {
-      final getInfo = await _apiClient.kycServiceGetInfo(body: dynamic);
+      final getInfo = await _apiClient.kycServiceGetInfo();
       encryptedSecretKey = getInfo.encryptedSecretKey;
       await _initializeEncryption(seed, encryptedSecretKey: encryptedSecretKey);
     } on DioException catch (e) {
