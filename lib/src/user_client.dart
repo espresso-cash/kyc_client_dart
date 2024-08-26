@@ -157,9 +157,11 @@ class KycUserClient {
   }) async {
     final encryptedData = Map.fromEntries(
       data.toJson().entries.map((entry) {
-        final signed =
-            _encryptAndSign(utf8.encode(entry.value as String)).toList();
-        return MapEntry(entry.key, base64Encode(signed));
+        final value = entry.value as String;
+        final signedData = value.isEmpty
+            ? value
+            : base64Encode(_encryptAndSign(utf8.encode(value)).toList());
+        return MapEntry(entry.key, signedData);
       }),
     );
 
@@ -167,8 +169,6 @@ class KycUserClient {
     if (photoSelfie != null) {
       photo = base64Encode(_encryptAndSign(photoSelfie));
     }
-
-    print(photo);
 
     await _apiClient.kycServiceSetData(
       body: V1SetDataRequest(
