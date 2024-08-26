@@ -8,17 +8,17 @@ part of 'v1_user_data.dart';
 
 _$V1UserDataImpl _$$V1UserDataImplFromJson(Map<String, dynamic> json) =>
     _$V1UserDataImpl(
-      email: json['email'] as String,
-      phone: json['phone'] as String,
-      firstName: json['firstName'] as String,
-      middleName: json['middleName'] as String,
-      lastName: json['lastName'] as String,
-      dob: json['dob'] as String,
-      countryCode: json['countryCode'] as String,
-      idType: json['idType'] as String,
-      idNumber: json['idNumber'] as String,
-      photoIdCard: json['photoIdCard'] as String,
-      photoSelfie: json['photoSelfie'] as String,
+      email: json['email'] as String?,
+      phone: json['phone'] as String?,
+      firstName: json['firstName'] as String?,
+      middleName: json['middleName'] as String?,
+      lastName: json['lastName'] as String?,
+      dob: json['dob'] as String?,
+      countryCode: json['countryCode'] as String?,
+      idType: json['idType'] as String?,
+      idNumber: json['idNumber'] as String?,
+      photoIdCard: json['photoIdCard'] as String?,
+      photoSelfie: json['photoSelfie'] as String?,
     );
 
 Map<String, dynamic> _$$V1UserDataImplToJson(_$V1UserDataImpl instance) =>

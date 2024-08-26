@@ -19,11 +19,11 @@ class _KycServiceClient implements KycServiceClient {
   String? baseUrl;
 
   @override
-  Future<V1GetDataResponse> kycServiceGetData({required dynamic body}) async {
+  Future<V1GetDataResponse> kycServiceGetData() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = body;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<V1GetDataResponse>(Options(
       method: 'POST',
@@ -34,7 +34,7 @@ class _KycServiceClient implements KycServiceClient {
               _dio.options,
               '/v1/getData',
               queryParameters: queryParameters,
-              // data: _data,
+              data: _data,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -46,11 +46,11 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetInfoResponse> kycServiceGetInfo({required dynamic body}) async {
+  Future<V1GetInfoResponse> kycServiceGetInfo() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = body;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<V1GetInfoResponse>(Options(
       method: 'POST',
@@ -61,7 +61,7 @@ class _KycServiceClient implements KycServiceClient {
               _dio.options,
               '/v1/getInfo',
               queryParameters: queryParameters,
-              // data: _data,
+              data: _data,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(

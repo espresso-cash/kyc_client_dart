@@ -9,9 +9,9 @@ part of 'v1_validation_data.dart';
 _$V1ValidationDataImpl _$$V1ValidationDataImplFromJson(
         Map<String, dynamic> json) =>
     _$V1ValidationDataImpl(
-      email: json['email'] as String,
-      phone: json['phone'] as String,
-      kycSmileId: json['kycSmileId'] as String,
+      email: json['email'] as String?,
+      phone: json['phone'] as String?,
+      kycSmileId: json['kycSmileId'] as String?,
     );
 
 Map<String, dynamic> _$$V1ValidationDataImplToJson(

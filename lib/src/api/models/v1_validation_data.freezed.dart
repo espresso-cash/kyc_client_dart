@@ -20,9 +20,9 @@ V1ValidationData _$V1ValidationDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$V1ValidationData {
-  String get email => throw _privateConstructorUsedError;
-  String get phone => throw _privateConstructorUsedError;
-  String get kycSmileId => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
+  String? get phone => throw _privateConstructorUsedError;
+  String? get kycSmileId => throw _privateConstructorUsedError;
 
   /// Serializes this V1ValidationData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,7 +40,7 @@ abstract class $V1ValidationDataCopyWith<$Res> {
           V1ValidationData value, $Res Function(V1ValidationData) then) =
       _$V1ValidationDataCopyWithImpl<$Res, V1ValidationData>;
   @useResult
-  $Res call({String email, String phone, String kycSmileId});
+  $Res call({String? email, String? phone, String? kycSmileId});
 }
 
 /// @nodoc
@@ -58,23 +58,23 @@ class _$V1ValidationDataCopyWithImpl<$Res, $Val extends V1ValidationData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? email = null,
-    Object? phone = null,
-    Object? kycSmileId = null,
+    Object? email = freezed,
+    Object? phone = freezed,
+    Object? kycSmileId = freezed,
   }) {
     return _then(_value.copyWith(
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      phone: null == phone
+              as String?,
+      phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
-              as String,
-      kycSmileId: null == kycSmileId
+              as String?,
+      kycSmileId: freezed == kycSmileId
           ? _value.kycSmileId
           : kycSmileId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -87,7 +87,7 @@ abstract class _$$V1ValidationDataImplCopyWith<$Res>
       __$$V1ValidationDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String email, String phone, String kycSmileId});
+  $Res call({String? email, String? phone, String? kycSmileId});
 }
 
 /// @nodoc
@@ -103,23 +103,23 @@ class __$$V1ValidationDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? email = null,
-    Object? phone = null,
-    Object? kycSmileId = null,
+    Object? email = freezed,
+    Object? phone = freezed,
+    Object? kycSmileId = freezed,
   }) {
     return _then(_$V1ValidationDataImpl(
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      phone: null == phone
+              as String?,
+      phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
-              as String,
-      kycSmileId: null == kycSmileId
+              as String?,
+      kycSmileId: freezed == kycSmileId
           ? _value.kycSmileId
           : kycSmileId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -127,18 +127,17 @@ class __$$V1ValidationDataImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$V1ValidationDataImpl implements _V1ValidationData {
-  const _$V1ValidationDataImpl(
-      {required this.email, required this.phone, required this.kycSmileId});
+  const _$V1ValidationDataImpl({this.email, this.phone, this.kycSmileId});
 
   factory _$V1ValidationDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1ValidationDataImplFromJson(json);
 
   @override
-  final String email;
+  final String? email;
   @override
-  final String phone;
+  final String? phone;
   @override
-  final String kycSmileId;
+  final String? kycSmileId;
 
   @override
   String toString() {
@@ -179,19 +178,19 @@ class _$V1ValidationDataImpl implements _V1ValidationData {
 
 abstract class _V1ValidationData implements V1ValidationData {
   const factory _V1ValidationData(
-      {required final String email,
-      required final String phone,
-      required final String kycSmileId}) = _$V1ValidationDataImpl;
+      {final String? email,
+      final String? phone,
+      final String? kycSmileId}) = _$V1ValidationDataImpl;
 
   factory _V1ValidationData.fromJson(Map<String, dynamic> json) =
       _$V1ValidationDataImpl.fromJson;
 
   @override
-  String get email;
+  String? get email;
   @override
-  String get phone;
+  String? get phone;
   @override
-  String get kycSmileId;
+  String? get kycSmileId;
 
   /// Create a copy of V1ValidationData
   /// with the given fields replaced by the non-null parameter values.

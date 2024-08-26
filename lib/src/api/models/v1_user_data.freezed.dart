@@ -20,17 +20,17 @@ V1UserData _$V1UserDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$V1UserData {
-  String get email => throw _privateConstructorUsedError;
-  String get phone => throw _privateConstructorUsedError;
-  String get firstName => throw _privateConstructorUsedError;
-  String get middleName => throw _privateConstructorUsedError;
-  String get lastName => throw _privateConstructorUsedError;
-  String get dob => throw _privateConstructorUsedError;
-  String get countryCode => throw _privateConstructorUsedError;
-  String get idType => throw _privateConstructorUsedError;
-  String get idNumber => throw _privateConstructorUsedError;
-  String get photoIdCard => throw _privateConstructorUsedError;
-  String get photoSelfie => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
+  String? get phone => throw _privateConstructorUsedError;
+  String? get firstName => throw _privateConstructorUsedError;
+  String? get middleName => throw _privateConstructorUsedError;
+  String? get lastName => throw _privateConstructorUsedError;
+  String? get dob => throw _privateConstructorUsedError;
+  String? get countryCode => throw _privateConstructorUsedError;
+  String? get idType => throw _privateConstructorUsedError;
+  String? get idNumber => throw _privateConstructorUsedError;
+  String? get photoIdCard => throw _privateConstructorUsedError;
+  String? get photoSelfie => throw _privateConstructorUsedError;
 
   /// Serializes this V1UserData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,17 +49,17 @@ abstract class $V1UserDataCopyWith<$Res> {
       _$V1UserDataCopyWithImpl<$Res, V1UserData>;
   @useResult
   $Res call(
-      {String email,
-      String phone,
-      String firstName,
-      String middleName,
-      String lastName,
-      String dob,
-      String countryCode,
-      String idType,
-      String idNumber,
-      String photoIdCard,
-      String photoSelfie});
+      {String? email,
+      String? phone,
+      String? firstName,
+      String? middleName,
+      String? lastName,
+      String? dob,
+      String? countryCode,
+      String? idType,
+      String? idNumber,
+      String? photoIdCard,
+      String? photoSelfie});
 }
 
 /// @nodoc
@@ -77,63 +77,63 @@ class _$V1UserDataCopyWithImpl<$Res, $Val extends V1UserData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? email = null,
-    Object? phone = null,
-    Object? firstName = null,
-    Object? middleName = null,
-    Object? lastName = null,
-    Object? dob = null,
-    Object? countryCode = null,
-    Object? idType = null,
-    Object? idNumber = null,
-    Object? photoIdCard = null,
-    Object? photoSelfie = null,
+    Object? email = freezed,
+    Object? phone = freezed,
+    Object? firstName = freezed,
+    Object? middleName = freezed,
+    Object? lastName = freezed,
+    Object? dob = freezed,
+    Object? countryCode = freezed,
+    Object? idType = freezed,
+    Object? idNumber = freezed,
+    Object? photoIdCard = freezed,
+    Object? photoSelfie = freezed,
   }) {
     return _then(_value.copyWith(
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      phone: null == phone
+              as String?,
+      phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
-              as String,
-      firstName: null == firstName
+              as String?,
+      firstName: freezed == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
-              as String,
-      middleName: null == middleName
+              as String?,
+      middleName: freezed == middleName
           ? _value.middleName
           : middleName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastName: null == lastName
+              as String?,
+      lastName: freezed == lastName
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
-              as String,
-      dob: null == dob
+              as String?,
+      dob: freezed == dob
           ? _value.dob
           : dob // ignore: cast_nullable_to_non_nullable
-              as String,
-      countryCode: null == countryCode
+              as String?,
+      countryCode: freezed == countryCode
           ? _value.countryCode
           : countryCode // ignore: cast_nullable_to_non_nullable
-              as String,
-      idType: null == idType
+              as String?,
+      idType: freezed == idType
           ? _value.idType
           : idType // ignore: cast_nullable_to_non_nullable
-              as String,
-      idNumber: null == idNumber
+              as String?,
+      idNumber: freezed == idNumber
           ? _value.idNumber
           : idNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      photoIdCard: null == photoIdCard
+              as String?,
+      photoIdCard: freezed == photoIdCard
           ? _value.photoIdCard
           : photoIdCard // ignore: cast_nullable_to_non_nullable
-              as String,
-      photoSelfie: null == photoSelfie
+              as String?,
+      photoSelfie: freezed == photoSelfie
           ? _value.photoSelfie
           : photoSelfie // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -147,17 +147,17 @@ abstract class _$$V1UserDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String email,
-      String phone,
-      String firstName,
-      String middleName,
-      String lastName,
-      String dob,
-      String countryCode,
-      String idType,
-      String idNumber,
-      String photoIdCard,
-      String photoSelfie});
+      {String? email,
+      String? phone,
+      String? firstName,
+      String? middleName,
+      String? lastName,
+      String? dob,
+      String? countryCode,
+      String? idType,
+      String? idNumber,
+      String? photoIdCard,
+      String? photoSelfie});
 }
 
 /// @nodoc
@@ -173,63 +173,63 @@ class __$$V1UserDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? email = null,
-    Object? phone = null,
-    Object? firstName = null,
-    Object? middleName = null,
-    Object? lastName = null,
-    Object? dob = null,
-    Object? countryCode = null,
-    Object? idType = null,
-    Object? idNumber = null,
-    Object? photoIdCard = null,
-    Object? photoSelfie = null,
+    Object? email = freezed,
+    Object? phone = freezed,
+    Object? firstName = freezed,
+    Object? middleName = freezed,
+    Object? lastName = freezed,
+    Object? dob = freezed,
+    Object? countryCode = freezed,
+    Object? idType = freezed,
+    Object? idNumber = freezed,
+    Object? photoIdCard = freezed,
+    Object? photoSelfie = freezed,
   }) {
     return _then(_$V1UserDataImpl(
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      phone: null == phone
+              as String?,
+      phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
-              as String,
-      firstName: null == firstName
+              as String?,
+      firstName: freezed == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
-              as String,
-      middleName: null == middleName
+              as String?,
+      middleName: freezed == middleName
           ? _value.middleName
           : middleName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastName: null == lastName
+              as String?,
+      lastName: freezed == lastName
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
-              as String,
-      dob: null == dob
+              as String?,
+      dob: freezed == dob
           ? _value.dob
           : dob // ignore: cast_nullable_to_non_nullable
-              as String,
-      countryCode: null == countryCode
+              as String?,
+      countryCode: freezed == countryCode
           ? _value.countryCode
           : countryCode // ignore: cast_nullable_to_non_nullable
-              as String,
-      idType: null == idType
+              as String?,
+      idType: freezed == idType
           ? _value.idType
           : idType // ignore: cast_nullable_to_non_nullable
-              as String,
-      idNumber: null == idNumber
+              as String?,
+      idNumber: freezed == idNumber
           ? _value.idNumber
           : idNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      photoIdCard: null == photoIdCard
+              as String?,
+      photoIdCard: freezed == photoIdCard
           ? _value.photoIdCard
           : photoIdCard // ignore: cast_nullable_to_non_nullable
-              as String,
-      photoSelfie: null == photoSelfie
+              as String?,
+      photoSelfie: freezed == photoSelfie
           ? _value.photoSelfie
           : photoSelfie // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -238,43 +238,43 @@ class __$$V1UserDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$V1UserDataImpl implements _V1UserData {
   const _$V1UserDataImpl(
-      {required this.email,
-      required this.phone,
-      required this.firstName,
-      required this.middleName,
-      required this.lastName,
-      required this.dob,
-      required this.countryCode,
-      required this.idType,
-      required this.idNumber,
-      required this.photoIdCard,
-      required this.photoSelfie});
+      {this.email,
+      this.phone,
+      this.firstName,
+      this.middleName,
+      this.lastName,
+      this.dob,
+      this.countryCode,
+      this.idType,
+      this.idNumber,
+      this.photoIdCard,
+      this.photoSelfie});
 
   factory _$V1UserDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1UserDataImplFromJson(json);
 
   @override
-  final String email;
+  final String? email;
   @override
-  final String phone;
+  final String? phone;
   @override
-  final String firstName;
+  final String? firstName;
   @override
-  final String middleName;
+  final String? middleName;
   @override
-  final String lastName;
+  final String? lastName;
   @override
-  final String dob;
+  final String? dob;
   @override
-  final String countryCode;
+  final String? countryCode;
   @override
-  final String idType;
+  final String? idType;
   @override
-  final String idNumber;
+  final String? idNumber;
   @override
-  final String photoIdCard;
+  final String? photoIdCard;
   @override
-  final String photoSelfie;
+  final String? photoSelfie;
 
   @override
   String toString() {
@@ -340,43 +340,43 @@ class _$V1UserDataImpl implements _V1UserData {
 
 abstract class _V1UserData implements V1UserData {
   const factory _V1UserData(
-      {required final String email,
-      required final String phone,
-      required final String firstName,
-      required final String middleName,
-      required final String lastName,
-      required final String dob,
-      required final String countryCode,
-      required final String idType,
-      required final String idNumber,
-      required final String photoIdCard,
-      required final String photoSelfie}) = _$V1UserDataImpl;
+      {final String? email,
+      final String? phone,
+      final String? firstName,
+      final String? middleName,
+      final String? lastName,
+      final String? dob,
+      final String? countryCode,
+      final String? idType,
+      final String? idNumber,
+      final String? photoIdCard,
+      final String? photoSelfie}) = _$V1UserDataImpl;
 
   factory _V1UserData.fromJson(Map<String, dynamic> json) =
       _$V1UserDataImpl.fromJson;
 
   @override
-  String get email;
+  String? get email;
   @override
-  String get phone;
+  String? get phone;
   @override
-  String get firstName;
+  String? get firstName;
   @override
-  String get middleName;
+  String? get middleName;
   @override
-  String get lastName;
+  String? get lastName;
   @override
-  String get dob;
+  String? get dob;
   @override
-  String get countryCode;
+  String? get countryCode;
   @override
-  String get idType;
+  String? get idType;
   @override
-  String get idNumber;
+  String? get idNumber;
   @override
-  String get photoIdCard;
+  String? get photoIdCard;
   @override
-  String get photoSelfie;
+  String? get photoSelfie;
 
   /// Create a copy of V1UserData
   /// with the given fields replaced by the non-null parameter values.

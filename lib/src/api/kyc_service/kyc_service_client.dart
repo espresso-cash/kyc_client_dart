@@ -27,9 +27,7 @@ abstract class KycServiceClient {
   factory KycServiceClient(Dio dio, {String? baseUrl}) = _KycServiceClient;
 
   @POST('/v1/getData')
-  Future<V1GetDataResponse> kycServiceGetData({
-    @Body() required V1GetDataRequest body,
-  });
+  Future<V1GetDataResponse> kycServiceGetData();
 
   @POST('/v1/getInfo')
   Future<V1GetInfoResponse> kycServiceGetInfo();

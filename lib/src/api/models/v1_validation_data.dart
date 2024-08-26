@@ -10,10 +10,11 @@ part 'v1_validation_data.g.dart';
 @Freezed()
 class V1ValidationData with _$V1ValidationData {
   const factory V1ValidationData({
-    required String email,
-    required String phone,
-    required String kycSmileId,
+    String? email,
+    String? phone,
+    String? kycSmileId,
   }) = _V1ValidationData;
-  
-  factory V1ValidationData.fromJson(Map<String, Object?> json) => _$V1ValidationDataFromJson(json);
+
+  factory V1ValidationData.fromJson(Map<String, Object?> json) =>
+      _$V1ValidationDataFromJson(json);
 }
