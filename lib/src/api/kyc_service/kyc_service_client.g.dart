@@ -34,7 +34,7 @@ class _KycServiceClient implements KycServiceClient {
               _dio.options,
               '/v1/getData',
               queryParameters: queryParameters,
-              data: _data,
+              // data: _data,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -61,7 +61,7 @@ class _KycServiceClient implements KycServiceClient {
               _dio.options,
               '/v1/getInfo',
               queryParameters: queryParameters,
-              data: _data,
+              // data: _data,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(

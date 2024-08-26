@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
 import 'package:kyc_client_dart/src/api/export.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/models/partner.dart';
@@ -55,8 +53,7 @@ class KycUserClient {
 
     String? encryptedSecretKey;
     try {
-      final getInfo =
-          await _apiClient.kycServiceGetInfo(body: V1GetInfoRequest);
+      final getInfo = await _apiClient.kycServiceGetInfo(body: dynamic);
       encryptedSecretKey = getInfo.encryptedSecretKey;
       await _initializeEncryption(seed, encryptedSecretKey: encryptedSecretKey);
     } on DioException catch (e) {
@@ -154,13 +151,24 @@ class KycUserClient {
     );
   }
 
-  Future<void> setData({required Map<String, String> data}) async {
+  Future<void> setData({
+    required V1UserData data,
+    required Uint8List? photoSelfie,
+  }) async {
     final encryptedData = Map.fromEntries(
-      data.entries.map((entry) {
-        final signed = _encryptAndSign(utf8.encode(entry.value)).toList();
+      data.toJson().entries.map((entry) {
+        final signed =
+            _encryptAndSign(utf8.encode(entry.value as String)).toList();
         return MapEntry(entry.key, base64Encode(signed));
       }),
     );
+
+    String? photo;
+    if (photoSelfie != null) {
+      photo = base64Encode(_encryptAndSign(photoSelfie));
+    }
+
+    print(photo);
 
     await _apiClient.kycServiceSetData(
       body: V1SetDataRequest(
@@ -175,7 +183,7 @@ class KycUserClient {
           idType: encryptedData['idType'] ?? '',
           idNumber: encryptedData['idNumber'] ?? '',
           photoIdCard: encryptedData['photoIdCard'] ?? '',
-          photoSelfie: encryptedData['photoSelfie'] ?? '',
+          photoSelfie: photo ?? '',
         ),
       ),
     );
@@ -196,15 +204,13 @@ class KycUserClient {
 
     return Map.fromEntries(
       await Future.wait(
-        keys.map((key) async {
-          final signedDataRaw =
-              response.firstWhereOrNull((e) => e.key == key.value);
-
-          if (signedDataRaw == null) return MapEntry(key.value, '');
+        response.entries.map((key) async {
+          final signedDataRaw = key.value as String;
 
           final signedMessage = SignedMessage.fromList(
-            signedMessage: base64Decode(signedDataRaw.value),
+            signedMessage: base64Decode(signedDataRaw),
           );
+
           if (!verifyKey.verifySignedMessage(signedMessage: signedMessage)) {
             throw Exception('Invalid signature for key: $key');
           }
@@ -213,60 +219,11 @@ class KycUserClient {
           final decrypted = box
               .decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-          return MapEntry(key.value, utf8.decode(decrypted));
+          return MapEntry(key.key, utf8.decode(decrypted));
         }),
       ),
     );
   }
-
-  // Future<bool> upload({
-  //   required Uint8List file,
-  //   // required DataFileKeys key,
-  // }) async {
-  //   return true;
-
-  // final uploadUrl = await _apiClient
-  //     .createUploadUrl({'fileName': key.value}).then((e) => e.url);
-  // final signed = _encryptAndSign(file);
-
-  // final response = await http.put(
-  //   Uri.parse(uploadUrl),
-  //   headers: {
-  //     'Content-Type': 'application/octet-stream',
-  //     'Content-Length': signed.length.toString(),
-  //   },
-  //   body: signed,
-  // );
-
-  // return response.statusCode == 200;
-  // }
-
-  // Future<Uint8List> download({
-  //   // required DataFileKeys key,
-  //   required String userPK,
-  //   required String secretKey,
-  // }) async {
-  //   return Uint8List(0);
-  // final downloadUrl = await _apiClient
-  //     .createDownloadUrl({'fileName': key.value}).then((e) => e.url);
-
-  // final response = await http.get(Uri.parse(downloadUrl));
-  // final encryptedData = response.bodyBytes;
-
-  // final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
-  // final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
-
-  // final signedMessage = SignedMessage.fromList(signedMessage: encryptedData);
-  // final result = verifyKey.verifySignedMessage(signedMessage: signedMessage);
-
-  // if (!result) throw Exception('Invalid signature');
-
-  // final data = base64Encode(signedMessage.message);
-  // final decrypted =
-  //     box.decrypt(EncryptedMessage.fromList(base64Decode(data)));
-
-  // return decrypted;
-  // }
 
   SignedMessage _encryptAndSign(Uint8List data) {
     final encrypted = _secretBox.encrypt(data);

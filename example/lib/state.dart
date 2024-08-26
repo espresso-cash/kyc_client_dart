@@ -64,18 +64,25 @@ class WalletAppState extends ChangeNotifier {
     required String name,
     XFile? file,
   }) async {
-    await _client.setData(
-      data: {
-        'email': email,
-        'phone': name,
-      },
-    );
-
-    if (file != null) {
-      await _client.upload(
-        file: await file.readAsBytes(),
-        key: DataFileKeys.photo,
+    try {
+      await _client.setData(
+        data: V1UserData(
+          email: email,
+          phone: name,
+          firstName: '',
+          middleName: '',
+          lastName: '',
+          dob: '',
+          countryCode: '',
+          idType: '',
+          idNumber: '',
+          photoIdCard: '',
+          photoSelfie: '',
+        ),
+        photoSelfie: await file?.readAsBytes(),
       );
+    } catch (ex) {
+      print(ex);
     }
   }
 }
@@ -99,7 +106,10 @@ class PartnerAppState extends ChangeNotifier {
     final keyPair = await Ed25519().newKeyPairFromSeed(
       base58decode('8ui6TQMfAudigNuKycopDyZ6irMeS7DTSe73d2gzv1Hz'),
     );
-    _client = KycPartnerClient(authKeyPair: keyPair);
+    _client = KycPartnerClient(
+      authKeyPair: keyPair,
+      baseUrl: 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
+    );
 
     _authPublicKey = await keyPair
         .extractPublicKey()
@@ -116,47 +126,60 @@ class PartnerAppState extends ChangeNotifier {
   }
 
   Future<void> setValidationResult(String message) async {
-    await _client.setValidationResult(
-      key: ValidationResultKeys.smileId,
-      value: message,
-    );
+    try {
+      await _client.setValidationResult(
+        value: V1ValidationData(
+          email: '',
+          phone: '',
+          kycSmileId: message,
+        ),
+      );
+    } catch (ex) {
+      print(ex);
+    }
   }
 
   Future<void> getValidationResult({
     required String secretKey,
     required String userPK,
   }) async {
-    final response = await _client.getValidationResult(
-      key: ValidationResultKeys.smileId,
-      validatorPK: _authPublicKey,
-      secretKey: secretKey,
-    );
+    try {
+      final response = await _client.getValidationResult(
+        key: '',
+        validatorPK: _authPublicKey,
+        secretKey: secretKey,
+      );
 
-    _result = response;
-    notifyListeners();
+      _result = response;
+      notifyListeners();
+    } catch (ex) {
+      print(ex);
+    }
   }
 
   Future<void> fetchData(String secretKey, String userPK) async {
-    final keys = [DataInfoKeys.email, DataInfoKeys.phone];
+    try {
+      final data = await _client.getData(
+        keys: [],
+        userPK: userPK,
+        secretKey: secretKey,
+      );
 
-    final data = await _client.getData(
-      keys: keys,
-      userPK: userPK,
-      secretKey: secretKey,
-    );
+      _email = data['email'] ?? '-';
+      _phone = data['phone'] ?? '-';
+    } catch (ex) {
+      print(ex);
+    }
 
-    _email = data[DataInfoKeys.email.value] ?? '-';
-    _phone = data[DataInfoKeys.phone.value] ?? '-';
+    // notifyListeners();
 
-    notifyListeners();
+    // final file = await _client.download(
+    //   key: DataFileKeys.photo,
+    //   userPK: userPK,
+    //   secretKey: secretKey,
+    // );
 
-    final file = await _client.download(
-      key: DataFileKeys.photo,
-      userPK: userPK,
-      secretKey: secretKey,
-    );
-
-    _file = XFile.fromData(file);
+    // _file = XFile.fromData(file);
 
     notifyListeners();
   }

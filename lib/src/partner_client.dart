@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cryptography/cryptography.dart' hide Hash, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
-import 'package:http/http.dart';
 import 'package:kyc_client_dart/src/api/export.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:pinenacl/digests.dart';
@@ -60,126 +59,110 @@ class KycPartnerClient {
   }
 
   Future<Map<String, String>> getData({
-    required List<DataInfoKeys> keys,
+    required List<String> keys,
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await _apiClient.getData(
-      {'keys': keys.map((e) => e.value).toList()},
-    ).then((e) => e.data);
+    final response = await _apiClient
+        .kycServiceGetData(
+          body: V1GetDataRequest,
+        )
+        .then((e) => e.data.toJson());
 
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 
-    final Map<String, String> results = {};
+    return Map.fromEntries(
+      await Future.wait(
+        response.entries.map((key) async {
+          final signedDataRaw = key.value as String;
 
-    for (final key in keys) {
-      final signedDataRaw =
-          response.firstWhereOrNull((e) => e.key == key.value);
+          final signedMessage = SignedMessage.fromList(
+            signedMessage: base64Decode(signedDataRaw),
+          );
 
-      if (signedDataRaw == null) {
-        results[key.value] = '';
-        continue;
-      }
+          if (signedDataRaw.isEmpty) return MapEntry(key.key, '');
 
-      final signedMessage = SignedMessage.fromList(
-        signedMessage: base64Decode(signedDataRaw.value),
-      );
-      final result =
-          verifyKey.verifySignedMessage(signedMessage: signedMessage);
+          if (!verifyKey.verifySignedMessage(signedMessage: signedMessage)) {
+            throw Exception('Invalid signature for key: $key');
+          }
 
-      if (!result) throw Exception('Invalid signature for key: $key');
+          final encryptedData = base64Encode(signedMessage.message);
+          final decrypted = box
+              .decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-      final encryptedData = base64Encode(signedMessage.message);
-      final decrypted =
-          box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
-
-      results[key.value] = utf8.decode(decrypted);
-    }
-
-    return results;
+          return MapEntry(key.key, utf8.decode(decrypted));
+        }),
+      ),
+    );
   }
 
   Future<void> setValidationResult({
-    required String value,
     required V1ValidationData value,
   }) async {
-    final valueBytes = utf8.encode(value);
-    final signedEncrypted = _encryptAndSign(Uint8List.fromList(valueBytes));
+    final data = value.toJson();
 
     await _apiClient.kycServiceSetValidationResult(
-      // DataEntry(key: key.value, value: base64Encode(signedEncrypted.toList())),
-      body: const V1SetValidationResultRequest(
+      body: V1SetValidationResultRequest(
         data: V1ValidationData(
-          email: '',
-          phone: '',
-          kycSmileId: '',
+          email: base64Encode(
+            _encryptAndSign(
+              Uint8List.fromList(utf8.encode(data['email'] as String)),
+            ),
+          ),
+          phone: base64Encode(
+            _encryptAndSign(
+              Uint8List.fromList(utf8.encode(data['phone'] as String)),
+            ),
+          ),
+          kycSmileId: base64Encode(
+            _encryptAndSign(
+              Uint8List.fromList(utf8.encode(data['kycSmileId'] as String)),
+            ),
+          ),
         ),
       ),
     );
   }
 
   Future<String> getValidationResult({
-    required ValidationResultKeys key,
+    required String key,
     required String validatorPK,
     required String secretKey,
   }) async {
     final response = await _apiClient
-        .getValidationResult(
-          ValidationRequestDto(
-            key: key.value,
-            validator: validatorPK,
+        .kycServiceGetValidationResult(
+          body: V1GetValidationResultRequest(
+            publicKey: validatorPK,
           ),
         )
-        .then((e) => e.value);
+        .then((e) => e.data);
 
-    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+    print(response);
 
-    final signedMessage = SignedMessage.fromList(
-      signedMessage: base64Decode(response),
-    );
+    // final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 
-    final encryptedData = base64Encode(signedMessage.message);
-    final decrypted =
-        box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
+    // final signedMessage = SignedMessage.fromList(
+    //   signedMessage: base64Decode(response),
+    // );
 
-    return utf8.decode(decrypted);
-  }
+    // final encryptedData = base64Encode(signedMessage.message);
+    // final decrypted =
+    //     box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-  Future<Uint8List> download({
-    required DataFileKeys key,
-    required String userPK,
-    required String secretKey,
-  }) async {
-    final downloadUrl = await _apiClient
-        .createDownloadUrl({'fileName': key.value}).then((e) => e.url);
+    // return utf8.decode(decrypted);
 
-    final response = await get(Uri.parse(downloadUrl));
-    final encryptedData = response.bodyBytes;
-
-    final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
-    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
-
-    final signedMessage = SignedMessage.fromList(signedMessage: encryptedData);
-    final result = verifyKey.verifySignedMessage(signedMessage: signedMessage);
-
-    if (!result) throw Exception('Invalid signature');
-
-    final data = base64Encode(signedMessage.message);
-    final decrypted =
-        box.decrypt(EncryptedMessage.fromList(base64Decode(data)));
-
-    return decrypted;
+    return '';
   }
 
   Future<void> validateField(
-    ValidationResultKeys key,
+    String key,
     String validatedField,
   ) async {
-    await setValidationResult(
-      key: key,
-      value: await _hash(validatedField),
-    );
+    // await setValidationResult(
+    //   key: key,
+    //   value: await _hash(validatedField),
+    // );
   }
 
   Future<String> _hash(String value) async {
