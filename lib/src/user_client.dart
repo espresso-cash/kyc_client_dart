@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cryptography/cryptography.dart' hide SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
@@ -24,22 +23,15 @@ class KycUserClient {
   static const _seedMessage = 'hello';
   static const _proofMessage = 'walletProofMessage';
 
-  // Authentication-related variables
   late final SimpleKeyPair _authKeyPair;
   late final String _authPublicKey;
   late final String _token;
-
-  // Encryption-related variables
   late final SimpleKeyPair _encryptionKeyPair;
   late final SecretKey _secretKey;
   late final String _encryptedSecretKey;
   late final String _rawSecretKey;
   late final SecretBox _secretBox;
-
-  // Signing-related variable
   late final SigningKey _signingKey;
-
-  // API client
   late final KycServiceClient _apiClient;
 
   String get authPublicKey => _authPublicKey;
@@ -51,14 +43,14 @@ class KycUserClient {
     await _initializeToken();
     _initializeApiClient();
 
-    String? encryptedSecretKey;
     try {
       final getInfo = await _apiClient.kycServiceGetInfo();
-      encryptedSecretKey = getInfo.encryptedSecretKey;
-      await _initializeEncryption(seed, encryptedSecretKey: encryptedSecretKey);
+      await _initializeEncryption(
+        seed,
+        encryptedSecretKey: getInfo.encryptedSecretKey,
+      );
     } on DioException catch (e) {
       if (e.response?.statusCode != 404) rethrow;
-
       await _initializeEncryption(seed);
       await _initStorage(walletAddress: walletAddress);
     }
@@ -97,13 +89,9 @@ class KycUserClient {
     );
     final sealedBox = SealedBox(encryptionSK);
 
-    if (encryptedSecretKey == null) {
-      _secretKey = await Chacha20.poly1305Aead().newSecretKey();
-    } else {
-      _secretKey = SecretKey(
-        sealedBox.decrypt(base64Decode(encryptedSecretKey)),
-      );
-    }
+    _secretKey = encryptedSecretKey == null
+        ? await Chacha20.poly1305Aead().newSecretKey()
+        : SecretKey(sealedBox.decrypt(base64Decode(encryptedSecretKey)));
 
     _rawSecretKey = base58encode(await _secretKey.extractBytes());
     _encryptedSecretKey = base64Encode(
@@ -153,76 +141,76 @@ class KycUserClient {
 
   Future<void> setData({
     required V1UserData data,
-    required Uint8List? photoSelfie,
+    required Uint8List? selfie,
+    required Uint8List? idCard,
   }) async {
-    final encryptedData = Map.fromEntries(
-      data.toJson().entries.map((entry) {
-        final value = entry.value as String?;
+    final encryptedData = _encryptUserData(data);
+    final photoSelfie =
+        selfie != null ? base64Encode(_encryptAndSign(selfie)) : null;
+    final photoIdCard =
+        idCard != null ? base64Encode(_encryptAndSign(idCard)) : null;
 
-        if (value == null) return MapEntry(entry.key, null);
-
-        final signedData =
-            base64Encode(_encryptAndSign(utf8.encode(value)).toList());
-        return MapEntry(entry.key, signedData);
-      }),
-    );
-
-    String? photo;
-    if (photoSelfie != null) {
-      photo = base64Encode(_encryptAndSign(photoSelfie));
-    }
-
-    try {
-      await _apiClient.kycServiceSetData(
-        body: V1SetDataRequest(
-          data: V1UserData(
-            email: encryptedData['email'],
-            phone: encryptedData['phone'],
-            firstName: encryptedData['firstName'],
-            middleName: encryptedData['middleName'],
-            lastName: encryptedData['lastName'],
-            dob: encryptedData['dob'],
-            countryCode: encryptedData['countryCode'],
-            idType: encryptedData['idType'],
-            idNumber: encryptedData['idNumber'],
-            photoIdCard: photo,
-            photoSelfie: photo,
-          ),
+    await _apiClient.kycServiceSetData(
+      body: V1SetDataRequest(
+        data: V1UserData(
+          email: encryptedData['email'],
+          phone: encryptedData['phone'],
+          firstName: encryptedData['firstName'],
+          middleName: encryptedData['middleName'],
+          lastName: encryptedData['lastName'],
+          dob: encryptedData['dob'],
+          countryCode: encryptedData['countryCode'],
+          idType: encryptedData['idType'],
+          idNumber: encryptedData['idNumber'],
+          photoIdCard: photoIdCard,
+          photoSelfie: photoSelfie,
         ),
-      );
-    } catch (ex) {
-      print(ex);
-    }
+      ),
+    );
   }
 
-  Future<Map<String, String>> getData({
+  Map<String, String?> _encryptUserData(V1UserData data) => Map.fromEntries(
+        data.toJson().entries.map((entry) {
+          final value = entry.value as String?;
+          if (value == null) return MapEntry(entry.key, null);
+          return MapEntry(
+            entry.key,
+            base64Encode(_encryptAndSign(utf8.encode(value))),
+          );
+        }),
+      );
+
+  Future<Map<String, dynamic>> getData({
     required String userPK,
     required String secretKey,
   }) async {
     final response =
         await _apiClient.kycServiceGetData().then((e) => e.data.toJson());
-
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 
     return Map.fromEntries(
       await Future.wait(
-        response.entries.map((key) async {
-          final signedDataRaw = key.value as String;
-
+        response.entries.map((entry) async {
+          final signedDataRaw = entry.value as String;
           final signedMessage = SignedMessage.fromList(
             signedMessage: base64Decode(signedDataRaw),
           );
 
           if (!verifyKey.verifySignedMessage(signedMessage: signedMessage)) {
-            throw Exception('Invalid signature for key: $key');
+            throw Exception('Invalid signature for key: ${entry.key}');
           }
 
           final encryptedData = base64Encode(signedMessage.message);
           final decrypted = box
               .decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-          return MapEntry(key.key, utf8.decode(decrypted));
+          return MapEntry(
+            entry.key,
+            entry.key == 'photoSelfie' || entry.key == 'photoIdCard'
+                ? decrypted
+                : utf8.decode(decrypted),
+          );
         }),
       ),
     );

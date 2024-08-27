@@ -70,7 +70,8 @@ class WalletAppState extends ChangeNotifier {
         email: email,
         phone: name,
       ),
-      photoSelfie: await file?.readAsBytes(),
+      selfie: await file?.readAsBytes(),
+      idCard: null,
     );
   }
 }
@@ -114,17 +115,9 @@ class PartnerAppState extends ChangeNotifier {
   }
 
   Future<void> setValidationResult(String message) async {
-    try {
-      await _client.setValidationResult(
-        value: V1ValidationData(
-          email: '',
-          phone: '',
-          kycSmileId: message,
-        ),
-      );
-    } catch (ex) {
-      print(ex);
-    }
+    await _client.setValidationResult(
+      value: V1ValidationData(kycSmileId: message),
+    );
   }
 
   Future<void> getValidationResult({
@@ -146,30 +139,19 @@ class PartnerAppState extends ChangeNotifier {
   }
 
   Future<void> fetchData(String secretKey, String userPK) async {
-    try {
-      final data = await _client.getData(
-        keys: [],
-        userPK: userPK,
-        secretKey: secretKey,
-      );
+    final data = await _client.getData(
+      userPK: userPK,
+      secretKey: secretKey,
+    );
 
-      print(data);
+    _email = data['email'] as String? ?? '-';
+    _phone = data['phone'] as String? ?? '-';
 
-      _email = data['email'] ?? '-';
-      _phone = data['phone'] ?? '-';
-    } catch (ex) {
-      print(ex);
+    final selfie = data['photoSelfie'];
+
+    if (selfie != null && selfie is Uint8List) {
+      _file = XFile.fromData(selfie);
     }
-
-    // notifyListeners();
-
-    // final file = await _client.download(
-    //   key: DataFileKeys.photo,
-    //   userPK: userPK,
-    //   secretKey: secretKey,
-    // );
-
-    // _file = XFile.fromData(file);
 
     notifyListeners();
   }

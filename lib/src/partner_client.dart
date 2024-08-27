@@ -58,8 +58,7 @@ class KycPartnerClient {
     _apiClient = KycServiceClient(dio, baseUrl: baseUrl);
   }
 
-  Future<Map<String, String>> getData({
-    required List<String> keys,
+  Future<Map<String, dynamic>> getData({
     required String userPK,
     required String secretKey,
   }) async {
@@ -88,6 +87,10 @@ class KycPartnerClient {
           final decrypted = box
               .decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
+          if (key.key == 'photoSelfie' || key.key == 'photoIdCard') {
+            return MapEntry(key.key, decrypted);
+          }
+
           return MapEntry(key.key, utf8.decode(decrypted));
         }),
       ),
@@ -97,28 +100,10 @@ class KycPartnerClient {
   Future<void> setValidationResult({
     required V1ValidationData value,
   }) async {
-    final data = value.toJson();
+    final encryptedValue = value.encryptAndSign(_encryptAndSign);
 
     await _apiClient.kycServiceSetValidationResult(
-      body: V1SetValidationResultRequest(
-        data: V1ValidationData(
-          email: base64Encode(
-            _encryptAndSign(
-              Uint8List.fromList(utf8.encode(data['email'] as String)),
-            ),
-          ),
-          phone: base64Encode(
-            _encryptAndSign(
-              Uint8List.fromList(utf8.encode(data['phone'] as String)),
-            ),
-          ),
-          kycSmileId: base64Encode(
-            _encryptAndSign(
-              Uint8List.fromList(utf8.encode(data['kycSmileId'] as String)),
-            ),
-          ),
-        ),
-      ),
+      body: V1SetValidationResultRequest(data: encryptedValue),
     );
   }
 
@@ -185,5 +170,26 @@ class KycPartnerClient {
   SignedMessage _encryptAndSign(Uint8List data) {
     final encrypted = _secretBox.encrypt(data);
     return _signingKey.sign(Uint8List.fromList(encrypted));
+  }
+}
+
+extension V1ValidationDataExtensions on V1ValidationData {
+  V1ValidationData encryptAndSign(
+    SignedMessage Function(Uint8List) encryptAndSign,
+  ) =>
+      V1ValidationData(
+        email: _encryptAndEncode(email, encryptAndSign),
+        phone: _encryptAndEncode(phone, encryptAndSign),
+        kycSmileId: _encryptAndEncode(kycSmileId, encryptAndSign),
+      );
+
+  String? _encryptAndEncode(
+    String? value,
+    SignedMessage Function(Uint8List) encryptAndSign,
+  ) {
+    if (value == null) return null;
+    final encryptedData =
+        encryptAndSign(Uint8List.fromList(utf8.encode(value)));
+    return base64Encode(encryptedData);
   }
 }
