@@ -148,14 +148,16 @@ class KycPartnerClient {
     return utf8.decode(decrypted);
   }
 
-  Future<void> validateField(
-    String key,
-    String validatedField,
-  ) async {
-    // await setValidationResult(
-    //   key: key,
-    //   value: await _hash(validatedField),
-    // );
+  Future<void> validateField(V1ValidationData value) async {
+    final updatedEmail = value.email != null ? await _hash(value.email!) : null;
+    final updatedPhone = value.phone != null ? await _hash(value.phone!) : null;
+
+    final updatedValue = value.copyWith(
+      email: updatedEmail,
+      phone: updatedPhone,
+    );
+
+    await setValidationResult(value: updatedValue);
   }
 
   Future<String> _hash(String value) async {
