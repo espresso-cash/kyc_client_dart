@@ -35,6 +35,17 @@ class KycPartnerClient {
     await _initializeEncryption(secretKey);
   }
 
+  Future<void> _initializeEncryption(String secretKey) async {
+    final secretKeyBytes = base58decode(secretKey);
+    _secretBox = SecretBox(Uint8List.fromList(secretKeyBytes));
+    _signingKey = SigningKey.fromValidBytes(
+      Uint8List.fromList(
+        await authKeyPair.extractPrivateKeyBytes() +
+            base58decode(_authPublicKey),
+      ),
+    );
+  }
+
   Future<void> _generateAuthToken(String partnerToken) async {
     _authPublicKey = await authKeyPair
         .extractPublicKey()
@@ -154,17 +165,6 @@ class KycPartnerClient {
     final hash = hex.encode(hasher(value));
 
     return hash;
-  }
-
-  Future<void> _initializeEncryption(String secretKey) async {
-    final secretKeyBytes = base58decode(secretKey);
-    _secretBox = SecretBox(Uint8List.fromList(secretKeyBytes));
-    _signingKey = SigningKey.fromValidBytes(
-      Uint8List.fromList(
-        await authKeyPair.extractPrivateKeyBytes() +
-            base58decode(_authPublicKey),
-      ),
-    );
   }
 
   SignedMessage _encryptAndSign(Uint8List data) {
