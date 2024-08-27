@@ -107,7 +107,7 @@ class KycPartnerClient {
     );
   }
 
-  Future<String> getValidationResult({
+  Future<String?> getValidationResult({
     required String key,
     required String validatorPK,
     required String secretKey,
@@ -118,23 +118,23 @@ class KycPartnerClient {
             publicKey: validatorPK,
           ),
         )
-        .then((e) => e.data);
+        .then((e) => e.data.toJson());
 
-    print(response);
+    final data = response[key] as String?;
 
-    // final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+    if (data == null) return null;
 
-    // final signedMessage = SignedMessage.fromList(
-    //   signedMessage: base64Decode(response),
-    // );
+    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 
-    // final encryptedData = base64Encode(signedMessage.message);
-    // final decrypted =
-    //     box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
+    final signedMessage = SignedMessage.fromList(
+      signedMessage: base64Decode(data),
+    );
 
-    // return utf8.decode(decrypted);
+    final encryptedData = base64Encode(signedMessage.message);
+    final decrypted =
+        box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-    return '';
+    return utf8.decode(decrypted);
   }
 
   Future<void> validateField(

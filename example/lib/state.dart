@@ -29,7 +29,7 @@ class WalletAppState extends ChangeNotifier {
     _wallet = await Ed25519HDKeyPair.random();
 
     // _wallet = await Ed25519HDKeyPair.fromMnemonic(
-    //   'add Mnemonic',
+    //   'insert mnemonic here',
     // );
 
     _client = KycUserClient(
