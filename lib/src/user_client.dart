@@ -70,7 +70,7 @@ class KycUserClient {
 
   Future<void> _initializeToken() async {
     final publicKey = await _authKeyPair.extractPublicKey();
-    final adminTokenData = jwt.JWT({'admin': true}, issuer: _authPublicKey);
+    final adminTokenData = jwt.JWT(<String, String>{}, issuer: _authPublicKey);
     _token = adminTokenData.sign(
       jwt.EdDSAPrivateKey(
         await _authKeyPair.extractPrivateKeyBytes() + publicKey.bytes,
