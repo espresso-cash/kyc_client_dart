@@ -24,20 +24,14 @@ class KycPartnerClient {
   late String _token;
   late KycServiceClient _apiClient;
 
-  late SecretBox _secretBox;
   late SigningKey _signingKey;
 
-  Future<void> init({
-    required String partnerToken,
-    required String secretKey,
-  }) async {
-    await _generateAuthToken(partnerToken);
-    await _initializeEncryption(secretKey);
+  Future<void> init() async {
+    await _generateAuthToken();
+    await _initializeEncryption();
   }
 
-  Future<void> _initializeEncryption(String secretKey) async {
-    final secretKeyBytes = base58decode(secretKey);
-    _secretBox = SecretBox(Uint8List.fromList(secretKeyBytes));
+  Future<void> _initializeEncryption() async {
     _signingKey = SigningKey.fromValidBytes(
       Uint8List.fromList(
         await authKeyPair.extractPrivateKeyBytes() +
@@ -46,14 +40,14 @@ class KycPartnerClient {
     );
   }
 
-  Future<void> _generateAuthToken(String partnerToken) async {
+  Future<void> _generateAuthToken() async {
     _authPublicKey = await authKeyPair
         .extractPublicKey()
         .then((value) => value.bytes)
         .then(base58encode);
 
     final partnerTokenData = jwt.JWT(
-      {'delegated': partnerToken},
+      <String, String>{},
       issuer: _authPublicKey,
     );
 
@@ -73,8 +67,9 @@ class KycPartnerClient {
     required String userPK,
     required String secretKey,
   }) async {
-    final response =
-        await _apiClient.kycServiceGetData().then((e) => e.data.toJson());
+    final response = await _apiClient
+        .kycServiceGetData(body: V1GetDataRequest(publicKey: userPK))
+        .then((e) => e.data.toJson());
 
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
@@ -110,11 +105,22 @@ class KycPartnerClient {
 
   Future<void> setValidationResult({
     required V1ValidationData value,
+    required String userPK,
+    required String secretKey,
   }) async {
-    final encryptedValue = value.encryptAndSign(_encryptAndSign);
+    SignedMessage encryptAndSign(Uint8List data) {
+      final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+      final encrypted = box.encrypt(data);
+      return _signingKey.sign(Uint8List.fromList(encrypted));
+    }
+
+    final encryptedValue = value.encryptAndSign(encryptAndSign);
 
     await _apiClient.kycServiceSetValidationResult(
-      body: V1SetValidationResultRequest(data: encryptedValue),
+      body: V1SetValidationResultRequest(
+        data: encryptedValue,
+        userPublicKey: userPK,
+      ),
     );
   }
 
@@ -122,11 +128,13 @@ class KycPartnerClient {
     required String key,
     required String validatorPK,
     required String secretKey,
+    required String userPK,
   }) async {
     final response = await _apiClient
         .kycServiceGetValidationResult(
           body: V1GetValidationResultRequest(
-            publicKey: validatorPK,
+            userPublicKey: userPK,
+            validatorPublicKey: validatorPK,
           ),
         )
         .then((e) => e.data.toJson());
@@ -148,7 +156,11 @@ class KycPartnerClient {
     return utf8.decode(decrypted);
   }
 
-  Future<void> validateField(V1ValidationData value) async {
+  Future<void> validateField({
+    required V1ValidationData value,
+    required String userPK,
+    required String secretKey,
+  }) async {
     final updatedEmail = value.email != null ? await _hash(value.email!) : null;
     final updatedPhone = value.phone != null ? await _hash(value.phone!) : null;
 
@@ -157,7 +169,11 @@ class KycPartnerClient {
       phone: updatedPhone,
     );
 
-    await setValidationResult(value: updatedValue);
+    await setValidationResult(
+      value: updatedValue,
+      userPK: userPK,
+      secretKey: secretKey,
+    );
   }
 
   Future<String> _hash(String value) async {
@@ -167,11 +183,6 @@ class KycPartnerClient {
     final hash = hex.encode(hasher(value));
 
     return hash;
-  }
-
-  SignedMessage _encryptAndSign(Uint8List data) {
-    final encrypted = _secretBox.encrypt(data);
-    return _signingKey.sign(Uint8List.fromList(encrypted));
   }
 }
 

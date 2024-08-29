@@ -128,14 +128,11 @@ class KycUserClient {
       .kycServiceGetPartnerInfo(body: V1GetPartnerInfoRequest(id: partnerPK))
       .then((e) => PartnerModel.fromJson(e.toJson()));
 
-  Future<String> generatePartnerToken(String partnerPK) async {
-    final tokenData = jwt.JWT({'issuedFor': partnerPK}, issuer: _authPublicKey);
-    return tokenData.sign(
-      jwt.EdDSAPrivateKey(
-        await _authKeyPair.extractPrivateKeyBytes() +
-            base58decode(_authPublicKey),
+  Future<void> grantPartnerAccess(String partnerPK) async {
+    await _apiClient.kycServiceGrantAccess(
+      body: V1GrantAccessRequest(
+        validatorPublicKey: partnerPK,
       ),
-      algorithm: jwt.JWTAlgorithm.EdDSA,
     );
   }
 
@@ -184,8 +181,11 @@ class KycUserClient {
     required String userPK,
     required String secretKey,
   }) async {
-    final response =
-        await _apiClient.kycServiceGetData().then((e) => e.data.toJson());
+    final response = await _apiClient
+        .kycServiceGetData(
+          body: V1GetDataRequest(publicKey: userPK),
+        )
+        .then((e) => e.data.toJson());
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 

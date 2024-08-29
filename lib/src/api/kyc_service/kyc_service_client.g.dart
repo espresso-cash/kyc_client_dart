@@ -48,11 +48,11 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetInfoResponse> kycServiceGetInfo({required dynamic body}) async {
+  Future<V1GetInfoResponse> kycServiceGetInfo() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = body;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<V1GetInfoResponse>(Options(
       method: 'POST',

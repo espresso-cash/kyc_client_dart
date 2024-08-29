@@ -11,13 +11,11 @@ class WalletAppState extends ChangeNotifier {
   Ed25519HDKeyPair? get wallet => _wallet;
   String get authPublicKey => _authPublicKey;
   String get rawSecretKey => _rawSecretKey;
-  String get partnerToken => _partnerToken;
   PartnerModel? get partnerInfo => _partnerInfo;
 
   Ed25519HDKeyPair? _wallet;
 
   late String _authPublicKey = '';
-  String _partnerToken = '';
   late String _rawSecretKey = '';
 
   PartnerModel? _partnerInfo;
@@ -25,7 +23,6 @@ class WalletAppState extends ChangeNotifier {
   late KycUserClient _client;
 
   Future<void> createWallet() async {
-    _partnerToken = '';
     _wallet = await Ed25519HDKeyPair.random();
 
     // _wallet = await Ed25519HDKeyPair.fromMnemonic(
@@ -48,9 +45,8 @@ class WalletAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> generatePartnerToken(String partnerPK) async {
-    _partnerToken = await _client.generatePartnerToken(partnerPK);
-
+  Future<void> grantPartnerAccess(String partnerPK) async {
+    await _client.grantPartnerAccess(partnerPK);
     notifyListeners();
   }
 
@@ -100,6 +96,8 @@ class PartnerAppState extends ChangeNotifier {
       baseUrl: 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
     );
 
+    await _client.init();
+
     _authPublicKey = await keyPair
         .extractPublicKey()
         .then((value) => value.bytes)
@@ -108,15 +106,15 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> generateAuthToken(String partnerToken, String secretKey) async {
-    await _client.init(partnerToken: partnerToken, secretKey: secretKey);
-
-    notifyListeners();
-  }
-
-  Future<void> setValidationResult(String message) async {
+  Future<void> setValidationResult({
+    required String message,
+    required String userPK,
+    required String secretKey,
+  }) async {
     await _client.setValidationResult(
       value: V1ValidationData(kycSmileId: message),
+      userPK: userPK,
+      secretKey: secretKey,
     );
   }
 
@@ -127,6 +125,7 @@ class PartnerAppState extends ChangeNotifier {
     final response = await _client.getValidationResult(
       key: 'kycSmileId',
       validatorPK: _authPublicKey,
+      userPK: userPK,
       secretKey: secretKey,
     );
 

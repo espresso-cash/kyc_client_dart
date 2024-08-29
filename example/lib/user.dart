@@ -20,23 +20,11 @@ class _UserViewState extends State<UserView> {
   void initState() {
     super.initState();
     context.read<PartnerAppState>().createPartner();
-    context.read<WalletAppState>().addListener(_handlePartnerTokenGenerated);
   }
 
   @override
   void dispose() {
-    context.read<WalletAppState>().removeListener(_handlePartnerTokenGenerated);
     super.dispose();
-  }
-
-  void _handlePartnerTokenGenerated() {
-    final partnerState = context.read<PartnerAppState>();
-    final walletState = context.read<WalletAppState>();
-
-    partnerState.generateAuthToken(
-      walletState.partnerToken,
-      walletState.rawSecretKey,
-    );
   }
 
   @override
@@ -111,17 +99,18 @@ class _UserViewState extends State<UserView> {
               const SizedBox(height: 16),
               const CustomDivider(),
               const SizedBox(height: 16),
-              ValueField(
-                title: 'Partner token',
-                value: state.partnerToken,
-              ),
               Consumer<PartnerAppState>(
                 builder: (context, partnerState, child) => ElevatedButton(
-                  onPressed: () =>
-                      context.read<WalletAppState>().generatePartnerToken(
-                            partnerState.authPublicKey,
-                          ),
-                  child: const Text('Generate partner token'),
+                  onPressed: () async {
+                    await context.read<WalletAppState>().grantPartnerAccess(
+                          partnerState.authPublicKey,
+                        );
+
+                    if (!context.mounted) return;
+
+                    showSnackBar(context, message: 'Granted partner access');
+                  },
+                  child: const Text('Grant partner access'),
                 ),
               ),
               const SizedBox(height: 16),

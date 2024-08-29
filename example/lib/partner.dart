@@ -42,7 +42,10 @@ class _PartnerViewState extends State<PartnerView> {
                 builder: (context, child) => ElevatedButton(
                   onPressed: () async {
                     await context.read<PartnerAppState>().setValidationResult(
-                          _messageController.text,
+                          message: _messageController.text,
+                          userPK: context.read<WalletAppState>().authPublicKey,
+                          secretKey:
+                              context.read<WalletAppState>().rawSecretKey,
                         );
 
                     if (!context.mounted) return;
@@ -64,8 +67,8 @@ class _PartnerViewState extends State<PartnerView> {
                   final walletState = context.read<WalletAppState>();
 
                   await context.read<PartnerAppState>().getValidationResult(
-                        secretKey: walletState.rawSecretKey,
                         userPK: walletState.authPublicKey,
+                        secretKey: walletState.rawSecretKey,
                       );
                 },
                 child: const Text('Fetch Validation Result'),
