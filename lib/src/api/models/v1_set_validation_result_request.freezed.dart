@@ -21,6 +21,7 @@ V1SetValidationResultRequest _$V1SetValidationResultRequestFromJson(
 
 /// @nodoc
 mixin _$V1SetValidationResultRequest {
+  String get userPublicKey => throw _privateConstructorUsedError;
   V1ValidationData get data => throw _privateConstructorUsedError;
 
   /// Serializes this V1SetValidationResultRequest to a JSON map.
@@ -41,7 +42,7 @@ abstract class $V1SetValidationResultRequestCopyWith<$Res> {
       _$V1SetValidationResultRequestCopyWithImpl<$Res,
           V1SetValidationResultRequest>;
   @useResult
-  $Res call({V1ValidationData data});
+  $Res call({String userPublicKey, V1ValidationData data});
 
   $V1ValidationDataCopyWith<$Res> get data;
 }
@@ -62,9 +63,14 @@ class _$V1SetValidationResultRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? userPublicKey = null,
     Object? data = null,
   }) {
     return _then(_value.copyWith(
+      userPublicKey: null == userPublicKey
+          ? _value.userPublicKey
+          : userPublicKey // ignore: cast_nullable_to_non_nullable
+              as String,
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
@@ -92,7 +98,7 @@ abstract class _$$V1SetValidationResultRequestImplCopyWith<$Res>
       __$$V1SetValidationResultRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({V1ValidationData data});
+  $Res call({String userPublicKey, V1ValidationData data});
 
   @override
   $V1ValidationDataCopyWith<$Res> get data;
@@ -113,9 +119,14 @@ class __$$V1SetValidationResultRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? userPublicKey = null,
     Object? data = null,
   }) {
     return _then(_$V1SetValidationResultRequestImpl(
+      userPublicKey: null == userPublicKey
+          ? _value.userPublicKey
+          : userPublicKey // ignore: cast_nullable_to_non_nullable
+              as String,
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
@@ -128,18 +139,21 @@ class __$$V1SetValidationResultRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$V1SetValidationResultRequestImpl
     implements _V1SetValidationResultRequest {
-  const _$V1SetValidationResultRequestImpl({required this.data});
+  const _$V1SetValidationResultRequestImpl(
+      {required this.userPublicKey, required this.data});
 
   factory _$V1SetValidationResultRequestImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$V1SetValidationResultRequestImplFromJson(json);
 
   @override
+  final String userPublicKey;
+  @override
   final V1ValidationData data;
 
   @override
   String toString() {
-    return 'V1SetValidationResultRequest(data: $data)';
+    return 'V1SetValidationResultRequest(userPublicKey: $userPublicKey, data: $data)';
   }
 
   @override
@@ -147,12 +161,14 @@ class _$V1SetValidationResultRequestImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$V1SetValidationResultRequestImpl &&
+            (identical(other.userPublicKey, userPublicKey) ||
+                other.userPublicKey == userPublicKey) &&
             (identical(other.data, data) || other.data == data));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, data);
+  int get hashCode => Object.hash(runtimeType, userPublicKey, data);
 
   /// Create a copy of V1SetValidationResultRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -175,12 +191,15 @@ class _$V1SetValidationResultRequestImpl
 abstract class _V1SetValidationResultRequest
     implements V1SetValidationResultRequest {
   const factory _V1SetValidationResultRequest(
-          {required final V1ValidationData data}) =
+          {required final String userPublicKey,
+          required final V1ValidationData data}) =
       _$V1SetValidationResultRequestImpl;
 
   factory _V1SetValidationResultRequest.fromJson(Map<String, dynamic> json) =
       _$V1SetValidationResultRequestImpl.fromJson;
 
+  @override
+  String get userPublicKey;
   @override
   V1ValidationData get data;
 

@@ -19,11 +19,13 @@ class _KycServiceClient implements KycServiceClient {
   String? baseUrl;
 
   @override
-  Future<V1GetDataResponse> kycServiceGetData() async {
+  Future<V1GetDataResponse> kycServiceGetData(
+      {required V1GetDataRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<V1GetDataResponse>(Options(
       method: 'POST',
@@ -46,11 +48,11 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetInfoResponse> kycServiceGetInfo() async {
+  Future<V1GetInfoResponse> kycServiceGetInfo({required dynamic body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = body;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<V1GetInfoResponse>(Options(
       method: 'POST',
@@ -127,6 +129,34 @@ class _KycServiceClient implements KycServiceClient {
               baseUrl,
             ))));
     final _value = V1GetValidationResultResponse.fromJson(_result.data!);
+    return _value;
+  }
+
+  @override
+  Future<dynamic> kycServiceGrantAccess(
+      {required V1GrantAccessRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/grantAccess',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final _value = _result.data;
     return _value;
   }
 

@@ -10,7 +10,8 @@ part 'v1_get_validation_result_request.g.dart';
 @Freezed()
 class V1GetValidationResultRequest with _$V1GetValidationResultRequest {
   const factory V1GetValidationResultRequest({
-    required String publicKey,
+    required String userPublicKey,
+    required String validatorPublicKey,
   }) = _V1GetValidationResultRequest;
   
   factory V1GetValidationResultRequest.fromJson(Map<String, Object?> json) => _$V1GetValidationResultRequestFromJson(json);

@@ -13,6 +13,8 @@ import '../models/v1_get_partner_info_request.dart';
 import '../models/v1_get_partner_info_response.dart';
 import '../models/v1_get_validation_result_request.dart';
 import '../models/v1_get_validation_result_response.dart';
+import '../models/v1_grant_access_request.dart';
+import '../models/v1_grant_access_response.dart';
 import '../models/v1_init_storage_request.dart';
 import '../models/v1_init_storage_response.dart';
 import '../models/v1_set_data_request.dart';
@@ -27,10 +29,14 @@ abstract class KycServiceClient {
   factory KycServiceClient(Dio dio, {String? baseUrl}) = _KycServiceClient;
 
   @POST('/v1/getData')
-  Future<V1GetDataResponse> kycServiceGetData();
+  Future<V1GetDataResponse> kycServiceGetData({
+    @Body() required V1GetDataRequest body,
+  });
 
   @POST('/v1/getInfo')
-  Future<V1GetInfoResponse> kycServiceGetInfo();
+  Future<V1GetInfoResponse> kycServiceGetInfo({
+    @Body() required V1GetInfoRequest body,
+  });
 
   @POST('/v1/getPartnerInfo')
   Future<V1GetPartnerInfoResponse> kycServiceGetPartnerInfo({
@@ -40,6 +46,11 @@ abstract class KycServiceClient {
   @POST('/v1/getValidationResult')
   Future<V1GetValidationResultResponse> kycServiceGetValidationResult({
     @Body() required V1GetValidationResultRequest body,
+  });
+
+  @POST('/v1/grantAccess')
+  Future<V1GrantAccessResponse> kycServiceGrantAccess({
+    @Body() required V1GrantAccessRequest body,
   });
 
   @POST('/v1/initStorage')

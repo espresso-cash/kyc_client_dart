@@ -14,7 +14,6 @@ class V1ValidationData with _$V1ValidationData {
     String? phone,
     String? kycSmileId,
   }) = _V1ValidationData;
-
-  factory V1ValidationData.fromJson(Map<String, Object?> json) =>
-      _$V1ValidationDataFromJson(json);
+  
+  factory V1ValidationData.fromJson(Map<String, Object?> json) => _$V1ValidationDataFromJson(json);
 }

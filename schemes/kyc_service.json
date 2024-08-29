@@ -144,6 +144,38 @@
         ]
       }
     },
+    "/v1/grantAccess": {
+      "post": {
+        "operationId": "KycService_GrantAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GrantAccessResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GrantAccessRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
     "/v1/initStorage": {
       "post": {
         "operationId": "KycService_InitStorage",
@@ -271,7 +303,12 @@
       }
     },
     "v1GetDataRequest": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string"
+        }
+      }
     },
     "v1GetDataResponse": {
       "type": "object",
@@ -323,7 +360,10 @@
     "v1GetValidationResultRequest": {
       "type": "object",
       "properties": {
-        "publicKey": {
+        "userPublicKey": {
+          "type": "string"
+        },
+        "validatorPublicKey": {
           "type": "string"
         }
       }
@@ -335,6 +375,17 @@
           "$ref": "#/definitions/v1ValidationData"
         }
       }
+    },
+    "v1GrantAccessRequest": {
+      "type": "object",
+      "properties": {
+        "validatorPublicKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GrantAccessResponse": {
+      "type": "object"
     },
     "v1InitStorageRequest": {
       "type": "object",
@@ -373,6 +424,9 @@
     "v1SetValidationResultRequest": {
       "type": "object",
       "properties": {
+        "userPublicKey": {
+          "type": "string"
+        },
         "data": {
           "$ref": "#/definitions/v1ValidationData"
         }
@@ -385,37 +439,48 @@
       "type": "object",
       "properties": {
         "email": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "phone": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "middleName": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "dob": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "countryCode": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "idType": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "idNumber": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "photoIdCard": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "photoSelfie": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         }
       }
     },
@@ -423,13 +488,16 @@
       "type": "object",
       "properties": {
         "email": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "phone": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "kycSmileId": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         }
       }
     }

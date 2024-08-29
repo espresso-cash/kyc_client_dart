@@ -12,6 +12,7 @@ part 'v1_set_validation_result_request.g.dart';
 @Freezed()
 class V1SetValidationResultRequest with _$V1SetValidationResultRequest {
   const factory V1SetValidationResultRequest({
+    required String userPublicKey,
     required V1ValidationData data,
   }) = _V1SetValidationResultRequest;
   

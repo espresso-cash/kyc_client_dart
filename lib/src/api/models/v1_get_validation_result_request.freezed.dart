@@ -21,7 +21,8 @@ V1GetValidationResultRequest _$V1GetValidationResultRequestFromJson(
 
 /// @nodoc
 mixin _$V1GetValidationResultRequest {
-  String get publicKey => throw _privateConstructorUsedError;
+  String get userPublicKey => throw _privateConstructorUsedError;
+  String get validatorPublicKey => throw _privateConstructorUsedError;
 
   /// Serializes this V1GetValidationResultRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +42,7 @@ abstract class $V1GetValidationResultRequestCopyWith<$Res> {
       _$V1GetValidationResultRequestCopyWithImpl<$Res,
           V1GetValidationResultRequest>;
   @useResult
-  $Res call({String publicKey});
+  $Res call({String userPublicKey, String validatorPublicKey});
 }
 
 /// @nodoc
@@ -60,12 +61,17 @@ class _$V1GetValidationResultRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? publicKey = null,
+    Object? userPublicKey = null,
+    Object? validatorPublicKey = null,
   }) {
     return _then(_value.copyWith(
-      publicKey: null == publicKey
-          ? _value.publicKey
-          : publicKey // ignore: cast_nullable_to_non_nullable
+      userPublicKey: null == userPublicKey
+          ? _value.userPublicKey
+          : userPublicKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      validatorPublicKey: null == validatorPublicKey
+          ? _value.validatorPublicKey
+          : validatorPublicKey // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -80,7 +86,7 @@ abstract class _$$V1GetValidationResultRequestImplCopyWith<$Res>
       __$$V1GetValidationResultRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String publicKey});
+  $Res call({String userPublicKey, String validatorPublicKey});
 }
 
 /// @nodoc
@@ -98,12 +104,17 @@ class __$$V1GetValidationResultRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? publicKey = null,
+    Object? userPublicKey = null,
+    Object? validatorPublicKey = null,
   }) {
     return _then(_$V1GetValidationResultRequestImpl(
-      publicKey: null == publicKey
-          ? _value.publicKey
-          : publicKey // ignore: cast_nullable_to_non_nullable
+      userPublicKey: null == userPublicKey
+          ? _value.userPublicKey
+          : userPublicKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      validatorPublicKey: null == validatorPublicKey
+          ? _value.validatorPublicKey
+          : validatorPublicKey // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -113,18 +124,21 @@ class __$$V1GetValidationResultRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$V1GetValidationResultRequestImpl
     implements _V1GetValidationResultRequest {
-  const _$V1GetValidationResultRequestImpl({required this.publicKey});
+  const _$V1GetValidationResultRequestImpl(
+      {required this.userPublicKey, required this.validatorPublicKey});
 
   factory _$V1GetValidationResultRequestImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$V1GetValidationResultRequestImplFromJson(json);
 
   @override
-  final String publicKey;
+  final String userPublicKey;
+  @override
+  final String validatorPublicKey;
 
   @override
   String toString() {
-    return 'V1GetValidationResultRequest(publicKey: $publicKey)';
+    return 'V1GetValidationResultRequest(userPublicKey: $userPublicKey, validatorPublicKey: $validatorPublicKey)';
   }
 
   @override
@@ -132,13 +146,16 @@ class _$V1GetValidationResultRequestImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$V1GetValidationResultRequestImpl &&
-            (identical(other.publicKey, publicKey) ||
-                other.publicKey == publicKey));
+            (identical(other.userPublicKey, userPublicKey) ||
+                other.userPublicKey == userPublicKey) &&
+            (identical(other.validatorPublicKey, validatorPublicKey) ||
+                other.validatorPublicKey == validatorPublicKey));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, publicKey);
+  int get hashCode =>
+      Object.hash(runtimeType, userPublicKey, validatorPublicKey);
 
   /// Create a copy of V1GetValidationResultRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -161,13 +178,17 @@ class _$V1GetValidationResultRequestImpl
 abstract class _V1GetValidationResultRequest
     implements V1GetValidationResultRequest {
   const factory _V1GetValidationResultRequest(
-      {required final String publicKey}) = _$V1GetValidationResultRequestImpl;
+          {required final String userPublicKey,
+          required final String validatorPublicKey}) =
+      _$V1GetValidationResultRequestImpl;
 
   factory _V1GetValidationResultRequest.fromJson(Map<String, dynamic> json) =
       _$V1GetValidationResultRequestImpl.fromJson;
 
   @override
-  String get publicKey;
+  String get userPublicKey;
+  @override
+  String get validatorPublicKey;
 
   /// Create a copy of V1GetValidationResultRequest
   /// with the given fields replaced by the non-null parameter values.
