@@ -20,10 +20,23 @@ class _UserViewState extends State<UserView> {
   void initState() {
     super.initState();
     context.read<PartnerAppState>().createPartner();
+
+    context.read<WalletAppState>().addListener(_updateControllers);
+  }
+
+  void _updateControllers() {
+    final state = context.read<WalletAppState>();
+    _emailController.text = state.email ?? '';
+    _nameController.text = state.phone ?? '';
   }
 
   @override
   void dispose() {
+    _emailController.dispose();
+    _nameController.dispose();
+
+    context.read<WalletAppState>().removeListener(_updateControllers);
+
     super.dispose();
   }
 
@@ -41,7 +54,7 @@ class _UserViewState extends State<UserView> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                child: const Text('New wallet'),
+                child: const Text('Init wallet'),
                 onPressed: () => context.read<WalletAppState>().createWallet(),
               ),
               const SizedBox(height: 16),

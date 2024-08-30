@@ -22,6 +22,12 @@ class WalletAppState extends ChangeNotifier {
 
   late KycUserClient _client;
 
+  String? _email;
+  String? _phone;
+
+  String? get email => _email;
+  String? get phone => _phone;
+
   Future<void> createWallet() async {
     _wallet = await Ed25519HDKeyPair.random();
 
@@ -43,6 +49,8 @@ class WalletAppState extends ChangeNotifier {
     _authPublicKey = _client.authPublicKey;
 
     notifyListeners();
+
+    await fetchData();
   }
 
   Future<void> grantPartnerAccess(String partnerPK) async {
@@ -69,6 +77,22 @@ class WalletAppState extends ChangeNotifier {
       selfie: await file?.readAsBytes(),
       idCard: null,
     );
+  }
+
+  Future<void> fetchData() async {
+    try {
+      final data = await _client.getData(
+        userPK: _authPublicKey,
+        secretKey: _rawSecretKey,
+      );
+
+      _email = data['email'] as String? ?? '-';
+      _phone = data['phone'] as String? ?? '-';
+
+      notifyListeners();
+    } on Exception {
+      //ignore, new wallet/nodata
+    }
   }
 }
 
