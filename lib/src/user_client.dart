@@ -6,6 +6,7 @@ import 'package:kyc_client_dart/src/api/export.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/models/partner.dart';
 import 'package:pinenacl/ed25519.dart' hide Signature;
+import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
 import 'package:solana/base58.dart';
 import 'package:solana/solana.dart';
@@ -203,9 +204,13 @@ class KycUserClient {
             throw Exception('Invalid signature for key: $entry');
           }
 
-          final encryptedData = base64Encode(signedMessage.message);
-          final decrypted = box
-              .decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
+          final encryptedData = Uint8List.fromList(signedMessage.message);
+          final decrypted = box.decrypt(
+            EncryptedMessage(
+              nonce: encryptedData.sublist(0, TweetNaCl.nonceLength),
+              cipherText: encryptedData.sublist(TweetNaCl.nonceLength),
+            ),
+          );
 
           if (entry.key == 'photoSelfie' || entry.key == 'photoIdCard') {
             return MapEntry(entry.key, decrypted);
