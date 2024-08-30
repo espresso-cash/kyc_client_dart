@@ -182,10 +182,9 @@ class KycUserClient {
     required String secretKey,
   }) async {
     final response = await _apiClient
-        .kycServiceGetData(
-          body: V1GetDataRequest(publicKey: userPK),
-        )
+        .kycServiceGetData(body: V1GetDataRequest(publicKey: userPK))
         .then((e) => e.data.toJson());
+
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 
@@ -193,24 +192,26 @@ class KycUserClient {
       await Future.wait(
         response.entries.map((entry) async {
           final signedDataRaw = entry.value as String;
+
           final signedMessage = SignedMessage.fromList(
             signedMessage: base64Decode(signedDataRaw),
           );
 
+          if (signedDataRaw.isEmpty) return MapEntry(entry.key, '');
+
           if (!verifyKey.verifySignedMessage(signedMessage: signedMessage)) {
-            throw Exception('Invalid signature for key: ${entry.key}');
+            throw Exception('Invalid signature for key: $entry');
           }
 
           final encryptedData = base64Encode(signedMessage.message);
           final decrypted = box
               .decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-          return MapEntry(
-            entry.key,
-            entry.key == 'photoSelfie' || entry.key == 'photoIdCard'
-                ? decrypted
-                : utf8.decode(decrypted),
-          );
+          if (entry.key == 'photoSelfie' || entry.key == 'photoIdCard') {
+            return MapEntry(entry.key, decrypted);
+          }
+
+          return MapEntry(entry.key, utf8.decode(decrypted));
         }),
       ),
     );

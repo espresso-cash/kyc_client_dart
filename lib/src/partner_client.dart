@@ -76,28 +76,28 @@ class KycPartnerClient {
 
     return Map.fromEntries(
       await Future.wait(
-        response.entries.map((key) async {
-          final signedDataRaw = key.value as String;
+        response.entries.map((entry) async {
+          final signedDataRaw = entry.value as String;
 
           final signedMessage = SignedMessage.fromList(
             signedMessage: base64Decode(signedDataRaw),
           );
 
-          if (signedDataRaw.isEmpty) return MapEntry(key.key, '');
+          if (signedDataRaw.isEmpty) return MapEntry(entry.key, '');
 
           if (!verifyKey.verifySignedMessage(signedMessage: signedMessage)) {
-            throw Exception('Invalid signature for key: $key');
+            throw Exception('Invalid signature for key: $entry');
           }
 
           final encryptedData = base64Encode(signedMessage.message);
           final decrypted = box
               .decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-          if (key.key == 'photoSelfie' || key.key == 'photoIdCard') {
-            return MapEntry(key.key, decrypted);
+          if (entry.key == 'photoSelfie' || entry.key == 'photoIdCard') {
+            return MapEntry(entry.key, decrypted);
           }
 
-          return MapEntry(key.key, utf8.decode(decrypted));
+          return MapEntry(entry.key, utf8.decode(decrypted));
         }),
       ),
     );
