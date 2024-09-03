@@ -15,7 +15,7 @@ dependencies:
   json_annotation: ^4.9.0
   pinenacl: ^0.6.0
   retrofit: ^4.0.3
-  solana: ^0.30.4
+  solana: ^0.31.0
 
 dev_dependencies:
   build_runner: ^2.4.7
