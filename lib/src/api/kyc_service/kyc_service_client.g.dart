@@ -19,6 +19,35 @@ class _KycServiceClient implements KycServiceClient {
   String? baseUrl;
 
   @override
+  Future<V1CreateOnRampOrderResponse> kycServiceCreateOnRampOrder(
+      {required V1CreateOnRampOrderRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<V1CreateOnRampOrderResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v1/createOnRampOrder',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = V1CreateOnRampOrderResponse.fromJson(_result.data!);
+    return _value;
+  }
+
+  @override
   Future<V1GetDataResponse> kycServiceGetData(
       {required V1GetDataRequest body}) async {
     final _extra = <String, dynamic>{};
@@ -71,6 +100,35 @@ class _KycServiceClient implements KycServiceClient {
               baseUrl,
             ))));
     final _value = V1GetInfoResponse.fromJson(_result.data!);
+    return _value;
+  }
+
+  @override
+  Future<V1GetOrderResponse> kycServiceGetOrder(
+      {required V1GetOrderRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<V1GetOrderResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v1/getOrder',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = V1GetOrderResponse.fromJson(_result.data!);
     return _value;
   }
 

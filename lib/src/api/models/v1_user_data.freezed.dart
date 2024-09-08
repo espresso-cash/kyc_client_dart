@@ -31,6 +31,8 @@ mixin _$V1UserData {
   String? get idNumber => throw _privateConstructorUsedError;
   String? get photoIdCard => throw _privateConstructorUsedError;
   String? get photoSelfie => throw _privateConstructorUsedError;
+  String? get bankAccountNumber => throw _privateConstructorUsedError;
+  String? get bankCode => throw _privateConstructorUsedError;
 
   /// Serializes this V1UserData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -59,7 +61,9 @@ abstract class $V1UserDataCopyWith<$Res> {
       String? idType,
       String? idNumber,
       String? photoIdCard,
-      String? photoSelfie});
+      String? photoSelfie,
+      String? bankAccountNumber,
+      String? bankCode});
 }
 
 /// @nodoc
@@ -88,6 +92,8 @@ class _$V1UserDataCopyWithImpl<$Res, $Val extends V1UserData>
     Object? idNumber = freezed,
     Object? photoIdCard = freezed,
     Object? photoSelfie = freezed,
+    Object? bankAccountNumber = freezed,
+    Object? bankCode = freezed,
   }) {
     return _then(_value.copyWith(
       email: freezed == email
@@ -134,6 +140,14 @@ class _$V1UserDataCopyWithImpl<$Res, $Val extends V1UserData>
           ? _value.photoSelfie
           : photoSelfie // ignore: cast_nullable_to_non_nullable
               as String?,
+      bankAccountNumber: freezed == bankAccountNumber
+          ? _value.bankAccountNumber
+          : bankAccountNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bankCode: freezed == bankCode
+          ? _value.bankCode
+          : bankCode // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -157,7 +171,9 @@ abstract class _$$V1UserDataImplCopyWith<$Res>
       String? idType,
       String? idNumber,
       String? photoIdCard,
-      String? photoSelfie});
+      String? photoSelfie,
+      String? bankAccountNumber,
+      String? bankCode});
 }
 
 /// @nodoc
@@ -184,6 +200,8 @@ class __$$V1UserDataImplCopyWithImpl<$Res>
     Object? idNumber = freezed,
     Object? photoIdCard = freezed,
     Object? photoSelfie = freezed,
+    Object? bankAccountNumber = freezed,
+    Object? bankCode = freezed,
   }) {
     return _then(_$V1UserDataImpl(
       email: freezed == email
@@ -230,6 +248,14 @@ class __$$V1UserDataImplCopyWithImpl<$Res>
           ? _value.photoSelfie
           : photoSelfie // ignore: cast_nullable_to_non_nullable
               as String?,
+      bankAccountNumber: freezed == bankAccountNumber
+          ? _value.bankAccountNumber
+          : bankAccountNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bankCode: freezed == bankCode
+          ? _value.bankCode
+          : bankCode // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -248,7 +274,9 @@ class _$V1UserDataImpl implements _V1UserData {
       this.idType,
       this.idNumber,
       this.photoIdCard,
-      this.photoSelfie});
+      this.photoSelfie,
+      this.bankAccountNumber,
+      this.bankCode});
 
   factory _$V1UserDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1UserDataImplFromJson(json);
@@ -275,10 +303,14 @@ class _$V1UserDataImpl implements _V1UserData {
   final String? photoIdCard;
   @override
   final String? photoSelfie;
+  @override
+  final String? bankAccountNumber;
+  @override
+  final String? bankCode;
 
   @override
   String toString() {
-    return 'V1UserData(email: $email, phone: $phone, firstName: $firstName, middleName: $middleName, lastName: $lastName, dob: $dob, countryCode: $countryCode, idType: $idType, idNumber: $idNumber, photoIdCard: $photoIdCard, photoSelfie: $photoSelfie)';
+    return 'V1UserData(email: $email, phone: $phone, firstName: $firstName, middleName: $middleName, lastName: $lastName, dob: $dob, countryCode: $countryCode, idType: $idType, idNumber: $idNumber, photoIdCard: $photoIdCard, photoSelfie: $photoSelfie, bankAccountNumber: $bankAccountNumber, bankCode: $bankCode)';
   }
 
   @override
@@ -303,7 +335,11 @@ class _$V1UserDataImpl implements _V1UserData {
             (identical(other.photoIdCard, photoIdCard) ||
                 other.photoIdCard == photoIdCard) &&
             (identical(other.photoSelfie, photoSelfie) ||
-                other.photoSelfie == photoSelfie));
+                other.photoSelfie == photoSelfie) &&
+            (identical(other.bankAccountNumber, bankAccountNumber) ||
+                other.bankAccountNumber == bankAccountNumber) &&
+            (identical(other.bankCode, bankCode) ||
+                other.bankCode == bankCode));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -320,7 +356,9 @@ class _$V1UserDataImpl implements _V1UserData {
       idType,
       idNumber,
       photoIdCard,
-      photoSelfie);
+      photoSelfie,
+      bankAccountNumber,
+      bankCode);
 
   /// Create a copy of V1UserData
   /// with the given fields replaced by the non-null parameter values.
@@ -350,7 +388,9 @@ abstract class _V1UserData implements V1UserData {
       final String? idType,
       final String? idNumber,
       final String? photoIdCard,
-      final String? photoSelfie}) = _$V1UserDataImpl;
+      final String? photoSelfie,
+      final String? bankAccountNumber,
+      final String? bankCode}) = _$V1UserDataImpl;
 
   factory _V1UserData.fromJson(Map<String, dynamic> json) =
       _$V1UserDataImpl.fromJson;
@@ -377,6 +417,10 @@ abstract class _V1UserData implements V1UserData {
   String? get photoIdCard;
   @override
   String? get photoSelfie;
+  @override
+  String? get bankAccountNumber;
+  @override
+  String? get bankCode;
 
   /// Create a copy of V1UserData
   /// with the given fields replaced by the non-null parameter values.

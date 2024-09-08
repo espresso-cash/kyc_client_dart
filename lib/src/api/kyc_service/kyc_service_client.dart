@@ -5,10 +5,14 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/v1_create_on_ramp_order_request.dart';
+import '../models/v1_create_on_ramp_order_response.dart';
 import '../models/v1_get_data_request.dart';
 import '../models/v1_get_data_response.dart';
 import '../models/v1_get_info_request.dart';
 import '../models/v1_get_info_response.dart';
+import '../models/v1_get_order_request.dart';
+import '../models/v1_get_order_response.dart';
 import '../models/v1_get_partner_info_request.dart';
 import '../models/v1_get_partner_info_response.dart';
 import '../models/v1_get_validation_result_request.dart';
@@ -28,6 +32,11 @@ part 'kyc_service_client.g.dart';
 abstract class KycServiceClient {
   factory KycServiceClient(Dio dio, {String? baseUrl}) = _KycServiceClient;
 
+  @POST('/v1/createOnRampOrder')
+  Future<V1CreateOnRampOrderResponse> kycServiceCreateOnRampOrder({
+    @Body() required V1CreateOnRampOrderRequest body,
+  });
+
   @POST('/v1/getData')
   Future<V1GetDataResponse> kycServiceGetData({
     @Body() required V1GetDataRequest body,
@@ -35,6 +44,11 @@ abstract class KycServiceClient {
 
   @POST('/v1/getInfo')
   Future<V1GetInfoResponse> kycServiceGetInfo();
+
+  @POST('/v1/getOrder')
+  Future<V1GetOrderResponse> kycServiceGetOrder({
+    @Body() required V1GetOrderRequest body,
+  });
 
   @POST('/v1/getPartnerInfo')
   Future<V1GetPartnerInfoResponse> kycServiceGetPartnerInfo({

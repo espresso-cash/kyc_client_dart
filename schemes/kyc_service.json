@@ -16,6 +16,38 @@
     "application/json"
   ],
   "paths": {
+    "/v1/createOnRampOrder": {
+      "post": {
+        "operationId": "KycService_CreateOnRampOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOnRampOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOnRampOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
     "/v1/getData": {
       "post": {
         "operationId": "KycService_GetData",
@@ -72,6 +104,38 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1GetInfoRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/getOrder": {
+      "post": {
+        "operationId": "KycService_GetOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetOrderRequest"
             }
           }
         ],
@@ -302,6 +366,29 @@
         }
       }
     },
+    "v1CreateOnRampOrderRequest": {
+      "type": "object",
+      "properties": {
+        "partnerPublicKey": {
+          "type": "string"
+        },
+        "cryptoAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "cryptoCurrency": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateOnRampOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
     "v1GetDataRequest": {
       "type": "object",
       "properties": {
@@ -335,6 +422,34 @@
         },
         "walletAddress": {
           "type": "string"
+        }
+      }
+    },
+    "v1GetOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "partnerPublicKey": {
+          "type": "string"
+        },
+        "userPublicKey": {
+          "type": "string"
+        },
+        "onRamp": {
+          "$ref": "#/definitions/v1OnRampData"
         }
       }
     },
@@ -410,6 +525,18 @@
     "v1InitStorageResponse": {
       "type": "object"
     },
+    "v1OnRampData": {
+      "type": "object",
+      "properties": {
+        "cryptoAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "cryptoCurrency": {
+          "type": "string"
+        }
+      }
+    },
     "v1SetDataRequest": {
       "type": "object",
       "properties": {
@@ -479,6 +606,14 @@
           "nullable": true
         },
         "photoSelfie": {
+          "type": "string",
+          "nullable": true
+        },
+        "bankAccountNumber": {
+          "type": "string",
+          "nullable": true
+        },
+        "bankCode": {
           "type": "string",
           "nullable": true
         }

@@ -19,6 +19,8 @@ _$V1UserDataImpl _$$V1UserDataImplFromJson(Map<String, dynamic> json) =>
       idNumber: json['idNumber'] as String?,
       photoIdCard: json['photoIdCard'] as String?,
       photoSelfie: json['photoSelfie'] as String?,
+      bankAccountNumber: json['bankAccountNumber'] as String?,
+      bankCode: json['bankCode'] as String?,
     );
 
 Map<String, dynamic> _$$V1UserDataImplToJson(_$V1UserDataImpl instance) =>
@@ -34,4 +36,6 @@ Map<String, dynamic> _$$V1UserDataImplToJson(_$V1UserDataImpl instance) =>
       'idNumber': instance.idNumber,
       'photoIdCard': instance.photoIdCard,
       'photoSelfie': instance.photoSelfie,
+      'bankAccountNumber': instance.bankAccountNumber,
+      'bankCode': instance.bankCode,
     };

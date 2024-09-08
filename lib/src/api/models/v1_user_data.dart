@@ -21,6 +21,8 @@ class V1UserData with _$V1UserData {
     String? idNumber,
     String? photoIdCard,
     String? photoSelfie,
+    String? bankAccountNumber,
+    String? bankCode,
   }) = _V1UserData;
   
   factory V1UserData.fromJson(Map<String, Object?> json) => _$V1UserDataFromJson(json);
