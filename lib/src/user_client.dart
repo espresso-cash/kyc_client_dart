@@ -162,6 +162,8 @@ class KycUserClient {
           idNumber: encryptedData['idNumber'],
           photoIdCard: photoIdCard,
           photoSelfie: photoSelfie,
+          bankCode: encryptedData['bankCode'],
+          bankAccountNumber: encryptedData['bankAccountNumber'],
         ),
       ),
     );
@@ -220,6 +222,31 @@ class KycUserClient {
         }),
       ),
     );
+  }
+
+  Future<String> createOrder(
+    String partnerPK,
+    String cryptoAmount,
+    String cryptoCurrency,
+  ) async {
+    final response = await _apiClient.kycServiceCreateOnRampOrder(
+      body: V1CreateOnRampOrderRequest(
+        partnerPublicKey: partnerPK,
+        cryptoAmount: cryptoAmount,
+        cryptoCurrency: cryptoCurrency,
+      ),
+    );
+
+    return response.orderId;
+  }
+
+  // TODO
+  Future<V1GetOrderResponse> getOrder(String orderId) async {
+    final response = _apiClient.kycServiceGetOrder(
+      body: V1GetOrderRequest(orderId: orderId),
+    );
+
+    return response;
   }
 
   SignedMessage _encryptAndSign(Uint8List data) {
