@@ -240,7 +240,6 @@ class KycUserClient {
     return response.orderId;
   }
 
-  // TODO
   Future<V1GetOrderResponse> getOrder(String orderId) async {
     final response = _apiClient.kycServiceGetOrder(
       body: V1GetOrderRequest(orderId: orderId),

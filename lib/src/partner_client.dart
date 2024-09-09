@@ -181,6 +181,14 @@ class KycPartnerClient {
     );
   }
 
+  Future<V1GetOrderResponse> getOrder(String orderId) async {
+    final response = _apiClient.kycServiceGetOrder(
+      body: V1GetOrderRequest(orderId: orderId),
+    );
+
+    return response;
+  }
+
   Future<String> _hash(String value) async {
     const hex = Base16Encoder.instance;
 
