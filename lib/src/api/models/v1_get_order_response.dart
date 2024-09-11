@@ -15,7 +15,6 @@ class V1GetOrderResponse with _$V1GetOrderResponse {
     required String orderId,
     required String status,
     required String partnerPublicKey,
-    required String userPublicKey,
     required V1OnRampData onRamp,
   }) = _V1GetOrderResponse;
   
