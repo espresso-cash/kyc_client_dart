@@ -98,7 +98,7 @@ class _UserViewState extends State<UserView> {
 
                     await context.read<WalletAppState>().updateData(
                           email: _emailController.text,
-                          name: _nameController.text,
+                          phone: _nameController.text,
                           file: _file,
                         );
 

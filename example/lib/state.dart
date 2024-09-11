@@ -66,17 +66,22 @@ class WalletAppState extends ChangeNotifier {
 
   Future<void> updateData({
     required String email,
-    required String name,
+    required String phone,
     XFile? file,
   }) async {
     await _client.setData(
       data: V1UserData(
         email: email,
-        phone: name,
+        phone: phone,
       ),
       selfie: await file?.readAsBytes(),
       idCard: null,
     );
+
+    _email = email;
+    _phone = phone;
+
+    notifyListeners();
   }
 
   Future<void> fetchData() async {
