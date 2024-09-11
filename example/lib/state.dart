@@ -24,9 +24,11 @@ class WalletAppState extends ChangeNotifier {
 
   String? _email;
   String? _phone;
+  String? _orderId;
 
   String? get email => _email;
   String? get phone => _phone;
+  String? get orderId => _orderId;
 
   Future<void> createWallet() async {
     _wallet = await Ed25519HDKeyPair.random();
@@ -51,6 +53,10 @@ class WalletAppState extends ChangeNotifier {
     notifyListeners();
 
     await fetchData();
+
+    // const orderId = 'ca938ea9-7d02-47ad-88c1-1270be8d2581';
+    // _orderId = orderId;
+    // await fetchOrder(orderId);
   }
 
   Future<void> grantPartnerAccess(String partnerPK) async {
@@ -97,6 +103,35 @@ class WalletAppState extends ChangeNotifier {
       notifyListeners();
     } on Exception {
       //ignore, new wallet/nodata
+    }
+  }
+
+  Future<void> createOnRampOrder({
+    required String amount,
+    required String currency,
+    required String partnerPK,
+  }) async {
+    final orderId = await _client.createOrder(
+      partnerPK: partnerPK,
+      cryptoAmount: amount,
+      cryptoCurrency: currency,
+    );
+
+    print('orderId: $orderId');
+
+    _orderId = orderId;
+    notifyListeners();
+  }
+
+  Future<void> fetchOrder(String orderId) async {
+    try {
+      final data = await _client.getOrder(orderId);
+
+      print(data);
+
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching order: $e');
     }
   }
 }
@@ -178,5 +213,17 @@ class PartnerAppState extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future<void> fetchOrder(String orderId) async {
+    try {
+      final data = await _client.getOrder(orderId);
+
+      print(data);
+
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching order: $e');
+    }
   }
 }

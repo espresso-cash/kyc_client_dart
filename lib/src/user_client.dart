@@ -224,11 +224,11 @@ class KycUserClient {
     );
   }
 
-  Future<String> createOrder(
-    String partnerPK,
-    String cryptoAmount,
-    String cryptoCurrency,
-  ) async {
+  Future<String> createOrder({
+    required String partnerPK,
+    required String cryptoAmount,
+    required String cryptoCurrency,
+  }) async {
     final response = await _apiClient.kycServiceCreateOnRampOrder(
       body: V1CreateOnRampOrderRequest(
         partnerPublicKey: partnerPK,

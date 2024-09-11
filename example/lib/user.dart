@@ -14,6 +14,10 @@ class UserView extends StatefulWidget {
 class _UserViewState extends State<UserView> {
   final _emailController = TextEditingController();
   final _nameController = TextEditingController();
+
+  final _amountController = TextEditingController();
+  final _currencyController = TextEditingController();
+
   XFile? _file;
 
   @override
@@ -34,6 +38,8 @@ class _UserViewState extends State<UserView> {
   void dispose() {
     _emailController.dispose();
     _nameController.dispose();
+    _amountController.dispose();
+    _currencyController.dispose();
 
     context.read<WalletAppState>().removeListener(_updateControllers);
 
@@ -143,6 +149,32 @@ class _UserViewState extends State<UserView> {
                           ),
                   child: const Text('Fetch partner info'),
                 ),
+              ),
+              const SizedBox(height: 16),
+              ValueTextfield(
+                controller: _amountController,
+                title: 'Amount',
+              ),
+              const SizedBox(height: 8),
+              ValueTextfield(
+                controller: _currencyController,
+                title: 'Cryptocurrency',
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  final partnerPk =
+                      context.read<PartnerAppState>().authPublicKey;
+
+                  await context.read<WalletAppState>().createOnRampOrder(
+                        amount: _amountController.text,
+                        currency: _currencyController.text,
+                        partnerPK: partnerPk,
+                      );
+                  if (!context.mounted) return;
+                  showSnackBar(context, message: 'Order created');
+                },
+                child: const Text('Create Onramp Order'),
               ),
             ],
           ),

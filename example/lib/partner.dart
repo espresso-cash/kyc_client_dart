@@ -95,6 +95,34 @@ class _PartnerViewState extends State<PartnerView> {
                 value: state.phone,
               ),
               if (state.file case final image?) Image.network(image.path),
+              const CustomDivider(),
+              const SizedBox(height: 16),
+              ValueField(
+                title: 'OrderId',
+                value: state.email,
+              ),
+              ValueField(
+                title: 'Amount',
+                value: state.phone,
+              ),
+              ValueField(
+                title: 'Crypto Currency',
+                value: state.phone,
+              ),
+              Consumer<WalletAppState>(
+                builder: (context, walletState, child) {
+                  final orderId = walletState.orderId;
+                  final hasOrder = orderId != null;
+
+                  return ElevatedButton(
+                    onPressed: hasOrder
+                        ? () =>
+                            context.read<PartnerAppState>().fetchOrder(orderId)
+                        : null,
+                    child: const Text('Fetch OnRamp Order'),
+                  );
+                },
+              ),
             ],
           ),
         ),
