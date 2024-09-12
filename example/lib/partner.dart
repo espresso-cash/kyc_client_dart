@@ -98,16 +98,8 @@ class _PartnerViewState extends State<PartnerView> {
               const CustomDivider(),
               const SizedBox(height: 16),
               ValueField(
-                title: 'OrderId',
-                value: state.email,
-              ),
-              ValueField(
-                title: 'Amount',
-                value: state.phone,
-              ),
-              ValueField(
-                title: 'Crypto Currency',
-                value: state.phone,
+                title: 'Order Data',
+                value: state.orderData ?? '',
               ),
               Consumer<WalletAppState>(
                 builder: (context, walletState, child) {

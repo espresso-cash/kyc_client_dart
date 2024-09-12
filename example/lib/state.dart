@@ -33,9 +33,7 @@ class WalletAppState extends ChangeNotifier {
   Future<void> createWallet() async {
     _wallet = await Ed25519HDKeyPair.random();
 
-    // _wallet = await Ed25519HDKeyPair.fromMnemonic(
-    //   'insert mnemonic here',
-    // );
+    // _wallet = await Ed25519HDKeyPair.fromMnemonic('');
 
     _client = KycUserClient(
       sign: (data) async {
@@ -54,7 +52,7 @@ class WalletAppState extends ChangeNotifier {
 
     await fetchData();
 
-    // const orderId = 'ca938ea9-7d02-47ad-88c1-1270be8d2581';
+    // const orderId = '68f98607-e6ba-4557-b2c8-cfab91d10963';
     // _orderId = orderId;
     // await fetchOrder(orderId);
   }
@@ -124,15 +122,9 @@ class WalletAppState extends ChangeNotifier {
   }
 
   Future<void> fetchOrder(String orderId) async {
-    try {
-      final data = await _client.getOrder(orderId);
+    final data = await _client.getOrder(orderId);
 
-      print(data);
-
-      notifyListeners();
-    } catch (e) {
-      print('Error fetching order: $e');
-    }
+    print(data.toJson());
   }
 }
 
@@ -142,12 +134,14 @@ class PartnerAppState extends ChangeNotifier {
   String get phone => _phone;
   XFile? get file => _file;
   String? get validationResult => _result;
+  String? get orderData => _orderData;
 
   late String _authPublicKey = '';
   late String _email = '';
   late String _phone = '';
   XFile? _file;
   String? _result;
+  String? _orderData;
 
   late KycPartnerClient _client;
 
@@ -216,14 +210,10 @@ class PartnerAppState extends ChangeNotifier {
   }
 
   Future<void> fetchOrder(String orderId) async {
-    try {
-      final data = await _client.getOrder(orderId);
+    final data = await _client.getOrder(orderId);
 
-      print(data);
+    _orderData = data.toJson().toString();
 
-      notifyListeners();
-    } catch (e) {
-      print('Error fetching order: $e');
-    }
+    notifyListeners();
   }
 }
