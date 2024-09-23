@@ -98,6 +98,18 @@ class _PartnerViewState extends State<PartnerView> {
               const CustomDivider(),
               const SizedBox(height: 16),
               ValueField(
+                title: 'Orders',
+                value: state.orders ?? '',
+              ),
+              Consumer<WalletAppState>(
+                builder: (context, walletState, child) => ElevatedButton(
+                  onPressed: context.read<PartnerAppState>().fetchPartnerOrders,
+                  child: const Text('Fetch partner orders'),
+                ),
+              ),
+              const CustomDivider(),
+              const SizedBox(height: 16),
+              ValueField(
                 title: 'Order Data',
                 value: state.orderData ?? '',
               ),
@@ -106,15 +118,58 @@ class _PartnerViewState extends State<PartnerView> {
                   final orderId = walletState.orderId;
                   final hasOrder = orderId != null;
 
-                  return ElevatedButton(
-                    onPressed: hasOrder
-                        ? () =>
-                            context.read<PartnerAppState>().fetchOrder(orderId)
-                        : null,
-                    child: const Text('Fetch OnRamp Order'),
+                  return Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () => context
+                                .read<PartnerAppState>()
+                                .fetchOrder(orderId)
+                            : null,
+                        child: const Text('Fetch OnRamp Order'),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () => context
+                                .read<PartnerAppState>()
+                                .acceptOrder(orderId)
+                            : null,
+                        child: const Text('Accept OnRamp Order'),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () => context
+                                .read<PartnerAppState>()
+                                .completeOrder(orderId)
+                            : null,
+                        child: const Text('Complete OnRamp Order'),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () => context.read<PartnerAppState>().rejectOrder(
+                                  orderId: orderId,
+                                  reason: 'Reject reason',
+                                )
+                            : null,
+                        child: const Text('Reject OnRamp Order'),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () => context.read<PartnerAppState>().failOrder(
+                                  orderId: orderId,
+                                  reason: 'Fail reason',
+                                )
+                            : null,
+                        child: const Text('Fail OnRamp Order'),
+                      ),
+                    ],
                   );
                 },
-              ),
+              )
             ],
           ),
         ),

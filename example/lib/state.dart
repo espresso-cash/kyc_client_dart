@@ -135,6 +135,7 @@ class PartnerAppState extends ChangeNotifier {
   XFile? get file => _file;
   String? get validationResult => _result;
   String? get orderData => _orderData;
+  String? get orders => _orders?.map((order) => order).join('\n\n');
 
   late String _authPublicKey = '';
   late String _email = '';
@@ -221,7 +222,7 @@ class PartnerAppState extends ChangeNotifier {
   Future<void> fetchPartnerOrders() async {
     final data = await _client.getPartnerOrders();
 
-    _orders = data.orders.map((e) => data.toJson().toString()).toList();
+    _orders = data.orders.map((e) => e.toJson().toString()).toList();
 
     notifyListeners();
   }
