@@ -10,8 +10,10 @@ _$V1GetOrderResponseImpl _$$V1GetOrderResponseImplFromJson(
         Map<String, dynamic> json) =>
     _$V1GetOrderResponseImpl(
       orderId: json['orderId'] as String,
+      created: json['created'] as String,
       status: json['status'] as String,
       partnerPublicKey: json['partnerPublicKey'] as String,
+      userPublicKey: json['userPublicKey'] as String,
       onRamp: V1OnRampData.fromJson(json['onRamp'] as Map<String, dynamic>),
     );
 
@@ -19,7 +21,9 @@ Map<String, dynamic> _$$V1GetOrderResponseImplToJson(
         _$V1GetOrderResponseImpl instance) =>
     <String, dynamic>{
       'orderId': instance.orderId,
+      'created': instance.created,
       'status': instance.status,
       'partnerPublicKey': instance.partnerPublicKey,
+      'userPublicKey': instance.userPublicKey,
       'onRamp': instance.onRamp,
     };

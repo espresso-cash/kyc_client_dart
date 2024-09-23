@@ -13,8 +13,10 @@ part 'v1_get_order_response.g.dart';
 class V1GetOrderResponse with _$V1GetOrderResponse {
   const factory V1GetOrderResponse({
     required String orderId,
+    required String created,
     required String status,
     required String partnerPublicKey,
+    required String userPublicKey,
     required V1OnRampData onRamp,
   }) = _V1GetOrderResponse;
   

@@ -16,6 +16,70 @@
     "application/json"
   ],
   "paths": {
+    "/v1/acceptOrder": {
+      "post": {
+        "operationId": "KycService_AcceptOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AcceptOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AcceptOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/completeOrder": {
+      "post": {
+        "operationId": "KycService_CompleteOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompleteOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CompleteOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
     "/v1/createOnRampOrder": {
       "post": {
         "operationId": "KycService_CreateOnRampOrder",
@@ -40,6 +104,38 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1CreateOnRampOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/failOrder": {
+      "post": {
+        "operationId": "KycService_FailOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1FailOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1FailOrderRequest"
             }
           }
         ],
@@ -176,6 +272,38 @@
         ]
       }
     },
+    "/v1/getPartnerOrders": {
+      "post": {
+        "operationId": "KycService_GetPartnerOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetPartnerOrdersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetPartnerOrdersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
     "/v1/getValidationResult": {
       "post": {
         "operationId": "KycService_GetValidationResult",
@@ -264,6 +392,38 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1InitStorageRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/rejectOrder": {
+      "post": {
+        "operationId": "KycService_RejectOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RejectOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RejectOrderRequest"
             }
           }
         ],
@@ -366,6 +526,28 @@
         }
       }
     },
+    "v1AcceptOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1AcceptOrderResponse": {
+      "type": "object"
+    },
+    "v1CompleteOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompleteOrderResponse": {
+      "type": "object"
+    },
     "v1CreateOnRampOrderRequest": {
       "type": "object",
       "properties": {
@@ -388,6 +570,20 @@
           "type": "string"
         }
       }
+    },
+    "v1FailOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "v1FailOrderResponse": {
+      "type": "object"
     },
     "v1GetDataRequest": {
       "type": "object",
@@ -439,10 +635,16 @@
         "orderId": {
           "type": "string"
         },
+        "created": {
+          "type": "string"
+        },
         "status": {
           "type": "string"
         },
         "partnerPublicKey": {
+          "type": "string"
+        },
+        "userPublicKey": {
           "type": "string"
         },
         "onRamp": {
@@ -466,6 +668,21 @@
         },
         "publicKey": {
           "type": "string"
+        }
+      }
+    },
+    "v1GetPartnerOrdersRequest": {
+      "type": "object"
+    },
+    "v1GetPartnerOrdersResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GetOrderResponse"
+          }
         }
       }
     },
@@ -533,6 +750,20 @@
           "type": "string"
         }
       }
+    },
+    "v1RejectOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RejectOrderResponse": {
+      "type": "object"
     },
     "v1SetDataRequest": {
       "type": "object",
