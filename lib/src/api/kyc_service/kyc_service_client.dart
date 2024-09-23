@@ -81,9 +81,7 @@ abstract class KycServiceClient {
   });
 
   @POST('/v1/getPartnerOrders')
-  Future<V1GetPartnerOrdersResponse> kycServiceGetPartnerOrders({
-    @Body() required V1GetPartnerOrdersRequest body,
-  });
+  Future<V1GetPartnerOrdersResponse> kycServiceGetPartnerOrders();
 
   @POST('/v1/getValidationResult')
   Future<V1GetValidationResultResponse> kycServiceGetValidationResult({

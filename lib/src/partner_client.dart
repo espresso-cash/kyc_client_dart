@@ -181,22 +181,41 @@ class KycPartnerClient {
     );
   }
 
-  Future<V1GetOrderResponse> getOrder(String orderId) async {
-    final response = _apiClient.kycServiceGetOrder(
-      body: V1GetOrderRequest(orderId: orderId),
-    );
+  Future<V1GetOrderResponse> getOrder(String orderId) async =>
+      _apiClient.kycServiceGetOrder(body: V1GetOrderRequest(orderId: orderId));
 
-    return response;
-  }
+  Future<V1GetPartnerOrdersResponse> getPartnerOrders() async =>
+      _apiClient.kycServiceGetPartnerOrders();
 
-  Future<String> _hash(String value) async {
-    const hex = Base16Encoder.instance;
+  Future<V1AcceptOrderResponse> acceptOrder(String orderId) async => _apiClient
+      .kycServiceAcceptOrder(body: V1AcceptOrderRequest(orderId: orderId));
 
-    const hasher = Hash.blake2b;
-    final hash = hex.encode(hasher(value));
+  Future<V1CompleteOrderResponse> completeOrder(String orderId) async =>
+      _apiClient.kycServiceCompleteOrder(
+        body: V1CompleteOrderRequest(orderId: orderId),
+      );
 
-    return hash;
-  }
+  Future<V1FailOrderResponse> failOrder(String orderId, String reason) async =>
+      _apiClient.kycServiceFailOrder(
+        body: V1FailOrderRequest(orderId: orderId, reason: reason),
+      );
+
+  Future<V1RejectOrderResponse> rejectOrder(
+    String orderId,
+    String reason,
+  ) async =>
+      _apiClient.kycServiceRejectOrder(
+        body: V1RejectOrderRequest(orderId: orderId, reason: reason),
+      );
+}
+
+Future<String> _hash(String value) async {
+  const hex = Base16Encoder.instance;
+
+  const hasher = Hash.blake2b;
+  final hash = hex.encode(hasher(value));
+
+  return hash;
 }
 
 extension V1ValidationDataExtensions on V1ValidationData {
