@@ -142,6 +142,7 @@ class PartnerAppState extends ChangeNotifier {
   XFile? _file;
   String? _result;
   String? _orderData;
+  List<String>? _orders;
 
   late KycPartnerClient _client;
 
@@ -215,5 +216,35 @@ class PartnerAppState extends ChangeNotifier {
     _orderData = data.toJson().toString();
 
     notifyListeners();
+  }
+
+  Future<void> fetchPartnerOrders() async {
+    final data = await _client.getPartnerOrders();
+
+    _orders = data.orders.map((e) => data.toJson().toString()).toList();
+
+    notifyListeners();
+  }
+
+  Future<void> completeOrder(String orderId) async {
+    await _client.completeOrder(orderId);
+  }
+
+  Future<void> acceptOrder(String orderId) async {
+    await _client.acceptOrder(orderId);
+  }
+
+  Future<void> failOrder({
+    required String orderId,
+    required String reason,
+  }) async {
+    await _client.failOrder(orderId: orderId, reason: reason);
+  }
+
+  Future<void> rejectOrder({
+    required String orderId,
+    required String reason,
+  }) async {
+    await _client.rejectOrder(orderId: orderId, reason: reason);
   }
 }

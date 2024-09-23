@@ -195,15 +195,18 @@ class KycPartnerClient {
         body: V1CompleteOrderRequest(orderId: orderId),
       );
 
-  Future<V1FailOrderResponse> failOrder(String orderId, String reason) async =>
+  Future<V1FailOrderResponse> failOrder({
+    required String orderId,
+    required String reason,
+  }) async =>
       _apiClient.kycServiceFailOrder(
         body: V1FailOrderRequest(orderId: orderId, reason: reason),
       );
 
-  Future<V1RejectOrderResponse> rejectOrder(
-    String orderId,
-    String reason,
-  ) async =>
+  Future<V1RejectOrderResponse> rejectOrder({
+    required String orderId,
+    required String reason,
+  }) async =>
       _apiClient.kycServiceRejectOrder(
         body: V1RejectOrderRequest(orderId: orderId, reason: reason),
       );
