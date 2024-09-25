@@ -21,6 +21,8 @@ export 'models/v1_get_info_request.dart';
 export 'models/v1_get_info_response.dart';
 export 'models/v1_get_order_request.dart';
 export 'models/v1_get_order_response.dart';
+export 'models/v1_get_orders_request.dart';
+export 'models/v1_get_orders_response.dart';
 export 'models/v1_get_partner_info_request.dart';
 export 'models/v1_get_partner_info_response.dart';
 export 'models/v1_get_partner_orders_request.dart';

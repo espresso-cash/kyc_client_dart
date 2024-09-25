@@ -240,6 +240,38 @@
         ]
       }
     },
+    "/v1/getOrders": {
+      "post": {
+        "operationId": "KycService_GetOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOrdersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetOrdersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
     "/v1/getPartnerInfo": {
       "post": {
         "operationId": "KycService_GetPartnerInfo",
@@ -602,7 +634,12 @@
       }
     },
     "v1GetInfoRequest": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string"
+        }
+      }
     },
     "v1GetInfoResponse": {
       "type": "object",
@@ -647,8 +684,26 @@
         "userPublicKey": {
           "type": "string"
         },
+        "comment": {
+          "type": "string"
+        },
         "onRamp": {
           "$ref": "#/definitions/v1OnRampData"
+        }
+      }
+    },
+    "v1GetOrdersRequest": {
+      "type": "object"
+    },
+    "v1GetOrdersResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GetOrderResponse"
+          }
         }
       }
     },
@@ -709,6 +764,9 @@
       "type": "object",
       "properties": {
         "validatorPublicKey": {
+          "type": "string"
+        },
+        "encryptedSecretKey": {
           "type": "string"
         }
       }

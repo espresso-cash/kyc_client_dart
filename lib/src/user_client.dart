@@ -45,7 +45,9 @@ class KycUserClient {
     _initializeApiClient();
 
     try {
-      final getInfo = await _apiClient.kycServiceGetInfo();
+      final getInfo = await _apiClient.kycServiceGetInfo(
+        body: V1GetInfoRequest(publicKey: _authPublicKey),
+      );
       await _initializeEncryption(
         seed,
         encryptedSecretKey: getInfo.encryptedSecretKey,
@@ -132,8 +134,8 @@ class KycUserClient {
   Future<void> grantPartnerAccess(String partnerPK) async {
     await _apiClient.kycServiceGrantAccess(
       body: V1GrantAccessRequest(
-        validatorPublicKey: partnerPK,
-      ),
+          validatorPublicKey: partnerPK,
+          encryptedSecretKey: _encryptedSecretKey),
     );
   }
 
@@ -240,13 +242,13 @@ class KycUserClient {
     return response.orderId;
   }
 
-  Future<V1GetOrderResponse> getOrder(String orderId) async {
-    final response = _apiClient.kycServiceGetOrder(
-      body: V1GetOrderRequest(orderId: orderId),
-    );
+  Future<V1GetOrderResponse> getOrder(String orderId) async =>
+      _apiClient.kycServiceGetOrder(
+        body: V1GetOrderRequest(orderId: orderId),
+      );
 
-    return response;
-  }
+  Future<V1GetOrdersResponse> getOrders() async =>
+      _apiClient.kycServiceGetOrders();
 
   SignedMessage _encryptAndSign(Uint8List data) {
     final encrypted = _secretBox.encrypt(data);

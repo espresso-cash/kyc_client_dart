@@ -11,6 +11,7 @@ part 'v1_grant_access_request.g.dart';
 class V1GrantAccessRequest with _$V1GrantAccessRequest {
   const factory V1GrantAccessRequest({
     required String validatorPublicKey,
+    required String encryptedSecretKey,
   }) = _V1GrantAccessRequest;
   
   factory V1GrantAccessRequest.fromJson(Map<String, Object?> json) => _$V1GrantAccessRequestFromJson(json);

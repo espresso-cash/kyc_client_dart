@@ -12,6 +12,7 @@ class WalletAppState extends ChangeNotifier {
   String get authPublicKey => _authPublicKey;
   String get rawSecretKey => _rawSecretKey;
   PartnerModel? get partnerInfo => _partnerInfo;
+  String? get orders => _orders?.map((order) => order).join('\n\n');
 
   Ed25519HDKeyPair? _wallet;
 
@@ -29,6 +30,7 @@ class WalletAppState extends ChangeNotifier {
   String? get email => _email;
   String? get phone => _phone;
   String? get orderId => _orderId;
+  List<String>? _orders;
 
   Future<void> createWallet() async {
     _wallet = await Ed25519HDKeyPair.random();
@@ -125,6 +127,14 @@ class WalletAppState extends ChangeNotifier {
     final data = await _client.getOrder(orderId);
 
     print(data.toJson());
+  }
+
+  Future<void> fetchUserOrders() async {
+    final data = await _client.getOrders();
+
+    _orders = data.orders.map((e) => e.toJson().toString()).toList();
+
+    notifyListeners();
   }
 }
 

@@ -19,6 +19,8 @@ import '../models/v1_get_info_request.dart';
 import '../models/v1_get_info_response.dart';
 import '../models/v1_get_order_request.dart';
 import '../models/v1_get_order_response.dart';
+import '../models/v1_get_orders_request.dart';
+import '../models/v1_get_orders_response.dart';
 import '../models/v1_get_partner_info_request.dart';
 import '../models/v1_get_partner_info_response.dart';
 import '../models/v1_get_partner_orders_request.dart';
@@ -68,12 +70,17 @@ abstract class KycServiceClient {
   });
 
   @POST('/v1/getInfo')
-  Future<V1GetInfoResponse> kycServiceGetInfo();
+  Future<V1GetInfoResponse> kycServiceGetInfo({
+    @Body() required V1GetInfoRequest body,
+  });
 
   @POST('/v1/getOrder')
   Future<V1GetOrderResponse> kycServiceGetOrder({
     @Body() required V1GetOrderRequest body,
   });
+
+  @POST('/v1/getOrders')
+  Future<V1GetOrdersResponse> kycServiceGetOrders();
 
   @POST('/v1/getPartnerInfo')
   Future<V1GetPartnerInfoResponse> kycServiceGetPartnerInfo({

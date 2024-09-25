@@ -25,6 +25,7 @@ mixin _$V1GetOrderResponse {
   String get status => throw _privateConstructorUsedError;
   String get partnerPublicKey => throw _privateConstructorUsedError;
   String get userPublicKey => throw _privateConstructorUsedError;
+  String get comment => throw _privateConstructorUsedError;
   V1OnRampData get onRamp => throw _privateConstructorUsedError;
 
   /// Serializes this V1GetOrderResponse to a JSON map.
@@ -49,6 +50,7 @@ abstract class $V1GetOrderResponseCopyWith<$Res> {
       String status,
       String partnerPublicKey,
       String userPublicKey,
+      String comment,
       V1OnRampData onRamp});
 
   $V1OnRampDataCopyWith<$Res> get onRamp;
@@ -74,6 +76,7 @@ class _$V1GetOrderResponseCopyWithImpl<$Res, $Val extends V1GetOrderResponse>
     Object? status = null,
     Object? partnerPublicKey = null,
     Object? userPublicKey = null,
+    Object? comment = null,
     Object? onRamp = null,
   }) {
     return _then(_value.copyWith(
@@ -96,6 +99,10 @@ class _$V1GetOrderResponseCopyWithImpl<$Res, $Val extends V1GetOrderResponse>
       userPublicKey: null == userPublicKey
           ? _value.userPublicKey
           : userPublicKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      comment: null == comment
+          ? _value.comment
+          : comment // ignore: cast_nullable_to_non_nullable
               as String,
       onRamp: null == onRamp
           ? _value.onRamp
@@ -129,6 +136,7 @@ abstract class _$$V1GetOrderResponseImplCopyWith<$Res>
       String status,
       String partnerPublicKey,
       String userPublicKey,
+      String comment,
       V1OnRampData onRamp});
 
   @override
@@ -153,6 +161,7 @@ class __$$V1GetOrderResponseImplCopyWithImpl<$Res>
     Object? status = null,
     Object? partnerPublicKey = null,
     Object? userPublicKey = null,
+    Object? comment = null,
     Object? onRamp = null,
   }) {
     return _then(_$V1GetOrderResponseImpl(
@@ -176,6 +185,10 @@ class __$$V1GetOrderResponseImplCopyWithImpl<$Res>
           ? _value.userPublicKey
           : userPublicKey // ignore: cast_nullable_to_non_nullable
               as String,
+      comment: null == comment
+          ? _value.comment
+          : comment // ignore: cast_nullable_to_non_nullable
+              as String,
       onRamp: null == onRamp
           ? _value.onRamp
           : onRamp // ignore: cast_nullable_to_non_nullable
@@ -193,6 +206,7 @@ class _$V1GetOrderResponseImpl implements _V1GetOrderResponse {
       required this.status,
       required this.partnerPublicKey,
       required this.userPublicKey,
+      required this.comment,
       required this.onRamp});
 
   factory _$V1GetOrderResponseImpl.fromJson(Map<String, dynamic> json) =>
@@ -209,11 +223,13 @@ class _$V1GetOrderResponseImpl implements _V1GetOrderResponse {
   @override
   final String userPublicKey;
   @override
+  final String comment;
+  @override
   final V1OnRampData onRamp;
 
   @override
   String toString() {
-    return 'V1GetOrderResponse(orderId: $orderId, created: $created, status: $status, partnerPublicKey: $partnerPublicKey, userPublicKey: $userPublicKey, onRamp: $onRamp)';
+    return 'V1GetOrderResponse(orderId: $orderId, created: $created, status: $status, partnerPublicKey: $partnerPublicKey, userPublicKey: $userPublicKey, comment: $comment, onRamp: $onRamp)';
   }
 
   @override
@@ -228,13 +244,14 @@ class _$V1GetOrderResponseImpl implements _V1GetOrderResponse {
                 other.partnerPublicKey == partnerPublicKey) &&
             (identical(other.userPublicKey, userPublicKey) ||
                 other.userPublicKey == userPublicKey) &&
+            (identical(other.comment, comment) || other.comment == comment) &&
             (identical(other.onRamp, onRamp) || other.onRamp == onRamp));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, orderId, created, status,
-      partnerPublicKey, userPublicKey, onRamp);
+      partnerPublicKey, userPublicKey, comment, onRamp);
 
   /// Create a copy of V1GetOrderResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -260,6 +277,7 @@ abstract class _V1GetOrderResponse implements V1GetOrderResponse {
       required final String status,
       required final String partnerPublicKey,
       required final String userPublicKey,
+      required final String comment,
       required final V1OnRampData onRamp}) = _$V1GetOrderResponseImpl;
 
   factory _V1GetOrderResponse.fromJson(Map<String, dynamic> json) =
@@ -275,6 +293,8 @@ abstract class _V1GetOrderResponse implements V1GetOrderResponse {
   String get partnerPublicKey;
   @override
   String get userPublicKey;
+  @override
+  String get comment;
   @override
   V1OnRampData get onRamp;
 

@@ -21,6 +21,7 @@ V1GrantAccessRequest _$V1GrantAccessRequestFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$V1GrantAccessRequest {
   String get validatorPublicKey => throw _privateConstructorUsedError;
+  String get encryptedSecretKey => throw _privateConstructorUsedError;
 
   /// Serializes this V1GrantAccessRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -38,7 +39,7 @@ abstract class $V1GrantAccessRequestCopyWith<$Res> {
           $Res Function(V1GrantAccessRequest) then) =
       _$V1GrantAccessRequestCopyWithImpl<$Res, V1GrantAccessRequest>;
   @useResult
-  $Res call({String validatorPublicKey});
+  $Res call({String validatorPublicKey, String encryptedSecretKey});
 }
 
 /// @nodoc
@@ -58,11 +59,16 @@ class _$V1GrantAccessRequestCopyWithImpl<$Res,
   @override
   $Res call({
     Object? validatorPublicKey = null,
+    Object? encryptedSecretKey = null,
   }) {
     return _then(_value.copyWith(
       validatorPublicKey: null == validatorPublicKey
           ? _value.validatorPublicKey
           : validatorPublicKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      encryptedSecretKey: null == encryptedSecretKey
+          ? _value.encryptedSecretKey
+          : encryptedSecretKey // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -76,7 +82,7 @@ abstract class _$$V1GrantAccessRequestImplCopyWith<$Res>
       __$$V1GrantAccessRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String validatorPublicKey});
+  $Res call({String validatorPublicKey, String encryptedSecretKey});
 }
 
 /// @nodoc
@@ -93,11 +99,16 @@ class __$$V1GrantAccessRequestImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? validatorPublicKey = null,
+    Object? encryptedSecretKey = null,
   }) {
     return _then(_$V1GrantAccessRequestImpl(
       validatorPublicKey: null == validatorPublicKey
           ? _value.validatorPublicKey
           : validatorPublicKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      encryptedSecretKey: null == encryptedSecretKey
+          ? _value.encryptedSecretKey
+          : encryptedSecretKey // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -106,17 +117,20 @@ class __$$V1GrantAccessRequestImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$V1GrantAccessRequestImpl implements _V1GrantAccessRequest {
-  const _$V1GrantAccessRequestImpl({required this.validatorPublicKey});
+  const _$V1GrantAccessRequestImpl(
+      {required this.validatorPublicKey, required this.encryptedSecretKey});
 
   factory _$V1GrantAccessRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1GrantAccessRequestImplFromJson(json);
 
   @override
   final String validatorPublicKey;
+  @override
+  final String encryptedSecretKey;
 
   @override
   String toString() {
-    return 'V1GrantAccessRequest(validatorPublicKey: $validatorPublicKey)';
+    return 'V1GrantAccessRequest(validatorPublicKey: $validatorPublicKey, encryptedSecretKey: $encryptedSecretKey)';
   }
 
   @override
@@ -125,12 +139,15 @@ class _$V1GrantAccessRequestImpl implements _V1GrantAccessRequest {
         (other.runtimeType == runtimeType &&
             other is _$V1GrantAccessRequestImpl &&
             (identical(other.validatorPublicKey, validatorPublicKey) ||
-                other.validatorPublicKey == validatorPublicKey));
+                other.validatorPublicKey == validatorPublicKey) &&
+            (identical(other.encryptedSecretKey, encryptedSecretKey) ||
+                other.encryptedSecretKey == encryptedSecretKey));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, validatorPublicKey);
+  int get hashCode =>
+      Object.hash(runtimeType, validatorPublicKey, encryptedSecretKey);
 
   /// Create a copy of V1GrantAccessRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -152,13 +169,16 @@ class _$V1GrantAccessRequestImpl implements _V1GrantAccessRequest {
 
 abstract class _V1GrantAccessRequest implements V1GrantAccessRequest {
   const factory _V1GrantAccessRequest(
-      {required final String validatorPublicKey}) = _$V1GrantAccessRequestImpl;
+      {required final String validatorPublicKey,
+      required final String encryptedSecretKey}) = _$V1GrantAccessRequestImpl;
 
   factory _V1GrantAccessRequest.fromJson(Map<String, dynamic> json) =
       _$V1GrantAccessRequestImpl.fromJson;
 
   @override
   String get validatorPublicKey;
+  @override
+  String get encryptedSecretKey;
 
   /// Create a copy of V1GrantAccessRequest
   /// with the given fields replaced by the non-null parameter values.

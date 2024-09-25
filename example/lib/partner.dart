@@ -98,7 +98,7 @@ class _PartnerViewState extends State<PartnerView> {
               const CustomDivider(),
               const SizedBox(height: 16),
               ValueField(
-                title: 'Orders',
+                title: 'Partner Orders:',
                 value: state.orders ?? '',
               ),
               Consumer<WalletAppState>(

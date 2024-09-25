@@ -176,6 +176,16 @@ class _UserViewState extends State<UserView> {
                 },
                 child: const Text('Create Onramp Order'),
               ),
+              const CustomDivider(),
+              const SizedBox(height: 16),
+              ValueField(
+                title: 'User Orders:',
+                value: state.orders ?? '',
+              ),
+              ElevatedButton(
+                onPressed: state.fetchUserOrders,
+                child: const Text('Fetch user orders'),
+              ),
             ],
           ),
         ),

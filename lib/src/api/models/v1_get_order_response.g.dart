@@ -14,6 +14,7 @@ _$V1GetOrderResponseImpl _$$V1GetOrderResponseImplFromJson(
       status: json['status'] as String,
       partnerPublicKey: json['partnerPublicKey'] as String,
       userPublicKey: json['userPublicKey'] as String,
+      comment: json['comment'] as String,
       onRamp: V1OnRampData.fromJson(json['onRamp'] as Map<String, dynamic>),
     );
 
@@ -25,5 +26,6 @@ Map<String, dynamic> _$$V1GetOrderResponseImplToJson(
       'status': instance.status,
       'partnerPublicKey': instance.partnerPublicKey,
       'userPublicKey': instance.userPublicKey,
+      'comment': instance.comment,
       'onRamp': instance.onRamp,
     };

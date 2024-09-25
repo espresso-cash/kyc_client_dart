@@ -10,10 +10,12 @@ _$V1GrantAccessRequestImpl _$$V1GrantAccessRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$V1GrantAccessRequestImpl(
       validatorPublicKey: json['validatorPublicKey'] as String,
+      encryptedSecretKey: json['encryptedSecretKey'] as String,
     );
 
 Map<String, dynamic> _$$V1GrantAccessRequestImplToJson(
         _$V1GrantAccessRequestImpl instance) =>
     <String, dynamic>{
       'validatorPublicKey': instance.validatorPublicKey,
+      'encryptedSecretKey': instance.encryptedSecretKey,
     };

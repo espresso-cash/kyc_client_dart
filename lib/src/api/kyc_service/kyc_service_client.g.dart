@@ -161,11 +161,13 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetInfoResponse> kycServiceGetInfo({required dynamic body}) async {
+  Future<V1GetInfoResponse> kycServiceGetInfo(
+      {required V1GetInfoRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = body;
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<V1GetInfoResponse>(Options(
       method: 'POST',
@@ -217,6 +219,33 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
+  Future<V1GetOrdersResponse> kycServiceGetOrders() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<V1GetOrdersResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v1/getOrders',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = V1GetOrdersResponse.fromJson(_result.data!);
+    return _value;
+  }
+
+  @override
   Future<V1GetPartnerInfoResponse> kycServiceGetPartnerInfo(
       {required V1GetPartnerInfoRequest body}) async {
     final _extra = <String, dynamic>{};
@@ -246,12 +275,11 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetPartnerOrdersResponse> kycServiceGetPartnerOrders(
-      {required dynamic body}) async {
+  Future<V1GetPartnerOrdersResponse> kycServiceGetPartnerOrders() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = body;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<V1GetPartnerOrdersResponse>(Options(
       method: 'POST',
