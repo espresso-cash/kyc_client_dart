@@ -122,54 +122,85 @@ class _PartnerViewState extends State<PartnerView> {
                     children: [
                       ElevatedButton(
                         onPressed: hasOrder
-                            ? () => context
-                                .read<PartnerAppState>()
-                                .fetchOrder(orderId)
+                            ? () async {
+                                await context
+                                    .read<PartnerAppState>()
+                                    .fetchOrder(orderId);
+                                if (!context.mounted) return;
+                                showSnackBar(context, message: 'Order fetched');
+                              }
                             : null,
                         child: const Text('Fetch OnRamp Order'),
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: hasOrder
-                            ? () => context
-                                .read<PartnerAppState>()
-                                .acceptOrder(orderId)
+                            ? () async {
+                                await context
+                                    .read<PartnerAppState>()
+                                    .acceptOrder(orderId);
+                                if (!context.mounted) return;
+                                showSnackBar(
+                                  context,
+                                  message: 'Order accepted',
+                                );
+                              }
                             : null,
                         child: const Text('Accept OnRamp Order'),
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: hasOrder
-                            ? () => context
-                                .read<PartnerAppState>()
-                                .completeOrder(orderId)
+                            ? () async {
+                                await context
+                                    .read<PartnerAppState>()
+                                    .completeOrder(orderId);
+                                if (!context.mounted) return;
+                                showSnackBar(
+                                  context,
+                                  message: 'Order completed',
+                                );
+                              }
                             : null,
                         child: const Text('Complete OnRamp Order'),
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: hasOrder
-                            ? () => context.read<PartnerAppState>().rejectOrder(
-                                  orderId: orderId,
-                                  reason: 'Reject reason',
-                                )
+                            ? () async {
+                                await context
+                                    .read<PartnerAppState>()
+                                    .rejectOrder(
+                                      orderId: orderId,
+                                      reason: 'Reject reason',
+                                    );
+                                if (!context.mounted) return;
+                                showSnackBar(
+                                  context,
+                                  message: 'Order rejected',
+                                );
+                              }
                             : null,
                         child: const Text('Reject OnRamp Order'),
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: hasOrder
-                            ? () => context.read<PartnerAppState>().failOrder(
-                                  orderId: orderId,
-                                  reason: 'Fail reason',
-                                )
+                            ? () async {
+                                await context.read<PartnerAppState>().failOrder(
+                                      orderId: orderId,
+                                      reason: 'Fail reason',
+                                    );
+                                if (!context.mounted) return;
+                                showSnackBar(context, message: 'Order failed');
+                              }
                             : null,
                         child: const Text('Fail OnRamp Order'),
                       ),
                     ],
                   );
                 },
-              )
+              ),
             ],
           ),
         ),
