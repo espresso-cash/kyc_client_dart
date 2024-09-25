@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:cryptography/cryptography.dart' hide Hash, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
-import 'package:http/http.dart';
-import 'package:kyc_client_dart/kyc_client_dart.dart';
-import 'package:kyc_client_dart/src/data/client.dart';
+import 'package:dio/dio.dart';
+import 'package:kyc_client_dart/src/api/export.dart';
+import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
+import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
 import 'package:solana/base58.dart';
 
@@ -23,27 +23,32 @@ class KycPartnerClient {
   late String _authPublicKey;
 
   late String _token;
-  late KycApiClient _apiClient;
+  late KycServiceClient _apiClient;
 
-  late SecretBox _secretBox;
   late SigningKey _signingKey;
 
-  Future<void> init({
-    required String partnerToken,
-    required String secretKey,
-  }) async {
-    await _generateAuthToken(partnerToken);
-    await _initializeEncryption(secretKey);
+  Future<void> init() async {
+    await _generateAuthToken();
+    await _initializeEncryption();
   }
 
-  Future<void> _generateAuthToken(String partnerToken) async {
+  Future<void> _initializeEncryption() async {
+    _signingKey = SigningKey.fromValidBytes(
+      Uint8List.fromList(
+        await authKeyPair.extractPrivateKeyBytes() +
+            base58decode(_authPublicKey),
+      ),
+    );
+  }
+
+  Future<void> _generateAuthToken() async {
     _authPublicKey = await authKeyPair
         .extractPublicKey()
         .then((value) => value.bytes)
         .then(base58encode);
 
     final partnerTokenData = jwt.JWT(
-      {'delegated': partnerToken},
+      <String, String>{},
       issuer: _authPublicKey,
     );
 
@@ -55,80 +60,98 @@ class KycPartnerClient {
       algorithm: jwt.JWTAlgorithm.EdDSA,
     );
 
-    _apiClient = KycApiClient(_token, baseUrl: baseUrl);
+    final dio = Dio()..interceptors.add(AuthInterceptor(_token));
+    _apiClient = KycServiceClient(dio, baseUrl: baseUrl);
   }
 
-  Future<Map<String, String>> getData({
-    required List<DataInfoKeys> keys,
+  Future<Map<String, dynamic>> getData({
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await _apiClient.getData(
-      {'keys': keys.map((e) => e.value).toList()},
-    ).then((e) => e.data);
+    final response = await _apiClient
+        .kycServiceGetData(body: V1GetDataRequest(publicKey: userPK))
+        .then((e) => e.data.toJson());
 
     final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 
-    final Map<String, String> results = {};
+    return Map.fromEntries(
+      await Future.wait(
+        response.entries.map((entry) async {
+          final signedDataRaw = entry.value as String;
 
-    for (final key in keys) {
-      final signedDataRaw =
-          response.firstWhereOrNull((e) => e.key == key.value);
+          final signedMessage = SignedMessage.fromList(
+            signedMessage: base64Decode(signedDataRaw),
+          );
 
-      if (signedDataRaw == null) {
-        results[key.value] = '';
-        continue;
-      }
+          if (signedDataRaw.isEmpty) return MapEntry(entry.key, '');
 
-      final signedMessage = SignedMessage.fromList(
-        signedMessage: base64Decode(signedDataRaw.value),
-      );
-      final result =
-          verifyKey.verifySignedMessage(signedMessage: signedMessage);
+          if (!verifyKey.verifySignedMessage(signedMessage: signedMessage)) {
+            throw Exception('Invalid signature for key: $entry');
+          }
 
-      if (!result) throw Exception('Invalid signature for key: $key');
+          final encryptedData = Uint8List.fromList(signedMessage.message);
+          final decrypted = box.decrypt(
+            EncryptedMessage(
+              nonce: encryptedData.sublist(0, TweetNaCl.nonceLength),
+              cipherText: encryptedData.sublist(TweetNaCl.nonceLength),
+            ),
+          );
 
-      final encryptedData = base64Encode(signedMessage.message);
-      final decrypted =
-          box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
+          if (entry.key == 'photoSelfie' || entry.key == 'photoIdCard') {
+            return MapEntry(entry.key, decrypted);
+          }
 
-      results[key.value] = utf8.decode(decrypted);
-    }
-
-    return results;
-  }
-
-  Future<void> setValidationResult({
-    required ValidationResultKeys key,
-    required String value,
-  }) async {
-    final valueBytes = utf8.encode(value);
-    final signedEncrypted = _encryptAndSign(Uint8List.fromList(valueBytes));
-
-    await _apiClient.setValidationResult(
-      DataEntry(key: key.value, value: base64Encode(signedEncrypted.toList())),
+          return MapEntry(entry.key, utf8.decode(decrypted));
+        }),
+      ),
     );
   }
 
-  Future<String> getValidationResult({
-    required ValidationResultKeys key,
-    required String validatorPK,
+  Future<void> setValidationResult({
+    required V1ValidationData value,
+    required String userPK,
     required String secretKey,
   }) async {
+    SignedMessage encryptAndSign(Uint8List data) {
+      final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+      final encrypted = box.encrypt(data);
+      return _signingKey.sign(Uint8List.fromList(encrypted));
+    }
+
+    final encryptedValue = value.encryptAndSign(encryptAndSign);
+
+    await _apiClient.kycServiceSetValidationResult(
+      body: V1SetValidationResultRequest(
+        data: encryptedValue,
+        userPublicKey: userPK,
+      ),
+    );
+  }
+
+  Future<String?> getValidationResult({
+    required String key,
+    required String validatorPK,
+    required String secretKey,
+    required String userPK,
+  }) async {
     final response = await _apiClient
-        .getValidationResult(
-          ValidationRequestDto(
-            key: key.value,
-            validator: validatorPK,
+        .kycServiceGetValidationResult(
+          body: V1GetValidationResultRequest(
+            userPublicKey: userPK,
+            validatorPublicKey: validatorPK,
           ),
         )
-        .then((e) => e.value);
+        .then((e) => e.data.toJson());
+
+    final data = response[key] as String?;
+
+    if (data == null) return null;
 
     final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
 
     final signedMessage = SignedMessage.fromList(
-      signedMessage: base64Decode(response),
+      signedMessage: base64Decode(data),
     );
 
     final encryptedData = base64Encode(signedMessage.message);
@@ -138,64 +161,83 @@ class KycPartnerClient {
     return utf8.decode(decrypted);
   }
 
-  Future<Uint8List> download({
-    required DataFileKeys key,
+  Future<void> validateField({
+    required V1ValidationData value,
     required String userPK,
     required String secretKey,
   }) async {
-    final downloadUrl = await _apiClient
-        .createDownloadUrl({'fileName': key.value}).then((e) => e.url);
+    final updatedEmail = value.email != null ? await _hash(value.email!) : null;
+    final updatedPhone = value.phone != null ? await _hash(value.phone!) : null;
 
-    final response = await get(Uri.parse(downloadUrl));
-    final encryptedData = response.bodyBytes;
+    final updatedValue = value.copyWith(
+      email: updatedEmail,
+      phone: updatedPhone,
+    );
 
-    final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
-    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
-
-    final signedMessage = SignedMessage.fromList(signedMessage: encryptedData);
-    final result = verifyKey.verifySignedMessage(signedMessage: signedMessage);
-
-    if (!result) throw Exception('Invalid signature');
-
-    final data = base64Encode(signedMessage.message);
-    final decrypted =
-        box.decrypt(EncryptedMessage.fromList(base64Decode(data)));
-
-    return decrypted;
-  }
-
-  Future<void> validateField(
-    ValidationResultKeys key,
-    String validatedField,
-  ) async {
     await setValidationResult(
-      key: key,
-      value: await _hash(validatedField),
+      value: updatedValue,
+      userPK: userPK,
+      secretKey: secretKey,
     );
   }
 
-  Future<String> _hash(String value) async {
-    const hex = Base16Encoder.instance;
+  Future<V1GetOrderResponse> getOrder(String orderId) async =>
+      _apiClient.kycServiceGetOrder(body: V1GetOrderRequest(orderId: orderId));
 
-    const hasher = Hash.blake2b;
-    final hash = hex.encode(hasher(value));
+  Future<V1GetPartnerOrdersResponse> getPartnerOrders() async =>
+      _apiClient.kycServiceGetPartnerOrders();
 
-    return hash;
-  }
+  Future<V1AcceptOrderResponse> acceptOrder(String orderId) async => _apiClient
+      .kycServiceAcceptOrder(body: V1AcceptOrderRequest(orderId: orderId));
 
-  Future<void> _initializeEncryption(String secretKey) async {
-    final secretKeyBytes = base58decode(secretKey);
-    _secretBox = SecretBox(Uint8List.fromList(secretKeyBytes));
-    _signingKey = SigningKey.fromValidBytes(
-      Uint8List.fromList(
-        await authKeyPair.extractPrivateKeyBytes() +
-            base58decode(_authPublicKey),
-      ),
-    );
-  }
+  Future<V1CompleteOrderResponse> completeOrder(String orderId) async =>
+      _apiClient.kycServiceCompleteOrder(
+        body: V1CompleteOrderRequest(orderId: orderId),
+      );
 
-  SignedMessage _encryptAndSign(Uint8List data) {
-    final encrypted = _secretBox.encrypt(data);
-    return _signingKey.sign(Uint8List.fromList(encrypted));
+  Future<V1FailOrderResponse> failOrder({
+    required String orderId,
+    required String reason,
+  }) async =>
+      _apiClient.kycServiceFailOrder(
+        body: V1FailOrderRequest(orderId: orderId, reason: reason),
+      );
+
+  Future<V1RejectOrderResponse> rejectOrder({
+    required String orderId,
+    required String reason,
+  }) async =>
+      _apiClient.kycServiceRejectOrder(
+        body: V1RejectOrderRequest(orderId: orderId, reason: reason),
+      );
+}
+
+Future<String> _hash(String value) async {
+  const hex = Base16Encoder.instance;
+
+  const hasher = Hash.blake2b;
+  final hash = hex.encode(hasher(value));
+
+  return hash;
+}
+
+extension V1ValidationDataExtensions on V1ValidationData {
+  V1ValidationData encryptAndSign(
+    SignedMessage Function(Uint8List) encryptAndSign,
+  ) =>
+      V1ValidationData(
+        email: _encryptAndEncode(email, encryptAndSign),
+        phone: _encryptAndEncode(phone, encryptAndSign),
+        kycSmileId: _encryptAndEncode(kycSmileId, encryptAndSign),
+      );
+
+  String? _encryptAndEncode(
+    String? value,
+    SignedMessage Function(Uint8List) encryptAndSign,
+  ) {
+    if (value == null) return null;
+    final encryptedData =
+        encryptAndSign(Uint8List.fromList(utf8.encode(value)));
+    return base64Encode(encryptedData);
   }
 }

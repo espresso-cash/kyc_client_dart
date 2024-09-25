@@ -14,29 +14,36 @@ class UserView extends StatefulWidget {
 class _UserViewState extends State<UserView> {
   final _emailController = TextEditingController();
   final _nameController = TextEditingController();
+
+  final _amountController = TextEditingController();
+  final _currencyController = TextEditingController();
+
   XFile? _file;
 
   @override
   void initState() {
     super.initState();
     context.read<PartnerAppState>().createPartner();
-    context.read<WalletAppState>().addListener(_handlePartnerTokenGenerated);
+
+    context.read<WalletAppState>().addListener(_updateControllers);
+  }
+
+  void _updateControllers() {
+    final state = context.read<WalletAppState>();
+    _emailController.text = state.email ?? '';
+    _nameController.text = state.phone ?? '';
   }
 
   @override
   void dispose() {
-    context.read<WalletAppState>().removeListener(_handlePartnerTokenGenerated);
+    _emailController.dispose();
+    _nameController.dispose();
+    _amountController.dispose();
+    _currencyController.dispose();
+
+    context.read<WalletAppState>().removeListener(_updateControllers);
+
     super.dispose();
-  }
-
-  void _handlePartnerTokenGenerated() {
-    final partnerState = context.read<PartnerAppState>();
-    final walletState = context.read<WalletAppState>();
-
-    partnerState.generateAuthToken(
-      walletState.partnerToken,
-      walletState.rawSecretKey,
-    );
   }
 
   @override
@@ -53,7 +60,7 @@ class _UserViewState extends State<UserView> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                child: const Text('New wallet'),
+                child: const Text('Init wallet'),
                 onPressed: () => context.read<WalletAppState>().createWallet(),
               ),
               const SizedBox(height: 16),
@@ -97,7 +104,7 @@ class _UserViewState extends State<UserView> {
 
                     await context.read<WalletAppState>().updateData(
                           email: _emailController.text,
-                          name: _nameController.text,
+                          phone: _nameController.text,
                           file: _file,
                         );
 
@@ -111,17 +118,18 @@ class _UserViewState extends State<UserView> {
               const SizedBox(height: 16),
               const CustomDivider(),
               const SizedBox(height: 16),
-              ValueField(
-                title: 'Partner token',
-                value: state.partnerToken,
-              ),
               Consumer<PartnerAppState>(
                 builder: (context, partnerState, child) => ElevatedButton(
-                  onPressed: () =>
-                      context.read<WalletAppState>().generatePartnerToken(
-                            partnerState.authPublicKey,
-                          ),
-                  child: const Text('Generate partner token'),
+                  onPressed: () async {
+                    await context.read<WalletAppState>().grantPartnerAccess(
+                          partnerState.authPublicKey,
+                        );
+
+                    if (!context.mounted) return;
+
+                    showSnackBar(context, message: 'Granted partner access');
+                  },
+                  child: const Text('Grant partner access'),
                 ),
               ),
               const SizedBox(height: 16),
@@ -141,6 +149,32 @@ class _UserViewState extends State<UserView> {
                           ),
                   child: const Text('Fetch partner info'),
                 ),
+              ),
+              const SizedBox(height: 16),
+              ValueTextfield(
+                controller: _amountController,
+                title: 'Amount',
+              ),
+              const SizedBox(height: 8),
+              ValueTextfield(
+                controller: _currencyController,
+                title: 'Cryptocurrency',
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  final partnerPk =
+                      context.read<PartnerAppState>().authPublicKey;
+
+                  await context.read<WalletAppState>().createOnRampOrder(
+                        amount: _amountController.text,
+                        currency: _currencyController.text,
+                        partnerPK: partnerPk,
+                      );
+                  if (!context.mounted) return;
+                  showSnackBar(context, message: 'Order created');
+                },
+                child: const Text('Create Onramp Order'),
               ),
             ],
           ),

@@ -17,7 +17,7 @@ dependencies:
     path: ../
   provider: ^6.1.2
   shared_preferences: ^2.2.3
-  solana: ^0.30.4
+  solana: ^0.31.0
 
 dev_dependencies:
   mews_pedantic: ^0.28.0

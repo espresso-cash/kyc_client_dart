@@ -15,7 +15,7 @@ dependencies:
   json_annotation: ^4.9.0
   pinenacl: ^0.6.0
   retrofit: ^4.0.3
-  solana: ^0.30.4
+  solana: ^0.31.0
 
 dev_dependencies:
   build_runner: ^2.4.7
@@ -23,4 +23,11 @@ dev_dependencies:
   json_serializable: ^6.7.1
   mews_pedantic: ^0.26.0
   retrofit_generator: ^8.0.6
+  swagger_parser: ^1.18.1
   test: ^1.24.0
+
+swagger_parser:
+  schema_path: schemes/kyc_service.json
+  output_directory: lib/src/api
+  json_serializer: freezed
+  root_client: false

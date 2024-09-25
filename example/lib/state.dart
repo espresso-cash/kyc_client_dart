@@ -11,31 +11,36 @@ class WalletAppState extends ChangeNotifier {
   Ed25519HDKeyPair? get wallet => _wallet;
   String get authPublicKey => _authPublicKey;
   String get rawSecretKey => _rawSecretKey;
-  String get partnerToken => _partnerToken;
   PartnerModel? get partnerInfo => _partnerInfo;
 
   Ed25519HDKeyPair? _wallet;
 
   late String _authPublicKey = '';
-  String _partnerToken = '';
   late String _rawSecretKey = '';
 
   PartnerModel? _partnerInfo;
 
   late KycUserClient _client;
 
+  String? _email;
+  String? _phone;
+  String? _orderId;
+
+  String? get email => _email;
+  String? get phone => _phone;
+  String? get orderId => _orderId;
+
   Future<void> createWallet() async {
-    _partnerToken = '';
-    // _wallet = await Ed25519HDKeyPair.random();
-    _wallet = await Ed25519HDKeyPair.fromMnemonic(
-      'add Mnemonic',
-    );
+    _wallet = await Ed25519HDKeyPair.random();
+
+    // _wallet = await Ed25519HDKeyPair.fromMnemonic('');
 
     _client = KycUserClient(
       sign: (data) async {
         final signature = await _wallet!.sign(data);
         return signature;
       },
+      baseUrl: 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
     );
 
     await _client.init(walletAddress: _wallet!.publicKey.toString());
@@ -44,11 +49,16 @@ class WalletAppState extends ChangeNotifier {
     _authPublicKey = _client.authPublicKey;
 
     notifyListeners();
+
+    await fetchData();
+
+    // const orderId = '68f98607-e6ba-4557-b2c8-cfab91d10963';
+    // _orderId = orderId;
+    // await fetchOrder(orderId);
   }
 
-  Future<void> generatePartnerToken(String partnerPK) async {
-    _partnerToken = await _client.generatePartnerToken(partnerPK);
-
+  Future<void> grantPartnerAccess(String partnerPK) async {
+    await _client.grantPartnerAccess(partnerPK);
     notifyListeners();
   }
 
@@ -60,22 +70,61 @@ class WalletAppState extends ChangeNotifier {
 
   Future<void> updateData({
     required String email,
-    required String name,
+    required String phone,
     XFile? file,
   }) async {
     await _client.setData(
-      data: {
-        DataInfoKeys.email: email,
-        DataInfoKeys.phone: name,
-      },
+      data: V1UserData(
+        email: email,
+        phone: phone,
+      ),
+      selfie: await file?.readAsBytes(),
+      idCard: null,
     );
 
-    if (file != null) {
-      await _client.upload(
-        file: await file.readAsBytes(),
-        key: DataFileKeys.photo,
+    _email = email;
+    _phone = phone;
+
+    notifyListeners();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      final data = await _client.getData(
+        userPK: _authPublicKey,
+        secretKey: _rawSecretKey,
       );
+
+      _email = data['email'] as String? ?? '-';
+      _phone = data['phone'] as String? ?? '-';
+
+      notifyListeners();
+    } on Exception {
+      //ignore, new wallet/nodata
     }
+  }
+
+  Future<void> createOnRampOrder({
+    required String amount,
+    required String currency,
+    required String partnerPK,
+  }) async {
+    final orderId = await _client.createOrder(
+      partnerPK: partnerPK,
+      cryptoAmount: amount,
+      cryptoCurrency: currency,
+    );
+
+    print('orderId: $orderId');
+
+    _orderId = orderId;
+    notifyListeners();
+  }
+
+  Future<void> fetchOrder(String orderId) async {
+    final data = await _client.getOrder(orderId);
+
+    print(data.toJson());
   }
 }
 
@@ -85,12 +134,16 @@ class PartnerAppState extends ChangeNotifier {
   String get phone => _phone;
   XFile? get file => _file;
   String? get validationResult => _result;
+  String? get orderData => _orderData;
+  String? get orders => _orders?.map((order) => order).join('\n\n');
 
   late String _authPublicKey = '';
   late String _email = '';
   late String _phone = '';
   XFile? _file;
   String? _result;
+  String? _orderData;
+  List<String>? _orders;
 
   late KycPartnerClient _client;
 
@@ -98,7 +151,12 @@ class PartnerAppState extends ChangeNotifier {
     final keyPair = await Ed25519().newKeyPairFromSeed(
       base58decode('8ui6TQMfAudigNuKycopDyZ6irMeS7DTSe73d2gzv1Hz'),
     );
-    _client = KycPartnerClient(authKeyPair: keyPair);
+    _client = KycPartnerClient(
+      authKeyPair: keyPair,
+      baseUrl: 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
+    );
+
+    await _client.init();
 
     _authPublicKey = await keyPair
         .extractPublicKey()
@@ -108,16 +166,15 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> generateAuthToken(String partnerToken, String secretKey) async {
-    await _client.init(partnerToken: partnerToken, secretKey: secretKey);
-
-    notifyListeners();
-  }
-
-  Future<void> setValidationResult(String message) async {
+  Future<void> setValidationResult({
+    required String message,
+    required String userPK,
+    required String secretKey,
+  }) async {
     await _client.setValidationResult(
-      key: ValidationResultKeys.smileId,
-      value: message,
+      value: V1ValidationData(kycSmileId: message),
+      userPK: userPK,
+      secretKey: secretKey,
     );
   }
 
@@ -126,8 +183,9 @@ class PartnerAppState extends ChangeNotifier {
     required String userPK,
   }) async {
     final response = await _client.getValidationResult(
-      key: ValidationResultKeys.smileId,
+      key: 'kycSmileId',
       validatorPK: _authPublicKey,
+      userPK: userPK,
       secretKey: secretKey,
     );
 
@@ -136,27 +194,58 @@ class PartnerAppState extends ChangeNotifier {
   }
 
   Future<void> fetchData(String secretKey, String userPK) async {
-    final keys = [DataInfoKeys.email, DataInfoKeys.phone];
-
     final data = await _client.getData(
-      keys: keys,
       userPK: userPK,
       secretKey: secretKey,
     );
 
-    _email = data[DataInfoKeys.email.value] ?? '-';
-    _phone = data[DataInfoKeys.phone.value] ?? '-';
+    _email = data['email'] as String? ?? '-';
+    _phone = data['phone'] as String? ?? '-';
+
+    final selfie = data['photoSelfie'];
+
+    if (selfie != null && selfie is Uint8List) {
+      _file = XFile.fromData(selfie);
+    }
 
     notifyListeners();
+  }
 
-    final file = await _client.download(
-      key: DataFileKeys.photo,
-      userPK: userPK,
-      secretKey: secretKey,
-    );
+  Future<void> fetchOrder(String orderId) async {
+    final data = await _client.getOrder(orderId);
 
-    _file = XFile.fromData(file);
+    _orderData = data.toJson().toString();
 
     notifyListeners();
+  }
+
+  Future<void> fetchPartnerOrders() async {
+    final data = await _client.getPartnerOrders();
+
+    _orders = data.orders.map((e) => e.toJson().toString()).toList();
+
+    notifyListeners();
+  }
+
+  Future<void> completeOrder(String orderId) async {
+    await _client.completeOrder(orderId);
+  }
+
+  Future<void> acceptOrder(String orderId) async {
+    await _client.acceptOrder(orderId);
+  }
+
+  Future<void> failOrder({
+    required String orderId,
+    required String reason,
+  }) async {
+    await _client.failOrder(orderId: orderId, reason: reason);
+  }
+
+  Future<void> rejectOrder({
+    required String orderId,
+    required String reason,
+  }) async {
+    await _client.rejectOrder(orderId: orderId, reason: reason);
   }
 }

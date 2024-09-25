@@ -1,0 +1,881 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "espressocash/kyc/v1/kyc.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "KycService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/acceptOrder": {
+      "post": {
+        "operationId": "KycService_AcceptOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AcceptOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AcceptOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/completeOrder": {
+      "post": {
+        "operationId": "KycService_CompleteOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompleteOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CompleteOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/createOnRampOrder": {
+      "post": {
+        "operationId": "KycService_CreateOnRampOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOnRampOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOnRampOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/failOrder": {
+      "post": {
+        "operationId": "KycService_FailOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1FailOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1FailOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/getData": {
+      "post": {
+        "operationId": "KycService_GetData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/getInfo": {
+      "post": {
+        "operationId": "KycService_GetInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetInfoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetInfoRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/getOrder": {
+      "post": {
+        "operationId": "KycService_GetOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/getPartnerInfo": {
+      "post": {
+        "operationId": "KycService_GetPartnerInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetPartnerInfoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetPartnerInfoRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/getPartnerOrders": {
+      "post": {
+        "operationId": "KycService_GetPartnerOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetPartnerOrdersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetPartnerOrdersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/getValidationResult": {
+      "post": {
+        "operationId": "KycService_GetValidationResult",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetValidationResultResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetValidationResultRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/grantAccess": {
+      "post": {
+        "operationId": "KycService_GrantAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GrantAccessResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GrantAccessRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/initStorage": {
+      "post": {
+        "operationId": "KycService_InitStorage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InitStorageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InitStorageRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/rejectOrder": {
+      "post": {
+        "operationId": "KycService_RejectOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RejectOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RejectOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/setData": {
+      "post": {
+        "operationId": "KycService_SetData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SetDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SetDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/setValidationResult": {
+      "post": {
+        "operationId": "KycService_SetValidationResult",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SetValidationResultResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SetValidationResultRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1AcceptOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1AcceptOrderResponse": {
+      "type": "object"
+    },
+    "v1CompleteOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompleteOrderResponse": {
+      "type": "object"
+    },
+    "v1CreateOnRampOrderRequest": {
+      "type": "object",
+      "properties": {
+        "partnerPublicKey": {
+          "type": "string"
+        },
+        "cryptoAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "cryptoCurrency": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateOnRampOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1FailOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "v1FailOrderResponse": {
+      "type": "object"
+    },
+    "v1GetDataRequest": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetDataResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/v1UserData"
+        }
+      }
+    },
+    "v1GetInfoRequest": {
+      "type": "object"
+    },
+    "v1GetInfoResponse": {
+      "type": "object",
+      "properties": {
+        "encryptedSecretKey": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "publicKey": {
+          "type": "string"
+        },
+        "walletAddress": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "partnerPublicKey": {
+          "type": "string"
+        },
+        "userPublicKey": {
+          "type": "string"
+        },
+        "onRamp": {
+          "$ref": "#/definitions/v1OnRampData"
+        }
+      }
+    },
+    "v1GetPartnerInfoRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetPartnerInfoResponse": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "publicKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetPartnerOrdersRequest": {
+      "type": "object"
+    },
+    "v1GetPartnerOrdersResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GetOrderResponse"
+          }
+        }
+      }
+    },
+    "v1GetValidationResultRequest": {
+      "type": "object",
+      "properties": {
+        "userPublicKey": {
+          "type": "string"
+        },
+        "validatorPublicKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetValidationResultResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/v1ValidationData"
+        }
+      }
+    },
+    "v1GrantAccessRequest": {
+      "type": "object",
+      "properties": {
+        "validatorPublicKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GrantAccessResponse": {
+      "type": "object"
+    },
+    "v1InitStorageRequest": {
+      "type": "object",
+      "properties": {
+        "walletAddress": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "encryptedSecretKey": {
+          "type": "string"
+        },
+        "walletProofSignature": {
+          "type": "string"
+        },
+        "walletProofMessage": {
+          "type": "string"
+        }
+      }
+    },
+    "v1InitStorageResponse": {
+      "type": "object"
+    },
+    "v1OnRampData": {
+      "type": "object",
+      "properties": {
+        "cryptoAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "cryptoCurrency": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RejectOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RejectOrderResponse": {
+      "type": "object"
+    },
+    "v1SetDataRequest": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/v1UserData"
+        }
+      }
+    },
+    "v1SetDataResponse": {
+      "type": "object"
+    },
+    "v1SetValidationResultRequest": {
+      "type": "object",
+      "properties": {
+        "userPublicKey": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/v1ValidationData"
+        }
+      }
+    },
+    "v1SetValidationResultResponse": {
+      "type": "object"
+    },
+    "v1UserData": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "nullable": true
+        },
+        "phone": {
+          "type": "string",
+          "nullable": true
+        },
+        "firstName": {
+          "type": "string",
+          "nullable": true
+        },
+        "middleName": {
+          "type": "string",
+          "nullable": true
+        },
+        "lastName": {
+          "type": "string",
+          "nullable": true
+        },
+        "dob": {
+          "type": "string",
+          "nullable": true
+        },
+        "countryCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "idType": {
+          "type": "string",
+          "nullable": true
+        },
+        "idNumber": {
+          "type": "string",
+          "nullable": true
+        },
+        "photoIdCard": {
+          "type": "string",
+          "nullable": true
+        },
+        "photoSelfie": {
+          "type": "string",
+          "nullable": true
+        },
+        "bankAccountNumber": {
+          "type": "string",
+          "nullable": true
+        },
+        "bankCode": {
+          "type": "string",
+          "nullable": true
+        }
+      }
+    },
+    "v1ValidationData": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "nullable": true
+        },
+        "phone": {
+          "type": "string",
+          "nullable": true
+        },
+        "kycSmileId": {
+          "type": "string",
+          "nullable": true
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}
