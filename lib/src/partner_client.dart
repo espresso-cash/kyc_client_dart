@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cryptography/cryptography.dart' hide Hash, SecretBox;
+import 'package:cryptography/cryptography.dart' hide Hash, PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
 import 'package:kyc_client_dart/src/api/export.dart';
@@ -210,6 +210,25 @@ class KycPartnerClient {
       _apiClient.kycServiceRejectOrder(
         body: V1RejectOrderRequest(orderId: orderId, reason: reason),
       );
+
+  Future<V1GetInfoResponse> getUserInfo(String userPK) async {
+    final info = await _apiClient.kycServiceGetInfo(
+      body: V1GetInfoRequest(publicKey: userPK),
+    );
+
+    print('encrypted secret key: ${info.encryptedSecretKey}');
+
+    final encodedSecretKey = base64Decode(info.encryptedSecretKey);
+
+    final privateKeyBytes = await authKeyPair.extractPrivateKeyBytes();
+    final privateKey = PrivateKey(Uint8List.fromList(privateKeyBytes));
+    final sealedBox = SealedBox(privateKey);
+
+    final decryptedSecretKey = sealedBox.decrypt(encodedSecretKey);
+    print(decryptedSecretKey);
+
+    return info;
+  }
 }
 
 Future<String> _hash(String value) async {

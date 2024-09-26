@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:cryptography/cryptography.dart' hide SecretBox;
+import 'package:cryptography/cryptography.dart' hide PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
 import 'package:kyc_client_dart/src/api/export.dart';
@@ -132,10 +132,17 @@ class KycUserClient {
       .then((e) => PartnerModel.fromJson(e.toJson()));
 
   Future<void> grantPartnerAccess(String partnerPK) async {
+    final partnerPublicKey =
+        PublicKey(Uint8List.fromList(base58decode(partnerPK)));
+    final sealedBox = SealedBox(partnerPublicKey);
+    final encodedSecretKey =
+        base64Encode(sealedBox.encrypt(base64Decode(_rawSecretKey)));
+
     await _apiClient.kycServiceGrantAccess(
       body: V1GrantAccessRequest(
-          validatorPublicKey: partnerPK,
-          encryptedSecretKey: _encryptedSecretKey),
+        validatorPublicKey: partnerPK,
+        encryptedSecretKey: encodedSecretKey,
+      ),
     );
   }
 
