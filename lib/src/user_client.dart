@@ -131,9 +131,12 @@ class KycUserClient {
       .kycServiceGetPartnerInfo(body: V1GetPartnerInfoRequest(id: partnerPK))
       .then((e) => PartnerModel.fromJson(e.toJson()));
 
-  Future<void> grantPartnerAccess(String partnerPK) async {
+  Future<void> grantPartnerAccess(
+    String partnerPK,
+    String partnerPKforEncryption,
+  ) async {
     final partnerPublicKey =
-        PublicKey(Uint8List.fromList(base58decode(partnerPK)));
+        PublicKey(Uint8List.fromList(base58decode(partnerPKforEncryption)));
     final sealedBox = SealedBox(partnerPublicKey);
     final encodedSecretKey =
         base64Encode(sealedBox.encrypt(base64Decode(_rawSecretKey)));

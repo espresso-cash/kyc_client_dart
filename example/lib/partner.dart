@@ -26,6 +26,16 @@ class _PartnerViewState extends State<PartnerView> {
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  final walletState = context.read<WalletAppState>();
+
+                  await state.getUserInfo(walletState.authPublicKey);
+                },
+                child: const Text('Get info'),
+              ),
+              const CustomDivider(),
+              const SizedBox(height: 16),
               ValueField(
                 title: 'Auth public key',
                 value: state.authPublicKey,
