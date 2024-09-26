@@ -32,6 +32,21 @@ class _PartnerViewState extends State<PartnerView> {
               ),
               const CustomDivider(),
               const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  final walletState = context.read<WalletAppState>();
+
+                  await state.getUserSecretKey(walletState.authPublicKey);
+                },
+                child: const Text('Get User SecretKey'),
+              ),
+              const SizedBox(height: 16),
+              ValueField(
+                title: 'User secret key',
+                value: state.userSecretKey,
+              ),
+              const CustomDivider(),
+              const SizedBox(height: 16),
               ValueTextfield(
                 controller: _messageController,
                 title: 'Validation Result',
