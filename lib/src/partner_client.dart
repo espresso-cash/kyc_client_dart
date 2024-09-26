@@ -239,7 +239,7 @@ class KycPartnerClient {
     final sealedBox = SealedBox(privateKey);
 
     final decryptedSecretKey = sealedBox.decrypt(encodedSecretKey);
-    print(decryptedSecretKey);
+    print('decryptedSecretKey: ${base64Encode(decryptedSecretKey)}');
 
     return info;
   }
