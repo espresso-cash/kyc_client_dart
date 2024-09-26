@@ -59,9 +59,8 @@ class WalletAppState extends ChangeNotifier {
     // await fetchOrder(orderId);
   }
 
-  Future<void> grantPartnerAccess(
-      String partnerPK, String partnerPKforEncryption) async {
-    await _client.grantPartnerAccess(partnerPK, partnerPKforEncryption);
+  Future<void> grantPartnerAccess(String partnerPK) async {
+    await _client.grantPartnerAccess(partnerPK);
     notifyListeners();
   }
 
@@ -141,7 +140,6 @@ class WalletAppState extends ChangeNotifier {
 
 class PartnerAppState extends ChangeNotifier {
   String get authPublicKey => _authPublicKey;
-  String get partnerPKForEncryption => _partnerPKForEncryption;
   String get email => _email;
   String get phone => _phone;
   XFile? get file => _file;
@@ -150,7 +148,6 @@ class PartnerAppState extends ChangeNotifier {
   String? get orders => _orders?.map((order) => order).join('\n\n');
 
   late String _authPublicKey = '';
-  late String _partnerPKForEncryption = '';
   late String _email = '';
   late String _phone = '';
   XFile? _file;
@@ -164,12 +161,8 @@ class PartnerAppState extends ChangeNotifier {
     final keyPair = await Ed25519().newKeyPairFromSeed(
       base58decode('8ui6TQMfAudigNuKycopDyZ6irMeS7DTSe73d2gzv1Hz'),
     );
-    final encryptionKeyPair = await X25519().newKeyPairFromSeed(
-      base58decode('8ui6TQMfAudigNuKycopDyZ6irMeS7DTSe73d2gzv1Hz'),
-    );
     _client = KycPartnerClient(
       authKeyPair: keyPair,
-      encryptionKeyPair: encryptionKeyPair,
       baseUrl: 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
     );
 
@@ -180,16 +173,7 @@ class PartnerAppState extends ChangeNotifier {
         .then((value) => value.bytes)
         .then(base58encode);
 
-    _partnerPKForEncryption = await encryptionKeyPair
-        .extractPublicKey()
-        .then((value) => value.bytes)
-        .then(base58encode);
-
     notifyListeners();
-  }
-
-  Future<void> getUserInfo(String userPK) async {
-    await _client.getUserInfo(userPK);
   }
 
   Future<void> setValidationResult({

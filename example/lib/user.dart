@@ -123,7 +123,6 @@ class _UserViewState extends State<UserView> {
                   onPressed: () async {
                     await context.read<WalletAppState>().grantPartnerAccess(
                           partnerState.authPublicKey,
-                          partnerState.partnerPKForEncryption,
                         );
 
                     if (!context.mounted) return;

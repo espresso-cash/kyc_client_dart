@@ -14,12 +14,10 @@ import 'package:solana/base58.dart';
 class KycPartnerClient {
   KycPartnerClient({
     required this.authKeyPair,
-    required this.encryptionKeyPair,
     this.baseUrl,
   });
 
   final SimpleKeyPair authKeyPair;
-  final SimpleKeyPair encryptionKeyPair;
   final String? baseUrl;
 
   late String _authPublicKey;
@@ -222,7 +220,7 @@ class KycPartnerClient {
 
     final encodedSecretKey = base64Decode(info.encryptedSecretKey);
 
-    final privateKeyBytes = await encryptionKeyPair.extractPrivateKeyBytes();
+    final privateKeyBytes = await authKeyPair.extractPrivateKeyBytes();
     final privateKey = PrivateKey(Uint8List.fromList(privateKeyBytes));
     final sealedBox = SealedBox(privateKey);
 
