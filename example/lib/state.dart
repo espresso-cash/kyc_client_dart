@@ -188,6 +188,10 @@ class PartnerAppState extends ChangeNotifier {
     );
   }
 
+  Future<void> getUserInfo(String userPK) async {
+    await _client.getUserInfo(userPK);
+  }
+
   Future<void> getValidationResult({
     required String secretKey,
     required String userPK,

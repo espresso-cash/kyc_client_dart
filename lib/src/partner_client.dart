@@ -218,10 +218,24 @@ class KycPartnerClient {
 
     print('encrypted secret key: ${info.encryptedSecretKey}');
 
+    final privateKeyBytes = await authKeyPair.extractPrivateKeyBytes();
+
+    final x25519PrivateKey = Uint8List(32);
+    final result = TweetNaClExt.crypto_sign_ed25519_sk_to_x25519_sk(
+      x25519PrivateKey,
+      Uint8List.fromList(privateKeyBytes),
+    );
+    if (result == 0) {
+      print('Conversion successful!');
+      print('X25519 Public Key: $x25519PrivateKey');
+    } else {
+      print('Conversion failed!');
+    }
+
+    final privateKey = PrivateKey(x25519PrivateKey);
+
     final encodedSecretKey = base64Decode(info.encryptedSecretKey);
 
-    final privateKeyBytes = await authKeyPair.extractPrivateKeyBytes();
-    final privateKey = PrivateKey(Uint8List.fromList(privateKeyBytes));
     final sealedBox = SealedBox(privateKey);
 
     final decryptedSecretKey = sealedBox.decrypt(encodedSecretKey);
