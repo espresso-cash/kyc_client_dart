@@ -211,37 +211,32 @@ class KycPartnerClient {
         body: V1RejectOrderRequest(orderId: orderId, reason: reason),
       );
 
-  Future<V1GetInfoResponse> getUserInfo(String userPK) async {
+  Future<V1GetInfoResponse> getUserInfo(String userPK) async =>
+      _apiClient.kycServiceGetInfo(
+        body: V1GetInfoRequest(publicKey: userPK),
+      );
+
+  Future<String> getUserSecretKey(String userPK) async {
     final info = await _apiClient.kycServiceGetInfo(
       body: V1GetInfoRequest(publicKey: userPK),
     );
 
-    print('encrypted secret key: ${info.encryptedSecretKey}');
+    final encodedSecretKey = base64Decode(info.encryptedSecretKey);
 
     final privateKeyBytes = await authKeyPair.extractPrivateKeyBytes();
-
     final x25519PrivateKey = Uint8List(32);
-    final result = TweetNaClExt.crypto_sign_ed25519_sk_to_x25519_sk(
+
+    TweetNaClExt.crypto_sign_ed25519_sk_to_x25519_sk(
       x25519PrivateKey,
       Uint8List.fromList(privateKeyBytes),
     );
-    if (result == 0) {
-      print('Conversion successful!');
-      print('X25519 Public Key: $x25519PrivateKey');
-    } else {
-      print('Conversion failed!');
-    }
 
     final privateKey = PrivateKey(x25519PrivateKey);
-
-    final encodedSecretKey = base64Decode(info.encryptedSecretKey);
-
     final sealedBox = SealedBox(privateKey);
 
     final decryptedSecretKey = sealedBox.decrypt(encodedSecretKey);
-    print('decryptedSecretKey: ${base64Encode(decryptedSecretKey)}');
 
-    return info;
+    return base64Encode(decryptedSecretKey);
   }
 }
 

@@ -140,6 +140,7 @@ class WalletAppState extends ChangeNotifier {
 
 class PartnerAppState extends ChangeNotifier {
   String get authPublicKey => _authPublicKey;
+  String get userSecretKey => _userSecretKey;
   String get email => _email;
   String get phone => _phone;
   XFile? get file => _file;
@@ -148,6 +149,7 @@ class PartnerAppState extends ChangeNotifier {
   String? get orders => _orders?.map((order) => order).join('\n\n');
 
   late String _authPublicKey = '';
+  late String _userSecretKey = '';
   late String _email = '';
   late String _phone = '';
   XFile? _file;
@@ -190,6 +192,11 @@ class PartnerAppState extends ChangeNotifier {
 
   Future<void> getUserInfo(String userPK) async {
     await _client.getUserInfo(userPK);
+  }
+
+  Future<void> getUserSecretKey(String userPK) async {
+    _userSecretKey = await _client.getUserSecretKey(userPK);
+    notifyListeners();
   }
 
   Future<void> getValidationResult({
