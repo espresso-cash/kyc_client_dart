@@ -27,7 +27,7 @@ class KycUserClient {
   late final SimpleKeyPair _authKeyPair;
   late final String _authPublicKey;
   late final String _token;
-  late final SimpleKeyPair _encryptionKeyPair;
+  late final PrivateKey _encryptionSecretKey;
   late final SecretKey _secretKey;
   late final String _encryptedSecretKey;
   late final String _rawSecretKey;
@@ -36,6 +36,7 @@ class KycUserClient {
   late final KycServiceClient _apiClient;
 
   String get authPublicKey => _authPublicKey;
+
   String get rawSecretKey => _rawSecretKey;
 
   Future<void> init({required String walletAddress}) async {
@@ -86,11 +87,13 @@ class KycUserClient {
     Uint8List seed, {
     String? encryptedSecretKey,
   }) async {
-    _encryptionKeyPair = await X25519().newKeyPairFromSeed(seed);
-    final encryptionSK = PrivateKey(
-      Uint8List.fromList(await _encryptionKeyPair.extractPrivateKeyBytes()),
-    );
-    final sealedBox = SealedBox(encryptionSK);
+    final edSK =
+        Uint8List.fromList(await _authKeyPair.extractPrivateKeyBytes());
+    final xSK = Uint8List(32);
+    TweetNaClExt.crypto_sign_ed25519_sk_to_x25519_sk(xSK, edSK);
+    _encryptionSecretKey = PrivateKey(xSK);
+
+    final sealedBox = SealedBox(_encryptionSecretKey);
 
     _secretKey = encryptedSecretKey == null
         ? await Chacha20.poly1305Aead().newSecretKey()
@@ -134,16 +137,20 @@ class KycUserClient {
   Future<void> grantPartnerAccess(String partnerPK) async {
     final partnerPKBytes = Uint8List.fromList(base58decode(partnerPK));
     final x25519PublicKey = Uint8List(32);
-    
+
     TweetNaClExt.crypto_sign_ed25519_pk_to_x25519_pk(
       x25519PublicKey,
       partnerPKBytes,
     );
 
     final partnerPublicKey = PublicKey(x25519PublicKey);
-    final sealedBox = SealedBox(partnerPublicKey);
-    final encodedSecretKey =
-        base64Encode(sealedBox.encrypt(base64Decode(_rawSecretKey)));
+    final sealedBox = Box(
+      theirPublicKey: partnerPublicKey,
+      myPrivateKey: _encryptionSecretKey,
+    );
+    final encodedSecretKey = base64Encode(
+      sealedBox.encrypt(Uint8List.fromList(base58decode(_rawSecretKey))),
+    );
 
     await _apiClient.kycServiceGrantAccess(
       body: V1GrantAccessRequest(
