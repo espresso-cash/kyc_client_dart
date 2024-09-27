@@ -50,12 +50,11 @@ class KycUserClient {
         body: V1GetInfoRequest(publicKey: _authPublicKey),
       );
       await _initializeEncryption(
-        seed,
         encryptedSecretKey: getInfo.encryptedSecretKey,
       );
     } on DioException catch (e) {
       if (e.response?.statusCode != 404) rethrow;
-      await _initializeEncryption(seed);
+      await _initializeEncryption();
       await _initStorage(walletAddress: walletAddress);
     }
   }
@@ -83,10 +82,7 @@ class KycUserClient {
     );
   }
 
-  Future<void> _initializeEncryption(
-    Uint8List seed, {
-    String? encryptedSecretKey,
-  }) async {
+  Future<void> _initializeEncryption({String? encryptedSecretKey}) async {
     final edSK =
         Uint8List.fromList(await _authKeyPair.extractPrivateKeyBytes());
     final xSK = Uint8List(32);
