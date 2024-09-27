@@ -135,19 +135,17 @@ class KycUserClient {
       .then((e) => PartnerModel.fromJson(e.toJson()));
 
   Future<void> grantPartnerAccess(String partnerPK) async {
-    final partnerPKBytes = Uint8List.fromList(base58decode(partnerPK));
-    final x25519PublicKey = Uint8List(32);
+    final partnerEdPK = Uint8List.fromList(base58decode(partnerPK));
+    final partnerXPK = Uint8List(32);
 
-    TweetNaClExt.crypto_sign_ed25519_pk_to_x25519_pk(
-      x25519PublicKey,
-      partnerPKBytes,
-    );
+    TweetNaClExt.crypto_sign_ed25519_pk_to_x25519_pk(partnerXPK, partnerEdPK);
 
-    final partnerPublicKey = PublicKey(x25519PublicKey);
+    final partnerPublicKey = PublicKey(partnerXPK);
     final sealedBox = Box(
       theirPublicKey: partnerPublicKey,
       myPrivateKey: _encryptionSecretKey,
     );
+
     final encodedSecretKey = base64Encode(
       sealedBox.encrypt(Uint8List.fromList(base58decode(_rawSecretKey))),
     );

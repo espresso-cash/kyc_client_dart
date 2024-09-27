@@ -221,22 +221,35 @@ class KycPartnerClient {
       body: V1GetInfoRequest(publicKey: userPK),
     );
 
-    final encodedSecretKey = base64Decode(info.encryptedSecretKey);
-
-    final privateKeyBytes = await authKeyPair.extractPrivateKeyBytes();
-    final x25519PrivateKey = Uint8List(32);
+    final edSK = await authKeyPair.extractPrivateKeyBytes();
+    final xSK = Uint8List(32);
 
     TweetNaClExt.crypto_sign_ed25519_sk_to_x25519_sk(
-      x25519PrivateKey,
-      Uint8List.fromList(privateKeyBytes),
+      xSK,
+      Uint8List.fromList(edSK),
     );
 
-    final privateKey = PrivateKey(x25519PrivateKey);
-    final sealedBox = SealedBox(privateKey);
+    final userEdPK = Uint8List.fromList(base58decode(userPK));
+    final userXPK = Uint8List(32);
 
-    final decryptedSecretKey = sealedBox.decrypt(encodedSecretKey);
+    TweetNaClExt.crypto_sign_ed25519_pk_to_x25519_pk(
+      userXPK,
+      userEdPK,
+    );
 
-    return base64Encode(decryptedSecretKey);
+    final userPublicKey = PublicKey(userXPK);
+    final privateKey = PrivateKey(xSK);
+
+    final sealedBox = Box(
+      theirPublicKey: userPublicKey,
+      myPrivateKey: privateKey,
+    );
+
+    final encodedSecretKey = base64Decode(info.encryptedSecretKey);
+    final encryptedMessage = EncryptedMessage.fromList(encodedSecretKey);
+    final decryptedSecretKey = sealedBox.decrypt(encryptedMessage);
+
+    return base58encode(decryptedSecretKey);
   }
 }
 
