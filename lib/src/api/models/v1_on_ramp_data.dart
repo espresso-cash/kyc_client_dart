@@ -12,6 +12,10 @@ class V1OnRampData with _$V1OnRampData {
   const factory V1OnRampData({
     required String cryptoAmount,
     required String cryptoCurrency,
+    required String fiatAmount,
+    required String fiatCurrency,
+    required String bankName,
+    required String bankAccount,
   }) = _V1OnRampData;
   
   factory V1OnRampData.fromJson(Map<String, Object?> json) => _$V1OnRampDataFromJson(json);

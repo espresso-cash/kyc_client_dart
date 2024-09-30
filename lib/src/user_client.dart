@@ -245,12 +245,16 @@ class KycUserClient {
     required String partnerPK,
     required String cryptoAmount,
     required String cryptoCurrency,
+    required String fiatAmount,
+    required String fiatCurrency,
   }) async {
     final response = await _apiClient.kycServiceCreateOnRampOrder(
       body: V1CreateOnRampOrderRequest(
         partnerPublicKey: partnerPK,
         cryptoAmount: cryptoAmount,
         cryptoCurrency: cryptoCurrency,
+        fiatAmount: fiatAmount,
+        fiatCurrency: fiatCurrency,
       ),
     );
 

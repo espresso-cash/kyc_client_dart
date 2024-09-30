@@ -24,6 +24,8 @@ mixin _$V1CreateOnRampOrderRequest {
   String get partnerPublicKey => throw _privateConstructorUsedError;
   String get cryptoAmount => throw _privateConstructorUsedError;
   String get cryptoCurrency => throw _privateConstructorUsedError;
+  String get fiatAmount => throw _privateConstructorUsedError;
+  String get fiatCurrency => throw _privateConstructorUsedError;
 
   /// Serializes this V1CreateOnRampOrderRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,7 +45,11 @@ abstract class $V1CreateOnRampOrderRequestCopyWith<$Res> {
           V1CreateOnRampOrderRequest>;
   @useResult
   $Res call(
-      {String partnerPublicKey, String cryptoAmount, String cryptoCurrency});
+      {String partnerPublicKey,
+      String cryptoAmount,
+      String cryptoCurrency,
+      String fiatAmount,
+      String fiatCurrency});
 }
 
 /// @nodoc
@@ -65,6 +71,8 @@ class _$V1CreateOnRampOrderRequestCopyWithImpl<$Res,
     Object? partnerPublicKey = null,
     Object? cryptoAmount = null,
     Object? cryptoCurrency = null,
+    Object? fiatAmount = null,
+    Object? fiatCurrency = null,
   }) {
     return _then(_value.copyWith(
       partnerPublicKey: null == partnerPublicKey
@@ -78,6 +86,14 @@ class _$V1CreateOnRampOrderRequestCopyWithImpl<$Res,
       cryptoCurrency: null == cryptoCurrency
           ? _value.cryptoCurrency
           : cryptoCurrency // ignore: cast_nullable_to_non_nullable
+              as String,
+      fiatAmount: null == fiatAmount
+          ? _value.fiatAmount
+          : fiatAmount // ignore: cast_nullable_to_non_nullable
+              as String,
+      fiatCurrency: null == fiatCurrency
+          ? _value.fiatCurrency
+          : fiatCurrency // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -93,7 +109,11 @@ abstract class _$$V1CreateOnRampOrderRequestImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String partnerPublicKey, String cryptoAmount, String cryptoCurrency});
+      {String partnerPublicKey,
+      String cryptoAmount,
+      String cryptoCurrency,
+      String fiatAmount,
+      String fiatCurrency});
 }
 
 /// @nodoc
@@ -114,6 +134,8 @@ class __$$V1CreateOnRampOrderRequestImplCopyWithImpl<$Res>
     Object? partnerPublicKey = null,
     Object? cryptoAmount = null,
     Object? cryptoCurrency = null,
+    Object? fiatAmount = null,
+    Object? fiatCurrency = null,
   }) {
     return _then(_$V1CreateOnRampOrderRequestImpl(
       partnerPublicKey: null == partnerPublicKey
@@ -128,6 +150,14 @@ class __$$V1CreateOnRampOrderRequestImplCopyWithImpl<$Res>
           ? _value.cryptoCurrency
           : cryptoCurrency // ignore: cast_nullable_to_non_nullable
               as String,
+      fiatAmount: null == fiatAmount
+          ? _value.fiatAmount
+          : fiatAmount // ignore: cast_nullable_to_non_nullable
+              as String,
+      fiatCurrency: null == fiatCurrency
+          ? _value.fiatCurrency
+          : fiatCurrency // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -138,7 +168,9 @@ class _$V1CreateOnRampOrderRequestImpl implements _V1CreateOnRampOrderRequest {
   const _$V1CreateOnRampOrderRequestImpl(
       {required this.partnerPublicKey,
       required this.cryptoAmount,
-      required this.cryptoCurrency});
+      required this.cryptoCurrency,
+      required this.fiatAmount,
+      required this.fiatCurrency});
 
   factory _$V1CreateOnRampOrderRequestImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -150,10 +182,14 @@ class _$V1CreateOnRampOrderRequestImpl implements _V1CreateOnRampOrderRequest {
   final String cryptoAmount;
   @override
   final String cryptoCurrency;
+  @override
+  final String fiatAmount;
+  @override
+  final String fiatCurrency;
 
   @override
   String toString() {
-    return 'V1CreateOnRampOrderRequest(partnerPublicKey: $partnerPublicKey, cryptoAmount: $cryptoAmount, cryptoCurrency: $cryptoCurrency)';
+    return 'V1CreateOnRampOrderRequest(partnerPublicKey: $partnerPublicKey, cryptoAmount: $cryptoAmount, cryptoCurrency: $cryptoCurrency, fiatAmount: $fiatAmount, fiatCurrency: $fiatCurrency)';
   }
 
   @override
@@ -166,13 +202,17 @@ class _$V1CreateOnRampOrderRequestImpl implements _V1CreateOnRampOrderRequest {
             (identical(other.cryptoAmount, cryptoAmount) ||
                 other.cryptoAmount == cryptoAmount) &&
             (identical(other.cryptoCurrency, cryptoCurrency) ||
-                other.cryptoCurrency == cryptoCurrency));
+                other.cryptoCurrency == cryptoCurrency) &&
+            (identical(other.fiatAmount, fiatAmount) ||
+                other.fiatAmount == fiatAmount) &&
+            (identical(other.fiatCurrency, fiatCurrency) ||
+                other.fiatCurrency == fiatCurrency));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, partnerPublicKey, cryptoAmount, cryptoCurrency);
+  int get hashCode => Object.hash(runtimeType, partnerPublicKey, cryptoAmount,
+      cryptoCurrency, fiatAmount, fiatCurrency);
 
   /// Create a copy of V1CreateOnRampOrderRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -196,7 +236,9 @@ abstract class _V1CreateOnRampOrderRequest
   const factory _V1CreateOnRampOrderRequest(
       {required final String partnerPublicKey,
       required final String cryptoAmount,
-      required final String cryptoCurrency}) = _$V1CreateOnRampOrderRequestImpl;
+      required final String cryptoCurrency,
+      required final String fiatAmount,
+      required final String fiatCurrency}) = _$V1CreateOnRampOrderRequestImpl;
 
   factory _V1CreateOnRampOrderRequest.fromJson(Map<String, dynamic> json) =
       _$V1CreateOnRampOrderRequestImpl.fromJson;
@@ -207,6 +249,10 @@ abstract class _V1CreateOnRampOrderRequest
   String get cryptoAmount;
   @override
   String get cryptoCurrency;
+  @override
+  String get fiatAmount;
+  @override
+  String get fiatCurrency;
 
   /// Create a copy of V1CreateOnRampOrderRequest
   /// with the given fields replaced by the non-null parameter values.

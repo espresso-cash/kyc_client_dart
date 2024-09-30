@@ -115,6 +115,8 @@ class WalletAppState extends ChangeNotifier {
       partnerPK: partnerPK,
       cryptoAmount: amount,
       cryptoCurrency: currency,
+      fiatAmount: amount,
+      fiatCurrency: currency,
     );
 
     print('orderId: $orderId');

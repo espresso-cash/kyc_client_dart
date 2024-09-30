@@ -13,6 +13,8 @@ class V1CreateOnRampOrderRequest with _$V1CreateOnRampOrderRequest {
     required String partnerPublicKey,
     required String cryptoAmount,
     required String cryptoCurrency,
+    required String fiatAmount,
+    required String fiatCurrency,
   }) = _V1CreateOnRampOrderRequest;
   
   factory V1CreateOnRampOrderRequest.fromJson(Map<String, Object?> json) => _$V1CreateOnRampOrderRequestFromJson(json);

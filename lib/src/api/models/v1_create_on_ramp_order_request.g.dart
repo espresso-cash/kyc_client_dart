@@ -12,6 +12,8 @@ _$V1CreateOnRampOrderRequestImpl _$$V1CreateOnRampOrderRequestImplFromJson(
       partnerPublicKey: json['partnerPublicKey'] as String,
       cryptoAmount: json['cryptoAmount'] as String,
       cryptoCurrency: json['cryptoCurrency'] as String,
+      fiatAmount: json['fiatAmount'] as String,
+      fiatCurrency: json['fiatCurrency'] as String,
     );
 
 Map<String, dynamic> _$$V1CreateOnRampOrderRequestImplToJson(
@@ -20,4 +22,6 @@ Map<String, dynamic> _$$V1CreateOnRampOrderRequestImplToJson(
       'partnerPublicKey': instance.partnerPublicKey,
       'cryptoAmount': instance.cryptoAmount,
       'cryptoCurrency': instance.cryptoCurrency,
+      'fiatAmount': instance.fiatAmount,
+      'fiatCurrency': instance.fiatCurrency,
     };

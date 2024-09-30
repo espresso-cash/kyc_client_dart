@@ -592,6 +592,13 @@
         },
         "cryptoCurrency": {
           "type": "string"
+        },
+        "fiatAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "fiatCurrency": {
+          "type": "string"
         }
       }
     },
@@ -805,6 +812,19 @@
           "format": "int64"
         },
         "cryptoCurrency": {
+          "type": "string"
+        },
+        "fiatAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "fiatCurrency": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "bankAccount": {
           "type": "string"
         }
       }

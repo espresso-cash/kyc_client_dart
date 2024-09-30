@@ -22,6 +22,10 @@ V1OnRampData _$V1OnRampDataFromJson(Map<String, dynamic> json) {
 mixin _$V1OnRampData {
   String get cryptoAmount => throw _privateConstructorUsedError;
   String get cryptoCurrency => throw _privateConstructorUsedError;
+  String get fiatAmount => throw _privateConstructorUsedError;
+  String get fiatCurrency => throw _privateConstructorUsedError;
+  String get bankName => throw _privateConstructorUsedError;
+  String get bankAccount => throw _privateConstructorUsedError;
 
   /// Serializes this V1OnRampData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +43,13 @@ abstract class $V1OnRampDataCopyWith<$Res> {
           V1OnRampData value, $Res Function(V1OnRampData) then) =
       _$V1OnRampDataCopyWithImpl<$Res, V1OnRampData>;
   @useResult
-  $Res call({String cryptoAmount, String cryptoCurrency});
+  $Res call(
+      {String cryptoAmount,
+      String cryptoCurrency,
+      String fiatAmount,
+      String fiatCurrency,
+      String bankName,
+      String bankAccount});
 }
 
 /// @nodoc
@@ -59,6 +69,10 @@ class _$V1OnRampDataCopyWithImpl<$Res, $Val extends V1OnRampData>
   $Res call({
     Object? cryptoAmount = null,
     Object? cryptoCurrency = null,
+    Object? fiatAmount = null,
+    Object? fiatCurrency = null,
+    Object? bankName = null,
+    Object? bankAccount = null,
   }) {
     return _then(_value.copyWith(
       cryptoAmount: null == cryptoAmount
@@ -68,6 +82,22 @@ class _$V1OnRampDataCopyWithImpl<$Res, $Val extends V1OnRampData>
       cryptoCurrency: null == cryptoCurrency
           ? _value.cryptoCurrency
           : cryptoCurrency // ignore: cast_nullable_to_non_nullable
+              as String,
+      fiatAmount: null == fiatAmount
+          ? _value.fiatAmount
+          : fiatAmount // ignore: cast_nullable_to_non_nullable
+              as String,
+      fiatCurrency: null == fiatCurrency
+          ? _value.fiatCurrency
+          : fiatCurrency // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankName: null == bankName
+          ? _value.bankName
+          : bankName // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankAccount: null == bankAccount
+          ? _value.bankAccount
+          : bankAccount // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -81,7 +111,13 @@ abstract class _$$V1OnRampDataImplCopyWith<$Res>
       __$$V1OnRampDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String cryptoAmount, String cryptoCurrency});
+  $Res call(
+      {String cryptoAmount,
+      String cryptoCurrency,
+      String fiatAmount,
+      String fiatCurrency,
+      String bankName,
+      String bankAccount});
 }
 
 /// @nodoc
@@ -99,6 +135,10 @@ class __$$V1OnRampDataImplCopyWithImpl<$Res>
   $Res call({
     Object? cryptoAmount = null,
     Object? cryptoCurrency = null,
+    Object? fiatAmount = null,
+    Object? fiatCurrency = null,
+    Object? bankName = null,
+    Object? bankAccount = null,
   }) {
     return _then(_$V1OnRampDataImpl(
       cryptoAmount: null == cryptoAmount
@@ -109,6 +149,22 @@ class __$$V1OnRampDataImplCopyWithImpl<$Res>
           ? _value.cryptoCurrency
           : cryptoCurrency // ignore: cast_nullable_to_non_nullable
               as String,
+      fiatAmount: null == fiatAmount
+          ? _value.fiatAmount
+          : fiatAmount // ignore: cast_nullable_to_non_nullable
+              as String,
+      fiatCurrency: null == fiatCurrency
+          ? _value.fiatCurrency
+          : fiatCurrency // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankName: null == bankName
+          ? _value.bankName
+          : bankName // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankAccount: null == bankAccount
+          ? _value.bankAccount
+          : bankAccount // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -117,7 +173,12 @@ class __$$V1OnRampDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$V1OnRampDataImpl implements _V1OnRampData {
   const _$V1OnRampDataImpl(
-      {required this.cryptoAmount, required this.cryptoCurrency});
+      {required this.cryptoAmount,
+      required this.cryptoCurrency,
+      required this.fiatAmount,
+      required this.fiatCurrency,
+      required this.bankName,
+      required this.bankAccount});
 
   factory _$V1OnRampDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1OnRampDataImplFromJson(json);
@@ -126,10 +187,18 @@ class _$V1OnRampDataImpl implements _V1OnRampData {
   final String cryptoAmount;
   @override
   final String cryptoCurrency;
+  @override
+  final String fiatAmount;
+  @override
+  final String fiatCurrency;
+  @override
+  final String bankName;
+  @override
+  final String bankAccount;
 
   @override
   String toString() {
-    return 'V1OnRampData(cryptoAmount: $cryptoAmount, cryptoCurrency: $cryptoCurrency)';
+    return 'V1OnRampData(cryptoAmount: $cryptoAmount, cryptoCurrency: $cryptoCurrency, fiatAmount: $fiatAmount, fiatCurrency: $fiatCurrency, bankName: $bankName, bankAccount: $bankAccount)';
   }
 
   @override
@@ -140,12 +209,21 @@ class _$V1OnRampDataImpl implements _V1OnRampData {
             (identical(other.cryptoAmount, cryptoAmount) ||
                 other.cryptoAmount == cryptoAmount) &&
             (identical(other.cryptoCurrency, cryptoCurrency) ||
-                other.cryptoCurrency == cryptoCurrency));
+                other.cryptoCurrency == cryptoCurrency) &&
+            (identical(other.fiatAmount, fiatAmount) ||
+                other.fiatAmount == fiatAmount) &&
+            (identical(other.fiatCurrency, fiatCurrency) ||
+                other.fiatCurrency == fiatCurrency) &&
+            (identical(other.bankName, bankName) ||
+                other.bankName == bankName) &&
+            (identical(other.bankAccount, bankAccount) ||
+                other.bankAccount == bankAccount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, cryptoAmount, cryptoCurrency);
+  int get hashCode => Object.hash(runtimeType, cryptoAmount, cryptoCurrency,
+      fiatAmount, fiatCurrency, bankName, bankAccount);
 
   /// Create a copy of V1OnRampData
   /// with the given fields replaced by the non-null parameter values.
@@ -166,7 +244,11 @@ class _$V1OnRampDataImpl implements _V1OnRampData {
 abstract class _V1OnRampData implements V1OnRampData {
   const factory _V1OnRampData(
       {required final String cryptoAmount,
-      required final String cryptoCurrency}) = _$V1OnRampDataImpl;
+      required final String cryptoCurrency,
+      required final String fiatAmount,
+      required final String fiatCurrency,
+      required final String bankName,
+      required final String bankAccount}) = _$V1OnRampDataImpl;
 
   factory _V1OnRampData.fromJson(Map<String, dynamic> json) =
       _$V1OnRampDataImpl.fromJson;
@@ -175,6 +257,14 @@ abstract class _V1OnRampData implements V1OnRampData {
   String get cryptoAmount;
   @override
   String get cryptoCurrency;
+  @override
+  String get fiatAmount;
+  @override
+  String get fiatCurrency;
+  @override
+  String get bankName;
+  @override
+  String get bankAccount;
 
   /// Create a copy of V1OnRampData
   /// with the given fields replaced by the non-null parameter values.
