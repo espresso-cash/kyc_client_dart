@@ -15,7 +15,13 @@ _$V1GetOrderResponseImpl _$$V1GetOrderResponseImplFromJson(
       partnerPublicKey: json['partnerPublicKey'] as String,
       userPublicKey: json['userPublicKey'] as String,
       comment: json['comment'] as String,
-      onRamp: V1OnRampData.fromJson(json['onRamp'] as Map<String, dynamic>),
+      type: json['type'] as String,
+      cryptoAmount: json['cryptoAmount'] as String,
+      cryptoCurrency: json['cryptoCurrency'] as String,
+      fiatAmount: json['fiatAmount'] as String,
+      fiatCurrency: json['fiatCurrency'] as String,
+      bankName: json['bankName'] as String,
+      bankAccount: json['bankAccount'] as String,
     );
 
 Map<String, dynamic> _$$V1GetOrderResponseImplToJson(
@@ -27,5 +33,11 @@ Map<String, dynamic> _$$V1GetOrderResponseImplToJson(
       'partnerPublicKey': instance.partnerPublicKey,
       'userPublicKey': instance.userPublicKey,
       'comment': instance.comment,
-      'onRamp': instance.onRamp,
+      'type': instance.type,
+      'cryptoAmount': instance.cryptoAmount,
+      'cryptoCurrency': instance.cryptoCurrency,
+      'fiatAmount': instance.fiatAmount,
+      'fiatCurrency': instance.fiatCurrency,
+      'bankName': instance.bankName,
+      'bankAccount': instance.bankAccount,
     };

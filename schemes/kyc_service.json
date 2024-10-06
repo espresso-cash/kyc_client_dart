@@ -694,8 +694,28 @@
         "comment": {
           "type": "string"
         },
-        "onRamp": {
-          "$ref": "#/definitions/v1OnRampData"
+        "type": {
+          "type": "string"
+        },
+        "cryptoAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "cryptoCurrency": {
+          "type": "string"
+        },
+        "fiatAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "fiatCurrency": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "bankAccount": {
+          "type": "string"
         }
       }
     },
@@ -803,31 +823,6 @@
     },
     "v1InitStorageResponse": {
       "type": "object"
-    },
-    "v1OnRampData": {
-      "type": "object",
-      "properties": {
-        "cryptoAmount": {
-          "type": "string",
-          "format": "int64"
-        },
-        "cryptoCurrency": {
-          "type": "string"
-        },
-        "fiatAmount": {
-          "type": "string",
-          "format": "int64"
-        },
-        "fiatCurrency": {
-          "type": "string"
-        },
-        "bankName": {
-          "type": "string"
-        },
-        "bankAccount": {
-          "type": "string"
-        }
-      }
     },
     "v1RejectOrderRequest": {
       "type": "object",

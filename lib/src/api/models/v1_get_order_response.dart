@@ -4,8 +4,6 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'v1_on_ramp_data.dart';
-
 part 'v1_get_order_response.freezed.dart';
 part 'v1_get_order_response.g.dart';
 
@@ -18,7 +16,13 @@ class V1GetOrderResponse with _$V1GetOrderResponse {
     required String partnerPublicKey,
     required String userPublicKey,
     required String comment,
-    required V1OnRampData onRamp,
+    required String type,
+    required String cryptoAmount,
+    required String cryptoCurrency,
+    required String fiatAmount,
+    required String fiatCurrency,
+    required String bankName,
+    required String bankAccount,
   }) = _V1GetOrderResponse;
   
   factory V1GetOrderResponse.fromJson(Map<String, Object?> json) => _$V1GetOrderResponseFromJson(json);

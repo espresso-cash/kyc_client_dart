@@ -26,7 +26,13 @@ mixin _$V1GetOrderResponse {
   String get partnerPublicKey => throw _privateConstructorUsedError;
   String get userPublicKey => throw _privateConstructorUsedError;
   String get comment => throw _privateConstructorUsedError;
-  V1OnRampData get onRamp => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  String get cryptoAmount => throw _privateConstructorUsedError;
+  String get cryptoCurrency => throw _privateConstructorUsedError;
+  String get fiatAmount => throw _privateConstructorUsedError;
+  String get fiatCurrency => throw _privateConstructorUsedError;
+  String get bankName => throw _privateConstructorUsedError;
+  String get bankAccount => throw _privateConstructorUsedError;
 
   /// Serializes this V1GetOrderResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -51,9 +57,13 @@ abstract class $V1GetOrderResponseCopyWith<$Res> {
       String partnerPublicKey,
       String userPublicKey,
       String comment,
-      V1OnRampData onRamp});
-
-  $V1OnRampDataCopyWith<$Res> get onRamp;
+      String type,
+      String cryptoAmount,
+      String cryptoCurrency,
+      String fiatAmount,
+      String fiatCurrency,
+      String bankName,
+      String bankAccount});
 }
 
 /// @nodoc
@@ -77,7 +87,13 @@ class _$V1GetOrderResponseCopyWithImpl<$Res, $Val extends V1GetOrderResponse>
     Object? partnerPublicKey = null,
     Object? userPublicKey = null,
     Object? comment = null,
-    Object? onRamp = null,
+    Object? type = null,
+    Object? cryptoAmount = null,
+    Object? cryptoCurrency = null,
+    Object? fiatAmount = null,
+    Object? fiatCurrency = null,
+    Object? bankName = null,
+    Object? bankAccount = null,
   }) {
     return _then(_value.copyWith(
       orderId: null == orderId
@@ -104,21 +120,35 @@ class _$V1GetOrderResponseCopyWithImpl<$Res, $Val extends V1GetOrderResponse>
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String,
-      onRamp: null == onRamp
-          ? _value.onRamp
-          : onRamp // ignore: cast_nullable_to_non_nullable
-              as V1OnRampData,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      cryptoAmount: null == cryptoAmount
+          ? _value.cryptoAmount
+          : cryptoAmount // ignore: cast_nullable_to_non_nullable
+              as String,
+      cryptoCurrency: null == cryptoCurrency
+          ? _value.cryptoCurrency
+          : cryptoCurrency // ignore: cast_nullable_to_non_nullable
+              as String,
+      fiatAmount: null == fiatAmount
+          ? _value.fiatAmount
+          : fiatAmount // ignore: cast_nullable_to_non_nullable
+              as String,
+      fiatCurrency: null == fiatCurrency
+          ? _value.fiatCurrency
+          : fiatCurrency // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankName: null == bankName
+          ? _value.bankName
+          : bankName // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankAccount: null == bankAccount
+          ? _value.bankAccount
+          : bankAccount // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
-  }
-
-  /// Create a copy of V1GetOrderResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $V1OnRampDataCopyWith<$Res> get onRamp {
-    return $V1OnRampDataCopyWith<$Res>(_value.onRamp, (value) {
-      return _then(_value.copyWith(onRamp: value) as $Val);
-    });
   }
 }
 
@@ -137,10 +167,13 @@ abstract class _$$V1GetOrderResponseImplCopyWith<$Res>
       String partnerPublicKey,
       String userPublicKey,
       String comment,
-      V1OnRampData onRamp});
-
-  @override
-  $V1OnRampDataCopyWith<$Res> get onRamp;
+      String type,
+      String cryptoAmount,
+      String cryptoCurrency,
+      String fiatAmount,
+      String fiatCurrency,
+      String bankName,
+      String bankAccount});
 }
 
 /// @nodoc
@@ -162,7 +195,13 @@ class __$$V1GetOrderResponseImplCopyWithImpl<$Res>
     Object? partnerPublicKey = null,
     Object? userPublicKey = null,
     Object? comment = null,
-    Object? onRamp = null,
+    Object? type = null,
+    Object? cryptoAmount = null,
+    Object? cryptoCurrency = null,
+    Object? fiatAmount = null,
+    Object? fiatCurrency = null,
+    Object? bankName = null,
+    Object? bankAccount = null,
   }) {
     return _then(_$V1GetOrderResponseImpl(
       orderId: null == orderId
@@ -189,10 +228,34 @@ class __$$V1GetOrderResponseImplCopyWithImpl<$Res>
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String,
-      onRamp: null == onRamp
-          ? _value.onRamp
-          : onRamp // ignore: cast_nullable_to_non_nullable
-              as V1OnRampData,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      cryptoAmount: null == cryptoAmount
+          ? _value.cryptoAmount
+          : cryptoAmount // ignore: cast_nullable_to_non_nullable
+              as String,
+      cryptoCurrency: null == cryptoCurrency
+          ? _value.cryptoCurrency
+          : cryptoCurrency // ignore: cast_nullable_to_non_nullable
+              as String,
+      fiatAmount: null == fiatAmount
+          ? _value.fiatAmount
+          : fiatAmount // ignore: cast_nullable_to_non_nullable
+              as String,
+      fiatCurrency: null == fiatCurrency
+          ? _value.fiatCurrency
+          : fiatCurrency // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankName: null == bankName
+          ? _value.bankName
+          : bankName // ignore: cast_nullable_to_non_nullable
+              as String,
+      bankAccount: null == bankAccount
+          ? _value.bankAccount
+          : bankAccount // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -207,7 +270,13 @@ class _$V1GetOrderResponseImpl implements _V1GetOrderResponse {
       required this.partnerPublicKey,
       required this.userPublicKey,
       required this.comment,
-      required this.onRamp});
+      required this.type,
+      required this.cryptoAmount,
+      required this.cryptoCurrency,
+      required this.fiatAmount,
+      required this.fiatCurrency,
+      required this.bankName,
+      required this.bankAccount});
 
   factory _$V1GetOrderResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1GetOrderResponseImplFromJson(json);
@@ -225,11 +294,23 @@ class _$V1GetOrderResponseImpl implements _V1GetOrderResponse {
   @override
   final String comment;
   @override
-  final V1OnRampData onRamp;
+  final String type;
+  @override
+  final String cryptoAmount;
+  @override
+  final String cryptoCurrency;
+  @override
+  final String fiatAmount;
+  @override
+  final String fiatCurrency;
+  @override
+  final String bankName;
+  @override
+  final String bankAccount;
 
   @override
   String toString() {
-    return 'V1GetOrderResponse(orderId: $orderId, created: $created, status: $status, partnerPublicKey: $partnerPublicKey, userPublicKey: $userPublicKey, comment: $comment, onRamp: $onRamp)';
+    return 'V1GetOrderResponse(orderId: $orderId, created: $created, status: $status, partnerPublicKey: $partnerPublicKey, userPublicKey: $userPublicKey, comment: $comment, type: $type, cryptoAmount: $cryptoAmount, cryptoCurrency: $cryptoCurrency, fiatAmount: $fiatAmount, fiatCurrency: $fiatCurrency, bankName: $bankName, bankAccount: $bankAccount)';
   }
 
   @override
@@ -245,13 +326,38 @@ class _$V1GetOrderResponseImpl implements _V1GetOrderResponse {
             (identical(other.userPublicKey, userPublicKey) ||
                 other.userPublicKey == userPublicKey) &&
             (identical(other.comment, comment) || other.comment == comment) &&
-            (identical(other.onRamp, onRamp) || other.onRamp == onRamp));
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.cryptoAmount, cryptoAmount) ||
+                other.cryptoAmount == cryptoAmount) &&
+            (identical(other.cryptoCurrency, cryptoCurrency) ||
+                other.cryptoCurrency == cryptoCurrency) &&
+            (identical(other.fiatAmount, fiatAmount) ||
+                other.fiatAmount == fiatAmount) &&
+            (identical(other.fiatCurrency, fiatCurrency) ||
+                other.fiatCurrency == fiatCurrency) &&
+            (identical(other.bankName, bankName) ||
+                other.bankName == bankName) &&
+            (identical(other.bankAccount, bankAccount) ||
+                other.bankAccount == bankAccount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, orderId, created, status,
-      partnerPublicKey, userPublicKey, comment, onRamp);
+  int get hashCode => Object.hash(
+      runtimeType,
+      orderId,
+      created,
+      status,
+      partnerPublicKey,
+      userPublicKey,
+      comment,
+      type,
+      cryptoAmount,
+      cryptoCurrency,
+      fiatAmount,
+      fiatCurrency,
+      bankName,
+      bankAccount);
 
   /// Create a copy of V1GetOrderResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -278,7 +384,13 @@ abstract class _V1GetOrderResponse implements V1GetOrderResponse {
       required final String partnerPublicKey,
       required final String userPublicKey,
       required final String comment,
-      required final V1OnRampData onRamp}) = _$V1GetOrderResponseImpl;
+      required final String type,
+      required final String cryptoAmount,
+      required final String cryptoCurrency,
+      required final String fiatAmount,
+      required final String fiatCurrency,
+      required final String bankName,
+      required final String bankAccount}) = _$V1GetOrderResponseImpl;
 
   factory _V1GetOrderResponse.fromJson(Map<String, dynamic> json) =
       _$V1GetOrderResponseImpl.fromJson;
@@ -296,7 +408,19 @@ abstract class _V1GetOrderResponse implements V1GetOrderResponse {
   @override
   String get comment;
   @override
-  V1OnRampData get onRamp;
+  String get type;
+  @override
+  String get cryptoAmount;
+  @override
+  String get cryptoCurrency;
+  @override
+  String get fiatAmount;
+  @override
+  String get fiatCurrency;
+  @override
+  String get bankName;
+  @override
+  String get bankAccount;
 
   /// Create a copy of V1GetOrderResponse
   /// with the given fields replaced by the non-null parameter values.

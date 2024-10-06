@@ -33,7 +33,6 @@ export 'models/v1_grant_access_request.dart';
 export 'models/v1_grant_access_response.dart';
 export 'models/v1_init_storage_request.dart';
 export 'models/v1_init_storage_response.dart';
-export 'models/v1_on_ramp_data.dart';
 export 'models/v1_reject_order_request.dart';
 export 'models/v1_reject_order_response.dart';
 export 'models/v1_set_data_request.dart';
