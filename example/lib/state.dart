@@ -44,7 +44,6 @@ class WalletAppState extends ChangeNotifier {
         final signature = await _wallet!.sign(data);
         return signature;
       },
-      baseUrl: 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
     );
 
     await _client.init(walletAddress: _wallet!.publicKey.toString());
@@ -190,10 +189,7 @@ class PartnerAppState extends ChangeNotifier {
     final keyPair = await Ed25519().newKeyPairFromSeed(
       base58decode('8ui6TQMfAudigNuKycopDyZ6irMeS7DTSe73d2gzv1Hz'),
     );
-    _client = KycPartnerClient(
-      authKeyPair: keyPair,
-      baseUrl: 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
-    );
+    _client = KycPartnerClient(authKeyPair: keyPair);
 
     await _client.init();
 
@@ -231,7 +227,7 @@ class PartnerAppState extends ChangeNotifier {
     required String userPK,
   }) async {
     final response = await _client.getValidationResult(
-      key: 'kycSmileId',
+      key: 'email',
       validatorPK: _authPublicKey,
       userPK: userPK,
       secretKey: secretKey,
