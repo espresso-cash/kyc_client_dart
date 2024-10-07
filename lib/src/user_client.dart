@@ -81,6 +81,7 @@ class KycUserClient {
     final adminTokenData = jwt.JWT(
       <String, dynamic>{
         'iss': _authPublicKey,
+        'aud': 'kyc.espressocash.com'
       },
     );
     final token = adminTokenData.sign(
