@@ -3,7 +3,8 @@
 // ignore_for_file: type=lint, unused_import
 
 // Clients
-export 'kyc_service/kyc_service_client.dart';
+export 'clients/kyc_service_client.dart';
+export 'clients/validator_service_client.dart';
 // Data classes
 export 'models/protobuf_any.dart';
 export 'models/rpc_status.dart';
@@ -41,3 +42,13 @@ export 'models/v1_set_validation_result_request.dart';
 export 'models/v1_set_validation_result_response.dart';
 export 'models/v1_user_data.dart';
 export 'models/v1_validation_data.dart';
+export 'models/v1_init_document_validation_request.dart';
+export 'models/v1_init_document_validation_response.dart';
+export 'models/v1_init_email_validation_request.dart';
+export 'models/v1_init_email_validation_response.dart';
+export 'models/v1_init_phone_validation_request.dart';
+export 'models/v1_init_phone_validation_response.dart';
+export 'models/v1_validate_email_request.dart';
+export 'models/v1_validate_email_response.dart';
+export 'models/v1_validate_phone_request.dart';
+export 'models/v1_validate_phone_response.dart';
