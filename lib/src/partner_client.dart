@@ -48,8 +48,7 @@ class KycPartnerClient {
         .then(base58encode);
 
     final partnerTokenData = jwt.JWT(
-      <String, String>{},
-      issuer: _authPublicKey,
+      <String, dynamic>{'iss': _authPublicKey, 'aud': 'kyc.espressocash.com'},
     );
 
     _token = partnerTokenData.sign(
