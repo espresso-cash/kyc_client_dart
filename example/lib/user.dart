@@ -13,7 +13,7 @@ class UserView extends StatefulWidget {
 
 class _UserViewState extends State<UserView> {
   final _emailController = TextEditingController();
-  final _nameController = TextEditingController();
+  final _phoneController = TextEditingController();
 
   final _amountController = TextEditingController();
   final _currencyController = TextEditingController();
@@ -31,13 +31,13 @@ class _UserViewState extends State<UserView> {
   void _updateControllers() {
     final state = context.read<WalletAppState>();
     _emailController.text = state.email ?? '';
-    _nameController.text = state.phone ?? '';
+    _phoneController.text = state.phone ?? '';
   }
 
   @override
   void dispose() {
     _emailController.dispose();
-    _nameController.dispose();
+    _phoneController.dispose();
     _amountController.dispose();
     _currencyController.dispose();
 
@@ -84,7 +84,7 @@ class _UserViewState extends State<UserView> {
               ),
               const SizedBox(height: 8),
               ValueTextfield(
-                controller: _nameController,
+                controller: _phoneController,
                 title: 'Phone',
               ),
               const SizedBox(height: 8),
@@ -96,7 +96,7 @@ class _UserViewState extends State<UserView> {
               ListenableBuilder(
                 listenable: Listenable.merge([
                   _emailController,
-                  _nameController,
+                  _phoneController,
                 ]),
                 builder: (context, child) => ElevatedButton(
                   onPressed: () async {
@@ -104,7 +104,7 @@ class _UserViewState extends State<UserView> {
 
                     await context.read<WalletAppState>().updateData(
                           email: _emailController.text,
-                          phone: _nameController.text,
+                          phone: _phoneController.text,
                           file: _file,
                         );
 
@@ -116,17 +116,49 @@ class _UserViewState extends State<UserView> {
                 ),
               ),
               const SizedBox(height: 16),
+              const CustomDivider(),
+              const SizedBox(height: 16),
               ListenableBuilder(
                 listenable: _emailController,
                 builder: (context, child) => ElevatedButton(
-                  onPressed: () async {
-                    await context.read<WalletAppState>().initEmailValidation();
+                  onPressed: _emailController.text.isEmpty
+                      ? null
+                      : () async {
+                          await context
+                              .read<WalletAppState>()
+                              .initEmailValidation();
 
-                    if (!context.mounted) return;
+                          if (!context.mounted) return;
 
-                    showSnackBar(context, message: 'Verification code has been sent to ${_emailController.text}');
-                  },
+                          showSnackBar(
+                            context,
+                            message:
+                                'Verification code has been sent to ${_emailController.text}',
+                          );
+                        },
                   child: const Text('Start email verification'),
+                ),
+              ),
+              const SizedBox(height: 8),
+              ListenableBuilder(
+                listenable: _phoneController,
+                builder: (context, child) => ElevatedButton(
+                  onPressed: _phoneController.text.isEmpty
+                      ? null
+                      : () async {
+                          await context
+                              .read<WalletAppState>()
+                              .initEmailValidation();
+
+                          if (!context.mounted) return;
+
+                          showSnackBar(
+                            context,
+                            message:
+                                'Verification code has been sent to ${_phoneController.text}',
+                          );
+                        },
+                  child: const Text('Start phone verification'),
                 ),
               ),
               const SizedBox(height: 16),
@@ -144,6 +176,21 @@ class _UserViewState extends State<UserView> {
                     showSnackBar(context, message: 'Granted partner access');
                   },
                   child: const Text('Grant partner access'),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Consumer<PartnerAppState>(
+                builder: (context, partnerState, child) => ElevatedButton(
+                  onPressed: () async {
+                    await context.read<WalletAppState>().grantPartnerAccess(
+                          validatorPK,
+                        );
+
+                    if (!context.mounted) return;
+
+                    showSnackBar(context, message: 'Granted partner access');
+                  },
+                  child: const Text('Grant validator access'),
                 ),
               ),
               const SizedBox(height: 16),
