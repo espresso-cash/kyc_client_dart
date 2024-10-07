@@ -106,6 +106,10 @@ class WalletAppState extends ChangeNotifier {
     }
   }
 
+  Future<void> initEmailValidation() async {
+    await _client.initEmailValidation();
+  }
+
   Future<void> createOnRampOrder({
     required String amount,
     required String currency,

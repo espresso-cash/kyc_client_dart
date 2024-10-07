@@ -116,6 +116,20 @@ class _UserViewState extends State<UserView> {
                 ),
               ),
               const SizedBox(height: 16),
+              ListenableBuilder(
+                listenable: _emailController,
+                builder: (context, child) => ElevatedButton(
+                  onPressed: () async {
+                    await context.read<WalletAppState>().initEmailValidation();
+
+                    if (!context.mounted) return;
+
+                    showSnackBar(context, message: 'Verification code has been sent to ${_emailController.text}');
+                  },
+                  child: const Text('Start email verification'),
+                ),
+              ),
+              const SizedBox(height: 16),
               const CustomDivider(),
               const SizedBox(height: 16),
               Consumer<PartnerAppState>(
