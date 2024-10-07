@@ -122,12 +122,6 @@ class KycUserClient {
     );
   }
 
-  Future<void> _initValidator() async {
-    final dio = Dio()..interceptors.add(AuthInterceptor(_token));
-    _validatorClient = ValidatorServiceClient(dio,
-        baseUrl: 'https://validator.espressocash.com/');
-  }
-
   Future<void> _initStorage({required String walletAddress}) async {
     final proofSignature = await sign(utf8.encode(_proofMessage));
     await _kycClient.kycServiceInitStorage(
