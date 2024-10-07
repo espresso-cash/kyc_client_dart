@@ -26,13 +26,13 @@ class KycUserClient {
 
   late final SimpleKeyPair _authKeyPair;
   late final String _authPublicKey;
-  late final String _token;
   late final PrivateKey _encryptionSecretKey;
   late final SecretKey _secretKey;
   late final String _encryptedSecretKey;
   late final String _rawSecretKey;
   late final SecretBox _secretBox;
   late final SigningKey _signingKey;
+
   late final KycServiceClient _kycClient;
   late final ValidatorServiceClient _validatorClient;
 
@@ -43,8 +43,8 @@ class KycUserClient {
   Future<void> init({required String walletAddress}) async {
     final seed = await _generateSeed();
     await _initializeKeys(seed);
-    await _initializeToken();
-    _initializeApiClients();
+    await _initializeKycClient();
+    await _initializeValidatorClient();
 
     try {
       final getInfo = await _kycClient.kycServiceGetInfo(
@@ -76,14 +76,43 @@ class KycUserClient {
     );
   }
 
-  Future<void> _initializeToken() async {
+  Future<void> _initializeKycClient() async {
     final publicKey = await _authKeyPair.extractPublicKey();
-    final adminTokenData = jwt.JWT(<String, String>{}, issuer: _authPublicKey);
-    _token = adminTokenData.sign(
+    final adminTokenData = jwt.JWT(
+      <String, dynamic>{
+        'iss': _authPublicKey,
+      },
+    );
+    final token = adminTokenData.sign(
       jwt.EdDSAPrivateKey(
         await _authKeyPair.extractPrivateKeyBytes() + publicKey.bytes,
       ),
       algorithm: jwt.JWTAlgorithm.EdDSA,
+    );
+
+    final dio = Dio()..interceptors.add(AuthInterceptor(token));
+    _kycClient = KycServiceClient(dio, baseUrl: baseUrl);
+  }
+
+  Future<void> _initializeValidatorClient() async {
+    final publicKey = await _authKeyPair.extractPublicKey();
+    final adminTokenData = jwt.JWT(
+      <String, dynamic>{
+        'iss': _authPublicKey,
+        'aud': 'validator.espressocash.com',
+      },
+    );
+    final token = adminTokenData.sign(
+      jwt.EdDSAPrivateKey(
+        await _authKeyPair.extractPrivateKeyBytes() + publicKey.bytes,
+      ),
+      algorithm: jwt.JWTAlgorithm.EdDSA,
+    );
+
+    final dio = Dio()..interceptors.add(AuthInterceptor(token));
+    _validatorClient = ValidatorServiceClient(
+      dio,
+      baseUrl: 'https://validator.espressocash.com/',
     );
   }
 
@@ -110,15 +139,6 @@ class KycUserClient {
         await _authKeyPair.extractPrivateKeyBytes() +
             (await _authKeyPair.extractPublicKey()).bytes,
       ),
-    );
-  }
-
-  void _initializeApiClients() {
-    final dio = Dio()..interceptors.add(AuthInterceptor(_token));
-    _kycClient = KycServiceClient(dio, baseUrl: baseUrl);
-    _validatorClient = ValidatorServiceClient(
-      dio,
-      baseUrl: 'https://validator.espressocash.com/',
     );
   }
 
