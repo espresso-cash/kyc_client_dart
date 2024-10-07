@@ -28,8 +28,18 @@ dev_dependencies:
 
 swagger_parser:
   output_directory: lib/src/api
+  squash_clients: false
+  merge_clients: false
 
   schemes:
     - schema_path: schemes/kyc.json
       json_serializer: freezed
       root_client: false
+      put_in_folder: true
+      put_clients_in_folder: true
+
+    - schema_path: schemes/validator.json
+      json_serializer: freezed
+      root_client: false
+      put_in_folder: true
+      put_clients_in_folder: true
