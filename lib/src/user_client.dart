@@ -53,7 +53,11 @@ class KycUserClient {
         encryptedSecretKey: getInfo.encryptedSecretKey,
       );
     } on DioException catch (e) {
-      if (e.response?.statusCode != 404) rethrow;
+      if (e.response?.data is! Map<String, dynamic> ||
+          (e.response?.data as Map<String, dynamic>)['message'] !=
+              'sql: no rows in result set') {
+        rethrow;
+      }
       await _initializeEncryption();
       await _initStorage(walletAddress: walletAddress);
     }
