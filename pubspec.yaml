@@ -27,7 +27,9 @@ dev_dependencies:
   test: ^1.24.0
 
 swagger_parser:
-  schema_path: schemes/kyc_service.json
   output_directory: lib/src/api
-  json_serializer: freezed
-  root_client: false
+
+  schemes:
+    - schema_path: schemes/kyc.json
+      json_serializer: freezed
+      root_client: false
