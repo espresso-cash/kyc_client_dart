@@ -16,9 +16,14 @@ export 'models/partner.dart';
 typedef SignRequest = Future<Signature> Function(Iterable<int> data);
 
 class KycUserClient {
-  KycUserClient({required this.sign, this.baseUrl});
+  KycUserClient({
+    required this.sign,
+    this.kycBaseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
+    this.validatorBaseUrl = 'https://validator.espressocash.com/',
+  });
 
-  final String? baseUrl;
+  final String? kycBaseUrl;
+  final String? validatorBaseUrl;
   final SignRequest sign;
 
   static const _seedMessage = 'hello';
@@ -79,10 +84,7 @@ class KycUserClient {
   Future<void> _initializeKycClient() async {
     final publicKey = await _authKeyPair.extractPublicKey();
     final adminTokenData = jwt.JWT(
-      <String, dynamic>{
-        'iss': _authPublicKey,
-        'aud': 'kyc.espressocash.com'
-      },
+      <String, dynamic>{'iss': _authPublicKey, 'aud': 'kyc.espressocash.com'},
     );
     final token = adminTokenData.sign(
       jwt.EdDSAPrivateKey(
@@ -92,7 +94,7 @@ class KycUserClient {
     );
 
     final dio = Dio()..interceptors.add(AuthInterceptor(token));
-    _kycClient = KycServiceClient(dio, baseUrl: baseUrl);
+    _kycClient = KycServiceClient(dio, baseUrl: kycBaseUrl);
   }
 
   Future<void> _initializeValidatorClient() async {
@@ -113,7 +115,7 @@ class KycUserClient {
     final dio = Dio()..interceptors.add(AuthInterceptor(token));
     _validatorClient = ValidatorServiceClient(
       dio,
-      baseUrl: 'https://validator.espressocash.com/',
+      baseUrl: validatorBaseUrl,
     );
   }
 

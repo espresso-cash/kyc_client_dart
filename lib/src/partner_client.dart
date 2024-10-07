@@ -14,7 +14,7 @@ import 'package:solana/base58.dart';
 class KycPartnerClient {
   KycPartnerClient({
     required this.authKeyPair,
-    this.baseUrl,
+    this.baseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
   });
 
   final SimpleKeyPair authKeyPair;

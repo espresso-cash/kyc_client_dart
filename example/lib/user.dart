@@ -14,6 +14,8 @@ class UserView extends StatefulWidget {
 class _UserViewState extends State<UserView> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _emailVerificationController = TextEditingController();
+  final _phoneVerificationController = TextEditingController();
   final _amountController = TextEditingController();
   final _currencyController = TextEditingController();
   XFile? _file;
@@ -37,6 +39,8 @@ class _UserViewState extends State<UserView> {
   void dispose() {
     _emailController.dispose();
     _phoneController.dispose();
+    _emailVerificationController.dispose();
+    _phoneVerificationController.dispose();
     _amountController.dispose();
     _currencyController.dispose();
     context.read<WalletAppState>().removeListener(_updateControllers);
@@ -160,6 +164,66 @@ class _UserViewState extends State<UserView> {
                     );
                   },
             child: const Text('Start phone verification'),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Flexible(
+                child: ValueTextfield(
+                  controller: _emailVerificationController,
+                  title: 'email code',
+                ),
+              ),
+              const SizedBox(width: 16),
+              ListenableBuilder(
+                listenable: _emailVerificationController,
+                builder: (context, child) => ElevatedButton(
+                  onPressed: _emailVerificationController.text.isEmpty
+                      ? null
+                      : () async {
+                          await context
+                              .read<WalletAppState>()
+                              .validateEmail(_emailVerificationController.text);
+                          if (!context.mounted) return;
+                          showSnackBar(
+                            context,
+                            message: 'Email verified',
+                          );
+                        },
+                  child: const Text('Verify email'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Flexible(
+                child: ValueTextfield(
+                  controller: _phoneVerificationController,
+                  title: 'sms code',
+                ),
+              ),
+              const SizedBox(width: 16),
+              ListenableBuilder(
+                listenable: _phoneVerificationController,
+                builder: (context, child) => ElevatedButton(
+                  onPressed: _phoneVerificationController.text.isEmpty
+                      ? null
+                      : () async {
+                          await context
+                              .read<WalletAppState>()
+                              .validateEmail(_phoneVerificationController.text);
+                          if (!context.mounted) return;
+                          showSnackBar(
+                            context,
+                            message: 'Phone verified',
+                          );
+                        },
+                  child: const Text('Verify phone'),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           const CustomDivider(),
