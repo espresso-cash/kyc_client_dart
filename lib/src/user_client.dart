@@ -15,11 +15,14 @@ export 'models/partner.dart';
 
 typedef SignRequest = Future<Signature> Function(Iterable<int> data);
 
+const _defaultKycBaseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/';
+const _defaultValidatorBaseUrl = 'https://validator.espressocash.com/';
+
 class KycUserClient {
   KycUserClient({
     required this.sign,
-    this.kycBaseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
-    this.validatorBaseUrl = 'https://validator.espressocash.com/',
+    this.kycBaseUrl = _defaultKycBaseUrl,
+    this.validatorBaseUrl = _defaultValidatorBaseUrl,
   });
 
   final String? kycBaseUrl;
