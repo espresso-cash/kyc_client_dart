@@ -55,7 +55,7 @@ class KycUserClient {
     } on DioException catch (e) {
       if (e.response?.data is! Map<String, dynamic> ||
           (e.response?.data as Map<String, dynamic>)['message'] !=
-              'sql: no rows in result set') {
+              'user not initialized') {
         rethrow;
       }
       await _initializeEncryption();
