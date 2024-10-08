@@ -217,7 +217,7 @@ class KycPartnerClient {
     return response;
   }
 
-  Future<V1CompleteOrderResponse> completeOnOrder({
+  Future<V1CompleteOrderResponse> completeOnRampOrder({
     required String orderId,
     required String transactionId,
   }) async {
@@ -231,7 +231,7 @@ class KycPartnerClient {
     return response;
   }
 
-  Future<V1CompleteOrderResponse> completeOffOrder(String orderId) async {
+  Future<V1CompleteOrderResponse> completeOffRampOrder(String orderId) async {
     final response = _apiClient.kycServiceCompleteOrder(
       body: V1CompleteOrderRequest(orderId: orderId),
     );

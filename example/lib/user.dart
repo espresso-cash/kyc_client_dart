@@ -55,10 +55,10 @@ class _UserViewState extends State<UserView> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _buildWalletSection(state),
-              _buildUserDataSection(state),
-              _buildVerificationSection(),
               _buildPartnerAccessSection(),
               _buildPartnerInfoSection(state),
+              _buildUserDataSection(state),
+              _buildVerificationSection(),
               _buildOnRampOrderSection(state),
               _buildUserOrdersSection(state),
             ],
@@ -99,6 +99,15 @@ class _UserViewState extends State<UserView> {
   Widget _buildUserDataSection(WalletAppState state) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const CustomDivider(thickness: 6),
+          const SizedBox(height: 16),
+          Center(
+            child: Text(
+              'User data',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          const SizedBox(height: 32),
           ValueTextfield(
             controller: _emailController,
             title: 'Email',
@@ -128,14 +137,21 @@ class _UserViewState extends State<UserView> {
             child: const Text('Update User Data'),
           ),
           const SizedBox(height: 16),
-          const CustomDivider(),
-          const SizedBox(height: 16),
         ],
       );
 
   Widget _buildVerificationSection() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const CustomDivider(thickness: 6),
+          const SizedBox(height: 16),
+          Center(
+            child: Text(
+              'Verification',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          const SizedBox(height: 32),
           ElevatedButton(
             onPressed: _emailController.text.isEmpty
                 ? null
@@ -226,8 +242,6 @@ class _UserViewState extends State<UserView> {
             ],
           ),
           const SizedBox(height: 16),
-          const CustomDivider(),
-          const SizedBox(height: 16),
         ],
       );
 
@@ -270,14 +284,21 @@ class _UserViewState extends State<UserView> {
             ),
           ),
           const SizedBox(height: 16),
-          const CustomDivider(),
-          const SizedBox(height: 16),
         ],
       );
 
   Widget _buildOnRampOrderSection(WalletAppState state) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const CustomDivider(thickness: 6),
+          const SizedBox(height: 16),
+          Center(
+            child: Text(
+              'Orders',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          const SizedBox(height: 32),
           ValueTextfield(
             controller: _amountController,
             title: 'Amount',

@@ -126,7 +126,7 @@ class WalletAppState extends ChangeNotifier {
     required String currency,
     required String partnerPK,
   }) async {
-    final orderId = await _client.createOrder(
+    final orderId = await _client.createOnRampOrder(
       partnerPK: partnerPK,
       cryptoAmount: amount,
       cryptoCurrency: currency,
@@ -138,6 +138,27 @@ class WalletAppState extends ChangeNotifier {
 
     _orderId = orderId;
     notifyListeners();
+  }
+
+  Future<void> createOffRampOrder({
+    required String amount,
+    required String currency,
+    required String partnerPK,
+  }) async {
+    final orderId = await _client.createOffRampOrder(
+      partnerPK: partnerPK,
+      cryptoAmount: amount,
+      cryptoCurrency: currency,
+      fiatAmount: amount,
+      fiatCurrency: currency,
+      bankName: 'bankName',
+      bankAccount: 'bankAccount',
+    );
+
+    print('orderId: $orderId');
+
+    // _orderId = orderId;
+    // notifyListeners();
   }
 
   Future<void> fetchOrder(String orderId) async {
@@ -262,12 +283,33 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> completeOrder(String orderId) async {
-    await _client.completeOrder(orderId);
+  Future<void> acceptOnRampOrder(String orderId) async {
+    await _client.acceptOnRampOrder(
+      orderId: orderId,
+      bankName: 'bankName',
+      bankAccount: 'bankAccount',
+    );
   }
 
-  Future<void> acceptOrder(String orderId) async {
-    await _client.acceptOrder(orderId);
+  Future<void> acceptOffRampOrder(String orderId) async {
+    await _client.acceptOffRampOrder(
+      orderId: orderId,
+      cryptoWalletAddress: '1234567890',
+    );
+  }
+
+  Future<void> completeOnRampOrder({
+    required String orderId,
+    required String transactionId,
+  }) async {
+    await _client.completeOnRampOrder(
+      orderId: orderId,
+      transactionId: transactionId,
+    );
+  }
+
+  Future<void> completeOffRampOrder(String orderId) async {
+    await _client.completeOffRampOrder(orderId);
   }
 
   Future<void> failOrder({

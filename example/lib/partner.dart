@@ -110,8 +110,15 @@ class _PartnerViewState extends State<PartnerView> {
                 value: state.phone,
               ),
               if (state.file case final image?) Image.network(image.path),
-              const CustomDivider(),
+              const CustomDivider(thickness: 6),
               const SizedBox(height: 16),
+              Center(
+                child: Text(
+                  'Orders',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              const SizedBox(height: 32),
               ValueField(
                 title: 'Partner Orders:',
                 value: state.orders ?? '',
@@ -153,7 +160,7 @@ class _PartnerViewState extends State<PartnerView> {
                             ? () async {
                                 await context
                                     .read<PartnerAppState>()
-                                    .acceptOrder(orderId);
+                                    .acceptOnRampOrder(orderId);
                                 if (!context.mounted) return;
                                 showSnackBar(
                                   context,
@@ -169,7 +176,9 @@ class _PartnerViewState extends State<PartnerView> {
                             ? () async {
                                 await context
                                     .read<PartnerAppState>()
-                                    .completeOrder(orderId);
+                                    .completeOnRampOrder(
+                                        orderId: orderId,
+                                        transactionId: 'transactionId');
                                 if (!context.mounted) return;
                                 showSnackBar(
                                   context,
