@@ -291,7 +291,7 @@ class KycUserClient {
     );
   }
 
-  Future<String> createOrder({
+  Future<String> createOnRampOrder({
     required String partnerPK,
     required String cryptoAmount,
     required String cryptoCurrency,
@@ -305,6 +305,30 @@ class KycUserClient {
         cryptoCurrency: cryptoCurrency,
         fiatAmount: fiatAmount,
         fiatCurrency: fiatCurrency,
+      ),
+    );
+
+    return response.orderId;
+  }
+
+    Future<String> createOffRampOrder({
+    required String partnerPK,
+    required String cryptoAmount,
+    required String cryptoCurrency,
+    required String fiatAmount,
+    required String fiatCurrency,
+    required String bankName,
+    required String bankAccount,
+  }) async {
+    final response = await _kycClient.kycServiceCreateOffRampOrder(
+      body: V1CreateOffRampOrderRequest(
+        partnerPublicKey: partnerPK,
+        cryptoAmount: cryptoAmount,
+        cryptoCurrency: cryptoCurrency,
+        fiatAmount: fiatAmount,
+        fiatCurrency: fiatCurrency,
+        bankName: bankName,
+        bankAccount: bankAccount,
       ),
     );
 

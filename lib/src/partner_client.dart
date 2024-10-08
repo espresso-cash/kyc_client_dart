@@ -187,17 +187,29 @@ class KycPartnerClient {
   Future<V1GetPartnerOrdersResponse> getPartnerOrders() async =>
       _apiClient.kycServiceGetPartnerOrders();
 
-  Future<V1AcceptOrderResponse> acceptOrder({
+  Future<V1AcceptOrderResponse> acceptOnRampOrder({
     required String orderId,
     required String bankName,
     required String bankAccount,
-    required String cryptoWalletAddress,
   }) async {
     final response = _apiClient.kycServiceAcceptOrder(
       body: V1AcceptOrderRequest(
         orderId: orderId,
         bankName: bankName,
         bankAccount: bankAccount,
+      ),
+    );
+
+    return response;
+  }
+
+  Future<V1AcceptOrderResponse> acceptOffRampOrder({
+    required String orderId,
+    required String cryptoWalletAddress,
+  }) async {
+    final response = _apiClient.kycServiceAcceptOrder(
+      body: V1AcceptOrderRequest(
+        orderId: orderId,
         cryptoWalletAddress: cryptoWalletAddress,
       ),
     );
@@ -205,7 +217,7 @@ class KycPartnerClient {
     return response;
   }
 
-  Future<V1CompleteOrderResponse> completeOrder({
+  Future<V1CompleteOrderResponse> completeOnOrder({
     required String orderId,
     required String transactionId,
   }) async {
@@ -214,6 +226,14 @@ class KycPartnerClient {
         orderId: orderId,
         transactionId: transactionId,
       ),
+    );
+
+    return response;
+  }
+
+  Future<V1CompleteOrderResponse> completeOffOrder(String orderId) async {
+    final response = _apiClient.kycServiceCompleteOrder(
+      body: V1CompleteOrderRequest(orderId: orderId),
     );
 
     return response;
