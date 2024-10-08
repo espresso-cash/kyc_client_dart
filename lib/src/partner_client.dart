@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:hex/hex.dart';
+import 'package:convert/convert.dart';
 
 import 'package:cryptography/cryptography.dart' hide Hash, PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
@@ -158,7 +158,7 @@ class KycPartnerClient {
     final decrypted =
         box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-    return HEX.encode(decrypted);
+    return hex.encode(decrypted);
   }
 
   Future<void> validateField({

@@ -24,7 +24,9 @@ class _PartnerViewState extends State<PartnerView> {
               _buildPartnerSection(state),
               _buildUserDataSection(state),
               _buildVerificationSection(state),
-              _buildOrdersSection(state),
+              _buildPartnerOrdersSection(state),
+              _buildOnRampOrderSection(state),
+              _buildOffRampOrderSection(state),
             ],
           ),
         ),
@@ -154,7 +156,7 @@ class _PartnerViewState extends State<PartnerView> {
         ],
       );
 
-  Widget _buildOrdersSection(PartnerAppState state) => Column(
+  Widget _buildPartnerOrdersSection(PartnerAppState state) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Center(
@@ -177,13 +179,19 @@ class _PartnerViewState extends State<PartnerView> {
           const SizedBox(height: 16),
           const CustomDivider(),
           const SizedBox(height: 16),
+        ],
+      );
+
+  Widget _buildOnRampOrderSection(PartnerAppState state) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
           ValueField(
-            title: 'Order Data',
-            value: state.orderData ?? '',
+            title: 'OnRamp Order Data',
+            value: state.onRampOrderData ?? '',
           ),
           Consumer<WalletAppState>(
             builder: (context, walletState, child) {
-              final orderId = walletState.orderId;
+              final orderId = walletState.onRampOrderId;
               final hasOrder = orderId != null;
 
               return Column(
@@ -193,9 +201,12 @@ class _PartnerViewState extends State<PartnerView> {
                         ? () async {
                             await context
                                 .read<PartnerAppState>()
-                                .fetchOrder(orderId);
+                                .fetchOnRampOrder(orderId);
                             if (!context.mounted) return;
-                            showSnackBar(context, message: 'Order fetched');
+                            showSnackBar(
+                              context,
+                              message: 'OnRamp Order fetched',
+                            );
                           }
                         : null,
                     child: const Text('Fetch OnRamp Order'),
@@ -206,11 +217,15 @@ class _PartnerViewState extends State<PartnerView> {
                         ? () async {
                             await context
                                 .read<PartnerAppState>()
-                                .acceptOnRampOrder(orderId);
+                                .acceptOnRampOrder(
+                                  orderId: orderId,
+                                  bankName: 'bankName',
+                                  bankAccount: '123456789',
+                                );
                             if (!context.mounted) return;
                             showSnackBar(
                               context,
-                              message: 'Order accepted',
+                              message: 'OnRamp Order accepted',
                             );
                           }
                         : null,
@@ -223,12 +238,14 @@ class _PartnerViewState extends State<PartnerView> {
                             await context
                                 .read<PartnerAppState>()
                                 .completeOnRampOrder(
-                                    orderId: orderId,
-                                    transactionId: 'transactionId');
+                                  orderId: orderId,
+                                  transactionId:
+                                      '3sWH8ZR3nTZpBmVAcBdDFeQqTkEyKKcK2nXfG3ZdoGRMmpHqxVa9zT7T9A7c6yFK3XeY4Ti4kgF8TYGpQTnrgfgv',
+                                );
                             if (!context.mounted) return;
                             showSnackBar(
                               context,
-                              message: 'Order completed',
+                              message: 'OnRamp Order completed',
                             );
                           }
                         : null,
@@ -264,6 +281,112 @@ class _PartnerViewState extends State<PartnerView> {
                           }
                         : null,
                     child: const Text('Fail OnRamp Order'),
+                  ),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+          const CustomDivider(),
+          const SizedBox(height: 16),
+        ],
+      );
+
+  Widget _buildOffRampOrderSection(PartnerAppState state) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ValueField(
+            title: 'OffRamp Order Data',
+            value: state.offRampOrderData ?? '',
+          ),
+          Consumer<WalletAppState>(
+            builder: (context, walletState, child) {
+              final orderId = walletState.offRampOrderId;
+              final hasOrder = orderId != null;
+
+              return Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: hasOrder
+                        ? () async {
+                            await context
+                                .read<PartnerAppState>()
+                                .fetchOffRampOrder(orderId);
+                            if (!context.mounted) return;
+                            showSnackBar(
+                              context,
+                              message: 'OffRamp Order fetched',
+                            );
+                          }
+                        : null,
+                    child: const Text('Fetch OffRamp Order'),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: hasOrder
+                        ? () async {
+                            await context
+                                .read<PartnerAppState>()
+                                .acceptOffRampOrder(
+                                  orderId: orderId,
+                                  cryptoWalletAddress:
+                                      '5EY2wqRSXsnfU7YwBnW45HoTLGmZgFkfA1A69N8T7Vtx',
+                                );
+                            if (!context.mounted) return;
+                            showSnackBar(
+                              context,
+                              message: 'OffRamp Order accepted',
+                            );
+                          }
+                        : null,
+                    child: const Text('Accept OffRamp Order'),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: hasOrder
+                        ? () async {
+                            await context
+                                .read<PartnerAppState>()
+                                .completeOffRampOrder(orderId);
+                            if (!context.mounted) return;
+                            showSnackBar(
+                              context,
+                              message: 'OffRamp Order completed',
+                            );
+                          }
+                        : null,
+                    child: const Text('Complete OffRamp Order'),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: hasOrder
+                        ? () async {
+                            await context.read<PartnerAppState>().rejectOrder(
+                                  orderId: orderId,
+                                  reason: 'Reject reason',
+                                );
+                            if (!context.mounted) return;
+                            showSnackBar(
+                              context,
+                              message: 'Order rejected',
+                            );
+                          }
+                        : null,
+                    child: const Text('Reject OffRamp Order'),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: hasOrder
+                        ? () async {
+                            await context.read<PartnerAppState>().failOrder(
+                                  orderId: orderId,
+                                  reason: 'Fail reason',
+                                );
+                            if (!context.mounted) return;
+                            showSnackBar(context, message: 'Order failed');
+                          }
+                        : null,
+                    child: const Text('Fail OffRamp Order'),
                   ),
                 ],
               );
