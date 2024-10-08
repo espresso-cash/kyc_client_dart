@@ -144,6 +144,8 @@ class WalletAppState extends ChangeNotifier {
     required String amount,
     required String currency,
     required String partnerPK,
+    required String bankName,
+    required String bankAccount,
   }) async {
     final orderId = await _client.createOffRampOrder(
       partnerPK: partnerPK,
@@ -151,8 +153,8 @@ class WalletAppState extends ChangeNotifier {
       cryptoCurrency: currency,
       fiatAmount: amount,
       fiatCurrency: currency,
-      bankName: 'bankName',
-      bankAccount: 'bankAccount',
+      bankName: bankName,
+      bankAccount: bankAccount,
     );
 
     print('orderId: $orderId');

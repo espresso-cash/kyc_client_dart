@@ -319,10 +319,28 @@ class _UserViewState extends State<UserView> {
                   );
 
               if (!context.mounted) return;
-              showSnackBar(context, message: 'Order created');
+              showSnackBar(context, message: 'Onramp Order created');
             },
             child: const Text('Create Onramp Order'),
           ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () async {
+              final partnerPk = context.read<PartnerAppState>().authPublicKey;
+              await context.read<WalletAppState>().createOffRampOrder(
+                    amount: _amountController.text,
+                    currency: _currencyController.text,
+                    partnerPK: partnerPk,
+                    bankName: 'Bank',
+                    bankAccount: '123456789',
+                  );
+
+              if (!context.mounted) return;
+              showSnackBar(context, message: 'Offramp Order created');
+            },
+            child: const Text('Create Offramp Order'),
+          ),
+          const SizedBox(height: 16),
           const CustomDivider(),
           const SizedBox(height: 16),
         ],
