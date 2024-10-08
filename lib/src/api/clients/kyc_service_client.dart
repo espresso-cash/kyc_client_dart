@@ -9,6 +9,8 @@ import '../models/v1_accept_order_request.dart';
 import '../models/v1_accept_order_response.dart';
 import '../models/v1_complete_order_request.dart';
 import '../models/v1_complete_order_response.dart';
+import '../models/v1_create_off_ramp_order_request.dart';
+import '../models/v1_create_off_ramp_order_response.dart';
 import '../models/v1_create_on_ramp_order_request.dart';
 import '../models/v1_create_on_ramp_order_response.dart';
 import '../models/v1_fail_order_request.dart';
@@ -52,6 +54,11 @@ abstract class KycServiceClient {
   @POST('/v1/completeOrder')
   Future<V1CompleteOrderResponse> kycServiceCompleteOrder({
     @Body() required V1CompleteOrderRequest body,
+  });
+
+  @POST('/v1/createOffRampOrder')
+  Future<V1CreateOffRampOrderResponse> kycServiceCreateOffRampOrder({
+    @Body() required V1CreateOffRampOrderRequest body,
   });
 
   @POST('/v1/createOnRampOrder')

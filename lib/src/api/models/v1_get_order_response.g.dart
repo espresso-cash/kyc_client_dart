@@ -22,6 +22,9 @@ _$V1GetOrderResponseImpl _$$V1GetOrderResponseImplFromJson(
       fiatCurrency: json['fiatCurrency'] as String,
       bankName: json['bankName'] as String,
       bankAccount: json['bankAccount'] as String,
+      cryptoWalletAddress: json['cryptoWalletAddress'] as String,
+      transaction: json['transaction'] as String,
+      transactionId: json['transactionId'] as String,
     );
 
 Map<String, dynamic> _$$V1GetOrderResponseImplToJson(
@@ -40,4 +43,7 @@ Map<String, dynamic> _$$V1GetOrderResponseImplToJson(
       'fiatCurrency': instance.fiatCurrency,
       'bankName': instance.bankName,
       'bankAccount': instance.bankAccount,
+      'cryptoWalletAddress': instance.cryptoWalletAddress,
+      'transaction': instance.transaction,
+      'transactionId': instance.transactionId,
     };

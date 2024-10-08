@@ -11,6 +11,9 @@ part 'v1_accept_order_request.g.dart';
 class V1AcceptOrderRequest with _$V1AcceptOrderRequest {
   const factory V1AcceptOrderRequest({
     required String orderId,
+    String? bankName,
+    String? bankAccount,
+    String? cryptoWalletAddress,
   }) = _V1AcceptOrderRequest;
   
   factory V1AcceptOrderRequest.fromJson(Map<String, Object?> json) => _$V1AcceptOrderRequestFromJson(json);

@@ -12,6 +12,8 @@ export 'models/v1_accept_order_request.dart';
 export 'models/v1_accept_order_response.dart';
 export 'models/v1_complete_order_request.dart';
 export 'models/v1_complete_order_response.dart';
+export 'models/v1_create_off_ramp_order_request.dart';
+export 'models/v1_create_off_ramp_order_response.dart';
 export 'models/v1_create_on_ramp_order_request.dart';
 export 'models/v1_create_on_ramp_order_response.dart';
 export 'models/v1_fail_order_request.dart';
