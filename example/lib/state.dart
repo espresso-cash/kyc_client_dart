@@ -7,8 +7,6 @@ import 'package:solana/base58.dart';
 
 import 'package:solana/solana.dart';
 
-const validatorPK = '5PcfzhA3saCwcJjRstKyytMwwxeK1XJt48WGUhZEyecp';
-
 class WalletAppState extends ChangeNotifier {
   Ed25519HDKeyPair? get wallet => _wallet;
   String get authPublicKey => _authPublicKey;
@@ -61,15 +59,8 @@ class WalletAppState extends ChangeNotifier {
   }
 
   Future<void> grantPartnerAccess(String partnerPK) async {
-    try {
-      await _client.grantPartnerAccess(partnerPK);
-      notifyListeners();
-    } catch (e) {
-      // Handle the error here
-      print('Error granting partner access: $e');
-      // You might want to rethrow the error or handle it in a specific way
-      // rethrow;
-    }
+    await _client.grantPartnerAccess(partnerPK);
+    notifyListeners();
   }
 
   Future<void> fetchPartnerInfo(String partnerPK) async {

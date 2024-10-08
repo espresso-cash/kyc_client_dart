@@ -86,10 +86,13 @@ class KycUserClient {
 
   Future<void> _initializeKycClient() async {
     final publicKey = await _authKeyPair.extractPublicKey();
-    final adminTokenData = jwt.JWT(
-      <String, dynamic>{'iss': _authPublicKey, 'aud': 'kyc.espressocash.com'},
+    final payload = jwt.JWT(
+      <String, dynamic>{
+        'iss': _authPublicKey,
+        'aud': 'kyc.espressocash.com',
+      },
     );
-    final token = adminTokenData.sign(
+    final token = payload.sign(
       jwt.EdDSAPrivateKey(
         await _authKeyPair.extractPrivateKeyBytes() + publicKey.bytes,
       ),
@@ -102,13 +105,13 @@ class KycUserClient {
 
   Future<void> _initializeValidatorClient() async {
     final publicKey = await _authKeyPair.extractPublicKey();
-    final adminTokenData = jwt.JWT(
+    final payload = jwt.JWT(
       <String, dynamic>{
         'iss': _authPublicKey,
         'aud': 'validator.espressocash.com',
       },
     );
-    final token = adminTokenData.sign(
+    final token = payload.sign(
       jwt.EdDSAPrivateKey(
         await _authKeyPair.extractPrivateKeyBytes() + publicKey.bytes,
       ),

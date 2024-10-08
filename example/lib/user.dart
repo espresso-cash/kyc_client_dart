@@ -246,19 +246,6 @@ class _UserViewState extends State<UserView> {
               child: const Text('Grant partner access'),
             ),
           ),
-          const SizedBox(height: 8),
-          Consumer<PartnerAppState>(
-            builder: (context, partnerState, _) => ElevatedButton(
-              onPressed: () async {
-                await context.read<WalletAppState>().grantPartnerAccess(
-                      validatorPK,
-                    );
-                if (!context.mounted) return;
-                showSnackBar(context, message: 'Granted partner access');
-              },
-              child: const Text('Grant validator access'),
-            ),
-          ),
           const SizedBox(height: 16),
           const CustomDivider(),
           const SizedBox(height: 16),
