@@ -25,6 +25,7 @@ _$V1GetOrderResponseImpl _$$V1GetOrderResponseImplFromJson(
       cryptoWalletAddress: json['cryptoWalletAddress'] as String,
       transaction: json['transaction'] as String,
       transactionId: json['transactionId'] as String,
+      externalId: json['externalId'] as String,
     );
 
 Map<String, dynamic> _$$V1GetOrderResponseImplToJson(
@@ -46,4 +47,5 @@ Map<String, dynamic> _$$V1GetOrderResponseImplToJson(
       'cryptoWalletAddress': instance.cryptoWalletAddress,
       'transaction': instance.transaction,
       'transactionId': instance.transactionId,
+      'externalId': instance.externalId,
     };

@@ -36,6 +36,7 @@ mixin _$V1GetOrderResponse {
   String get cryptoWalletAddress => throw _privateConstructorUsedError;
   String get transaction => throw _privateConstructorUsedError;
   String get transactionId => throw _privateConstructorUsedError;
+  String get externalId => throw _privateConstructorUsedError;
 
   /// Serializes this V1GetOrderResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -69,7 +70,8 @@ abstract class $V1GetOrderResponseCopyWith<$Res> {
       String bankAccount,
       String cryptoWalletAddress,
       String transaction,
-      String transactionId});
+      String transactionId,
+      String externalId});
 }
 
 /// @nodoc
@@ -103,6 +105,7 @@ class _$V1GetOrderResponseCopyWithImpl<$Res, $Val extends V1GetOrderResponse>
     Object? cryptoWalletAddress = null,
     Object? transaction = null,
     Object? transactionId = null,
+    Object? externalId = null,
   }) {
     return _then(_value.copyWith(
       orderId: null == orderId
@@ -169,6 +172,10 @@ class _$V1GetOrderResponseCopyWithImpl<$Res, $Val extends V1GetOrderResponse>
           ? _value.transactionId
           : transactionId // ignore: cast_nullable_to_non_nullable
               as String,
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -197,7 +204,8 @@ abstract class _$$V1GetOrderResponseImplCopyWith<$Res>
       String bankAccount,
       String cryptoWalletAddress,
       String transaction,
-      String transactionId});
+      String transactionId,
+      String externalId});
 }
 
 /// @nodoc
@@ -229,6 +237,7 @@ class __$$V1GetOrderResponseImplCopyWithImpl<$Res>
     Object? cryptoWalletAddress = null,
     Object? transaction = null,
     Object? transactionId = null,
+    Object? externalId = null,
   }) {
     return _then(_$V1GetOrderResponseImpl(
       orderId: null == orderId
@@ -295,6 +304,10 @@ class __$$V1GetOrderResponseImplCopyWithImpl<$Res>
           ? _value.transactionId
           : transactionId // ignore: cast_nullable_to_non_nullable
               as String,
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -318,7 +331,8 @@ class _$V1GetOrderResponseImpl implements _V1GetOrderResponse {
       required this.bankAccount,
       required this.cryptoWalletAddress,
       required this.transaction,
-      required this.transactionId});
+      required this.transactionId,
+      required this.externalId});
 
   factory _$V1GetOrderResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1GetOrderResponseImplFromJson(json);
@@ -355,10 +369,12 @@ class _$V1GetOrderResponseImpl implements _V1GetOrderResponse {
   final String transaction;
   @override
   final String transactionId;
+  @override
+  final String externalId;
 
   @override
   String toString() {
-    return 'V1GetOrderResponse(orderId: $orderId, created: $created, status: $status, partnerPublicKey: $partnerPublicKey, userPublicKey: $userPublicKey, comment: $comment, type: $type, cryptoAmount: $cryptoAmount, cryptoCurrency: $cryptoCurrency, fiatAmount: $fiatAmount, fiatCurrency: $fiatCurrency, bankName: $bankName, bankAccount: $bankAccount, cryptoWalletAddress: $cryptoWalletAddress, transaction: $transaction, transactionId: $transactionId)';
+    return 'V1GetOrderResponse(orderId: $orderId, created: $created, status: $status, partnerPublicKey: $partnerPublicKey, userPublicKey: $userPublicKey, comment: $comment, type: $type, cryptoAmount: $cryptoAmount, cryptoCurrency: $cryptoCurrency, fiatAmount: $fiatAmount, fiatCurrency: $fiatCurrency, bankName: $bankName, bankAccount: $bankAccount, cryptoWalletAddress: $cryptoWalletAddress, transaction: $transaction, transactionId: $transactionId, externalId: $externalId)';
   }
 
   @override
@@ -392,7 +408,9 @@ class _$V1GetOrderResponseImpl implements _V1GetOrderResponse {
             (identical(other.transaction, transaction) ||
                 other.transaction == transaction) &&
             (identical(other.transactionId, transactionId) ||
-                other.transactionId == transactionId));
+                other.transactionId == transactionId) &&
+            (identical(other.externalId, externalId) ||
+                other.externalId == externalId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -414,7 +432,8 @@ class _$V1GetOrderResponseImpl implements _V1GetOrderResponse {
       bankAccount,
       cryptoWalletAddress,
       transaction,
-      transactionId);
+      transactionId,
+      externalId);
 
   /// Create a copy of V1GetOrderResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -450,7 +469,8 @@ abstract class _V1GetOrderResponse implements V1GetOrderResponse {
       required final String bankAccount,
       required final String cryptoWalletAddress,
       required final String transaction,
-      required final String transactionId}) = _$V1GetOrderResponseImpl;
+      required final String transactionId,
+      required final String externalId}) = _$V1GetOrderResponseImpl;
 
   factory _V1GetOrderResponse.fromJson(Map<String, dynamic> json) =
       _$V1GetOrderResponseImpl.fromJson;
@@ -487,6 +507,8 @@ abstract class _V1GetOrderResponse implements V1GetOrderResponse {
   String get transaction;
   @override
   String get transactionId;
+  @override
+  String get externalId;
 
   /// Create a copy of V1GetOrderResponse
   /// with the given fields replaced by the non-null parameter values.

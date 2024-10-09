@@ -221,6 +221,7 @@ class _PartnerViewState extends State<PartnerView> {
                                   orderId: orderId,
                                   bankName: 'bankName',
                                   bankAccount: '123456789',
+                                  externalId: 'b111-a222-c333',
                                 );
                             if (!context.mounted) return;
                             showSnackBar(
@@ -331,6 +332,7 @@ class _PartnerViewState extends State<PartnerView> {
                                   orderId: orderId,
                                   cryptoWalletAddress:
                                       '5EY2wqRSXsnfU7YwBnW45HoTLGmZgFkfA1A69N8T7Vtx',
+                                  externalId: 'b111-a222-c333',
                                 );
                             if (!context.mounted) return;
                             showSnackBar(

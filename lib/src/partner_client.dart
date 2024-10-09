@@ -191,12 +191,14 @@ class KycPartnerClient {
     required String orderId,
     required String bankName,
     required String bankAccount,
+    required String externalId,
   }) async {
     final response = _apiClient.kycServiceAcceptOrder(
       body: V1AcceptOrderRequest(
         orderId: orderId,
         bankName: bankName,
         bankAccount: bankAccount,
+        externalId: externalId,
       ),
     );
 
@@ -206,11 +208,13 @@ class KycPartnerClient {
   Future<V1AcceptOrderResponse> acceptOffRampOrder({
     required String orderId,
     required String cryptoWalletAddress,
+    required String externalId,
   }) async {
     final response = _apiClient.kycServiceAcceptOrder(
       body: V1AcceptOrderRequest(
         orderId: orderId,
         cryptoWalletAddress: cryptoWalletAddress,
+        externalId: externalId,
       ),
     );
 

@@ -171,7 +171,7 @@ class _UserViewState extends State<UserView> {
             onPressed: _phoneController.text.isEmpty
                 ? null
                 : () async {
-                    await context.read<WalletAppState>().initEmailValidation();
+                    await context.read<WalletAppState>().initPhoneValidation();
                     if (!context.mounted) return;
                     showSnackBar(
                       context,

@@ -14,6 +14,7 @@ class V1AcceptOrderRequest with _$V1AcceptOrderRequest {
     String? bankName,
     String? bankAccount,
     String? cryptoWalletAddress,
+    String? externalId,
   }) = _V1AcceptOrderRequest;
   
   factory V1AcceptOrderRequest.fromJson(Map<String, Object?> json) => _$V1AcceptOrderRequestFromJson(json);

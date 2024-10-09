@@ -297,21 +297,25 @@ class PartnerAppState extends ChangeNotifier {
     required String orderId,
     required String bankName,
     required String bankAccount,
+    required String externalId,
   }) async {
     await _client.acceptOnRampOrder(
       orderId: orderId,
       bankName: bankName,
       bankAccount: bankAccount,
+      externalId: externalId,
     );
   }
 
   Future<void> acceptOffRampOrder({
     required String orderId,
     required String cryptoWalletAddress,
+    required String externalId,
   }) async {
     await _client.acceptOffRampOrder(
       orderId: orderId,
       cryptoWalletAddress: cryptoWalletAddress,
+      externalId: externalId,
     );
   }
 

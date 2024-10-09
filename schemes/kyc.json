@@ -607,6 +607,10 @@
         "cryptoWalletAddress": {
           "type": "string",
           "nullable": true
+        },
+        "externalId": {
+          "type": "string",
+          "nullable": true
         }
       }
     },
@@ -808,6 +812,9 @@
           "type": "string"
         },
         "transactionId": {
+          "type": "string"
+        },
+        "externalId": {
           "type": "string"
         }
       }

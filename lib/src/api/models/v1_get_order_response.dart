@@ -26,6 +26,7 @@ class V1GetOrderResponse with _$V1GetOrderResponse {
     required String cryptoWalletAddress,
     required String transaction,
     required String transactionId,
+    required String externalId,
   }) = _V1GetOrderResponse;
   
   factory V1GetOrderResponse.fromJson(Map<String, Object?> json) => _$V1GetOrderResponseFromJson(json);
