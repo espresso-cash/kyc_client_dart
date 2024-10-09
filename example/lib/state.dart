@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cross_file/cross_file.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter/foundation.dart';
@@ -240,14 +242,20 @@ class PartnerAppState extends ChangeNotifier {
     required String secretKey,
     required String userPK,
   }) async {
-    final response = await _client.getValidationResult(
-      key: 'email',
-      validatorPK: _authPublicKey,
+    final kycValidationResult = await _client.getValidationResult(
+      key: 'kycSmileId',
       userPK: userPK,
       secretKey: secretKey,
     );
 
-    _result = response;
+    final email = await _client.getEmail(userPK: userPK, secretKey: secretKey);
+    final phone = await _client.getPhone(userPK: userPK, secretKey: secretKey);
+
+    final emailValidationResult = jsonEncode(email);
+    final phoneValidationResult = jsonEncode(phone);
+
+    _result =
+        'kyc: $kycValidationResult\nemail: $emailValidationResult\nphone: $phoneValidationResult';
     notifyListeners();
   }
 

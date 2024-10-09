@@ -64,6 +64,47 @@ class KycPartnerClient {
     _apiClient = KycServiceClient(dio, baseUrl: baseUrl);
   }
 
+  Future<V1GetInfoResponse> getUserInfo(String userPK) async =>
+      _apiClient.kycServiceGetInfo(
+        body: V1GetInfoRequest(publicKey: userPK),
+      );
+
+  Future<String> getUserSecretKey(String userPK) async {
+    final info = await _apiClient.kycServiceGetInfo(
+      body: V1GetInfoRequest(publicKey: userPK),
+    );
+
+    final edSK = await authKeyPair.extractPrivateKeyBytes();
+    final xSK = Uint8List(32);
+
+    TweetNaClExt.crypto_sign_ed25519_sk_to_x25519_sk(
+      xSK,
+      Uint8List.fromList(edSK),
+    );
+
+    final userEdPK = Uint8List.fromList(base58decode(userPK));
+    final userXPK = Uint8List(32);
+
+    TweetNaClExt.crypto_sign_ed25519_pk_to_x25519_pk(
+      userXPK,
+      userEdPK,
+    );
+
+    final userPublicKey = PublicKey(userXPK);
+    final privateKey = PrivateKey(xSK);
+
+    final sealedBox = Box(
+      theirPublicKey: userPublicKey,
+      myPrivateKey: privateKey,
+    );
+
+    final encodedSecretKey = base64Decode(info.encryptedSecretKey);
+    final encryptedMessage = EncryptedMessage.fromList(encodedSecretKey);
+    final decryptedSecretKey = sealedBox.decrypt(encryptedMessage);
+
+    return base58encode(decryptedSecretKey);
+  }
+
   Future<Map<String, dynamic>> getData({
     required String userPK,
     required String secretKey,
@@ -108,6 +149,81 @@ class KycPartnerClient {
     );
   }
 
+  Future<Map<String, dynamic>> getEmail({
+    required String userPK,
+    required String secretKey,
+  }) async {
+    final results = await Future.wait([
+      getData(userPK: userPK, secretKey: secretKey),
+      getValidationResult(key: 'email', secretKey: secretKey, userPK: userPK),
+    ]);
+
+    final userData = results[0] as Map<String, dynamic>?;
+    final validationResult = results[1] as String?;
+
+    final email = userData?['email'] as String;
+    final emailHash = await _hash(email);
+    final verified = emailHash == validationResult;
+
+    return {
+      'value': email,
+      'verified': verified,
+    };
+  }
+
+  Future<Map<String, dynamic>> getPhone({
+    required String userPK,
+    required String secretKey,
+  }) async {
+    final results = await Future.wait([
+      getData(userPK: userPK, secretKey: secretKey),
+      getValidationResult(key: 'phone', secretKey: secretKey, userPK: userPK),
+    ]);
+
+    final userData = results[0] as Map<String, dynamic>?;
+    final validationResult = results[1] as String?;
+
+    final phone = userData?['phone'] as String;
+    final phoneHash = await _hash(phone);
+    final verified = phoneHash == validationResult;
+
+    return {
+      'value': phone,
+      'verified': verified,
+    };
+  }
+
+  Future<String?> getValidationResult({
+    required String key,
+    required String secretKey,
+    required String userPK,
+  }) async {
+    final response = await _apiClient
+        .kycServiceGetValidationResult(
+          body: V1GetValidationResultRequest(
+            userPublicKey: userPK,
+            validatorPublicKey: _authPublicKey,
+          ),
+        )
+        .then((e) => e.data.toJson());
+
+    final data = response[key] as String?;
+
+    if (data == null || data.isEmpty) return null;
+
+    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+
+    final signedMessage = SignedMessage.fromList(
+      signedMessage: base64Decode(data),
+    );
+
+    final encryptedData = base64Encode(signedMessage.message);
+    final decrypted =
+        box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
+
+    return hex.encode(decrypted);
+  }
+
   Future<void> setValidationResult({
     required V1ValidationData value,
     required String userPK,
@@ -126,58 +242,6 @@ class KycPartnerClient {
         data: encryptedValue,
         userPublicKey: userPK,
       ),
-    );
-  }
-
-  Future<String?> getValidationResult({
-    required String key,
-    required String validatorPK,
-    required String secretKey,
-    required String userPK,
-  }) async {
-    final response = await _apiClient
-        .kycServiceGetValidationResult(
-          body: V1GetValidationResultRequest(
-            userPublicKey: userPK,
-            validatorPublicKey: validatorPK,
-          ),
-        )
-        .then((e) => e.data.toJson());
-
-    final data = response[key] as String?;
-
-    if (data == null) return null;
-
-    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
-
-    final signedMessage = SignedMessage.fromList(
-      signedMessage: base64Decode(data),
-    );
-
-    final encryptedData = base64Encode(signedMessage.message);
-    final decrypted =
-        box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
-
-    return hex.encode(decrypted);
-  }
-
-  Future<void> validateField({
-    required V1ValidationData value,
-    required String userPK,
-    required String secretKey,
-  }) async {
-    final updatedEmail = value.email != null ? await _hash(value.email!) : null;
-    final updatedPhone = value.phone != null ? await _hash(value.phone!) : null;
-
-    final updatedValue = value.copyWith(
-      email: updatedEmail,
-      phone: updatedPhone,
-    );
-
-    await setValidationResult(
-      value: updatedValue,
-      userPK: userPK,
-      secretKey: secretKey,
     );
   }
 
@@ -258,56 +322,12 @@ class KycPartnerClient {
       _apiClient.kycServiceRejectOrder(
         body: V1RejectOrderRequest(orderId: orderId, reason: reason),
       );
-
-  Future<V1GetInfoResponse> getUserInfo(String userPK) async =>
-      _apiClient.kycServiceGetInfo(
-        body: V1GetInfoRequest(publicKey: userPK),
-      );
-
-  Future<String> getUserSecretKey(String userPK) async {
-    final info = await _apiClient.kycServiceGetInfo(
-      body: V1GetInfoRequest(publicKey: userPK),
-    );
-
-    final edSK = await authKeyPair.extractPrivateKeyBytes();
-    final xSK = Uint8List(32);
-
-    TweetNaClExt.crypto_sign_ed25519_sk_to_x25519_sk(
-      xSK,
-      Uint8List.fromList(edSK),
-    );
-
-    final userEdPK = Uint8List.fromList(base58decode(userPK));
-    final userXPK = Uint8List(32);
-
-    TweetNaClExt.crypto_sign_ed25519_pk_to_x25519_pk(
-      userXPK,
-      userEdPK,
-    );
-
-    final userPublicKey = PublicKey(userXPK);
-    final privateKey = PrivateKey(xSK);
-
-    final sealedBox = Box(
-      theirPublicKey: userPublicKey,
-      myPrivateKey: privateKey,
-    );
-
-    final encodedSecretKey = base64Decode(info.encryptedSecretKey);
-    final encryptedMessage = EncryptedMessage.fromList(encodedSecretKey);
-    final decryptedSecretKey = sealedBox.decrypt(encryptedMessage);
-
-    return base58encode(decryptedSecretKey);
-  }
 }
 
-Future<String> _hash(String value) async {
-  const hex = Base16Encoder.instance;
-
-  const hasher = Hash.blake2b;
-  final hash = hex.encode(hasher(value));
-
-  return hash;
+String _hash(String value) {
+  final bytes = utf8.encode(value);
+  final digest = Hash.sha256(bytes);
+  return hex.encode(digest);
 }
 
 extension V1ValidationDataExtensions on V1ValidationData {
