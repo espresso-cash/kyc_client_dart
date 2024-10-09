@@ -99,10 +99,18 @@ class _ValueFilePickerState extends State<ValueFilePicker> {
 }
 
 class CustomDivider extends StatelessWidget {
-  const CustomDivider({super.key});
+  const CustomDivider({
+    super.key,
+    this.thickness = 1,
+  });
+
+  final double thickness;
 
   @override
-  Widget build(BuildContext context) => const Divider(height: 16);
+  Widget build(BuildContext context) => Divider(
+        height: 16,
+        thickness: thickness,
+      );
 }
 
 void showSnackBar(BuildContext context, {required String message}) {

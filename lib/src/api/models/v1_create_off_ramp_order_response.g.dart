@@ -1,21 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'v1_complete_order_request.dart';
+part of 'v1_create_off_ramp_order_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$V1CompleteOrderRequestImpl _$$V1CompleteOrderRequestImplFromJson(
+_$V1CreateOffRampOrderResponseImpl _$$V1CreateOffRampOrderResponseImplFromJson(
         Map<String, dynamic> json) =>
-    _$V1CompleteOrderRequestImpl(
+    _$V1CreateOffRampOrderResponseImpl(
       orderId: json['orderId'] as String,
-      transactionId: json['transactionId'] as String?,
     );
 
-Map<String, dynamic> _$$V1CompleteOrderRequestImplToJson(
-        _$V1CompleteOrderRequestImpl instance) =>
+Map<String, dynamic> _$$V1CreateOffRampOrderResponseImplToJson(
+        _$V1CreateOffRampOrderResponseImpl instance) =>
     <String, dynamic>{
       'orderId': instance.orderId,
-      'transactionId': instance.transactionId,
     };

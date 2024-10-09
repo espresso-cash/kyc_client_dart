@@ -25,11 +25,13 @@ class WalletAppState extends ChangeNotifier {
 
   String? _email;
   String? _phone;
-  String? _orderId;
+  String? _onRampOrderId;
+  String? _offRampOrderId;
 
   String? get email => _email;
   String? get phone => _phone;
-  String? get orderId => _orderId;
+  String? get onRampOrderId => _onRampOrderId;
+  String? get offRampOrderId => _offRampOrderId;
   List<String>? _orders;
 
   Future<void> createWallet() async {
@@ -42,7 +44,6 @@ class WalletAppState extends ChangeNotifier {
         final signature = await _wallet!.sign(data);
         return signature;
       },
-      baseUrl: 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
     );
 
     await _client.init(walletAddress: _wallet!.publicKey.toString());
@@ -106,12 +107,28 @@ class WalletAppState extends ChangeNotifier {
     }
   }
 
+  Future<void> initEmailValidation() async {
+    await _client.initEmailValidation();
+  }
+
+  Future<void> initPhoneValidation() async {
+    await _client.initPhoneValidation();
+  }
+
+  Future<void> validateEmail(String code) async {
+    await _client.validateEmail(code);
+  }
+
+  Future<void> validatePhone(String code) async {
+    await _client.validatePhone(code);
+  }
+
   Future<void> createOnRampOrder({
     required String amount,
     required String currency,
     required String partnerPK,
   }) async {
-    final orderId = await _client.createOrder(
+    final orderId = await _client.createOnRampOrder(
       partnerPK: partnerPK,
       cryptoAmount: amount,
       cryptoCurrency: currency,
@@ -119,9 +136,28 @@ class WalletAppState extends ChangeNotifier {
       fiatCurrency: currency,
     );
 
-    print('orderId: $orderId');
+    _onRampOrderId = orderId;
+    notifyListeners();
+  }
 
-    _orderId = orderId;
+  Future<void> createOffRampOrder({
+    required String amount,
+    required String currency,
+    required String partnerPK,
+    required String bankName,
+    required String bankAccount,
+  }) async {
+    final orderId = await _client.createOffRampOrder(
+      partnerPK: partnerPK,
+      cryptoAmount: amount,
+      cryptoCurrency: currency,
+      fiatAmount: amount,
+      fiatCurrency: currency,
+      bankName: bankName,
+      bankAccount: bankAccount,
+    );
+
+    _offRampOrderId = orderId;
     notifyListeners();
   }
 
@@ -147,7 +183,8 @@ class PartnerAppState extends ChangeNotifier {
   String get phone => _phone;
   XFile? get file => _file;
   String? get validationResult => _result;
-  String? get orderData => _orderData;
+  String? get onRampOrderData => _onRampOrderData;
+  String? get offRampOrderData => _offRampOrderData;
   String? get orders => _orders?.map((order) => order).join('\n\n');
 
   late String _authPublicKey = '';
@@ -156,7 +193,8 @@ class PartnerAppState extends ChangeNotifier {
   late String _phone = '';
   XFile? _file;
   String? _result;
-  String? _orderData;
+  String? _onRampOrderData;
+  String? _offRampOrderData;
   List<String>? _orders;
 
   late KycPartnerClient _client;
@@ -165,10 +203,7 @@ class PartnerAppState extends ChangeNotifier {
     final keyPair = await Ed25519().newKeyPairFromSeed(
       base58decode('8ui6TQMfAudigNuKycopDyZ6irMeS7DTSe73d2gzv1Hz'),
     );
-    _client = KycPartnerClient(
-      authKeyPair: keyPair,
-      baseUrl: 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
-    );
+    _client = KycPartnerClient(authKeyPair: keyPair);
 
     await _client.init();
 
@@ -206,7 +241,7 @@ class PartnerAppState extends ChangeNotifier {
     required String userPK,
   }) async {
     final response = await _client.getValidationResult(
-      key: 'kycSmileId',
+      key: 'email',
       validatorPK: _authPublicKey,
       userPK: userPK,
       secretKey: secretKey,
@@ -234,10 +269,18 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchOrder(String orderId) async {
+  Future<void> fetchOnRampOrder(String orderId) async {
     final data = await _client.getOrder(orderId);
 
-    _orderData = data.toJson().toString();
+    _onRampOrderData = data.toJson().toString();
+
+    notifyListeners();
+  }
+
+  Future<void> fetchOffRampOrder(String orderId) async {
+    final data = await _client.getOrder(orderId);
+
+    _offRampOrderData = data.toJson().toString();
 
     notifyListeners();
   }
@@ -250,12 +293,40 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> completeOrder(String orderId) async {
-    await _client.completeOrder(orderId);
+  Future<void> acceptOnRampOrder({
+    required String orderId,
+    required String bankName,
+    required String bankAccount,
+  }) async {
+    await _client.acceptOnRampOrder(
+      orderId: orderId,
+      bankName: bankName,
+      bankAccount: bankAccount,
+    );
   }
 
-  Future<void> acceptOrder(String orderId) async {
-    await _client.acceptOrder(orderId);
+  Future<void> acceptOffRampOrder({
+    required String orderId,
+    required String cryptoWalletAddress,
+  }) async {
+    await _client.acceptOffRampOrder(
+      orderId: orderId,
+      cryptoWalletAddress: cryptoWalletAddress,
+    );
+  }
+
+  Future<void> completeOnRampOrder({
+    required String orderId,
+    required String transactionId,
+  }) async {
+    await _client.completeOnRampOrder(
+      orderId: orderId,
+      transactionId: transactionId,
+    );
+  }
+
+  Future<void> completeOffRampOrder(String orderId) async {
+    await _client.completeOffRampOrder(orderId);
   }
 
   Future<void> failOrder({

@@ -1,0 +1,263 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "espressocash/validator/v1/validator.proto",
+      "version": "version not set"
+    },
+    "tags": [
+      {
+        "name": "ValidatorService"
+      }
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/v1/initDocumentValidation": {
+        "post": {
+          "operationId": "ValidatorService_InitDocumentValidation",
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "schema": {
+                "$ref": "#/definitions/v1InitDocumentValidationResponse"
+              }
+            },
+            "default": {
+              "description": "An unexpected error response.",
+              "schema": {
+                "$ref": "#/definitions/rpcStatus"
+              }
+            }
+          },
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/v1InitDocumentValidationRequest"
+              }
+            }
+          ],
+          "tags": [
+            "ValidatorService"
+          ]
+        }
+      },
+      "/v1/initEmailValidation": {
+        "post": {
+          "operationId": "ValidatorService_InitEmailValidation",
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "schema": {
+                "$ref": "#/definitions/v1InitEmailValidationResponse"
+              }
+            },
+            "default": {
+              "description": "An unexpected error response.",
+              "schema": {
+                "$ref": "#/definitions/rpcStatus"
+              }
+            }
+          },
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/v1InitEmailValidationRequest"
+              }
+            }
+          ],
+          "tags": [
+            "ValidatorService"
+          ]
+        }
+      },
+      "/v1/initPhoneValidation": {
+        "post": {
+          "operationId": "ValidatorService_InitPhoneValidation",
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "schema": {
+                "$ref": "#/definitions/v1InitPhoneValidationResponse"
+              }
+            },
+            "default": {
+              "description": "An unexpected error response.",
+              "schema": {
+                "$ref": "#/definitions/rpcStatus"
+              }
+            }
+          },
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/v1InitPhoneValidationRequest"
+              }
+            }
+          ],
+          "tags": [
+            "ValidatorService"
+          ]
+        }
+      },
+      "/v1/validateEmail": {
+        "post": {
+          "operationId": "ValidatorService_ValidateEmail",
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "schema": {
+                "$ref": "#/definitions/v1ValidateEmailResponse"
+              }
+            },
+            "default": {
+              "description": "An unexpected error response.",
+              "schema": {
+                "$ref": "#/definitions/rpcStatus"
+              }
+            }
+          },
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/v1ValidateEmailRequest"
+              }
+            }
+          ],
+          "tags": [
+            "ValidatorService"
+          ]
+        }
+      },
+      "/v1/validatePhone": {
+        "post": {
+          "operationId": "ValidatorService_ValidatePhone",
+          "responses": {
+            "200": {
+              "description": "A successful response.",
+              "schema": {
+                "$ref": "#/definitions/v1ValidatePhoneResponse"
+              }
+            },
+            "default": {
+              "description": "An unexpected error response.",
+              "schema": {
+                "$ref": "#/definitions/rpcStatus"
+              }
+            }
+          },
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/v1ValidatePhoneRequest"
+              }
+            }
+          ],
+          "tags": [
+            "ValidatorService"
+          ]
+        }
+      }
+    },
+    "definitions": {
+      "protobufAny": {
+        "type": "object",
+        "properties": {
+          "@type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": {}
+      },
+      "rpcStatus": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/definitions/protobufAny"
+            }
+          }
+        }
+      },
+      "v1InitDocumentValidationRequest": {
+        "type": "object"
+      },
+      "v1InitDocumentValidationResponse": {
+        "type": "object"
+      },
+      "v1InitEmailValidationRequest": {
+        "type": "object"
+      },
+      "v1InitEmailValidationResponse": {
+        "type": "object"
+      },
+      "v1InitPhoneValidationRequest": {
+        "type": "object"
+      },
+      "v1InitPhoneValidationResponse": {
+        "type": "object"
+      },
+      "v1ValidateEmailRequest": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "v1ValidateEmailResponse": {
+        "type": "object"
+      },
+      "v1ValidatePhoneRequest": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "v1ValidatePhoneResponse": {
+        "type": "object"
+      }
+    },
+    "securityDefinitions": {
+      "bearer": {
+        "type": "apiKey",
+        "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "security": [
+      {
+        "bearer": []
+      }
+    ]
+  }

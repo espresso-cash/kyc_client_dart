@@ -15,10 +15,18 @@ export 'models/partner.dart';
 
 typedef SignRequest = Future<Signature> Function(Iterable<int> data);
 
-class KycUserClient {
-  KycUserClient({required this.sign, this.baseUrl});
+const _defaultKycBaseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/';
+const _defaultValidatorBaseUrl = 'https://validator.espressocash.com/';
 
-  final String? baseUrl;
+class KycUserClient {
+  KycUserClient({
+    required this.sign,
+    this.kycBaseUrl = _defaultKycBaseUrl,
+    this.validatorBaseUrl = _defaultValidatorBaseUrl,
+  });
+
+  final String? kycBaseUrl;
+  final String? validatorBaseUrl;
   final SignRequest sign;
 
   static const _seedMessage = 'hello';
@@ -26,14 +34,15 @@ class KycUserClient {
 
   late final SimpleKeyPair _authKeyPair;
   late final String _authPublicKey;
-  late final String _token;
   late final PrivateKey _encryptionSecretKey;
   late final SecretKey _secretKey;
   late final String _encryptedSecretKey;
   late final String _rawSecretKey;
   late final SecretBox _secretBox;
   late final SigningKey _signingKey;
-  late final KycServiceClient _apiClient;
+
+  late final KycServiceClient _kycClient;
+  late final ValidatorServiceClient _validatorClient;
 
   String get authPublicKey => _authPublicKey;
 
@@ -42,11 +51,11 @@ class KycUserClient {
   Future<void> init({required String walletAddress}) async {
     final seed = await _generateSeed();
     await _initializeKeys(seed);
-    await _initializeToken();
-    _initializeApiClient();
+    await _initializeKycClient();
+    await _initializeValidatorClient();
 
     try {
-      final getInfo = await _apiClient.kycServiceGetInfo(
+      final getInfo = await _kycClient.kycServiceGetInfo(
         body: V1GetInfoRequest(publicKey: _authPublicKey),
       );
       await _initializeEncryption(
@@ -75,15 +84,33 @@ class KycUserClient {
     );
   }
 
-  Future<void> _initializeToken() async {
+  Future<void> _initializeKycClient() async {
+    final dio = await _createAuthenticatedClient('kyc.espressocash.com');
+    _kycClient = KycServiceClient(dio, baseUrl: kycBaseUrl);
+  }
+
+  Future<void> _initializeValidatorClient() async {
+    final dio = await _createAuthenticatedClient('validator.espressocash.com');
+    _validatorClient = ValidatorServiceClient(dio, baseUrl: validatorBaseUrl);
+  }
+
+  Future<Dio> _createAuthenticatedClient(String audience) async {
+    final payload = jwt.JWT(
+      <String, dynamic>{
+        'iss': _authPublicKey,
+        'aud': audience,
+      },
+    );
+
     final publicKey = await _authKeyPair.extractPublicKey();
-    final adminTokenData = jwt.JWT(<String, String>{}, issuer: _authPublicKey);
-    _token = adminTokenData.sign(
+    final token = payload.sign(
       jwt.EdDSAPrivateKey(
         await _authKeyPair.extractPrivateKeyBytes() + publicKey.bytes,
       ),
       algorithm: jwt.JWTAlgorithm.EdDSA,
     );
+
+    return Dio()..interceptors.add(AuthInterceptor(token));
   }
 
   Future<void> _initializeEncryption({String? encryptedSecretKey}) async {
@@ -112,14 +139,9 @@ class KycUserClient {
     );
   }
 
-  void _initializeApiClient() {
-    final dio = Dio()..interceptors.add(AuthInterceptor(_token));
-    _apiClient = KycServiceClient(dio, baseUrl: baseUrl);
-  }
-
   Future<void> _initStorage({required String walletAddress}) async {
     final proofSignature = await sign(utf8.encode(_proofMessage));
-    await _apiClient.kycServiceInitStorage(
+    await _kycClient.kycServiceInitStorage(
       body: V1InitStorageRequest(
         walletAddress: walletAddress,
         message: _seedMessage,
@@ -130,7 +152,7 @@ class KycUserClient {
     );
   }
 
-  Future<PartnerModel> getPartnerInfo({required String partnerPK}) => _apiClient
+  Future<PartnerModel> getPartnerInfo({required String partnerPK}) => _kycClient
       .kycServiceGetPartnerInfo(body: V1GetPartnerInfoRequest(id: partnerPK))
       .then((e) => PartnerModel.fromJson(e.toJson()));
 
@@ -150,7 +172,7 @@ class KycUserClient {
       sealedBox.encrypt(Uint8List.fromList(base58decode(_rawSecretKey))),
     );
 
-    await _apiClient.kycServiceGrantAccess(
+    await _kycClient.kycServiceGrantAccess(
       body: V1GrantAccessRequest(
         validatorPublicKey: partnerPK,
         encryptedSecretKey: encodedSecretKey,
@@ -169,7 +191,7 @@ class KycUserClient {
     final photoIdCard =
         idCard != null ? base64Encode(_encryptAndSign(idCard)) : null;
 
-    await _apiClient.kycServiceSetData(
+    await _kycClient.kycServiceSetData(
       body: V1SetDataRequest(
         data: V1UserData(
           email: encryptedData['email'],
@@ -205,7 +227,7 @@ class KycUserClient {
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await _apiClient
+    final response = await _kycClient
         .kycServiceGetData(body: V1GetDataRequest(publicKey: userPK))
         .then((e) => e.data.toJson());
 
@@ -245,14 +267,38 @@ class KycUserClient {
     );
   }
 
-  Future<String> createOrder({
+  Future<void> initDocumentValidation() async {
+    await _validatorClient.validatorServiceInitDocumentValidation();
+  }
+
+  Future<void> initEmailValidation() async {
+    await _validatorClient.validatorServiceInitEmailValidation();
+  }
+
+  Future<void> validateEmail(String code) async {
+    await _validatorClient.validatorServiceValidateEmail(
+      body: V1ValidateEmailRequest(code: code),
+    );
+  }
+
+  Future<void> initPhoneValidation() async {
+    await _validatorClient.validatorServiceInitPhoneValidation();
+  }
+
+  Future<void> validatePhone(String code) async {
+    await _validatorClient.validatorServiceValidatePhone(
+      body: V1ValidatePhoneRequest(code: code),
+    );
+  }
+
+  Future<String> createOnRampOrder({
     required String partnerPK,
     required String cryptoAmount,
     required String cryptoCurrency,
     required String fiatAmount,
     required String fiatCurrency,
   }) async {
-    final response = await _apiClient.kycServiceCreateOnRampOrder(
+    final response = await _kycClient.kycServiceCreateOnRampOrder(
       body: V1CreateOnRampOrderRequest(
         partnerPublicKey: partnerPK,
         cryptoAmount: cryptoAmount,
@@ -265,13 +311,37 @@ class KycUserClient {
     return response.orderId;
   }
 
+    Future<String> createOffRampOrder({
+    required String partnerPK,
+    required String cryptoAmount,
+    required String cryptoCurrency,
+    required String fiatAmount,
+    required String fiatCurrency,
+    required String bankName,
+    required String bankAccount,
+  }) async {
+    final response = await _kycClient.kycServiceCreateOffRampOrder(
+      body: V1CreateOffRampOrderRequest(
+        partnerPublicKey: partnerPK,
+        cryptoAmount: cryptoAmount,
+        cryptoCurrency: cryptoCurrency,
+        fiatAmount: fiatAmount,
+        fiatCurrency: fiatCurrency,
+        bankName: bankName,
+        bankAccount: bankAccount,
+      ),
+    );
+
+    return response.orderId;
+  }
+
   Future<V1GetOrderResponse> getOrder(String orderId) async =>
-      _apiClient.kycServiceGetOrder(
+      _kycClient.kycServiceGetOrder(
         body: V1GetOrderRequest(orderId: orderId),
       );
 
   Future<V1GetOrdersResponse> getOrders() async =>
-      _apiClient.kycServiceGetOrders();
+      _kycClient.kycServiceGetOrders();
 
   SignedMessage _encryptAndSign(Uint8List data) {
     final encrypted = _secretBox.encrypt(data);

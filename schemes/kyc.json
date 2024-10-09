@@ -80,6 +80,38 @@
         ]
       }
     },
+    "/v1/createOffRampOrder": {
+      "post": {
+        "operationId": "KycService_CreateOffRampOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOffRampOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOffRampOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
     "/v1/createOnRampOrder": {
       "post": {
         "operationId": "KycService_CreateOnRampOrder",
@@ -563,6 +595,18 @@
       "properties": {
         "orderId": {
           "type": "string"
+        },
+        "bankName": {
+          "type": "string",
+          "nullable": true
+        },
+        "bankAccount": {
+          "type": "string",
+          "nullable": true
+        },
+        "cryptoWalletAddress": {
+          "type": "string",
+          "nullable": true
         }
       }
     },
@@ -574,11 +618,51 @@
       "properties": {
         "orderId": {
           "type": "string"
+        },
+        "transactionId": {
+          "type": "string",
+          "nullable": true
         }
       }
     },
     "v1CompleteOrderResponse": {
       "type": "object"
+    },
+    "v1CreateOffRampOrderRequest": {
+      "type": "object",
+      "properties": {
+        "partnerPublicKey": {
+          "type": "string"
+        },
+        "cryptoAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "cryptoCurrency": {
+          "type": "string"
+        },
+        "fiatAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "fiatCurrency": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "bankAccount": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateOffRampOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
     },
     "v1CreateOnRampOrderRequest": {
       "type": "object",
@@ -715,6 +799,15 @@
           "type": "string"
         },
         "bankAccount": {
+          "type": "string"
+        },
+        "cryptoWalletAddress": {
+          "type": "string"
+        },
+        "transaction": {
+          "type": "string"
+        },
+        "transactionId": {
           "type": "string"
         }
       }

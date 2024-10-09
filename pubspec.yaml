@@ -7,6 +7,7 @@ environment:
 
 dependencies:
   collection: ^1.18.0
+  convert: ^3.1.1
   cryptography: ^2.7.0
   dart_jsonwebtoken: ^2.14.0
   dio: ^5.4.0
@@ -27,7 +28,19 @@ dev_dependencies:
   test: ^1.24.0
 
 swagger_parser:
-  schema_path: schemes/kyc_service.json
   output_directory: lib/src/api
-  json_serializer: freezed
-  root_client: false
+  squash_clients: false
+  merge_clients: false
+
+  schemes:
+    - schema_path: schemes/kyc.json
+      json_serializer: freezed
+      root_client: false
+      put_in_folder: true
+      put_clients_in_folder: true
+
+    - schema_path: schemes/validator.json
+      json_serializer: freezed
+      root_client: false
+      put_in_folder: true
+      put_clients_in_folder: true

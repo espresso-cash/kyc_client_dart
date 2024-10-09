@@ -21,6 +21,9 @@ V1AcceptOrderRequest _$V1AcceptOrderRequestFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$V1AcceptOrderRequest {
   String get orderId => throw _privateConstructorUsedError;
+  String? get bankName => throw _privateConstructorUsedError;
+  String? get bankAccount => throw _privateConstructorUsedError;
+  String? get cryptoWalletAddress => throw _privateConstructorUsedError;
 
   /// Serializes this V1AcceptOrderRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -38,7 +41,11 @@ abstract class $V1AcceptOrderRequestCopyWith<$Res> {
           $Res Function(V1AcceptOrderRequest) then) =
       _$V1AcceptOrderRequestCopyWithImpl<$Res, V1AcceptOrderRequest>;
   @useResult
-  $Res call({String orderId});
+  $Res call(
+      {String orderId,
+      String? bankName,
+      String? bankAccount,
+      String? cryptoWalletAddress});
 }
 
 /// @nodoc
@@ -58,12 +65,27 @@ class _$V1AcceptOrderRequestCopyWithImpl<$Res,
   @override
   $Res call({
     Object? orderId = null,
+    Object? bankName = freezed,
+    Object? bankAccount = freezed,
+    Object? cryptoWalletAddress = freezed,
   }) {
     return _then(_value.copyWith(
       orderId: null == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
               as String,
+      bankName: freezed == bankName
+          ? _value.bankName
+          : bankName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bankAccount: freezed == bankAccount
+          ? _value.bankAccount
+          : bankAccount // ignore: cast_nullable_to_non_nullable
+              as String?,
+      cryptoWalletAddress: freezed == cryptoWalletAddress
+          ? _value.cryptoWalletAddress
+          : cryptoWalletAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -76,7 +98,11 @@ abstract class _$$V1AcceptOrderRequestImplCopyWith<$Res>
       __$$V1AcceptOrderRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String orderId});
+  $Res call(
+      {String orderId,
+      String? bankName,
+      String? bankAccount,
+      String? cryptoWalletAddress});
 }
 
 /// @nodoc
@@ -93,12 +119,27 @@ class __$$V1AcceptOrderRequestImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? orderId = null,
+    Object? bankName = freezed,
+    Object? bankAccount = freezed,
+    Object? cryptoWalletAddress = freezed,
   }) {
     return _then(_$V1AcceptOrderRequestImpl(
       orderId: null == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
               as String,
+      bankName: freezed == bankName
+          ? _value.bankName
+          : bankName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bankAccount: freezed == bankAccount
+          ? _value.bankAccount
+          : bankAccount // ignore: cast_nullable_to_non_nullable
+              as String?,
+      cryptoWalletAddress: freezed == cryptoWalletAddress
+          ? _value.cryptoWalletAddress
+          : cryptoWalletAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -106,17 +147,27 @@ class __$$V1AcceptOrderRequestImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$V1AcceptOrderRequestImpl implements _V1AcceptOrderRequest {
-  const _$V1AcceptOrderRequestImpl({required this.orderId});
+  const _$V1AcceptOrderRequestImpl(
+      {required this.orderId,
+      this.bankName,
+      this.bankAccount,
+      this.cryptoWalletAddress});
 
   factory _$V1AcceptOrderRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1AcceptOrderRequestImplFromJson(json);
 
   @override
   final String orderId;
+  @override
+  final String? bankName;
+  @override
+  final String? bankAccount;
+  @override
+  final String? cryptoWalletAddress;
 
   @override
   String toString() {
-    return 'V1AcceptOrderRequest(orderId: $orderId)';
+    return 'V1AcceptOrderRequest(orderId: $orderId, bankName: $bankName, bankAccount: $bankAccount, cryptoWalletAddress: $cryptoWalletAddress)';
   }
 
   @override
@@ -124,12 +175,19 @@ class _$V1AcceptOrderRequestImpl implements _V1AcceptOrderRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$V1AcceptOrderRequestImpl &&
-            (identical(other.orderId, orderId) || other.orderId == orderId));
+            (identical(other.orderId, orderId) || other.orderId == orderId) &&
+            (identical(other.bankName, bankName) ||
+                other.bankName == bankName) &&
+            (identical(other.bankAccount, bankAccount) ||
+                other.bankAccount == bankAccount) &&
+            (identical(other.cryptoWalletAddress, cryptoWalletAddress) ||
+                other.cryptoWalletAddress == cryptoWalletAddress));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, orderId);
+  int get hashCode => Object.hash(
+      runtimeType, orderId, bankName, bankAccount, cryptoWalletAddress);
 
   /// Create a copy of V1AcceptOrderRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -150,14 +208,23 @@ class _$V1AcceptOrderRequestImpl implements _V1AcceptOrderRequest {
 }
 
 abstract class _V1AcceptOrderRequest implements V1AcceptOrderRequest {
-  const factory _V1AcceptOrderRequest({required final String orderId}) =
-      _$V1AcceptOrderRequestImpl;
+  const factory _V1AcceptOrderRequest(
+      {required final String orderId,
+      final String? bankName,
+      final String? bankAccount,
+      final String? cryptoWalletAddress}) = _$V1AcceptOrderRequestImpl;
 
   factory _V1AcceptOrderRequest.fromJson(Map<String, dynamic> json) =
       _$V1AcceptOrderRequestImpl.fromJson;
 
   @override
   String get orderId;
+  @override
+  String? get bankName;
+  @override
+  String? get bankAccount;
+  @override
+  String? get cryptoWalletAddress;
 
   /// Create a copy of V1AcceptOrderRequest
   /// with the given fields replaced by the non-null parameter values.

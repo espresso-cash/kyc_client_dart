@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:convert/convert.dart';
 
 import 'package:cryptography/cryptography.dart' hide Hash, PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
@@ -14,7 +15,7 @@ import 'package:solana/base58.dart';
 class KycPartnerClient {
   KycPartnerClient({
     required this.authKeyPair,
-    this.baseUrl,
+    this.baseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
   });
 
   final SimpleKeyPair authKeyPair;
@@ -48,8 +49,7 @@ class KycPartnerClient {
         .then(base58encode);
 
     final partnerTokenData = jwt.JWT(
-      <String, String>{},
-      issuer: _authPublicKey,
+      <String, dynamic>{'iss': _authPublicKey, 'aud': 'kyc.espressocash.com'},
     );
 
     _token = partnerTokenData.sign(
@@ -158,7 +158,7 @@ class KycPartnerClient {
     final decrypted =
         box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
 
-    return utf8.decode(decrypted);
+    return hex.encode(decrypted);
   }
 
   Future<void> validateField({
@@ -187,13 +187,57 @@ class KycPartnerClient {
   Future<V1GetPartnerOrdersResponse> getPartnerOrders() async =>
       _apiClient.kycServiceGetPartnerOrders();
 
-  Future<V1AcceptOrderResponse> acceptOrder(String orderId) async => _apiClient
-      .kycServiceAcceptOrder(body: V1AcceptOrderRequest(orderId: orderId));
+  Future<V1AcceptOrderResponse> acceptOnRampOrder({
+    required String orderId,
+    required String bankName,
+    required String bankAccount,
+  }) async {
+    final response = _apiClient.kycServiceAcceptOrder(
+      body: V1AcceptOrderRequest(
+        orderId: orderId,
+        bankName: bankName,
+        bankAccount: bankAccount,
+      ),
+    );
 
-  Future<V1CompleteOrderResponse> completeOrder(String orderId) async =>
-      _apiClient.kycServiceCompleteOrder(
-        body: V1CompleteOrderRequest(orderId: orderId),
-      );
+    return response;
+  }
+
+  Future<V1AcceptOrderResponse> acceptOffRampOrder({
+    required String orderId,
+    required String cryptoWalletAddress,
+  }) async {
+    final response = _apiClient.kycServiceAcceptOrder(
+      body: V1AcceptOrderRequest(
+        orderId: orderId,
+        cryptoWalletAddress: cryptoWalletAddress,
+      ),
+    );
+
+    return response;
+  }
+
+  Future<V1CompleteOrderResponse> completeOnRampOrder({
+    required String orderId,
+    required String transactionId,
+  }) async {
+    final response = _apiClient.kycServiceCompleteOrder(
+      body: V1CompleteOrderRequest(
+        orderId: orderId,
+        transactionId: transactionId,
+      ),
+    );
+
+    return response;
+  }
+
+  Future<V1CompleteOrderResponse> completeOffRampOrder(String orderId) async {
+    final response = _apiClient.kycServiceCompleteOrder(
+      body: V1CompleteOrderRequest(orderId: orderId),
+    );
+
+    return response;
+  }
 
   Future<V1FailOrderResponse> failOrder({
     required String orderId,

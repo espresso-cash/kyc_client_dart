@@ -75,6 +75,35 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
+  Future<V1CreateOffRampOrderResponse> kycServiceCreateOffRampOrder(
+      {required V1CreateOffRampOrderRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<V1CreateOffRampOrderResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v1/createOffRampOrder',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = V1CreateOffRampOrderResponse.fromJson(_result.data!);
+    return _value;
+  }
+
+  @override
   Future<V1CreateOnRampOrderResponse> kycServiceCreateOnRampOrder(
       {required V1CreateOnRampOrderRequest body}) async {
     final _extra = <String, dynamic>{};
