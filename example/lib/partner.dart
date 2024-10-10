@@ -182,26 +182,43 @@ class _PartnerViewState extends State<PartnerView> {
         ],
       );
 
-  Widget _buildOnRampOrderSection(PartnerAppState state) => Column(
+  Widget _buildOnRampOrderSection(PartnerAppState partnerState) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ValueField(
             title: 'OnRamp Order Data',
-            value: state.onRampOrderData ?? '',
+            value: partnerState.onRampOrderData ?? '',
           ),
           Consumer<WalletAppState>(
             builder: (context, walletState, child) {
-              final orderId = walletState.onRampOrderId;
-              final hasOrder = orderId != null;
+              final orderId = partnerState.onRampUseExternalId
+                  ? null
+                  : walletState.onRampOrderId;
+              final externalId = partnerState.onRampUseExternalId
+                  ? partnerState.onRampExternalId
+                  : null;
+              final hasOrder = orderId != null || externalId != null;
 
               return Column(
                 children: [
+                  Row(
+                    children: [
+                      const Text('Use External ID'),
+                      Switch(
+                        value: partnerState.onRampUseExternalId,
+                        onChanged: (value) {
+                          partnerState.onRampUseExternalId = value;
+                        },
+                      ),
+                    ],
+                  ),
                   ElevatedButton(
                     onPressed: hasOrder
                         ? () async {
-                            await context
-                                .read<PartnerAppState>()
-                                .fetchOnRampOrder(orderId);
+                            await partnerState.fetchOnRampOrder(
+                              orderId: orderId,
+                              externalId: externalId,
+                            );
                             if (!context.mounted) return;
                             showSnackBar(
                               context,
@@ -212,76 +229,96 @@ class _PartnerViewState extends State<PartnerView> {
                     child: const Text('Fetch OnRamp Order'),
                   ),
                   const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: hasOrder
-                        ? () async {
-                            await context
-                                .read<PartnerAppState>()
-                                .acceptOnRampOrder(
-                                  orderId: orderId,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () async {
+                                await partnerState.acceptOnRampOrder(
+                                  orderId: orderId!,
                                   bankName: 'bankName',
                                   bankAccount: '123456789',
-                                  externalId: 'b111-a222-c333',
                                 );
-                            if (!context.mounted) return;
-                            showSnackBar(
-                              context,
-                              message: 'OnRamp Order accepted',
-                            );
-                          }
-                        : null,
-                    child: const Text('Accept OnRamp Order'),
+                                await partnerState.fetchOnRampOrder(
+                                  orderId: orderId,
+                                );
+                                if (!context.mounted) return;
+                                showSnackBar(
+                                  context,
+                                  message: 'OnRamp Order accepted',
+                                );
+                              }
+                            : null,
+                        child: const Text('Accept'),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () async {
+                                await partnerState.rejectOrder(
+                                  orderId: orderId!,
+                                  reason: 'Reject reason',
+                                );
+                                await partnerState.fetchOnRampOrder(
+                                    orderId: orderId);
+                                if (!context.mounted) return;
+                                showSnackBar(
+                                  context,
+                                  message: 'Order rejected',
+                                );
+                              }
+                            : null,
+                        child: const Text('Reject'),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: hasOrder
-                        ? () async {
-                            await context
-                                .read<PartnerAppState>()
-                                .completeOnRampOrder(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () async {
+                                await partnerState.completeOnRampOrder(
                                   orderId: orderId,
+                                  externalId: externalId,
                                   transactionId:
                                       '3sWH8ZR3nTZpBmVAcBdDFeQqTkEyKKcK2nXfG3ZdoGRMmpHqxVa9zT7T9A7c6yFK3XeY4Ti4kgF8TYGpQTnrgfgv',
                                 );
-                            if (!context.mounted) return;
-                            showSnackBar(
-                              context,
-                              message: 'OnRamp Order completed',
-                            );
-                          }
-                        : null,
-                    child: const Text('Complete OnRamp Order'),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: hasOrder
-                        ? () async {
-                            await context.read<PartnerAppState>().rejectOrder(
+                                await partnerState.fetchOnRampOrder(
                                   orderId: orderId,
-                                  reason: 'Reject reason',
+                                  externalId: externalId,
                                 );
-                            if (!context.mounted) return;
-                            showSnackBar(
-                              context,
-                              message: 'Order rejected',
-                            );
-                          }
-                        : null,
-                    child: const Text('Reject OnRamp Order'),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: hasOrder
-                        ? () async {
-                            await context.read<PartnerAppState>().failOrder(
+                                if (!context.mounted) return;
+                                showSnackBar(
+                                  context,
+                                  message: 'OnRamp Order completed',
+                                );
+                              }
+                            : null,
+                        child: const Text('Complete'),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () async {
+                                await partnerState.failOrder(
                                   orderId: orderId,
+                                  externalId: externalId,
                                   reason: 'Fail reason',
                                 );
-                            if (!context.mounted) return;
-                            showSnackBar(context, message: 'Order failed');
-                          }
-                        : null,
-                    child: const Text('Fail OnRamp Order'),
+                                await partnerState.fetchOnRampOrder(
+                                  orderId: orderId,
+                                  externalId: externalId,
+                                );
+                                if (!context.mounted) return;
+                                showSnackBar(context, message: 'Order failed');
+                              }
+                            : null,
+                        child: const Text('Fail'),
+                      ),
+                    ],
                   ),
                 ],
               );
@@ -293,26 +330,43 @@ class _PartnerViewState extends State<PartnerView> {
         ],
       );
 
-  Widget _buildOffRampOrderSection(PartnerAppState state) => Column(
+  Widget _buildOffRampOrderSection(PartnerAppState partnerState) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ValueField(
             title: 'OffRamp Order Data',
-            value: state.offRampOrderData ?? '',
+            value: partnerState.offRampOrderData ?? '',
           ),
           Consumer<WalletAppState>(
             builder: (context, walletState, child) {
-              final orderId = walletState.offRampOrderId;
-              final hasOrder = orderId != null;
+              final orderId = partnerState.offRampUseExternalId
+                  ? null
+                  : walletState.offRampOrderId;
+              final externalId = partnerState.offRampUseExternalId
+                  ? partnerState.offRampExternalId
+                  : null;
+              final hasOrder = orderId != null || externalId != null;
 
               return Column(
                 children: [
+                  Row(
+                    children: [
+                      const Text('Use External ID'),
+                      Switch(
+                        value: partnerState.offRampUseExternalId,
+                        onChanged: (value) {
+                          partnerState.offRampUseExternalId = value;
+                        },
+                      ),
+                    ],
+                  ),
                   ElevatedButton(
                     onPressed: hasOrder
                         ? () async {
-                            await context
-                                .read<PartnerAppState>()
-                                .fetchOffRampOrder(orderId);
+                            await partnerState.fetchOffRampOrder(
+                              orderId: orderId,
+                              externalId: externalId,
+                            );
                             if (!context.mounted) return;
                             showSnackBar(
                               context,
@@ -323,72 +377,95 @@ class _PartnerViewState extends State<PartnerView> {
                     child: const Text('Fetch OffRamp Order'),
                   ),
                   const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: hasOrder
-                        ? () async {
-                            await context
-                                .read<PartnerAppState>()
-                                .acceptOffRampOrder(
-                                  orderId: orderId,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () async {
+                                await partnerState.acceptOffRampOrder(
+                                  orderId: orderId!,
                                   cryptoWalletAddress:
                                       '5EY2wqRSXsnfU7YwBnW45HoTLGmZgFkfA1A69N8T7Vtx',
-                                  externalId: 'b111-a222-c333',
                                 );
-                            if (!context.mounted) return;
-                            showSnackBar(
-                              context,
-                              message: 'OffRamp Order accepted',
-                            );
-                          }
-                        : null,
-                    child: const Text('Accept OffRamp Order'),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: hasOrder
-                        ? () async {
-                            await context
-                                .read<PartnerAppState>()
-                                .completeOffRampOrder(orderId);
-                            if (!context.mounted) return;
-                            showSnackBar(
-                              context,
-                              message: 'OffRamp Order completed',
-                            );
-                          }
-                        : null,
-                    child: const Text('Complete OffRamp Order'),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: hasOrder
-                        ? () async {
-                            await context.read<PartnerAppState>().rejectOrder(
+                                await partnerState.fetchOffRampOrder(
                                   orderId: orderId,
+                                );
+                                if (!context.mounted) return;
+                                showSnackBar(
+                                  context,
+                                  message: 'OffRamp Order accepted',
+                                );
+                              }
+                            : null,
+                        child: const Text('Accept'),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () async {
+                                await partnerState.rejectOrder(
+                                  orderId: orderId!,
                                   reason: 'Reject reason',
                                 );
-                            if (!context.mounted) return;
-                            showSnackBar(
-                              context,
-                              message: 'Order rejected',
-                            );
-                          }
-                        : null,
-                    child: const Text('Reject OffRamp Order'),
+                                await partnerState.fetchOffRampOrder(
+                                  orderId: orderId,
+                                );
+                                if (!context.mounted) return;
+                                showSnackBar(
+                                  context,
+                                  message: 'Order rejected',
+                                );
+                              }
+                            : null,
+                        child: const Text('Reject'),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: hasOrder
-                        ? () async {
-                            await context.read<PartnerAppState>().failOrder(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () async {
+                                await partnerState.completeOffRampOrder(
                                   orderId: orderId,
+                                  externalId: externalId,
+                                );
+                                await partnerState.fetchOffRampOrder(
+                                  orderId: orderId,
+                                  externalId: externalId,
+                                );
+                                if (!context.mounted) return;
+                                showSnackBar(
+                                  context,
+                                  message: 'OffRamp Order completed',
+                                );
+                              }
+                            : null,
+                        child: const Text('Complete'),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: hasOrder
+                            ? () async {
+                                await partnerState.failOrder(
+                                  orderId: orderId,
+                                  externalId: externalId,
                                   reason: 'Fail reason',
                                 );
-                            if (!context.mounted) return;
-                            showSnackBar(context, message: 'Order failed');
-                          }
-                        : null,
-                    child: const Text('Fail OffRamp Order'),
+                                await partnerState.fetchOffRampOrder(
+                                  orderId: orderId,
+                                  externalId: externalId,
+                                );
+                                if (!context.mounted) return;
+                                showSnackBar(context, message: 'Order failed');
+                              }
+                            : null,
+                        child: const Text('Fail'),
+                      ),
+                    ],
                   ),
                 ],
               );

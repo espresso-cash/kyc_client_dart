@@ -245,8 +245,18 @@ class KycPartnerClient {
     );
   }
 
-  Future<V1GetOrderResponse> getOrder(String orderId) async =>
-      _apiClient.kycServiceGetOrder(body: V1GetOrderRequest(orderId: orderId));
+  Future<V1GetOrderResponse> getOrder({
+    String? orderId,
+    String? externalId,
+  }) async {
+    assert(
+      orderId != null || externalId != null,
+      'Either orderId or externalId must be provided',
+    );
+    return _apiClient.kycServiceGetOrder(
+      body: V1GetOrderRequest(orderId: orderId, externalId: externalId),
+    );
+  }
 
   Future<V1GetPartnerOrdersResponse> getPartnerOrders() async =>
       _apiClient.kycServiceGetPartnerOrders();
@@ -255,7 +265,7 @@ class KycPartnerClient {
     required String orderId,
     required String bankName,
     required String bankAccount,
-    required String externalId,
+    String? externalId,
   }) async {
     final response = _apiClient.kycServiceAcceptOrder(
       body: V1AcceptOrderRequest(
@@ -272,7 +282,7 @@ class KycPartnerClient {
   Future<V1AcceptOrderResponse> acceptOffRampOrder({
     required String orderId,
     required String cryptoWalletAddress,
-    required String externalId,
+    String? externalId,
   }) async {
     final response = _apiClient.kycServiceAcceptOrder(
       body: V1AcceptOrderRequest(
@@ -286,12 +296,18 @@ class KycPartnerClient {
   }
 
   Future<V1CompleteOrderResponse> completeOnRampOrder({
-    required String orderId,
+    String? orderId,
+    String? externalId,
     required String transactionId,
   }) async {
+    assert(
+      orderId != null || externalId != null,
+      'Either orderId or externalId must be provided',
+    );
     final response = _apiClient.kycServiceCompleteOrder(
       body: V1CompleteOrderRequest(
         orderId: orderId,
+        externalId: externalId,
         transactionId: transactionId,
       ),
     );
@@ -299,21 +315,41 @@ class KycPartnerClient {
     return response;
   }
 
-  Future<V1CompleteOrderResponse> completeOffRampOrder(String orderId) async {
+  Future<V1CompleteOrderResponse> completeOffRampOrder({
+    String? orderId,
+    String? externalId,
+  }) async {
+    assert(
+      orderId != null || externalId != null,
+      'Either orderId or externalId must be provided',
+    );
     final response = _apiClient.kycServiceCompleteOrder(
-      body: V1CompleteOrderRequest(orderId: orderId),
+      body: V1CompleteOrderRequest(
+        orderId: orderId,
+        externalId: externalId,
+      ),
     );
 
     return response;
   }
 
   Future<V1FailOrderResponse> failOrder({
-    required String orderId,
+    String? orderId,
+    String? externalId,
     required String reason,
-  }) async =>
-      _apiClient.kycServiceFailOrder(
-        body: V1FailOrderRequest(orderId: orderId, reason: reason),
-      );
+  }) async {
+    assert(
+      orderId != null || externalId != null,
+      'Either orderId or externalId must be provided',
+    );
+    return _apiClient.kycServiceFailOrder(
+      body: V1FailOrderRequest(
+        orderId: orderId,
+        externalId: externalId,
+        reason: reason,
+      ),
+    );
+  }
 
   Future<V1RejectOrderResponse> rejectOrder({
     required String orderId,

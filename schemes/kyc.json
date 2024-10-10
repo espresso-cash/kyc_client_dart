@@ -621,9 +621,14 @@
       "type": "object",
       "properties": {
         "orderId": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "transactionId": {
+          "type": "string",
+          "nullable": true
+        },
+        "externalId": {
           "type": "string",
           "nullable": true
         }
@@ -702,10 +707,15 @@
       "type": "object",
       "properties": {
         "orderId": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
         },
         "reason": {
           "type": "string"
+        },
+        "externalId": {
+          "type": "string",
+          "nullable": true
         }
       }
     },
@@ -757,7 +767,12 @@
       "type": "object",
       "properties": {
         "orderId": {
-          "type": "string"
+          "type": "string",
+          "nullable": true
+        },  
+        "externalId": {
+          "type": "string",
+          "nullable": true
         }
       }
     },

@@ -10,8 +10,9 @@ part 'v1_complete_order_request.g.dart';
 @Freezed()
 class V1CompleteOrderRequest with _$V1CompleteOrderRequest {
   const factory V1CompleteOrderRequest({
-    required String orderId,
+    String? orderId,
     String? transactionId,
+    String? externalId,
   }) = _V1CompleteOrderRequest;
   
   factory V1CompleteOrderRequest.fromJson(Map<String, Object?> json) => _$V1CompleteOrderRequestFromJson(json);

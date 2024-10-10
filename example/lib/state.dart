@@ -3,11 +3,10 @@ import 'dart:convert';
 import 'package:cross_file/cross_file.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:kyc_client_dart/kyc_client_dart.dart';
 import 'package:solana/base58.dart';
-
 import 'package:solana/solana.dart';
+import 'package:uuid/uuid.dart';
 
 class WalletAppState extends ChangeNotifier {
   Ed25519HDKeyPair? get wallet => _wallet;
@@ -184,20 +183,41 @@ class PartnerAppState extends ChangeNotifier {
   String get email => _email;
   String get phone => _phone;
   XFile? get file => _file;
-  String? get validationResult => _result;
+
+  String? get validationResult => _validationResult;
+
   String? get onRampOrderData => _onRampOrderData;
   String? get offRampOrderData => _offRampOrderData;
   String? get orders => _orders?.map((order) => order).join('\n\n');
+  String? get onRampExternalId => _onRampExternalId;
+  String? get offRampExternalId => _offRampExternalId;
+  bool get onRampUseExternalId => _onRampUseExternalId;
+  set onRampUseExternalId(bool value) {
+    _onRampUseExternalId = value;
+    notifyListeners();
+  }
+
+  bool get offRampUseExternalId => _offRampUseExternalId;
+  set offRampUseExternalId(bool value) {
+    _offRampUseExternalId = value;
+    notifyListeners();
+  }
 
   late String _authPublicKey = '';
   late String _userSecretKey = '';
   late String _email = '';
   late String _phone = '';
   XFile? _file;
-  String? _result;
+
+  String? _validationResult;
+
   String? _onRampOrderData;
   String? _offRampOrderData;
   List<String>? _orders;
+  String? _onRampExternalId;
+  String? _offRampExternalId;
+  bool _onRampUseExternalId = false;
+  bool _offRampUseExternalId = false;
 
   late KycPartnerClient _client;
 
@@ -254,7 +274,7 @@ class PartnerAppState extends ChangeNotifier {
     final emailValidationResult = jsonEncode(email);
     final phoneValidationResult = jsonEncode(phone);
 
-    _result =
+    _validationResult =
         'kyc: $kycValidationResult\nemail: $emailValidationResult\nphone: $phoneValidationResult';
     notifyListeners();
   }
@@ -277,16 +297,28 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchOnRampOrder(String orderId) async {
-    final data = await _client.getOrder(orderId);
+  Future<void> fetchOnRampOrder({
+    String? orderId,
+    String? externalId,
+  }) async {
+    final data = await _client.getOrder(
+      orderId: orderId,
+      externalId: externalId,
+    );
 
     _onRampOrderData = data.toJson().toString();
 
     notifyListeners();
   }
 
-  Future<void> fetchOffRampOrder(String orderId) async {
-    final data = await _client.getOrder(orderId);
+  Future<void> fetchOffRampOrder({
+    String? orderId,
+    String? externalId,
+  }) async {
+    final data = await _client.getOrder(
+      orderId: orderId,
+      externalId: externalId,
+    );
 
     _offRampOrderData = data.toJson().toString();
 
@@ -305,47 +337,62 @@ class PartnerAppState extends ChangeNotifier {
     required String orderId,
     required String bankName,
     required String bankAccount,
-    required String externalId,
   }) async {
+    _onRampExternalId = const Uuid().v4();
+
     await _client.acceptOnRampOrder(
       orderId: orderId,
       bankName: bankName,
       bankAccount: bankAccount,
-      externalId: externalId,
+      externalId: _onRampExternalId,
     );
   }
 
   Future<void> acceptOffRampOrder({
     required String orderId,
     required String cryptoWalletAddress,
-    required String externalId,
   }) async {
+    _offRampExternalId = const Uuid().v4();
+
     await _client.acceptOffRampOrder(
       orderId: orderId,
       cryptoWalletAddress: cryptoWalletAddress,
-      externalId: externalId,
+      externalId: _offRampExternalId,
     );
   }
 
   Future<void> completeOnRampOrder({
-    required String orderId,
+    String? orderId,
+    String? externalId,
     required String transactionId,
   }) async {
     await _client.completeOnRampOrder(
       orderId: orderId,
+      externalId: externalId,
       transactionId: transactionId,
     );
   }
 
-  Future<void> completeOffRampOrder(String orderId) async {
-    await _client.completeOffRampOrder(orderId);
+  Future<void> completeOffRampOrder({
+    String? orderId,
+    String? externalId,
+  }) async {
+    await _client.completeOffRampOrder(
+      orderId: orderId,
+      externalId: externalId,
+    );
   }
 
   Future<void> failOrder({
-    required String orderId,
+    String? orderId,
+    String? externalId,
     required String reason,
   }) async {
-    await _client.failOrder(orderId: orderId, reason: reason);
+    await _client.failOrder(
+      orderId: orderId,
+      externalId: externalId,
+      reason: reason,
+    );
   }
 
   Future<void> rejectOrder({

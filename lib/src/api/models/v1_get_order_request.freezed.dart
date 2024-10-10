@@ -20,7 +20,8 @@ V1GetOrderRequest _$V1GetOrderRequestFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$V1GetOrderRequest {
-  String get orderId => throw _privateConstructorUsedError;
+  String? get orderId => throw _privateConstructorUsedError;
+  String? get externalId => throw _privateConstructorUsedError;
 
   /// Serializes this V1GetOrderRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -38,7 +39,7 @@ abstract class $V1GetOrderRequestCopyWith<$Res> {
           V1GetOrderRequest value, $Res Function(V1GetOrderRequest) then) =
       _$V1GetOrderRequestCopyWithImpl<$Res, V1GetOrderRequest>;
   @useResult
-  $Res call({String orderId});
+  $Res call({String? orderId, String? externalId});
 }
 
 /// @nodoc
@@ -56,13 +57,18 @@ class _$V1GetOrderRequestCopyWithImpl<$Res, $Val extends V1GetOrderRequest>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? orderId = null,
+    Object? orderId = freezed,
+    Object? externalId = freezed,
   }) {
     return _then(_value.copyWith(
-      orderId: null == orderId
+      orderId: freezed == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      externalId: freezed == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -75,7 +81,7 @@ abstract class _$$V1GetOrderRequestImplCopyWith<$Res>
       __$$V1GetOrderRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String orderId});
+  $Res call({String? orderId, String? externalId});
 }
 
 /// @nodoc
@@ -91,13 +97,18 @@ class __$$V1GetOrderRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? orderId = null,
+    Object? orderId = freezed,
+    Object? externalId = freezed,
   }) {
     return _then(_$V1GetOrderRequestImpl(
-      orderId: null == orderId
+      orderId: freezed == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      externalId: freezed == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -105,17 +116,19 @@ class __$$V1GetOrderRequestImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$V1GetOrderRequestImpl implements _V1GetOrderRequest {
-  const _$V1GetOrderRequestImpl({required this.orderId});
+  const _$V1GetOrderRequestImpl({this.orderId, this.externalId});
 
   factory _$V1GetOrderRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1GetOrderRequestImplFromJson(json);
 
   @override
-  final String orderId;
+  final String? orderId;
+  @override
+  final String? externalId;
 
   @override
   String toString() {
-    return 'V1GetOrderRequest(orderId: $orderId)';
+    return 'V1GetOrderRequest(orderId: $orderId, externalId: $externalId)';
   }
 
   @override
@@ -123,12 +136,14 @@ class _$V1GetOrderRequestImpl implements _V1GetOrderRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$V1GetOrderRequestImpl &&
-            (identical(other.orderId, orderId) || other.orderId == orderId));
+            (identical(other.orderId, orderId) || other.orderId == orderId) &&
+            (identical(other.externalId, externalId) ||
+                other.externalId == externalId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, orderId);
+  int get hashCode => Object.hash(runtimeType, orderId, externalId);
 
   /// Create a copy of V1GetOrderRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -148,14 +163,17 @@ class _$V1GetOrderRequestImpl implements _V1GetOrderRequest {
 }
 
 abstract class _V1GetOrderRequest implements V1GetOrderRequest {
-  const factory _V1GetOrderRequest({required final String orderId}) =
-      _$V1GetOrderRequestImpl;
+  const factory _V1GetOrderRequest(
+      {final String? orderId,
+      final String? externalId}) = _$V1GetOrderRequestImpl;
 
   factory _V1GetOrderRequest.fromJson(Map<String, dynamic> json) =
       _$V1GetOrderRequestImpl.fromJson;
 
   @override
-  String get orderId;
+  String? get orderId;
+  @override
+  String? get externalId;
 
   /// Create a copy of V1GetOrderRequest
   /// with the given fields replaced by the non-null parameter values.
