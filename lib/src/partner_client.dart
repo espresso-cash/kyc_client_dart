@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
 
 import 'package:cryptography/cryptography.dart' hide Hash, PublicKey, SecretBox;
@@ -10,7 +11,6 @@ import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
-import 'package:solana/base58.dart';
 
 class KycPartnerClient {
   KycPartnerClient({
@@ -37,7 +37,7 @@ class KycPartnerClient {
     _signingKey = SigningKey.fromValidBytes(
       Uint8List.fromList(
         await authKeyPair.extractPrivateKeyBytes() +
-            base58decode(_authPublicKey),
+            base58.decode(_authPublicKey),
       ),
     );
   }
@@ -45,8 +45,8 @@ class KycPartnerClient {
   Future<void> _generateAuthToken() async {
     _authPublicKey = await authKeyPair
         .extractPublicKey()
-        .then((value) => value.bytes)
-        .then(base58encode);
+        .then((value) => Uint8List.fromList(value.bytes))
+        .then(base58.encode);
 
     final partnerTokenData = jwt.JWT(
       <String, dynamic>{'iss': _authPublicKey, 'aud': 'kyc.espressocash.com'},
@@ -55,7 +55,7 @@ class KycPartnerClient {
     _token = partnerTokenData.sign(
       jwt.EdDSAPrivateKey(
         await authKeyPair.extractPrivateKeyBytes() +
-            base58decode(_authPublicKey),
+            base58.decode(_authPublicKey),
       ),
       algorithm: jwt.JWTAlgorithm.EdDSA,
     );
@@ -82,7 +82,7 @@ class KycPartnerClient {
       Uint8List.fromList(edSK),
     );
 
-    final userEdPK = Uint8List.fromList(base58decode(userPK));
+    final userEdPK = Uint8List.fromList(base58.decode(userPK));
     final userXPK = Uint8List(32);
 
     TweetNaClExt.crypto_sign_ed25519_pk_to_x25519_pk(
@@ -102,7 +102,7 @@ class KycPartnerClient {
     final encryptedMessage = EncryptedMessage.fromList(encodedSecretKey);
     final decryptedSecretKey = sealedBox.decrypt(encryptedMessage);
 
-    return base58encode(decryptedSecretKey);
+    return base58.encode(decryptedSecretKey);
   }
 
   Future<Map<String, dynamic>> getData({
@@ -113,8 +113,8 @@ class KycPartnerClient {
         .kycServiceGetData(body: V1GetDataRequest(publicKey: userPK))
         .then((e) => e.data.toJson());
 
-    final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
-    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+    final verifyKey = VerifyKey(Uint8List.fromList(base58.decode(userPK)));
+    final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
 
     return Map.fromEntries(
       await Future.wait(
@@ -211,7 +211,7 @@ class KycPartnerClient {
 
     if (data == null || data.isEmpty) return null;
 
-    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+    final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
 
     final signedMessage = SignedMessage.fromList(
       signedMessage: base64Decode(data),
@@ -230,7 +230,7 @@ class KycPartnerClient {
     required String secretKey,
   }) async {
     SignedMessage encryptAndSign(Uint8List data) {
-      final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+      final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
       final encrypted = box.encrypt(data);
       return _signingKey.sign(Uint8List.fromList(encrypted));
     }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bs58/bs58.dart';
 import 'package:cryptography/cryptography.dart' hide PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
@@ -8,8 +9,6 @@ import 'package:kyc_client_dart/src/models/partner.dart';
 import 'package:pinenacl/ed25519.dart' hide Signature;
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
-import 'package:solana/base58.dart';
-import 'package:solana/solana.dart';
 
 export 'models/partner.dart';
 
@@ -79,8 +78,10 @@ class KycUserClient {
 
   Future<void> _initializeKeys(Uint8List seed) async {
     _authKeyPair = await Ed25519().newKeyPairFromSeed(seed);
-    _authPublicKey = base58encode(
-      await _authKeyPair.extractPublicKey().then((value) => value.bytes),
+    _authPublicKey = base58.encode(
+      Uint8List.fromList(
+        await _authKeyPair.extractPublicKey().then((value) => value.bytes),
+      ),
     );
   }
 
@@ -126,7 +127,8 @@ class KycUserClient {
         ? await Chacha20.poly1305Aead().newSecretKey()
         : SecretKey(sealedBox.decrypt(base64Decode(encryptedSecretKey)));
 
-    _rawSecretKey = base58encode(await _secretKey.extractBytes());
+    _rawSecretKey =
+        base58.encode(Uint8List.fromList(await _secretKey.extractBytes()));
     _encryptedSecretKey = base64Encode(
       sealedBox.encrypt(Uint8List.fromList(await _secretKey.extractBytes())),
     );
@@ -147,7 +149,8 @@ class KycUserClient {
         message: _seedMessage,
         encryptedSecretKey: _encryptedSecretKey,
         walletProofMessage: _proofMessage,
-        walletProofSignature: proofSignature.toBase58(),
+        walletProofSignature:
+            base58.encode(Uint8List.fromList(proofSignature.bytes)),
       ),
     );
   }
@@ -157,7 +160,7 @@ class KycUserClient {
       .then((e) => PartnerModel.fromJson(e.toJson()));
 
   Future<void> grantPartnerAccess(String partnerPK) async {
-    final partnerEdPK = Uint8List.fromList(base58decode(partnerPK));
+    final partnerEdPK = Uint8List.fromList(base58.decode(partnerPK));
     final partnerXPK = Uint8List(32);
 
     TweetNaClExt.crypto_sign_ed25519_pk_to_x25519_pk(partnerXPK, partnerEdPK);
@@ -169,7 +172,7 @@ class KycUserClient {
     );
 
     final encodedSecretKey = base64Encode(
-      sealedBox.encrypt(Uint8List.fromList(base58decode(_rawSecretKey))),
+      sealedBox.encrypt(Uint8List.fromList(base58.decode(_rawSecretKey))),
     );
 
     await _kycClient.kycServiceGrantAccess(
@@ -231,8 +234,8 @@ class KycUserClient {
         .kycServiceGetData(body: V1GetDataRequest(publicKey: userPK))
         .then((e) => e.data.toJson());
 
-    final verifyKey = VerifyKey(Uint8List.fromList(base58decode(userPK)));
-    final box = SecretBox(Uint8List.fromList(base58decode(secretKey)));
+    final verifyKey = VerifyKey(Uint8List.fromList(base58.decode(userPK)));
+    final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
 
     return Map.fromEntries(
       await Future.wait(

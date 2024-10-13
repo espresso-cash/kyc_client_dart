@@ -261,7 +261,8 @@ class _PartnerViewState extends State<PartnerView> {
                                   reason: 'Reject reason',
                                 );
                                 await partnerState.fetchOnRampOrder(
-                                    orderId: orderId);
+                                  orderId: orderId,
+                                );
                                 if (!context.mounted) return;
                                 showSnackBar(
                                   context,
