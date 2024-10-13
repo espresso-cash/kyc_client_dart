@@ -117,11 +117,11 @@ class WalletAppState extends ChangeNotifier {
   }
 
   Future<void> validateEmail(String code) async {
-    await _client.validateEmail(code);
+    await _client.validateEmail(code: code);
   }
 
   Future<void> validatePhone(String code) async {
-    await _client.validatePhone(code);
+    await _client.validatePhone(code: code);
   }
 
   Future<void> createOnRampOrder({

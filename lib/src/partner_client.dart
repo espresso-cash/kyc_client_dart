@@ -162,7 +162,7 @@ class KycPartnerClient {
     final validationResult = results[1] as String?;
 
     final email = userData?['email'] as String;
-    final emailHash = await _hash(email);
+    final emailHash = _hash(email);
     final verified = emailHash == validationResult;
 
     return {
@@ -184,7 +184,7 @@ class KycPartnerClient {
     final validationResult = results[1] as String?;
 
     final phone = userData?['phone'] as String;
-    final phoneHash = await _hash(phone);
+    final phoneHash = _hash(phone);
     final verified = phoneHash == validationResult;
 
     return {

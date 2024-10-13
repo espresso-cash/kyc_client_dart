@@ -275,7 +275,7 @@ class KycUserClient {
     await _validatorClient.validatorServiceInitEmailValidation();
   }
 
-  Future<void> validateEmail(String code) async {
+  Future<void> validateEmail({required String code}) async {
     await _validatorClient.validatorServiceValidateEmail(
       body: V1ValidateEmailRequest(code: code),
     );
@@ -285,7 +285,7 @@ class KycUserClient {
     await _validatorClient.validatorServiceInitPhoneValidation();
   }
 
-  Future<void> validatePhone(String code) async {
+  Future<void> validatePhone({required String code}) async {
     await _validatorClient.validatorServiceValidatePhone(
       body: V1ValidatePhoneRequest(code: code),
     );
@@ -311,7 +311,7 @@ class KycUserClient {
     return response.orderId;
   }
 
-    Future<String> createOffRampOrder({
+  Future<String> createOffRampOrder({
     required String partnerPK,
     required String cryptoAmount,
     required String cryptoCurrency,
