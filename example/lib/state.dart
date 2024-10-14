@@ -39,7 +39,7 @@ class WalletAppState extends ChangeNotifier {
     // _wallet = await Ed25519HDKeyPair.random();
 
     _wallet = await Ed25519HDKeyPair.fromMnemonic(
-      'city wild aisle under toss keen become solve exit suffer panel shiver',
+      'genre enlist initial body uncle business congress bench sad right shuffle little',
     );
 
     _client = KycUserClient(
@@ -244,7 +244,11 @@ class PartnerAppState extends ChangeNotifier {
     required String secretKey,
   }) async {
     await _client.setValidationResult(
-      value: ValidationResult(type: 'kycSmileId', data: message),
+      value: const ValidationResult(
+        type: ValidationType.email,
+        value: 'justin@test.com',
+        dataId: '96209540-e6f2-48f2-a392-a4073ecc1eea',
+      ),
       userPK: userPK,
       secretKey: secretKey,
     );

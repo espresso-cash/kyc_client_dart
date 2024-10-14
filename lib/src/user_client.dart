@@ -251,12 +251,16 @@ class KycUserClient {
     UserData userData = const UserData();
 
     for (final encryptedData in response.userData) {
+      print(encryptedData.id);
+
       final decryptedData = _verifyAndDecrypt(
         signedEncryptedData: encryptedData.encryptedData,
         secretKey: secretKey,
         userPK: userPK,
       );
       final wrappedData = WrappedData.fromBuffer(decryptedData);
+
+      print(wrappedData.whichData());
 
       userData = userData.copyWith(
         email: wrappedData.hasEmail() ? wrappedData.email : userData.email,

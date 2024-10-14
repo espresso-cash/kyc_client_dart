@@ -126,7 +126,6 @@ class KycPartnerClient {
       final decryptedData = _verifyAndDecrypt(
         signedEncryptedData: encryptedData.encryptedData,
         secretKey: secretKey,
-        userPK: userPK,
       );
       final wrappedData = WrappedData.fromBuffer(decryptedData);
 
@@ -219,7 +218,21 @@ class KycPartnerClient {
       body: V1GetUserDataRequest(userPublicKey: userPK),
     );
 
-    print(response.validationData);
+    for (final encryptedData in response.validationData) {
+      final decryptedData = _verifyAndDecrypt(
+        signedEncryptedData: encryptedData.encryptedData,
+        secretKey: secretKey,
+      );
+
+      final wrappedData = WrappedValidation.fromBuffer(decryptedData);
+
+      print(encryptedData.dataId);
+      print(wrappedData);
+
+      // print(wrappedData.hash);
+      // print(wrappedData.custom.type);
+      // print(utf8.decode(wrappedData.custom.data));
+    }
 
     // final data = response[key] as String?;
 
@@ -250,20 +263,24 @@ class KycPartnerClient {
       return _signingKey.sign(Uint8List.fromList(encrypted));
     }
 
-    final data = value.data;
-    final wrappedData = WrappedValidation(
-      hash: _hash(data),
-      custom: CustomValidation(
-        type: value.type,
-        data: encryptAndSign(Uint8List.fromList(utf8.encode(data))),
-      ),
-    );
+    final wrappedData = switch (value.type) {
+      ValidationType.email || ValidationType.phone => WrappedValidation(
+          hash: _hash(value.value),
+        ),
+      ValidationType.custom => WrappedValidation(
+          custom: CustomValidation(
+            type: 'kycSmileId',
+            data: Uint8List.fromList(utf8.encode(value.value)),
+          ),
+        ),
+    }
+        .writeToBuffer();
 
     await _apiClient.kycServiceSetValidationData(
       body: V1SetValidationDataRequest(
-        encryptedData: base64Encode(wrappedData.writeToBuffer()),
-        dataId: 'dataId',
+        encryptedData: base64Encode(encryptAndSign(wrappedData)),
         userPublicKey: userPK,
+        dataId: value.dataId,
         id: '',
       ),
     );
@@ -363,19 +380,13 @@ String _hash(String value) {
 
 Uint8List _verifyAndDecrypt({
   required String signedEncryptedData,
-  required String userPK,
   required String secretKey,
 }) {
-  final verifyKey = VerifyKey(Uint8List.fromList(base58.decode(userPK)));
   final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
 
   final signedMessage = SignedMessage.fromList(
     signedMessage: base64Decode(signedEncryptedData),
   );
-
-  if (!verifyKey.verifySignedMessage(signedMessage: signedMessage)) {
-    throw Exception('Invalid signature for user data');
-  }
 
   final encryptedData = Uint8List.fromList(signedMessage.message);
   final decrypted = box.decrypt(

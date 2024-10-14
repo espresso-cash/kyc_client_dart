@@ -20,8 +20,9 @@ ValidationResult _$ValidationResultFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ValidationResult {
-  String get type => throw _privateConstructorUsedError;
-  String get data => throw _privateConstructorUsedError;
+  String get dataId => throw _privateConstructorUsedError;
+  ValidationType get type => throw _privateConstructorUsedError;
+  String get value => throw _privateConstructorUsedError;
 
   /// Serializes this ValidationResult to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +40,7 @@ abstract class $ValidationResultCopyWith<$Res> {
           ValidationResult value, $Res Function(ValidationResult) then) =
       _$ValidationResultCopyWithImpl<$Res, ValidationResult>;
   @useResult
-  $Res call({String type, String data});
+  $Res call({String dataId, ValidationType type, String value});
 }
 
 /// @nodoc
@@ -57,17 +58,22 @@ class _$ValidationResultCopyWithImpl<$Res, $Val extends ValidationResult>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? dataId = null,
     Object? type = null,
-    Object? data = null,
+    Object? value = null,
   }) {
     return _then(_value.copyWith(
+      dataId: null == dataId
+          ? _value.dataId
+          : dataId // ignore: cast_nullable_to_non_nullable
+              as String,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
+              as ValidationType,
+      value: null == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -81,7 +87,7 @@ abstract class _$$ValidationResultImplCopyWith<$Res>
       __$$ValidationResultImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String type, String data});
+  $Res call({String dataId, ValidationType type, String value});
 }
 
 /// @nodoc
@@ -97,17 +103,22 @@ class __$$ValidationResultImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? dataId = null,
     Object? type = null,
-    Object? data = null,
+    Object? value = null,
   }) {
     return _then(_$ValidationResultImpl(
+      dataId: null == dataId
+          ? _value.dataId
+          : dataId // ignore: cast_nullable_to_non_nullable
+              as String,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
+              as ValidationType,
+      value: null == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -116,19 +127,22 @@ class __$$ValidationResultImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ValidationResultImpl implements _ValidationResult {
-  const _$ValidationResultImpl({required this.type, required this.data});
+  const _$ValidationResultImpl(
+      {required this.dataId, required this.type, required this.value});
 
   factory _$ValidationResultImpl.fromJson(Map<String, dynamic> json) =>
       _$$ValidationResultImplFromJson(json);
 
   @override
-  final String type;
+  final String dataId;
   @override
-  final String data;
+  final ValidationType type;
+  @override
+  final String value;
 
   @override
   String toString() {
-    return 'ValidationResult(type: $type, data: $data)';
+    return 'ValidationResult(dataId: $dataId, type: $type, value: $value)';
   }
 
   @override
@@ -136,13 +150,14 @@ class _$ValidationResultImpl implements _ValidationResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ValidationResultImpl &&
+            (identical(other.dataId, dataId) || other.dataId == dataId) &&
             (identical(other.type, type) || other.type == type) &&
-            (identical(other.data, data) || other.data == data));
+            (identical(other.value, value) || other.value == value));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, type, data);
+  int get hashCode => Object.hash(runtimeType, dataId, type, value);
 
   /// Create a copy of ValidationResult
   /// with the given fields replaced by the non-null parameter values.
@@ -163,16 +178,19 @@ class _$ValidationResultImpl implements _ValidationResult {
 
 abstract class _ValidationResult implements ValidationResult {
   const factory _ValidationResult(
-      {required final String type,
-      required final String data}) = _$ValidationResultImpl;
+      {required final String dataId,
+      required final ValidationType type,
+      required final String value}) = _$ValidationResultImpl;
 
   factory _ValidationResult.fromJson(Map<String, dynamic> json) =
       _$ValidationResultImpl.fromJson;
 
   @override
-  String get type;
+  String get dataId;
   @override
-  String get data;
+  ValidationType get type;
+  @override
+  String get value;
 
   /// Create a copy of ValidationResult
   /// with the given fields replaced by the non-null parameter values.
