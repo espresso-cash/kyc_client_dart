@@ -12,10 +12,13 @@ import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
 
+const _defaultKycBaseUrl =
+    'https://kyc-backend-beta-402681483920.europe-west1.run.app/';
+
 class KycPartnerClient {
   KycPartnerClient({
     required this.authKeyPair,
-    this.baseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
+    this.baseUrl = _defaultKycBaseUrl,
   });
 
   final SimpleKeyPair authKeyPair;

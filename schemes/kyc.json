@@ -176,38 +176,6 @@
         ]
       }
     },
-    "/v1/getData": {
-      "post": {
-        "operationId": "KycService_GetData",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetDataResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetDataRequest"
-            }
-          }
-        ],
-        "tags": [
-          "KycService"
-        ]
-      }
-    },
     "/v1/getInfo": {
       "post": {
         "operationId": "KycService_GetInfo",
@@ -368,14 +336,14 @@
         ]
       }
     },
-    "/v1/getValidationResult": {
+    "/v1/getUserData": {
       "post": {
-        "operationId": "KycService_GetValidationResult",
+        "operationId": "KycService_GetUserData",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetValidationResultResponse"
+              "$ref": "#/definitions/v1GetUserDataResponse"
             }
           },
           "default": {
@@ -391,7 +359,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1GetValidationResultRequest"
+              "$ref": "#/definitions/v1GetUserDataRequest"
             }
           }
         ],
@@ -496,14 +464,14 @@
         ]
       }
     },
-    "/v1/setData": {
+    "/v1/setUserData": {
       "post": {
-        "operationId": "KycService_SetData",
+        "operationId": "KycService_SetUserData",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1SetDataResponse"
+              "$ref": "#/definitions/v1SetUserDataResponse"
             }
           },
           "default": {
@@ -519,7 +487,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1SetDataRequest"
+              "$ref": "#/definitions/v1SetUserDataRequest"
             }
           }
         ],
@@ -528,14 +496,14 @@
         ]
       }
     },
-    "/v1/setValidationResult": {
+    "/v1/setValidationData": {
       "post": {
-        "operationId": "KycService_SetValidationResult",
+        "operationId": "KycService_SetValidationData",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1SetValidationResultResponse"
+              "$ref": "#/definitions/v1SetValidationDataResponse"
             }
           },
           "default": {
@@ -551,7 +519,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1SetValidationResultRequest"
+              "$ref": "#/definitions/v1SetValidationDataRequest"
             }
           }
         ],
@@ -597,20 +565,16 @@
           "type": "string"
         },
         "bankName": {
-          "type": "string",
-          "nullable": true
+          "type": "string"
         },
         "bankAccount": {
-          "type": "string",
-          "nullable": true
+          "type": "string"
         },
         "cryptoWalletAddress": {
-          "type": "string",
-          "nullable": true
+          "type": "string"
         },
         "externalId": {
-          "type": "string",
-          "nullable": true
+          "type": "string"
         }
       }
     },
@@ -621,16 +585,13 @@
       "type": "object",
       "properties": {
         "orderId": {
-          "type": "string",
-          "nullable": true
+          "type": "string"
         },
         "transactionId": {
-          "type": "string",
-          "nullable": true
+          "type": "string"
         },
         "externalId": {
-          "type": "string",
-          "nullable": true
+          "type": "string"
         }
       }
     },
@@ -707,36 +668,18 @@
       "type": "object",
       "properties": {
         "orderId": {
-          "type": "string",
-          "nullable": true
+          "type": "string"
         },
         "reason": {
           "type": "string"
         },
         "externalId": {
-          "type": "string",
-          "nullable": true
+          "type": "string"
         }
       }
     },
     "v1FailOrderResponse": {
       "type": "object"
-    },
-    "v1GetDataRequest": {
-      "type": "object",
-      "properties": {
-        "publicKey": {
-          "type": "string"
-        }
-      }
-    },
-    "v1GetDataResponse": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "$ref": "#/definitions/v1UserData"
-        }
-      }
     },
     "v1GetInfoRequest": {
       "type": "object",
@@ -767,12 +710,10 @@
       "type": "object",
       "properties": {
         "orderId": {
-          "type": "string",
-          "nullable": true
-        },  
+          "type": "string"
+        },
         "externalId": {
-          "type": "string",
-          "nullable": true
+          "type": "string"
         }
       }
     },
@@ -883,22 +824,30 @@
         }
       }
     },
-    "v1GetValidationResultRequest": {
+    "v1GetUserDataRequest": {
       "type": "object",
       "properties": {
         "userPublicKey": {
           "type": "string"
-        },
-        "validatorPublicKey": {
-          "type": "string"
         }
       }
     },
-    "v1GetValidationResultResponse": {
+    "v1GetUserDataResponse": {
       "type": "object",
       "properties": {
-        "data": {
-          "$ref": "#/definitions/v1ValidationData"
+        "userData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserDataField"
+          }
+        },
+        "validationData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ValidationDataField"
+          }
         }
       }
     },
@@ -953,102 +902,62 @@
     "v1RejectOrderResponse": {
       "type": "object"
     },
-    "v1SetDataRequest": {
+    "v1SetUserDataRequest": {
       "type": "object",
       "properties": {
-        "data": {
-          "$ref": "#/definitions/v1UserData"
+        "id": {
+          "type": "string"
+        },
+        "encryptedData": {
+          "type": "string"
         }
       }
     },
-    "v1SetDataResponse": {
+    "v1SetUserDataResponse": {
       "type": "object"
     },
-    "v1SetValidationResultRequest": {
+    "v1SetValidationDataRequest": {
       "type": "object",
       "properties": {
         "userPublicKey": {
           "type": "string"
         },
-        "data": {
-          "$ref": "#/definitions/v1ValidationData"
+        "encryptedData": {
+          "type": "string"
+        },
+        "dataId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
         }
       }
     },
-    "v1SetValidationResultResponse": {
+    "v1SetValidationDataResponse": {
       "type": "object"
     },
-    "v1UserData": {
+    "v1UserDataField": {
       "type": "object",
       "properties": {
-        "email": {
-          "type": "string",
-          "nullable": true
+        "id": {
+          "type": "string"
         },
-        "phone": {
-          "type": "string",
-          "nullable": true
-        },
-        "firstName": {
-          "type": "string",
-          "nullable": true
-        },
-        "middleName": {
-          "type": "string",
-          "nullable": true
-        },
-        "lastName": {
-          "type": "string",
-          "nullable": true
-        },
-        "dob": {
-          "type": "string",
-          "nullable": true
-        },
-        "countryCode": {
-          "type": "string",
-          "nullable": true
-        },
-        "idType": {
-          "type": "string",
-          "nullable": true
-        },
-        "idNumber": {
-          "type": "string",
-          "nullable": true
-        },
-        "photoIdCard": {
-          "type": "string",
-          "nullable": true
-        },
-        "photoSelfie": {
-          "type": "string",
-          "nullable": true
-        },
-        "bankAccountNumber": {
-          "type": "string",
-          "nullable": true
-        },
-        "bankCode": {
-          "type": "string",
-          "nullable": true
+        "encryptedData": {
+          "type": "string"
         }
       }
     },
-    "v1ValidationData": {
+    "v1ValidationDataField": {
       "type": "object",
       "properties": {
-        "email": {
-          "type": "string",
-          "nullable": true
+        "validatorPublicKey": {
+          "type": "string"
         },
-        "phone": {
-          "type": "string",
-          "nullable": true
+        "encryptedData": {
+          "type": "string"
         },
-        "kycSmileId": {
-          "type": "string",
-          "nullable": true
+        "dataId": {
+          "type": "string"
         }
       }
     }
