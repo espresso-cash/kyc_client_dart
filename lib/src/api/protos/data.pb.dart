@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: user.proto
+//  source: data.proto
 //
 // @dart = 2.12
 
@@ -13,10 +13,10 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'data.pbenum.dart';
 import 'google/protobuf/timestamp.pb.dart' as $0;
-import 'user.pbenum.dart';
 
-export 'user.pbenum.dart';
+export 'data.pbenum.dart';
 
 enum WrappedData_Data {
   email, 

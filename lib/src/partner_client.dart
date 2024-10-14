@@ -7,13 +7,14 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
 import 'package:kyc_client_dart/kyc_client_dart.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
-import 'package:kyc_client_dart/src/api/protos/user.pb.dart';
+import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
 import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
 
-export 'package:kyc_client_dart/src/models/order_id.dart';
+export 'models/order_id.dart';
+export 'models/validation_result.dart';
 
 const _defaultKycBaseUrl =
     'https://kyc-backend-beta-402681483920.europe-west1.run.app/';
@@ -214,14 +215,11 @@ class KycPartnerClient {
     required String secretKey,
     required String userPK,
   }) async {
-    // final response = await _apiClient
-    //     .kycServiceGetValidationResult(
-    //       body: V1GetValidationResultRequest(
-    //         userPublicKey: userPK,
-    //         validatorPublicKey: _authPublicKey,
-    //       ),
-    //     )
-    //     .then((e) => e.data.toJson());
+    final response = await _apiClient.kycServiceGetUserData(
+      body: V1GetUserDataRequest(userPublicKey: userPK),
+    );
+
+    print(response.validationData);
 
     // final data = response[key] as String?;
 
@@ -242,25 +240,39 @@ class KycPartnerClient {
   }
 
   Future<void> setValidationResult({
-    // required V1ValidationData value,
+    required ValidationResult value,
     required String userPK,
     required String secretKey,
   }) async {
-    //TODO
-    // SignedMessage encryptAndSign(Uint8List data) {
-    //   final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
-    //   final encrypted = box.encrypt(data);
-    //   return _signingKey.sign(Uint8List.fromList(encrypted));
-    // }
+    SignedMessage encryptAndSign(Uint8List data) {
+      final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
+      final encrypted = box.encrypt(data);
+      return _signingKey.sign(Uint8List.fromList(encrypted));
+    }
 
-    // final encryptedValue = value.encryptAndSign(encryptAndSign);
+    final data = value.data;
+    final wrappedData = WrappedValidation(
+      hash: _hash(data),
+      custom: CustomValidation(
+        type: value.type,
+        data: encryptAndSign(Uint8List.fromList(utf8.encode(data))),
+      ),
+    );
 
-    // await _apiClient.kycServiceSetValidationResult(
-    //   body: V1SetValidationResultRequest(
-    //     data: encryptedValue,
-    //     userPublicKey: userPK,
-    //   ),
-    // );
+    try {
+      await _apiClient.kycServiceSetValidationData(
+        body: V1SetValidationDataRequest(
+          encryptedData: base64Encode(wrappedData.writeToBuffer()),
+          dataId: 'dataId',
+          userPublicKey: userPK,
+          id: '',
+        ),
+      );
+    } catch (e) {
+      // Handle the error here
+      print('Error setting validation data: $e');
+      rethrow; // Re-throw the error if you want it to propagate
+    }
   }
 
   Future<V1GetOrderResponse> getOrder({
@@ -381,24 +393,3 @@ Uint8List _verifyAndDecrypt({
 
   return decrypted;
 }
-
-// extension V1ValidationDataExtensions on V1ValidationData {
-//   V1ValidationData encryptAndSign(
-//     SignedMessage Function(Uint8List) encryptAndSign,
-//   ) =>
-//       V1ValidationData(
-//         email: _encryptAndEncode(email, encryptAndSign),
-//         phone: _encryptAndEncode(phone, encryptAndSign),
-//         kycSmileId: _encryptAndEncode(kycSmileId, encryptAndSign),
-//       );
-
-//   String? _encryptAndEncode(
-//     String? value,
-//     SignedMessage Function(Uint8List) encryptAndSign,
-//   ) {
-//     if (value == null) return null;
-//     final encryptedData =
-//         encryptAndSign(Uint8List.fromList(utf8.encode(value)));
-//     return base64Encode(encryptedData);
-//   }
-// }

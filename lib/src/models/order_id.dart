@@ -19,7 +19,4 @@ class OrderId {
   }
   final String orderId;
   final String externalId;
-
-  bool get hasOrderId => orderId.isNotEmpty;
-  bool get hasExternalId => externalId.isNotEmpty;
 }

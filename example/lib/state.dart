@@ -243,11 +243,11 @@ class PartnerAppState extends ChangeNotifier {
     required String userPK,
     required String secretKey,
   }) async {
-    // await _client.setValidationResult(
-    //   value: V1ValidationData(kycSmileId: message),
-    //   userPK: userPK,
-    //   secretKey: secretKey,
-    // );
+    await _client.setValidationResult(
+      value: ValidationResult(type: 'kycSmileId', data: message),
+      userPK: userPK,
+      secretKey: secretKey,
+    );
   }
 
   Future<void> getUserInfo(String userPK) async {
@@ -269,14 +269,15 @@ class PartnerAppState extends ChangeNotifier {
       secretKey: secretKey,
     );
 
-    final email = await _client.getEmail(userPK: userPK, secretKey: secretKey);
-    final phone = await _client.getPhone(userPK: userPK, secretKey: secretKey);
+    // final email = await _client.getEmail(userPK: userPK, secretKey: secretKey);
+    // final phone = await _client.getPhone(userPK: userPK, secretKey: secretKey);
 
-    final emailValidationResult = jsonEncode(email);
-    final phoneValidationResult = jsonEncode(phone);
+    // final emailValidationResult = jsonEncode(email);
+    // final phoneValidationResult = jsonEncode(phone);
 
-    _validationResult =
-        'kyc: $kycValidationResult\nemail: $emailValidationResult\nphone: $phoneValidationResult';
+    // _validationResult =
+    //     'kyc: $kycValidationResult\nemail: $emailValidationResult\nphone: $phoneValidationResult';
+    _validationResult = '$kycValidationResult';
     notifyListeners();
   }
 

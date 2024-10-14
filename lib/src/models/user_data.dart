@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:kyc_client_dart/src/api/protos/user.pb.dart';
+import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
 
 part 'user_data.freezed.dart';
 
