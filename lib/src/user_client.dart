@@ -238,6 +238,8 @@ class KycUserClient {
     }
   }
 
+  //TODO create separate update data
+
   Future<UserData> getData({
     required String userPK,
     required String secretKey,

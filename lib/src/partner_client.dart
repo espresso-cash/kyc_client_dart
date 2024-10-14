@@ -259,20 +259,14 @@ class KycPartnerClient {
       ),
     );
 
-    try {
-      await _apiClient.kycServiceSetValidationData(
-        body: V1SetValidationDataRequest(
-          encryptedData: base64Encode(wrappedData.writeToBuffer()),
-          dataId: 'dataId',
-          userPublicKey: userPK,
-          id: '',
-        ),
-      );
-    } catch (e) {
-      // Handle the error here
-      print('Error setting validation data: $e');
-      rethrow; // Re-throw the error if you want it to propagate
-    }
+    await _apiClient.kycServiceSetValidationData(
+      body: V1SetValidationDataRequest(
+        encryptedData: base64Encode(wrappedData.writeToBuffer()),
+        dataId: 'dataId',
+        userPublicKey: userPK,
+        id: '',
+      ),
+    );
   }
 
   Future<V1GetOrderResponse> getOrder({
