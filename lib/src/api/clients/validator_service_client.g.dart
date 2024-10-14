@@ -22,12 +22,11 @@ class _ValidatorServiceClient implements ValidatorServiceClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<dynamic> validatorServiceInitDocumentValidation(
-      {required dynamic body}) async {
+  Future<dynamic> validatorServiceInitDocumentValidation() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = body;
+    const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
@@ -50,12 +49,11 @@ class _ValidatorServiceClient implements ValidatorServiceClient {
   }
 
   @override
-  Future<dynamic> validatorServiceInitEmailValidation(
-      {required dynamic body}) async {
+  Future<dynamic> validatorServiceInitEmailValidation() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = body;
+    const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
@@ -78,12 +76,11 @@ class _ValidatorServiceClient implements ValidatorServiceClient {
   }
 
   @override
-  Future<dynamic> validatorServiceInitPhoneValidation(
-      {required dynamic body}) async {
+  Future<dynamic> validatorServiceInitPhoneValidation() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = body;
+    const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,

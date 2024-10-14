@@ -249,12 +249,11 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetOrdersResponse> kycServiceGetOrders(
-      {required dynamic body}) async {
+  Future<V1GetOrdersResponse> kycServiceGetOrders() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = body;
+    const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<V1GetOrdersResponse>(Options(
       method: 'POST',
       headers: _headers,
@@ -318,12 +317,11 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetPartnerOrdersResponse> kycServiceGetPartnerOrders(
-      {required dynamic body}) async {
+  Future<V1GetPartnerOrdersResponse> kycServiceGetPartnerOrders() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = body;
+    const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<V1GetPartnerOrdersResponse>(Options(
       method: 'POST',
       headers: _headers,

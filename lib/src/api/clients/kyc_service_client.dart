@@ -80,9 +80,7 @@ abstract class KycServiceClient {
   });
 
   @POST('/v1/getOrders')
-  Future<V1GetOrdersResponse> kycServiceGetOrders({
-    @Body() required V1GetOrdersRequest body,
-  });
+  Future<V1GetOrdersResponse> kycServiceGetOrders();
 
   @POST('/v1/getPartnerInfo')
   Future<V1GetPartnerInfoResponse> kycServiceGetPartnerInfo({
@@ -90,9 +88,7 @@ abstract class KycServiceClient {
   });
 
   @POST('/v1/getPartnerOrders')
-  Future<V1GetPartnerOrdersResponse> kycServiceGetPartnerOrders({
-    @Body() required V1GetPartnerOrdersRequest body,
-  });
+  Future<V1GetPartnerOrdersResponse> kycServiceGetPartnerOrders();
 
   @POST('/v1/getUserData')
   Future<V1GetUserDataResponse> kycServiceGetUserData({

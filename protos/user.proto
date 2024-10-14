@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package espressocash.data.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message WrappedData {
+  oneof data {
+    string email = 1;
+    Name name = 2;
+    google.protobuf.Timestamp birth_date = 3;
+    string phone = 4;
+    Document document = 5;
+    BankInfo bank_info = 6;
+    bytes selfie_image = 7;
+  }
+}
+
+message Name {
+  string first_name = 1;
+  string last_name = 2;
+}
+
+message Document {
+  DocumentType type = 1;
+  string number = 2;
+}
+
+enum DocumentType {
+  DOCUMENT_TYPE_UNSPECIFIED = 0;
+  DOCUMENT_TYPE_VOTER_ID = 1;
+}
+
+message BankInfo {
+  string account_number = 1;
+  string bank_code = 2;
+  string bank_name = 3;
+}
+
+message WrappedValidation {
+  oneof data {
+    string hash = 1;
+    CustomValidation custom = 2;
+  }
+}
+
+message CustomValidation {
+  string type = 1;
+  bytes data = 2;
+}
