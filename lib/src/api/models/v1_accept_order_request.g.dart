@@ -10,10 +10,10 @@ _$V1AcceptOrderRequestImpl _$$V1AcceptOrderRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$V1AcceptOrderRequestImpl(
       orderId: json['orderId'] as String,
-      bankName: json['bankName'] as String?,
-      bankAccount: json['bankAccount'] as String?,
-      cryptoWalletAddress: json['cryptoWalletAddress'] as String?,
-      externalId: json['externalId'] as String?,
+      bankName: json['bankName'] as String,
+      bankAccount: json['bankAccount'] as String,
+      cryptoWalletAddress: json['cryptoWalletAddress'] as String,
+      externalId: json['externalId'] as String,
     );
 
 Map<String, dynamic> _$$V1AcceptOrderRequestImplToJson(

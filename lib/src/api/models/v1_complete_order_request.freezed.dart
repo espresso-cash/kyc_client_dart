@@ -21,9 +21,9 @@ V1CompleteOrderRequest _$V1CompleteOrderRequestFromJson(
 
 /// @nodoc
 mixin _$V1CompleteOrderRequest {
-  String? get orderId => throw _privateConstructorUsedError;
-  String? get transactionId => throw _privateConstructorUsedError;
-  String? get externalId => throw _privateConstructorUsedError;
+  String get orderId => throw _privateConstructorUsedError;
+  String get transactionId => throw _privateConstructorUsedError;
+  String get externalId => throw _privateConstructorUsedError;
 
   /// Serializes this V1CompleteOrderRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $V1CompleteOrderRequestCopyWith<$Res> {
           $Res Function(V1CompleteOrderRequest) then) =
       _$V1CompleteOrderRequestCopyWithImpl<$Res, V1CompleteOrderRequest>;
   @useResult
-  $Res call({String? orderId, String? transactionId, String? externalId});
+  $Res call({String orderId, String transactionId, String externalId});
 }
 
 /// @nodoc
@@ -60,23 +60,23 @@ class _$V1CompleteOrderRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? orderId = freezed,
-    Object? transactionId = freezed,
-    Object? externalId = freezed,
+    Object? orderId = null,
+    Object? transactionId = null,
+    Object? externalId = null,
   }) {
     return _then(_value.copyWith(
-      orderId: freezed == orderId
+      orderId: null == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      transactionId: freezed == transactionId
+              as String,
+      transactionId: null == transactionId
           ? _value.transactionId
           : transactionId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      externalId: freezed == externalId
+              as String,
+      externalId: null == externalId
           ? _value.externalId
           : externalId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ) as $Val);
   }
 }
@@ -90,7 +90,7 @@ abstract class _$$V1CompleteOrderRequestImplCopyWith<$Res>
       __$$V1CompleteOrderRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? orderId, String? transactionId, String? externalId});
+  $Res call({String orderId, String transactionId, String externalId});
 }
 
 /// @nodoc
@@ -108,23 +108,23 @@ class __$$V1CompleteOrderRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? orderId = freezed,
-    Object? transactionId = freezed,
-    Object? externalId = freezed,
+    Object? orderId = null,
+    Object? transactionId = null,
+    Object? externalId = null,
   }) {
     return _then(_$V1CompleteOrderRequestImpl(
-      orderId: freezed == orderId
+      orderId: null == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      transactionId: freezed == transactionId
+              as String,
+      transactionId: null == transactionId
           ? _value.transactionId
           : transactionId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      externalId: freezed == externalId
+              as String,
+      externalId: null == externalId
           ? _value.externalId
           : externalId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
@@ -133,17 +133,19 @@ class __$$V1CompleteOrderRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$V1CompleteOrderRequestImpl implements _V1CompleteOrderRequest {
   const _$V1CompleteOrderRequestImpl(
-      {this.orderId, this.transactionId, this.externalId});
+      {required this.orderId,
+      required this.transactionId,
+      required this.externalId});
 
   factory _$V1CompleteOrderRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1CompleteOrderRequestImplFromJson(json);
 
   @override
-  final String? orderId;
+  final String orderId;
   @override
-  final String? transactionId;
+  final String transactionId;
   @override
-  final String? externalId;
+  final String externalId;
 
   @override
   String toString() {
@@ -186,19 +188,19 @@ class _$V1CompleteOrderRequestImpl implements _V1CompleteOrderRequest {
 
 abstract class _V1CompleteOrderRequest implements V1CompleteOrderRequest {
   const factory _V1CompleteOrderRequest(
-      {final String? orderId,
-      final String? transactionId,
-      final String? externalId}) = _$V1CompleteOrderRequestImpl;
+      {required final String orderId,
+      required final String transactionId,
+      required final String externalId}) = _$V1CompleteOrderRequestImpl;
 
   factory _V1CompleteOrderRequest.fromJson(Map<String, dynamic> json) =
       _$V1CompleteOrderRequestImpl.fromJson;
 
   @override
-  String? get orderId;
+  String get orderId;
   @override
-  String? get transactionId;
+  String get transactionId;
   @override
-  String? get externalId;
+  String get externalId;
 
   /// Create a copy of V1CompleteOrderRequest
   /// with the given fields replaced by the non-null parameter values.

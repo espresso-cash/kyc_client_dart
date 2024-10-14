@@ -179,41 +179,6 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetDataResponse> kycServiceGetData(
-      {required V1GetDataRequest body}) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body.toJson());
-    final _options = _setStreamType<V1GetDataResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/v1/getData',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late V1GetDataResponse _value;
-    try {
-      _value = V1GetDataResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
   Future<V1GetInfoResponse> kycServiceGetInfo(
       {required V1GetInfoRequest body}) async {
     final _extra = <String, dynamic>{};
@@ -284,11 +249,12 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetOrdersResponse> kycServiceGetOrders() async {
+  Future<V1GetOrdersResponse> kycServiceGetOrders(
+      {required dynamic body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = body;
     final _options = _setStreamType<V1GetOrdersResponse>(Options(
       method: 'POST',
       headers: _headers,
@@ -352,11 +318,12 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetPartnerOrdersResponse> kycServiceGetPartnerOrders() async {
+  Future<V1GetPartnerOrdersResponse> kycServiceGetPartnerOrders(
+      {required dynamic body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = body;
     final _options = _setStreamType<V1GetPartnerOrdersResponse>(Options(
       method: 'POST',
       headers: _headers,
@@ -385,21 +352,21 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetValidationResultResponse> kycServiceGetValidationResult(
-      {required V1GetValidationResultRequest body}) async {
+  Future<V1GetUserDataResponse> kycServiceGetUserData(
+      {required V1GetUserDataRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
-    final _options = _setStreamType<V1GetValidationResultResponse>(Options(
+    final _options = _setStreamType<V1GetUserDataResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/v1/getValidationResult',
+          '/v1/getUserData',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -409,9 +376,9 @@ class _KycServiceClient implements KycServiceClient {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late V1GetValidationResultResponse _value;
+    late V1GetUserDataResponse _value;
     try {
-      _value = V1GetValidationResultResponse.fromJson(_result.data!);
+      _value = V1GetUserDataResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -507,7 +474,8 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<dynamic> kycServiceSetData({required V1SetDataRequest body}) async {
+  Future<dynamic> kycServiceSetUserData(
+      {required V1SetUserDataRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -520,7 +488,7 @@ class _KycServiceClient implements KycServiceClient {
     )
         .compose(
           _dio.options,
-          '/v1/setData',
+          '/v1/setUserData',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -535,8 +503,8 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<dynamic> kycServiceSetValidationResult(
-      {required V1SetValidationResultRequest body}) async {
+  Future<dynamic> kycServiceSetValidationData(
+      {required V1SetValidationDataRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -549,7 +517,7 @@ class _KycServiceClient implements KycServiceClient {
     )
         .compose(
           _dio.options,
-          '/v1/setValidationResult',
+          '/v1/setValidationData',
           queryParameters: queryParameters,
           data: _data,
         )

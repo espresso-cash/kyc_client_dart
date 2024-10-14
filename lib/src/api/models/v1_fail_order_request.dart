@@ -10,9 +10,9 @@ part 'v1_fail_order_request.g.dart';
 @Freezed()
 class V1FailOrderRequest with _$V1FailOrderRequest {
   const factory V1FailOrderRequest({
+    required String orderId,
     required String reason,
-    String? orderId,
-    String? externalId,
+    required String externalId,
   }) = _V1FailOrderRequest;
   
   factory V1FailOrderRequest.fromJson(Map<String, Object?> json) => _$V1FailOrderRequestFromJson(json);

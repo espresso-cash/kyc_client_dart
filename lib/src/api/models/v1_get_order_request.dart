@@ -10,8 +10,8 @@ part 'v1_get_order_request.g.dart';
 @Freezed()
 class V1GetOrderRequest with _$V1GetOrderRequest {
   const factory V1GetOrderRequest({
-    String? orderId,
-    String? externalId,
+    required String orderId,
+    required String externalId,
   }) = _V1GetOrderRequest;
   
   factory V1GetOrderRequest.fromJson(Map<String, Object?> json) => _$V1GetOrderRequestFromJson(json);
