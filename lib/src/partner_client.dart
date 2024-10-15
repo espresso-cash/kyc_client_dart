@@ -8,7 +8,7 @@ import 'package:kyc_client_dart/kyc_client_dart.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
 import 'package:kyc_client_dart/src/common.dart';
-import 'package:kyc_client_dart/src/models/user_profile.dart' as profile;
+import 'package:kyc_client_dart/src/models/order.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
@@ -109,7 +109,7 @@ class KycPartnerClient {
     return base58.encode(decryptedSecretKey);
   }
 
-  Future<profile.UserProfile> getUserData({
+  Future<UserData> getUserData({
     required String userPK,
     required String secretKey,
   }) async =>
@@ -152,18 +152,24 @@ class KycPartnerClient {
     );
   }
 
-  Future<V1GetOrderResponse> getOrder({
+  Future<Order> getOrder({
     required OrderId orderId,
-  }) async =>
-      _kycClient.kycServiceGetOrder(
-        body: V1GetOrderRequest(
-          orderId: orderId.orderId,
-          externalId: orderId.externalId,
-        ),
-      );
+  }) async {
+    final response = await _kycClient.kycServiceGetOrder(
+      body: V1GetOrderRequest(
+        orderId: orderId.orderId,
+        externalId: orderId.externalId,
+      ),
+    );
 
-  Future<V1GetPartnerOrdersResponse> getPartnerOrders() async =>
-      _kycClient.kycServiceGetPartnerOrders();
+    return Order.fromV1GetOrderResponse(response);
+  }
+
+  Future<List<Order>> getPartnerOrders() async {
+    final response = await _kycClient.kycServiceGetPartnerOrders();
+
+    return response.orders.map(Order.fromV1GetOrderResponse).toList();
+  }
 
   Future<void> acceptOnRampOrder({
     required OrderId orderId,

@@ -176,7 +176,7 @@ class WalletAppState extends ChangeNotifier {
   Future<void> fetchUserOrders() async {
     final data = await _client.getOrders();
 
-    _orders = data.orders.map((e) => e.toJson().toString()).toList();
+    _orders = data.map((e) => e.toJson().toString()).toList();
 
     notifyListeners();
   }
@@ -300,7 +300,7 @@ class PartnerAppState extends ChangeNotifier {
   Future<void> fetchPartnerOrders() async {
     final data = await _client.getPartnerOrders();
 
-    _orders = data.orders.map((e) => e.toJson().toString()).toList();
+    _orders = data.map((e) => e.toJson().toString()).toList();
 
     notifyListeners();
   }

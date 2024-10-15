@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
 import 'package:kyc_client_dart/src/api/export.dart';
-import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
+import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/models/id_type.dart';
-import 'package:kyc_client_dart/src/models/user_profile.dart' as profile;
+import 'package:kyc_client_dart/src/models/user_data.dart';
 import 'package:kyc_client_dart/src/models/validation_result.dart';
 import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
@@ -60,7 +60,7 @@ Uint8List verifyAndDecrypt({
   return decrypted;
 }
 
-Future<profile.UserProfile> processUserData({
+Future<UserData> processUserData({
   required KycServiceClient kycClient,
   required String userPK,
   required String secretKey,
@@ -79,18 +79,18 @@ Future<profile.UserProfile> processUserData({
       secretKey: secretKey,
       userPK: encryptedData.validatorPublicKey,
     );
-    final wrappedData = WrappedValidation.fromBuffer(decryptedData);
+    final wrappedData = proto.WrappedValidation.fromBuffer(decryptedData);
 
     final result = switch (wrappedData.whichData()) {
-      WrappedValidation_Data.hash => HashValidationResult(
+      proto.WrappedValidation_Data.hash => HashValidationResult(
           dataId: encryptedData.dataId,
           value: wrappedData.hash,
         ),
-      WrappedValidation_Data.custom => CustomValidationResult(
+      proto.WrappedValidation_Data.custom => CustomValidationResult(
           type: wrappedData.custom.type,
           value: utf8.decode(wrappedData.custom.data),
         ),
-      WrappedValidation_Data.notSet => null,
+      proto.WrappedValidation_Data.notSet => null,
     };
 
     if (result != null) {
@@ -102,13 +102,13 @@ Future<profile.UserProfile> processUserData({
     }
   }
 
-  final email = <profile.Email>[];
-  final phone = <profile.Phone>[];
-  final name = <profile.Name>[];
-  final birthDate = <profile.BirthDate>[];
-  final document = <profile.Document>[];
-  final bankInfo = <profile.BankInfo>[];
-  final selfie = <profile.Selfie>[];
+  final email = <Email>[];
+  final phone = <Phone>[];
+  final name = <Name>[];
+  final birthDate = <BirthDate>[];
+  final document = <Document>[];
+  final bankInfo = <BankInfo>[];
+  final selfie = <Selfie>[];
 
   // Process user data
   for (final encryptedData in response.userData) {
@@ -117,10 +117,10 @@ Future<profile.UserProfile> processUserData({
       secretKey: secretKey,
       userPK: userPK,
     );
-    final wrappedData = WrappedData.fromBuffer(decryptedData);
+    final wrappedData = proto.WrappedData.fromBuffer(decryptedData);
 
-    final dataId = encryptedData.id;
-    final verificationData = validationMap[dataId] as HashValidationResult?;
+    final id = encryptedData.id;
+    final verificationData = validationMap[id] as HashValidationResult?;
 
     bool verified = false;
     if (verificationData != null) {
@@ -129,72 +129,72 @@ Future<profile.UserProfile> processUserData({
     }
 
     switch (wrappedData.whichData()) {
-      case WrappedData_Data.email:
+      case proto.WrappedData_Data.email:
         email.add(
-          profile.Email(
+          Email(
             value: wrappedData.email,
-            dataId: dataId,
+            id: id,
             verified: verified,
           ),
         );
-      case WrappedData_Data.name:
+      case proto.WrappedData_Data.name:
         name.add(
-          profile.Name(
+          Name(
             firstName: wrappedData.name.firstName,
             lastName: wrappedData.name.lastName,
-            dataId: dataId,
+            id: id,
             verified: verified,
           ),
         );
-      case WrappedData_Data.birthDate:
+      case proto.WrappedData_Data.birthDate:
         birthDate.add(
-          profile.BirthDate(
+          BirthDate(
             value: wrappedData.birthDate.toDateTime(),
-            dataId: dataId,
+            id: id,
             verified: verified,
           ),
         );
-      case WrappedData_Data.phone:
+      case proto.WrappedData_Data.phone:
         phone.add(
-          profile.Phone(
+          Phone(
             value: wrappedData.phone,
-            dataId: dataId,
+            id: id,
             verified: verified,
           ),
         );
-      case WrappedData_Data.document:
+      case proto.WrappedData_Data.document:
         document.add(
-          profile.Document(
+          Document(
             type: wrappedData.document.type.toIdType(),
             number: wrappedData.document.number,
-            dataId: dataId,
+            id: id,
             verified: verified,
           ),
         );
-      case WrappedData_Data.bankInfo:
+      case proto.WrappedData_Data.bankInfo:
         bankInfo.add(
-          profile.BankInfo(
+          BankInfo(
             bankName: wrappedData.bankInfo.bankName,
             accountNumber: wrappedData.bankInfo.accountNumber,
             bankCode: wrappedData.bankInfo.bankCode,
-            dataId: dataId,
+            id: id,
             verified: verified,
           ),
         );
-      case WrappedData_Data.selfieImage:
+      case proto.WrappedData_Data.selfieImage:
         selfie.add(
-          profile.Selfie(
+          Selfie(
             value: wrappedData.selfieImage,
-            dataId: dataId,
+            id: id,
             verified: verified,
           ),
         );
-      case WrappedData_Data.notSet:
+      case proto.WrappedData_Data.notSet:
         break;
     }
   }
 
-  return profile.UserProfile(
+  return UserData(
     email: email,
     phone: phone,
     name: name,

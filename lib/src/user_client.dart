@@ -6,18 +6,18 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
 import 'package:kyc_client_dart/src/api/export.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
-import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
+import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
 import 'package:kyc_client_dart/src/common.dart';
 import 'package:kyc_client_dart/src/models/id_type.dart';
-import 'package:kyc_client_dart/src/models/partner.dart';
+import 'package:kyc_client_dart/src/models/order.dart';
+import 'package:kyc_client_dart/src/models/partner_data.dart';
 import 'package:kyc_client_dart/src/models/user_data.dart';
-import 'package:kyc_client_dart/src/models/user_profile.dart' as profile;
 import 'package:pinenacl/ed25519.dart' hide Signature;
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
 
-export 'models/partner.dart';
+export 'models/partner_data.dart';
 export 'models/user_data.dart';
 
 typedef SignRequest = Future<Signature> Function(Iterable<int> data);
@@ -189,42 +189,70 @@ class KycUserClient {
   }
 
   Future<void> setData({
-    required UserData data,
+    Email? email,
+    Phone? phone,
+    Name? name,
+    Document? document,
+    BankInfo? bankInfo,
+    BirthDate? dob,
+    Selfie? selfie,
   }) async {
-    final wrappedDataList = [
-      if (data.phone != null) WrappedData(phone: data.phone),
-      if (data.email != null) WrappedData(email: data.email),
-      if (data.firstName != null && data.lastName != null)
-        WrappedData(
-          name: Name(
-            firstName: data.firstName,
-            lastName: data.lastName,
-          ),
+    final dataList = [
+      if (email != null)
+        (
+          data: proto.WrappedData(email: email.value),
+          id: email.id,
         ),
-      if (data.idNumber != null && data.idType != null)
-        WrappedData(
-          document: Document(
-            number: data.idNumber,
-            type: data.idType!.toDocumentType(), // TODOrefactor null !
-          ),
+      if (phone != null)
+        (
+          data: proto.WrappedData(phone: phone.value),
+          id: phone.id,
         ),
-      if (data.bankName != null &&
-          data.bankAccountNumber != null &&
-          data.bankCode != null)
-        WrappedData(
-          bankInfo: BankInfo(
-            bankName: data.bankName,
-            accountNumber: data.bankAccountNumber,
-            bankCode: data.bankCode,
+      if (name != null)
+        (
+          data: proto.WrappedData(
+            name: proto.Name(
+              firstName: name.firstName,
+              lastName: name.lastName,
+            ),
           ),
+          id: name.id,
         ),
-      if (data.dob case final dob?)
-        WrappedData(birthDate: Timestamp.fromDateTime(dob)),
-      if (data.selfie != null) WrappedData(selfieImage: data.selfie),
+      if (document != null)
+        (
+          data: proto.WrappedData(
+            document: proto.Document(
+              number: document.number,
+              type: document.type.toDocumentType(),
+            ),
+          ),
+          id: document.id,
+        ),
+      if (bankInfo != null)
+        (
+          data: proto.WrappedData(
+            bankInfo: proto.BankInfo(
+              bankName: bankInfo.bankName,
+              accountNumber: bankInfo.accountNumber,
+              bankCode: bankInfo.bankCode,
+            ),
+          ),
+          id: bankInfo.id,
+        ),
+      if (dob != null)
+        (
+          data: proto.WrappedData(birthDate: Timestamp.fromDateTime(dob.value)),
+          id: dob.id
+        ),
+      if (selfie != null)
+        (
+          data: proto.WrappedData(selfieImage: selfie.value),
+          id: selfie.id,
+        ),
     ];
 
-    for (final wrappedData in wrappedDataList) {
-      final protoData = wrappedData.writeToBuffer();
+    for (final item in dataList) {
+      final protoData = item.data.writeToBuffer();
       final encryptedData = encryptAndSign(
         data: protoData,
         secretBox: _secretBox,
@@ -233,16 +261,14 @@ class KycUserClient {
 
       await _kycClient.kycServiceSetUserData(
         body: V1SetUserDataRequest(
-          id: '',
+          id: item.id,
           encryptedData: base64Encode(encryptedData),
         ),
       );
     }
   }
 
-  //TODO create separate update data
-
-  Future<profile.UserProfile> getUserData({
+  Future<UserData> getUserData({
     required String userPK,
     required String secretKey,
   }) async =>
@@ -320,18 +346,22 @@ class KycUserClient {
     return response.orderId;
   }
 
-  // TODO: update return Order object
-  Future<V1GetOrderResponse> getOrder({
+  Future<Order> getOrder({
     required OrderId orderId,
-  }) async =>
-      _kycClient.kycServiceGetOrder(
-        body: V1GetOrderRequest(
-          orderId: orderId.orderId,
-          externalId: orderId.externalId,
-        ),
-      );
+  }) async {
+    final response = await _kycClient.kycServiceGetOrder(
+      body: V1GetOrderRequest(
+        orderId: orderId.orderId,
+        externalId: orderId.externalId,
+      ),
+    );
 
-  // TODO: update return Order object
-  Future<V1GetOrdersResponse> getOrders() async =>
-      _kycClient.kycServiceGetOrders();
+    return Order.fromV1GetOrderResponse(response);
+  }
+
+  Future<List<Order>> getOrders() async {
+    final response = await _kycClient.kycServiceGetOrders();
+
+    return response.orders.map(Order.fromV1GetOrderResponse).toList();
+  }
 }

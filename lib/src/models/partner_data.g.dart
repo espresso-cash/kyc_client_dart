@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'partner.dart';
+part of 'partner_data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

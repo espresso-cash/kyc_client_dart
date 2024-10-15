@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_profile.dart';
+part of 'user_data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$UserProfileImpl _$$UserProfileImplFromJson(Map<String, dynamic> json) =>
-    _$UserProfileImpl(
+_$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
+    _$UserDataImpl(
       email: (json['email'] as List<dynamic>?)
           ?.map((e) => Email.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -32,7 +32,7 @@ _$UserProfileImpl _$$UserProfileImplFromJson(Map<String, dynamic> json) =>
       custom: json['custom'] as Map<String, dynamic>?,
     );
 
-Map<String, dynamic> _$$UserProfileImplToJson(_$UserProfileImpl instance) =>
+Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
     <String, dynamic>{
       'email': instance.email,
       'phone': instance.phone,
@@ -46,88 +46,88 @@ Map<String, dynamic> _$$UserProfileImplToJson(_$UserProfileImpl instance) =>
 
 _$EmailImpl _$$EmailImplFromJson(Map<String, dynamic> json) => _$EmailImpl(
       value: json['value'] as String,
-      verified: json['verified'] as bool,
-      dataId: json['dataId'] as String,
+      id: json['id'] as String? ?? '',
+      verified: json['verified'] as bool?,
     );
 
 Map<String, dynamic> _$$EmailImplToJson(_$EmailImpl instance) =>
     <String, dynamic>{
       'value': instance.value,
+      'id': instance.id,
       'verified': instance.verified,
-      'dataId': instance.dataId,
     };
 
 _$PhoneImpl _$$PhoneImplFromJson(Map<String, dynamic> json) => _$PhoneImpl(
       value: json['value'] as String,
-      verified: json['verified'] as bool,
-      dataId: json['dataId'] as String,
+      id: json['id'] as String? ?? '',
+      verified: json['verified'] as bool?,
     );
 
 Map<String, dynamic> _$$PhoneImplToJson(_$PhoneImpl instance) =>
     <String, dynamic>{
       'value': instance.value,
+      'id': instance.id,
       'verified': instance.verified,
-      'dataId': instance.dataId,
     };
 
 _$SelfieImpl _$$SelfieImplFromJson(Map<String, dynamic> json) => _$SelfieImpl(
       value: (json['value'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),
-      verified: json['verified'] as bool,
-      dataId: json['dataId'] as String,
+      id: json['id'] as String? ?? '',
+      verified: json['verified'] as bool?,
     );
 
 Map<String, dynamic> _$$SelfieImplToJson(_$SelfieImpl instance) =>
     <String, dynamic>{
       'value': instance.value,
+      'id': instance.id,
       'verified': instance.verified,
-      'dataId': instance.dataId,
     };
 
 _$NameImpl _$$NameImplFromJson(Map<String, dynamic> json) => _$NameImpl(
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
-      verified: json['verified'] as bool,
-      dataId: json['dataId'] as String,
+      id: json['id'] as String? ?? '',
+      verified: json['verified'] as bool?,
     );
 
 Map<String, dynamic> _$$NameImplToJson(_$NameImpl instance) =>
     <String, dynamic>{
       'firstName': instance.firstName,
       'lastName': instance.lastName,
+      'id': instance.id,
       'verified': instance.verified,
-      'dataId': instance.dataId,
     };
 
 _$BirthDateImpl _$$BirthDateImplFromJson(Map<String, dynamic> json) =>
     _$BirthDateImpl(
       value: DateTime.parse(json['value'] as String),
-      verified: json['verified'] as bool,
-      dataId: json['dataId'] as String,
+      id: json['id'] as String? ?? '',
+      verified: json['verified'] as bool?,
     );
 
 Map<String, dynamic> _$$BirthDateImplToJson(_$BirthDateImpl instance) =>
     <String, dynamic>{
       'value': instance.value.toIso8601String(),
+      'id': instance.id,
       'verified': instance.verified,
-      'dataId': instance.dataId,
     };
 
 _$DocumentImpl _$$DocumentImplFromJson(Map<String, dynamic> json) =>
     _$DocumentImpl(
       type: $enumDecode(_$IdTypeEnumMap, json['type']),
       number: json['number'] as String,
-      verified: json['verified'] as bool,
-      dataId: json['dataId'] as String,
+      id: json['id'] as String? ?? '',
+      verified: json['verified'] as bool?,
     );
 
 Map<String, dynamic> _$$DocumentImplToJson(_$DocumentImpl instance) =>
     <String, dynamic>{
       'type': _$IdTypeEnumMap[instance.type]!,
       'number': instance.number,
+      'id': instance.id,
       'verified': instance.verified,
-      'dataId': instance.dataId,
     };
 
 const _$IdTypeEnumMap = {
@@ -142,8 +142,8 @@ _$BankInfoImpl _$$BankInfoImplFromJson(Map<String, dynamic> json) =>
       bankName: json['bankName'] as String,
       bankCode: json['bankCode'] as String,
       accountNumber: json['accountNumber'] as String,
-      verified: json['verified'] as bool,
-      dataId: json['dataId'] as String,
+      id: json['id'] as String? ?? '',
+      verified: json['verified'] as bool?,
     );
 
 Map<String, dynamic> _$$BankInfoImplToJson(_$BankInfoImpl instance) =>
@@ -151,6 +151,6 @@ Map<String, dynamic> _$$BankInfoImplToJson(_$BankInfoImpl instance) =>
       'bankName': instance.bankName,
       'bankCode': instance.bankCode,
       'accountNumber': instance.accountNumber,
+      'id': instance.id,
       'verified': instance.verified,
-      'dataId': instance.dataId,
     };

@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'partner.freezed.dart';
-part 'partner.g.dart';
+part 'partner_data.freezed.dart';
+part 'partner_data.g.dart';
 
 @freezed
 class PartnerModel with _$PartnerModel {
