@@ -10,10 +10,12 @@ _$V1ValidateEmailRequestImpl _$$V1ValidateEmailRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$V1ValidateEmailRequestImpl(
       code: json['code'] as String,
+      dataId: json['dataId'] as String,
     );
 
 Map<String, dynamic> _$$V1ValidateEmailRequestImplToJson(
         _$V1ValidateEmailRequestImpl instance) =>
     <String, dynamic>{
       'code': instance.code,
+      'dataId': instance.dataId,
     };

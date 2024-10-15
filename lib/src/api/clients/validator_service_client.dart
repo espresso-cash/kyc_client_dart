@@ -28,10 +28,14 @@ abstract class ValidatorServiceClient {
       validatorServiceInitDocumentValidation();
 
   @POST('/v1/initEmailValidation')
-  Future<V1InitEmailValidationResponse> validatorServiceInitEmailValidation();
+  Future<V1InitEmailValidationResponse> validatorServiceInitEmailValidation({
+    @Body() required V1InitEmailValidationRequest body,
+  });
 
   @POST('/v1/initPhoneValidation')
-  Future<V1InitPhoneValidationResponse> validatorServiceInitPhoneValidation();
+  Future<V1InitPhoneValidationResponse> validatorServiceInitPhoneValidation({
+    @Body() required V1InitPhoneValidationRequest body,
+  });
 
   @POST('/v1/validateEmail')
   Future<V1ValidateEmailResponse> validatorServiceValidateEmail({

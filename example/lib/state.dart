@@ -109,19 +109,19 @@ class WalletAppState extends ChangeNotifier {
   }
 
   Future<void> initEmailValidation() async {
-    await _client.initEmailValidation();
+    await _client.initEmailValidation(dataId: _emailId);
   }
 
   Future<void> initPhoneValidation() async {
-    await _client.initPhoneValidation();
+    await _client.initPhoneValidation(dataId: _phoneId);
   }
 
   Future<void> validateEmail(String code) async {
-    await _client.validateEmail(code: code);
+    await _client.validateEmail(code: code, dataId: _emailId);
   }
 
   Future<void> validatePhone(String code) async {
-    await _client.validatePhone(code: code);
+    await _client.validatePhone(code: code, dataId: _phoneId);
   }
 
   Future<void> createOnRampOrder({

@@ -276,23 +276,33 @@ class KycUserClient {
     await _validatorClient.validatorServiceInitDocumentValidation();
   }
 
-  Future<void> initEmailValidation() async {
-    await _validatorClient.validatorServiceInitEmailValidation();
-  }
-
-  Future<void> validateEmail({required String code}) async {
-    await _validatorClient.validatorServiceValidateEmail(
-      body: V1ValidateEmailRequest(code: code),
+  Future<void> initEmailValidation({required String dataId}) async {
+    await _validatorClient.validatorServiceInitEmailValidation(
+      body: V1InitEmailValidationRequest(dataId: dataId),
     );
   }
 
-  Future<void> initPhoneValidation() async {
-    await _validatorClient.validatorServiceInitPhoneValidation();
+  Future<void> validateEmail({
+    required String code,
+    required String dataId,
+  }) async {
+    await _validatorClient.validatorServiceValidateEmail(
+      body: V1ValidateEmailRequest(code: code, dataId: dataId),
+    );
   }
 
-  Future<void> validatePhone({required String code}) async {
+  Future<void> initPhoneValidation({required String dataId}) async {
+    await _validatorClient.validatorServiceInitPhoneValidation(
+      body: V1InitPhoneValidationRequest(dataId: dataId),
+    );
+  }
+
+  Future<void> validatePhone({
+    required String code,
+    required String dataId,
+  }) async {
     await _validatorClient.validatorServiceValidatePhone(
-      body: V1ValidatePhoneRequest(code: code),
+      body: V1ValidatePhoneRequest(code: code, dataId: dataId),
     );
   }
 
