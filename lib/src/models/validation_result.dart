@@ -1,23 +1,17 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'validation_result.freezed.dart';
-part 'validation_result.g.dart';
 
-// TODO, refactor could include other user data like name
-enum ValidationType {
-  email,
-  phone,
-  custom,
-}
-
-@freezed
-class ValidationResult with _$ValidationResult {
-  const factory ValidationResult({
+@Freezed(map: FreezedMapOptions.none, when: FreezedWhenOptions.none)
+sealed class ValidationResult with _$ValidationResult {
+  const factory ValidationResult.hash({
     required String dataId,
-    required ValidationType type,
     required String value,
-  }) = _ValidationResult;
+  }) = HashValidationResult;
 
-  factory ValidationResult.fromJson(Map<String, dynamic> json) =>
-      _$ValidationResultFromJson(json);
+  const factory ValidationResult.custom({
+    @Default('') String dataId,
+    required String type,
+    required String value,
+  }) = CustomValidationResult;
 }

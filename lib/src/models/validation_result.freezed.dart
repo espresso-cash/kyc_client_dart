@@ -14,18 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-ValidationResult _$ValidationResultFromJson(Map<String, dynamic> json) {
-  return _ValidationResult.fromJson(json);
-}
-
 /// @nodoc
 mixin _$ValidationResult {
   String get dataId => throw _privateConstructorUsedError;
-  ValidationType get type => throw _privateConstructorUsedError;
   String get value => throw _privateConstructorUsedError;
-
-  /// Serializes this ValidationResult to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of ValidationResult
   /// with the given fields replaced by the non-null parameter values.
@@ -40,7 +32,7 @@ abstract class $ValidationResultCopyWith<$Res> {
           ValidationResult value, $Res Function(ValidationResult) then) =
       _$ValidationResultCopyWithImpl<$Res, ValidationResult>;
   @useResult
-  $Res call({String dataId, ValidationType type, String value});
+  $Res call({String dataId, String value});
 }
 
 /// @nodoc
@@ -59,7 +51,6 @@ class _$ValidationResultCopyWithImpl<$Res, $Val extends ValidationResult>
   @override
   $Res call({
     Object? dataId = null,
-    Object? type = null,
     Object? value = null,
   }) {
     return _then(_value.copyWith(
@@ -67,10 +58,6 @@ class _$ValidationResultCopyWithImpl<$Res, $Val extends ValidationResult>
           ? _value.dataId
           : dataId // ignore: cast_nullable_to_non_nullable
               as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as ValidationType,
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -80,22 +67,120 @@ class _$ValidationResultCopyWithImpl<$Res, $Val extends ValidationResult>
 }
 
 /// @nodoc
-abstract class _$$ValidationResultImplCopyWith<$Res>
+abstract class _$$HashValidationResultImplCopyWith<$Res>
     implements $ValidationResultCopyWith<$Res> {
-  factory _$$ValidationResultImplCopyWith(_$ValidationResultImpl value,
-          $Res Function(_$ValidationResultImpl) then) =
-      __$$ValidationResultImplCopyWithImpl<$Res>;
+  factory _$$HashValidationResultImplCopyWith(_$HashValidationResultImpl value,
+          $Res Function(_$HashValidationResultImpl) then) =
+      __$$HashValidationResultImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String dataId, ValidationType type, String value});
+  $Res call({String dataId, String value});
 }
 
 /// @nodoc
-class __$$ValidationResultImplCopyWithImpl<$Res>
-    extends _$ValidationResultCopyWithImpl<$Res, _$ValidationResultImpl>
-    implements _$$ValidationResultImplCopyWith<$Res> {
-  __$$ValidationResultImplCopyWithImpl(_$ValidationResultImpl _value,
-      $Res Function(_$ValidationResultImpl) _then)
+class __$$HashValidationResultImplCopyWithImpl<$Res>
+    extends _$ValidationResultCopyWithImpl<$Res, _$HashValidationResultImpl>
+    implements _$$HashValidationResultImplCopyWith<$Res> {
+  __$$HashValidationResultImplCopyWithImpl(_$HashValidationResultImpl _value,
+      $Res Function(_$HashValidationResultImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ValidationResult
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? dataId = null,
+    Object? value = null,
+  }) {
+    return _then(_$HashValidationResultImpl(
+      dataId: null == dataId
+          ? _value.dataId
+          : dataId // ignore: cast_nullable_to_non_nullable
+              as String,
+      value: null == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$HashValidationResultImpl implements HashValidationResult {
+  const _$HashValidationResultImpl({required this.dataId, required this.value});
+
+  @override
+  final String dataId;
+  @override
+  final String value;
+
+  @override
+  String toString() {
+    return 'ValidationResult.hash(dataId: $dataId, value: $value)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HashValidationResultImpl &&
+            (identical(other.dataId, dataId) || other.dataId == dataId) &&
+            (identical(other.value, value) || other.value == value));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, dataId, value);
+
+  /// Create a copy of ValidationResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$HashValidationResultImplCopyWith<_$HashValidationResultImpl>
+      get copyWith =>
+          __$$HashValidationResultImplCopyWithImpl<_$HashValidationResultImpl>(
+              this, _$identity);
+}
+
+abstract class HashValidationResult implements ValidationResult {
+  const factory HashValidationResult(
+      {required final String dataId,
+      required final String value}) = _$HashValidationResultImpl;
+
+  @override
+  String get dataId;
+  @override
+  String get value;
+
+  /// Create a copy of ValidationResult
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$HashValidationResultImplCopyWith<_$HashValidationResultImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$CustomValidationResultImplCopyWith<$Res>
+    implements $ValidationResultCopyWith<$Res> {
+  factory _$$CustomValidationResultImplCopyWith(
+          _$CustomValidationResultImpl value,
+          $Res Function(_$CustomValidationResultImpl) then) =
+      __$$CustomValidationResultImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String dataId, String type, String value});
+}
+
+/// @nodoc
+class __$$CustomValidationResultImplCopyWithImpl<$Res>
+    extends _$ValidationResultCopyWithImpl<$Res, _$CustomValidationResultImpl>
+    implements _$$CustomValidationResultImplCopyWith<$Res> {
+  __$$CustomValidationResultImplCopyWithImpl(
+      _$CustomValidationResultImpl _value,
+      $Res Function(_$CustomValidationResultImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of ValidationResult
@@ -107,7 +192,7 @@ class __$$ValidationResultImplCopyWithImpl<$Res>
     Object? type = null,
     Object? value = null,
   }) {
-    return _then(_$ValidationResultImpl(
+    return _then(_$CustomValidationResultImpl(
       dataId: null == dataId
           ? _value.dataId
           : dataId // ignore: cast_nullable_to_non_nullable
@@ -115,7 +200,7 @@ class __$$ValidationResultImplCopyWithImpl<$Res>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as ValidationType,
+              as String,
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -125,37 +210,34 @@ class __$$ValidationResultImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
-class _$ValidationResultImpl implements _ValidationResult {
-  const _$ValidationResultImpl(
-      {required this.dataId, required this.type, required this.value});
 
-  factory _$ValidationResultImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ValidationResultImplFromJson(json);
+class _$CustomValidationResultImpl implements CustomValidationResult {
+  const _$CustomValidationResultImpl(
+      {this.dataId = '', required this.type, required this.value});
 
   @override
+  @JsonKey()
   final String dataId;
   @override
-  final ValidationType type;
+  final String type;
   @override
   final String value;
 
   @override
   String toString() {
-    return 'ValidationResult(dataId: $dataId, type: $type, value: $value)';
+    return 'ValidationResult.custom(dataId: $dataId, type: $type, value: $value)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ValidationResultImpl &&
+            other is _$CustomValidationResultImpl &&
             (identical(other.dataId, dataId) || other.dataId == dataId) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.value, value) || other.value == value));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, dataId, type, value);
 
@@ -164,31 +246,20 @@ class _$ValidationResultImpl implements _ValidationResult {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ValidationResultImplCopyWith<_$ValidationResultImpl> get copyWith =>
-      __$$ValidationResultImplCopyWithImpl<_$ValidationResultImpl>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ValidationResultImplToJson(
-      this,
-    );
-  }
+  _$$CustomValidationResultImplCopyWith<_$CustomValidationResultImpl>
+      get copyWith => __$$CustomValidationResultImplCopyWithImpl<
+          _$CustomValidationResultImpl>(this, _$identity);
 }
 
-abstract class _ValidationResult implements ValidationResult {
-  const factory _ValidationResult(
-      {required final String dataId,
-      required final ValidationType type,
-      required final String value}) = _$ValidationResultImpl;
-
-  factory _ValidationResult.fromJson(Map<String, dynamic> json) =
-      _$ValidationResultImpl.fromJson;
+abstract class CustomValidationResult implements ValidationResult {
+  const factory CustomValidationResult(
+      {final String dataId,
+      required final String type,
+      required final String value}) = _$CustomValidationResultImpl;
 
   @override
   String get dataId;
-  @override
-  ValidationType get type;
+  String get type;
   @override
   String get value;
 
@@ -196,6 +267,6 @@ abstract class _ValidationResult implements ValidationResult {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ValidationResultImplCopyWith<_$ValidationResultImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$CustomValidationResultImplCopyWith<_$CustomValidationResultImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

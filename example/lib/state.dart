@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cross_file/cross_file.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter/foundation.dart';
@@ -57,10 +55,6 @@ class WalletAppState extends ChangeNotifier {
     notifyListeners();
 
     await fetchData();
-
-    // const orderId = '68f98607-e6ba-4557-b2c8-cfab91d10963';
-    // _orderId = orderId;
-    // await fetchOrder(orderId);
   }
 
   Future<void> grantPartnerAccess(String partnerPK) async {
@@ -79,29 +73,39 @@ class WalletAppState extends ChangeNotifier {
     required String phone,
     XFile? file,
   }) async {
-    await _client.setData(
-      data: UserData(
-        email: email,
-        phone: phone,
-        selfie: await file?.readAsBytes(),
-      ),
-    );
+    await fetchData();
+    // await _client.setData(
+    // data: UserData(
+    // email: email,
+    // phone: phone,
+    // selfie: await file?.readAsBytes(),
+    // firstName: 'justin',
+    // lastName: 'test',
+    // idNumber: '1234567890',
+    // idType: IdType.voterId,
+    // bankName: 'bank of america',
+    // bankAccountNumber: '1234567890',
+    // bankCode: '123456',
+    // dob: DateTime.now(),
+    // countryCode: 'US',
+    // ),
+    // );
 
-    _email = email;
-    _phone = phone;
+    // _email = email;
+    // _phone = phone;
 
     notifyListeners();
   }
 
   Future<void> fetchData() async {
     try {
-      final data = await _client.getData(
+      final data = await _client.getUserData(
         userPK: _authPublicKey,
         secretKey: _rawSecretKey,
       );
 
-      _email = data.email;
-      _phone = data.phone;
+      _email = data.email?.first.value ?? '-';
+      _phone = data.phone?.first.value ?? '-';
 
       notifyListeners();
     } on Exception {
@@ -181,11 +185,7 @@ class WalletAppState extends ChangeNotifier {
 class PartnerAppState extends ChangeNotifier {
   String get authPublicKey => _authPublicKey;
   String get userSecretKey => _userSecretKey;
-  String get email => _email;
-  String get phone => _phone;
-  XFile? get file => _file;
-
-  String? get validationResult => _validationResult;
+  Map<String, dynamic>? get userData => _userData;
 
   String? get onRampOrderData => _onRampOrderData;
   String? get offRampOrderData => _offRampOrderData;
@@ -206,11 +206,8 @@ class PartnerAppState extends ChangeNotifier {
 
   late String _authPublicKey = '';
   late String _userSecretKey = '';
-  late String _email = '';
-  late String _phone = '';
-  XFile? _file;
 
-  String? _validationResult;
+  Map<String, dynamic>? _userData;
 
   String? _onRampOrderData;
   String? _offRampOrderData;
@@ -238,16 +235,16 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setValidationResult({
-    required String message,
+  Future<void> createCustomValidationResult({
+    required String type,
+    required String result,
     required String userPK,
     required String secretKey,
   }) async {
     await _client.setValidationResult(
-      value: const ValidationResult(
-        type: ValidationType.email,
-        value: 'justin@test.com',
-        dataId: '96209540-e6f2-48f2-a392-a4073ecc1eea',
+      value: CustomValidationResult(
+        type: type,
+        value: result,
       ),
       userPK: userPK,
       secretKey: secretKey,
@@ -263,42 +260,13 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getValidationResult({
-    required String secretKey,
-    required String userPK,
-  }) async {
-    final kycValidationResult = await _client.getValidationResult(
-      key: 'kycSmileId',
-      userPK: userPK,
-      secretKey: secretKey,
-    );
-
-    // final email = await _client.getEmail(userPK: userPK, secretKey: secretKey);
-    // final phone = await _client.getPhone(userPK: userPK, secretKey: secretKey);
-
-    // final emailValidationResult = jsonEncode(email);
-    // final phoneValidationResult = jsonEncode(phone);
-
-    // _validationResult =
-    //     'kyc: $kycValidationResult\nemail: $emailValidationResult\nphone: $phoneValidationResult';
-    _validationResult = '$kycValidationResult';
-    notifyListeners();
-  }
-
   Future<void> fetchData(String secretKey, String userPK) async {
-    final data = await _client.getData(
+    final data = await _client.getUserData(
       userPK: userPK,
       secretKey: secretKey,
     );
 
-    _email = data.email ?? '-';
-    _phone = data.phone ?? '-';
-
-    final selfie = data.selfie;
-
-    if (selfie != null) {
-      _file = XFile.fromData(selfie);
-    }
+    _userData = data.toJson();
 
     notifyListeners();
   }

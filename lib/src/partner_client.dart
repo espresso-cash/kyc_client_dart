@@ -1,14 +1,14 @@
 import 'dart:convert';
-import 'package:bs58/bs58.dart';
-import 'package:convert/convert.dart';
 
+import 'package:bs58/bs58.dart';
 import 'package:cryptography/cryptography.dart' hide Hash, PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
 import 'package:kyc_client_dart/kyc_client_dart.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
-import 'package:pinenacl/digests.dart';
+import 'package:kyc_client_dart/src/common.dart';
+import 'package:kyc_client_dart/src/models/user_profile.dart' as profile;
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
@@ -16,13 +16,10 @@ import 'package:pinenacl/x25519.dart';
 export 'models/order_id.dart';
 export 'models/validation_result.dart';
 
-const _defaultKycBaseUrl =
-    'https://kyc-backend-beta-402681483920.europe-west1.run.app/';
-
 class KycPartnerClient {
   KycPartnerClient({
     required this.authKeyPair,
-    this.baseUrl = _defaultKycBaseUrl,
+    this.baseUrl = defaultKycBaseUrl,
   });
 
   final SimpleKeyPair authKeyPair;
@@ -31,7 +28,7 @@ class KycPartnerClient {
   late String _authPublicKey;
 
   late String _token;
-  late KycServiceClient _apiClient;
+  late KycServiceClient _kycClient;
 
   late SigningKey _signingKey;
 
@@ -68,16 +65,16 @@ class KycPartnerClient {
     );
 
     final dio = Dio()..interceptors.add(AuthInterceptor(_token));
-    _apiClient = KycServiceClient(dio, baseUrl: baseUrl);
+    _kycClient = KycServiceClient(dio, baseUrl: baseUrl);
   }
 
   Future<V1GetInfoResponse> getUserInfo(String userPK) async =>
-      _apiClient.kycServiceGetInfo(
+      _kycClient.kycServiceGetInfo(
         body: V1GetInfoRequest(publicKey: userPK),
       );
 
   Future<String> getUserSecretKey(String userPK) async {
-    final info = await _apiClient.kycServiceGetInfo(
+    final info = await _kycClient.kycServiceGetInfo(
       body: V1GetInfoRequest(publicKey: userPK),
     );
 
@@ -112,144 +109,151 @@ class KycPartnerClient {
     return base58.encode(decryptedSecretKey);
   }
 
-  Future<UserData> getData({
+  Future<profile.UserProfile> getUserData({
     required String userPK,
     required String secretKey,
   }) async {
-    final response = await _apiClient.kycServiceGetUserData(
+    final response = await _kycClient.kycServiceGetUserData(
       body: V1GetUserDataRequest(userPublicKey: userPK),
     );
 
-    UserData userData = const UserData();
+    final validationMap = <String, ValidationResult>{};
+    final custom = <String, dynamic>{};
 
-    for (final encryptedData in response.userData) {
-      final decryptedData = _verifyAndDecrypt(
+    // Process validation data
+    for (final encryptedData in response.validationData) {
+      final decryptedData = verifyAndDecrypt(
         signedEncryptedData: encryptedData.encryptedData,
         secretKey: secretKey,
+        userPK: encryptedData.validatorPublicKey,
+      );
+      final wrappedData = WrappedValidation.fromBuffer(decryptedData);
+
+      final result = switch (wrappedData.whichData()) {
+        WrappedValidation_Data.hash => HashValidationResult(
+            dataId: encryptedData.dataId,
+            value: wrappedData.hash,
+          ),
+        WrappedValidation_Data.custom => CustomValidationResult(
+            type: wrappedData.custom.type,
+            value: utf8.decode(wrappedData.custom.data),
+          ),
+        WrappedValidation_Data.notSet => null,
+      };
+
+      if (result != null) {
+        if (result is HashValidationResult) {
+          validationMap[result.dataId] = result;
+        } else if (result is CustomValidationResult) {
+          custom[result.type] = result.value;
+        }
+      }
+    }
+
+    final email = <profile.Email>[];
+    final phone = <profile.Phone>[];
+    final name = <profile.Name>[];
+    final birthDate = <profile.BirthDate>[];
+    final document = <profile.Document>[];
+    final bankInfo = <profile.BankInfo>[];
+    final selfie = <profile.Selfie>[];
+
+    // Process user data
+    for (final encryptedData in response.userData) {
+      final decryptedData = verifyAndDecrypt(
+        signedEncryptedData: encryptedData.encryptedData,
+        secretKey: secretKey,
+        userPK: userPK,
       );
       final wrappedData = WrappedData.fromBuffer(decryptedData);
 
-      userData = userData.copyWith(
-        email: wrappedData.hasEmail() ? wrappedData.email : userData.email,
-        firstName: wrappedData.hasName()
-            ? wrappedData.name.firstName
-            : userData.firstName,
-        lastName: wrappedData.hasName()
-            ? wrappedData.name.lastName
-            : userData.lastName,
-        dob: wrappedData.hasBirthDate()
-            ? wrappedData.birthDate.toDateTime()
-            : userData.dob,
-        phone: wrappedData.hasPhone() ? wrappedData.phone : userData.phone,
-        idNumber: wrappedData.hasDocument()
-            ? wrappedData.document.number
-            : userData.idNumber,
-        idType: wrappedData.hasDocument()
-            ? mapDocumentTypeToIdType(wrappedData.document.type)
-            : userData.idType,
-        bankAccountNumber: wrappedData.hasBankInfo()
-            ? wrappedData.bankInfo.accountNumber
-            : userData.bankAccountNumber,
-        bankCode: wrappedData.hasBankInfo()
-            ? wrappedData.bankInfo.bankCode
-            : userData.bankCode,
-        bankName: wrappedData.hasBankInfo()
-            ? wrappedData.bankInfo.bankName
-            : userData.bankName,
-        selfie: wrappedData.hasSelfieImage()
-            ? Uint8List.fromList(wrappedData.selfieImage)
-            : userData.selfie,
-      );
+      final dataId = encryptedData.id;
+      final verificationData = validationMap[dataId] as HashValidationResult?;
+
+      bool verified = false;
+      if (verificationData != null) {
+        final item = wrappedData.email; //TODO what data to match
+
+        final hash = generateHash(item);
+        verified = hash == verificationData.value;
+      }
+
+      switch (wrappedData.whichData()) {
+        case WrappedData_Data.email:
+          email.add(
+            profile.Email(
+              value: wrappedData.email,
+              dataId: dataId,
+              verified: verified,
+            ),
+          );
+        case WrappedData_Data.name:
+          name.add(
+            profile.Name(
+              firstName: wrappedData.name.firstName,
+              lastName: wrappedData.name.lastName,
+              dataId: dataId,
+              verified: verified,
+            ),
+          );
+        case WrappedData_Data.birthDate:
+          birthDate.add(
+            profile.BirthDate(
+              value: wrappedData.birthDate.toDateTime(),
+              dataId: dataId,
+              verified: verified,
+            ),
+          );
+        case WrappedData_Data.phone:
+          phone.add(
+            profile.Phone(
+              value: wrappedData.phone,
+              dataId: dataId,
+              verified: verified,
+            ),
+          );
+        case WrappedData_Data.document:
+          document.add(
+            profile.Document(
+              type: wrappedData.document.type.toString(), //TODO
+              number: wrappedData.document.number,
+              dataId: dataId,
+              verified: verified,
+            ),
+          );
+        case WrappedData_Data.bankInfo:
+          bankInfo.add(
+            profile.BankInfo(
+              bankName: wrappedData.bankInfo.bankName,
+              accountNumber: wrappedData.bankInfo.accountNumber,
+              bankCode: wrappedData.bankInfo.bankCode,
+              dataId: dataId,
+              verified: verified,
+            ),
+          );
+        case WrappedData_Data.selfieImage:
+          selfie.add(
+            profile.Selfie(
+              value: wrappedData.selfieImage,
+              dataId: dataId,
+              verified: verified,
+            ),
+          );
+        case WrappedData_Data.notSet:
+          break;
+      }
     }
 
-    return userData;
-  }
-
-  Future<Map<String, dynamic>> getEmail({
-    required String userPK,
-    required String secretKey,
-  }) async {
-    final results = await Future.wait([
-      getData(userPK: userPK, secretKey: secretKey),
-      getValidationResult(key: 'email', secretKey: secretKey, userPK: userPK),
-    ]);
-
-    final userData = results[0] as Map<String, dynamic>?;
-    final validationResult = results[1] as String?;
-
-    final email = userData?['email'] as String;
-    final emailHash = _hash(email);
-    final verified = emailHash == validationResult;
-
-    return {
-      'value': email,
-      'verified': verified,
-    };
-  }
-
-  Future<Map<String, dynamic>> getPhone({
-    required String userPK,
-    required String secretKey,
-  }) async {
-    final results = await Future.wait([
-      getData(userPK: userPK, secretKey: secretKey),
-      getValidationResult(key: 'phone', secretKey: secretKey, userPK: userPK),
-    ]);
-
-    final userData = results[0] as Map<String, dynamic>?;
-    final validationResult = results[1] as String?;
-
-    final phone = userData?['phone'] as String;
-    final phoneHash = _hash(phone);
-    final verified = phoneHash == validationResult;
-
-    return {
-      'value': phone,
-      'verified': verified,
-    };
-  }
-
-  Future<String?> getValidationResult({
-    required String key,
-    required String secretKey,
-    required String userPK,
-  }) async {
-    final response = await _apiClient.kycServiceGetUserData(
-      body: V1GetUserDataRequest(userPublicKey: userPK),
+    return profile.UserProfile(
+      email: email,
+      phone: phone,
+      name: name,
+      birthDate: birthDate,
+      document: document,
+      bankInfo: bankInfo,
+      selfie: selfie,
+      custom: custom,
     );
-
-    for (final encryptedData in response.validationData) {
-      final decryptedData = _verifyAndDecrypt(
-        signedEncryptedData: encryptedData.encryptedData,
-        secretKey: secretKey,
-      );
-
-      final wrappedData = WrappedValidation.fromBuffer(decryptedData);
-
-      print(encryptedData.dataId);
-      print(wrappedData);
-
-      // print(wrappedData.hash);
-      // print(wrappedData.custom.type);
-      // print(utf8.decode(wrappedData.custom.data));
-    }
-
-    // final data = response[key] as String?;
-
-    // if (data == null || data.isEmpty) return null;
-
-    // final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
-
-    // final signedMessage = SignedMessage.fromList(
-    //   signedMessage: base64Decode(data),
-    // );
-
-    // final encryptedData = base64Encode(signedMessage.message);
-    // final decrypted =
-    //     box.decrypt(EncryptedMessage.fromList(base64Decode(encryptedData)));
-
-    // return hex.encode(decrypted);
-    return '123'; //TODO
   }
 
   Future<void> setValidationResult({
@@ -257,28 +261,27 @@ class KycPartnerClient {
     required String userPK,
     required String secretKey,
   }) async {
-    SignedMessage encryptAndSign(Uint8List data) {
-      final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
-      final encrypted = box.encrypt(data);
-      return _signingKey.sign(Uint8List.fromList(encrypted));
-    }
-
-    final wrappedData = switch (value.type) {
-      ValidationType.email || ValidationType.phone => WrappedValidation(
-          hash: _hash(value.value),
-        ),
-      ValidationType.custom => WrappedValidation(
+    final wrappedData = switch (value) {
+      HashValidationResult() =>
+        WrappedValidation(hash: generateHash(value.value)),
+      CustomValidationResult() => WrappedValidation(
           custom: CustomValidation(
-            type: 'kycSmileId',
+            type: value.type,
             data: Uint8List.fromList(utf8.encode(value.value)),
           ),
         ),
     }
         .writeToBuffer();
 
-    await _apiClient.kycServiceSetValidationData(
+    final encryptedData = encryptAndSign(
+      data: wrappedData,
+      secretBox: SecretBox(Uint8List.fromList(base58.decode(secretKey))),
+      signingKey: _signingKey,
+    );
+
+    await _kycClient.kycServiceSetValidationData(
       body: V1SetValidationDataRequest(
-        encryptedData: base64Encode(encryptAndSign(wrappedData)),
+        encryptedData: base64Encode(encryptedData),
         userPublicKey: userPK,
         dataId: value.dataId,
         id: '',
@@ -289,7 +292,7 @@ class KycPartnerClient {
   Future<V1GetOrderResponse> getOrder({
     required OrderId orderId,
   }) async =>
-      _apiClient.kycServiceGetOrder(
+      _kycClient.kycServiceGetOrder(
         body: V1GetOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -297,14 +300,14 @@ class KycPartnerClient {
       );
 
   Future<V1GetPartnerOrdersResponse> getPartnerOrders() async =>
-      _apiClient.kycServiceGetPartnerOrders();
+      _kycClient.kycServiceGetPartnerOrders();
 
   Future<void> acceptOnRampOrder({
     required OrderId orderId,
     required String bankName,
     required String bankAccount,
   }) async =>
-      _apiClient.kycServiceAcceptOrder(
+      _kycClient.kycServiceAcceptOrder(
         body: V1AcceptOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -318,7 +321,7 @@ class KycPartnerClient {
     required OrderId orderId,
     required String cryptoWalletAddress,
   }) async =>
-      _apiClient.kycServiceAcceptOrder(
+      _kycClient.kycServiceAcceptOrder(
         body: V1AcceptOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -332,7 +335,7 @@ class KycPartnerClient {
     required OrderId orderId,
     required String transactionId,
   }) async =>
-      _apiClient.kycServiceCompleteOrder(
+      _kycClient.kycServiceCompleteOrder(
         body: V1CompleteOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -343,7 +346,7 @@ class KycPartnerClient {
   Future<void> completeOffRampOrder({
     required OrderId orderId,
   }) async =>
-      _apiClient.kycServiceCompleteOrder(
+      _kycClient.kycServiceCompleteOrder(
         body: V1CompleteOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -355,7 +358,7 @@ class KycPartnerClient {
     required OrderId orderId,
     required String reason,
   }) async =>
-      _apiClient.kycServiceFailOrder(
+      _kycClient.kycServiceFailOrder(
         body: V1FailOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -367,34 +370,7 @@ class KycPartnerClient {
     required String orderId,
     required String reason,
   }) async =>
-      _apiClient.kycServiceRejectOrder(
+      _kycClient.kycServiceRejectOrder(
         body: V1RejectOrderRequest(orderId: orderId, reason: reason),
       );
-}
-
-String _hash(String value) {
-  final bytes = utf8.encode(value);
-  final digest = Hash.sha256(bytes);
-  return hex.encode(digest);
-}
-
-Uint8List _verifyAndDecrypt({
-  required String signedEncryptedData,
-  required String secretKey,
-}) {
-  final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
-
-  final signedMessage = SignedMessage.fromList(
-    signedMessage: base64Decode(signedEncryptedData),
-  );
-
-  final encryptedData = Uint8List.fromList(signedMessage.message);
-  final decrypted = box.decrypt(
-    EncryptedMessage(
-      nonce: encryptedData.sublist(0, TweetNaCl.nonceLength),
-      cipherText: encryptedData.sublist(TweetNaCl.nonceLength),
-    ),
-  );
-
-  return decrypted;
 }
