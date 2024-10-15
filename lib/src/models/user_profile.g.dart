@@ -116,7 +116,7 @@ Map<String, dynamic> _$$BirthDateImplToJson(_$BirthDateImpl instance) =>
 
 _$DocumentImpl _$$DocumentImplFromJson(Map<String, dynamic> json) =>
     _$DocumentImpl(
-      type: json['type'] as String,
+      type: $enumDecode(_$IdTypeEnumMap, json['type']),
       number: json['number'] as String,
       verified: json['verified'] as bool,
       dataId: json['dataId'] as String,
@@ -124,11 +124,18 @@ _$DocumentImpl _$$DocumentImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$DocumentImplToJson(_$DocumentImpl instance) =>
     <String, dynamic>{
-      'type': instance.type,
+      'type': _$IdTypeEnumMap[instance.type]!,
       'number': instance.number,
       'verified': instance.verified,
       'dataId': instance.dataId,
     };
+
+const _$IdTypeEnumMap = {
+  IdType.voterId: 'voterId',
+  IdType.passport: 'passport',
+  IdType.driverLicense: 'driverLicense',
+  IdType.other: 'other',
+};
 
 _$BankInfoImpl _$$BankInfoImplFromJson(Map<String, dynamic> json) =>
     _$BankInfoImpl(

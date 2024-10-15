@@ -8,6 +8,7 @@ import 'package:kyc_client_dart/kyc_client_dart.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
 import 'package:kyc_client_dart/src/common.dart';
+import 'package:kyc_client_dart/src/models/id_type.dart';
 import 'package:kyc_client_dart/src/models/user_profile.dart' as profile;
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
@@ -215,7 +216,7 @@ class KycPartnerClient {
         case WrappedData_Data.document:
           document.add(
             profile.Document(
-              type: wrappedData.document.type.toString(), //TODO
+              type: wrappedData.document.type.toIdType(),
               number: wrappedData.document.number,
               dataId: dataId,
               verified: verified,

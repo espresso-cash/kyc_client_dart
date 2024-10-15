@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:kyc_client_dart/src/models/id_type.dart';
 
 part 'user_profile.freezed.dart';
 part 'user_profile.g.dart';
@@ -80,7 +81,7 @@ class BirthDate with _$BirthDate {
 @freezed
 class Document with _$Document {
   const factory Document({
-    required String type,
+    required IdType type,
     required String number,
     required bool verified,
     required String dataId,

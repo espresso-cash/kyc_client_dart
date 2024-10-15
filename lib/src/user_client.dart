@@ -9,6 +9,7 @@ import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
 import 'package:kyc_client_dart/src/common.dart';
+import 'package:kyc_client_dart/src/models/id_type.dart';
 import 'package:kyc_client_dart/src/models/partner.dart';
 import 'package:kyc_client_dart/src/models/user_data.dart';
 import 'package:kyc_client_dart/src/models/user_profile.dart' as profile;
@@ -204,7 +205,7 @@ class KycUserClient {
         WrappedData(
           document: Document(
             number: data.idNumber,
-            type: DocumentType.DOCUMENT_TYPE_VOTER_ID,
+            type: data.idType!.toDocumentType(), // TODOrefactor null !
           ),
         ),
       if (data.bankName != null &&
@@ -304,9 +305,7 @@ class KycUserClient {
 
       bool verified = false;
       if (verificationData != null) {
-        final item = wrappedData.email; //TODO what data to match
-
-        final hash = generateHash(item);
+        final hash = generateHash(base64Encode(wrappedData.writeToBuffer()));
         verified = hash == verificationData.value;
       }
 
@@ -347,7 +346,7 @@ class KycUserClient {
         case WrappedData_Data.document:
           document.add(
             profile.Document(
-              type: wrappedData.document.type.toString(), //TODO
+              type: wrappedData.document.type.toIdType(),
               number: wrappedData.document.number,
               dataId: dataId,
               verified: verified,

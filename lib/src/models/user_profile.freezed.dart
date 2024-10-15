@@ -1339,7 +1339,7 @@ Document _$DocumentFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Document {
-  String get type => throw _privateConstructorUsedError;
+  IdType get type => throw _privateConstructorUsedError;
   String get number => throw _privateConstructorUsedError;
   bool get verified => throw _privateConstructorUsedError;
   String get dataId => throw _privateConstructorUsedError;
@@ -1359,7 +1359,7 @@ abstract class $DocumentCopyWith<$Res> {
   factory $DocumentCopyWith(Document value, $Res Function(Document) then) =
       _$DocumentCopyWithImpl<$Res, Document>;
   @useResult
-  $Res call({String type, String number, bool verified, String dataId});
+  $Res call({IdType type, String number, bool verified, String dataId});
 }
 
 /// @nodoc
@@ -1386,7 +1386,7 @@ class _$DocumentCopyWithImpl<$Res, $Val extends Document>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
+              as IdType,
       number: null == number
           ? _value.number
           : number // ignore: cast_nullable_to_non_nullable
@@ -1411,7 +1411,7 @@ abstract class _$$DocumentImplCopyWith<$Res>
       __$$DocumentImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String type, String number, bool verified, String dataId});
+  $Res call({IdType type, String number, bool verified, String dataId});
 }
 
 /// @nodoc
@@ -1436,7 +1436,7 @@ class __$$DocumentImplCopyWithImpl<$Res>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
+              as IdType,
       number: null == number
           ? _value.number
           : number // ignore: cast_nullable_to_non_nullable
@@ -1466,7 +1466,7 @@ class _$DocumentImpl implements _Document {
       _$$DocumentImplFromJson(json);
 
   @override
-  final String type;
+  final IdType type;
   @override
   final String number;
   @override
@@ -1513,7 +1513,7 @@ class _$DocumentImpl implements _Document {
 
 abstract class _Document implements Document {
   const factory _Document(
-      {required final String type,
+      {required final IdType type,
       required final String number,
       required final bool verified,
       required final String dataId}) = _$DocumentImpl;
@@ -1522,7 +1522,7 @@ abstract class _Document implements Document {
       _$DocumentImpl.fromJson;
 
   @override
-  String get type;
+  IdType get type;
   @override
   String get number;
   @override
