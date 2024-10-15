@@ -246,10 +246,6 @@ class PartnerAppState extends ChangeNotifier {
     );
   }
 
-  Future<void> getUserInfo(String userPK) async {
-    await _client.getUserInfo(userPK);
-  }
-
   Future<void> getUserSecretKey(String userPK) async {
     _userSecretKey = await _client.getUserSecretKey(userPK);
     notifyListeners();

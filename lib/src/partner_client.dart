@@ -65,11 +65,6 @@ class KycPartnerClient {
     _kycClient = KycServiceClient(dio, baseUrl: baseUrl);
   }
 
-  Future<V1GetInfoResponse> getUserInfo(String userPK) async =>
-      _kycClient.kycServiceGetInfo(
-        body: V1GetInfoRequest(publicKey: userPK),
-      );
-
   Future<String> getUserSecretKey(String userPK) async {
     final info = await _kycClient.kycServiceGetInfo(
       body: V1GetInfoRequest(publicKey: userPK),
