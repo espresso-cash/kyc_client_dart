@@ -9,16 +9,10 @@ import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
 import 'package:kyc_client_dart/src/common.dart';
-import 'package:kyc_client_dart/src/models/id_type.dart';
-import 'package:kyc_client_dart/src/models/order.dart';
-import 'package:kyc_client_dart/src/models/partner_data.dart';
-import 'package:kyc_client_dart/src/models/user_data.dart';
+import 'package:kyc_client_dart/src/models/export.dart';
 import 'package:pinenacl/ed25519.dart' hide Signature;
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
-
-export 'models/partner_data.dart';
-export 'models/user_data.dart';
 
 typedef SignRequest = Future<Signature> Function(Iterable<int> data);
 
