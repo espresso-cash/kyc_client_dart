@@ -34,11 +34,11 @@ class WalletAppState extends ChangeNotifier {
   List<String>? _orders;
 
   Future<void> createWallet() async {
-    // _wallet = await Ed25519HDKeyPair.random();
+    _wallet = await Ed25519HDKeyPair.random();
 
-    _wallet = await Ed25519HDKeyPair.fromMnemonic(
-      'genre enlist initial body uncle business congress bench sad right shuffle little',
-    );
+    // _wallet = await Ed25519HDKeyPair.fromMnemonic(
+    //   'genre enlist initial body uncle business congress bench sad right shuffle little',
+    // );
 
     _client = KycUserClient(
       sign: (data) async {
@@ -68,33 +68,24 @@ class WalletAppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  String _emailId = '';
+  String _phoneId = '';
+  String _selfieId = '';
+
   Future<void> updateData({
     required String email,
     required String phone,
     XFile? file,
   }) async {
+    await _client.setData(
+      email: Email(value: email, id: _emailId),
+      phone: Phone(value: phone, id: _phoneId),
+      selfie: file != null
+          ? Selfie(value: await file.readAsBytes(), id: _selfieId)
+          : null,
+    );
+
     await fetchData();
-    // await _client.setData(
-    // data: UserData(
-    // email: email,
-    // phone: phone,
-    // selfie: await file?.readAsBytes(),
-    // firstName: 'justin',
-    // lastName: 'test',
-    // idNumber: '1234567890',
-    // idType: IdType.voterId,
-    // bankName: 'bank of america',
-    // bankAccountNumber: '1234567890',
-    // bankCode: '123456',
-    // dob: DateTime.now(),
-    // countryCode: 'US',
-    // ),
-    // );
-
-    // _email = email;
-    // _phone = phone;
-
-    notifyListeners();
   }
 
   Future<void> fetchData() async {
@@ -103,6 +94,10 @@ class WalletAppState extends ChangeNotifier {
         userPK: _authPublicKey,
         secretKey: _rawSecretKey,
       );
+
+      _emailId = data.email?.first.id ?? '';
+      _phoneId = data.phone?.first.id ?? '';
+      _selfieId = data.selfie?.first.id ?? '';
 
       _email = data.email?.first.value ?? '-';
       _phone = data.phone?.first.value ?? '-';

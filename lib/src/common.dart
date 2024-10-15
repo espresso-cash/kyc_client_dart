@@ -70,7 +70,7 @@ Future<UserData> processUserData({
   );
 
   final validationMap = <String, ValidationResult>{};
-  final custom = <String, dynamic>{};
+  Map<String, dynamic>? custom;
 
   // Process validation data
   for (final encryptedData in response.validationData) {
@@ -97,18 +97,19 @@ Future<UserData> processUserData({
       if (result is HashValidationResult) {
         validationMap[result.dataId] = result;
       } else if (result is CustomValidationResult) {
+        custom ??= {};
         custom[result.type] = result.value;
       }
     }
   }
 
-  final email = <Email>[];
-  final phone = <Phone>[];
-  final name = <Name>[];
-  final birthDate = <BirthDate>[];
-  final document = <Document>[];
-  final bankInfo = <BankInfo>[];
-  final selfie = <Selfie>[];
+  List<Email>? email;
+  List<Phone>? phone;
+  List<Name>? name;
+  List<BirthDate>? birthDate;
+  List<Document>? document;
+  List<BankInfo>? bankInfo;
+  List<Selfie>? selfie;
 
   // Process user data
   for (final encryptedData in response.userData) {
@@ -130,6 +131,7 @@ Future<UserData> processUserData({
 
     switch (wrappedData.whichData()) {
       case proto.WrappedData_Data.email:
+        email ??= [];
         email.add(
           Email(
             value: wrappedData.email,
@@ -138,6 +140,7 @@ Future<UserData> processUserData({
           ),
         );
       case proto.WrappedData_Data.name:
+        name ??= [];
         name.add(
           Name(
             firstName: wrappedData.name.firstName,
@@ -147,6 +150,7 @@ Future<UserData> processUserData({
           ),
         );
       case proto.WrappedData_Data.birthDate:
+        birthDate ??= [];
         birthDate.add(
           BirthDate(
             value: wrappedData.birthDate.toDateTime(),
@@ -155,6 +159,7 @@ Future<UserData> processUserData({
           ),
         );
       case proto.WrappedData_Data.phone:
+        phone ??= [];
         phone.add(
           Phone(
             value: wrappedData.phone,
@@ -163,6 +168,7 @@ Future<UserData> processUserData({
           ),
         );
       case proto.WrappedData_Data.document:
+        document ??= [];
         document.add(
           Document(
             type: wrappedData.document.type.toIdType(),
@@ -172,6 +178,7 @@ Future<UserData> processUserData({
           ),
         );
       case proto.WrappedData_Data.bankInfo:
+        bankInfo ??= [];
         bankInfo.add(
           BankInfo(
             bankName: wrappedData.bankInfo.bankName,
@@ -182,6 +189,7 @@ Future<UserData> processUserData({
           ),
         );
       case proto.WrappedData_Data.selfieImage:
+        selfie ??= [];
         selfie.add(
           Selfie(
             value: wrappedData.selfieImage,
