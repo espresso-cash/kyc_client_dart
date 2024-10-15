@@ -123,7 +123,7 @@ Future<UserData> processUserData({
 
     bool verified = false;
     if (verificationData != null) {
-      final hash = generateHash(base64Encode(wrappedData.writeToBuffer()));
+      final hash = generateHash(utf8.decode(wrappedData.writeToBuffer()));
       verified = hash == verificationData.value;
     }
 
