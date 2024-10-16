@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_json_view/flutter_json_view.dart';
 import 'package:kyc_sharing_client/shared.dart';
 import 'package:kyc_sharing_client/state.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,8 @@ class PartnerView extends StatefulWidget {
 }
 
 class _PartnerViewState extends State<PartnerView> {
-  final _messageController = TextEditingController();
+  final _validationTypeController = TextEditingController();
+  final _validationResultController = TextEditingController();
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
@@ -22,8 +24,8 @@ class _PartnerViewState extends State<PartnerView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildPartnerSection(state),
-              _buildUserDataSection(state),
               _buildVerificationSection(state),
+              _buildUserDataSection(state),
               _buildPartnerOrdersSection(state),
               _buildOnRampOrderSection(state),
               _buildOffRampOrderSection(state),
@@ -73,16 +75,16 @@ class _PartnerViewState extends State<PartnerView> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          const SizedBox(height: 32),
-          ValueField(
-            title: 'Email',
-            value: state.email,
-          ),
-          ValueField(
-            title: 'Phone',
-            value: state.phone,
-          ),
-          if (state.file case final image?) Image.network(image.path),
+          const SizedBox(height: 24),
+          if (state.userData != null)
+            SizedBox(
+              height: 350,
+              child: JsonView.map(
+                state.userData ?? {},
+                theme: const JsonViewTheme(viewType: JsonViewType.base),
+              ),
+            ),
+          const SizedBox(height: 16),
           Consumer<WalletAppState>(
             builder: (context, walletState, child) => ElevatedButton(
               onPressed: () => context.read<PartnerAppState>().fetchData(
@@ -107,51 +109,58 @@ class _PartnerViewState extends State<PartnerView> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          const SizedBox(height: 32),
-          ValueTextfield(
-            controller: _messageController,
-            title: 'Validation Result',
+          const SizedBox(height: 24),
+          Row(
+            children: [
+              Expanded(
+                child: ValueTextfield(
+                  controller: _validationTypeController,
+                  title: 'Custom Type',
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                flex: 3,
+                child: ValueTextfield(
+                  controller: _validationResultController,
+                  title: 'Validation Result',
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           ListenableBuilder(
-            listenable: _messageController,
+            listenable: Listenable.merge(
+              [_validationTypeController, _validationResultController],
+            ),
             builder: (context, child) => ElevatedButton(
-              onPressed: () async {
-                await context.read<PartnerAppState>().setValidationResult(
-                      message: _messageController.text,
-                      userPK: context.read<WalletAppState>().authPublicKey,
-                      secretKey: context.read<WalletAppState>().rawSecretKey,
-                    );
+              onPressed: _validationResultController.text.isEmpty &&
+                      _validationTypeController.text.isEmpty
+                  ? null
+                  : () async {
+                      await context
+                          .read<PartnerAppState>()
+                          .createCustomValidationResult(
+                            type: _validationTypeController.text,
+                            result: _validationResultController.text,
+                            userPK:
+                                context.read<WalletAppState>().authPublicKey,
+                            secretKey:
+                                context.read<WalletAppState>().rawSecretKey,
+                          );
 
-                if (!context.mounted) return;
+                      if (!context.mounted) return;
 
-                showSnackBar(context, message: 'Validation Result updated');
-              },
-              child: const Text('Update Validation Result'),
+                      showSnackBar(
+                        context,
+                        message: 'Validation Result updated',
+                      );
+                    },
+              child: const Text('Add Custom Validation Result'),
             ),
           ),
           const SizedBox(height: 16),
           const CustomDivider(),
-          const SizedBox(height: 16),
-          ValueField(
-            title: 'Result',
-            value: state.validationResult != null
-                ? state.validationResult.toString()
-                : '',
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final walletState = context.read<WalletAppState>();
-
-              await context.read<PartnerAppState>().getValidationResult(
-                    userPK: walletState.authPublicKey,
-                    secretKey: walletState.rawSecretKey,
-                  );
-            },
-            child: const Text('Fetch Validation Result'),
-          ),
-          const SizedBox(height: 16),
-          const CustomDivider(thickness: 6),
           const SizedBox(height: 16),
         ],
       );

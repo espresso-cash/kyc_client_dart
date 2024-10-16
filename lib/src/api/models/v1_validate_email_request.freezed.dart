@@ -22,6 +22,7 @@ V1ValidateEmailRequest _$V1ValidateEmailRequestFromJson(
 /// @nodoc
 mixin _$V1ValidateEmailRequest {
   String get code => throw _privateConstructorUsedError;
+  String get dataId => throw _privateConstructorUsedError;
 
   /// Serializes this V1ValidateEmailRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +40,7 @@ abstract class $V1ValidateEmailRequestCopyWith<$Res> {
           $Res Function(V1ValidateEmailRequest) then) =
       _$V1ValidateEmailRequestCopyWithImpl<$Res, V1ValidateEmailRequest>;
   @useResult
-  $Res call({String code});
+  $Res call({String code, String dataId});
 }
 
 /// @nodoc
@@ -59,11 +60,16 @@ class _$V1ValidateEmailRequestCopyWithImpl<$Res,
   @override
   $Res call({
     Object? code = null,
+    Object? dataId = null,
   }) {
     return _then(_value.copyWith(
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
+              as String,
+      dataId: null == dataId
+          ? _value.dataId
+          : dataId // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -78,7 +84,7 @@ abstract class _$$V1ValidateEmailRequestImplCopyWith<$Res>
       __$$V1ValidateEmailRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String code});
+  $Res call({String code, String dataId});
 }
 
 /// @nodoc
@@ -97,11 +103,16 @@ class __$$V1ValidateEmailRequestImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? code = null,
+    Object? dataId = null,
   }) {
     return _then(_$V1ValidateEmailRequestImpl(
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
+              as String,
+      dataId: null == dataId
+          ? _value.dataId
+          : dataId // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -110,17 +121,20 @@ class __$$V1ValidateEmailRequestImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$V1ValidateEmailRequestImpl implements _V1ValidateEmailRequest {
-  const _$V1ValidateEmailRequestImpl({required this.code});
+  const _$V1ValidateEmailRequestImpl(
+      {required this.code, required this.dataId});
 
   factory _$V1ValidateEmailRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1ValidateEmailRequestImplFromJson(json);
 
   @override
   final String code;
+  @override
+  final String dataId;
 
   @override
   String toString() {
-    return 'V1ValidateEmailRequest(code: $code)';
+    return 'V1ValidateEmailRequest(code: $code, dataId: $dataId)';
   }
 
   @override
@@ -128,12 +142,13 @@ class _$V1ValidateEmailRequestImpl implements _V1ValidateEmailRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$V1ValidateEmailRequestImpl &&
-            (identical(other.code, code) || other.code == code));
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.dataId, dataId) || other.dataId == dataId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, code);
+  int get hashCode => Object.hash(runtimeType, code, dataId);
 
   /// Create a copy of V1ValidateEmailRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -153,14 +168,17 @@ class _$V1ValidateEmailRequestImpl implements _V1ValidateEmailRequest {
 }
 
 abstract class _V1ValidateEmailRequest implements V1ValidateEmailRequest {
-  const factory _V1ValidateEmailRequest({required final String code}) =
-      _$V1ValidateEmailRequestImpl;
+  const factory _V1ValidateEmailRequest(
+      {required final String code,
+      required final String dataId}) = _$V1ValidateEmailRequestImpl;
 
   factory _V1ValidateEmailRequest.fromJson(Map<String, dynamic> json) =
       _$V1ValidateEmailRequestImpl.fromJson;
 
   @override
   String get code;
+  @override
+  String get dataId;
 
   /// Create a copy of V1ValidateEmailRequest
   /// with the given fields replaced by the non-null parameter values.

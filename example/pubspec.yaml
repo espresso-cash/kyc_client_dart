@@ -12,11 +12,10 @@ dependencies:
   file_picker: ^8.0.6
   flutter:
     sdk: flutter
-  http: ^1.2.1
+  flutter_json_view: ^1.1.5
   kyc_client_dart:
     path: ../
   provider: ^6.1.2
-  shared_preferences: ^2.2.3
   solana: ^0.31.0
   uuid: ^4.5.1
 

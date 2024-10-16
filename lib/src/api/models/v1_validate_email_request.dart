@@ -11,6 +11,7 @@ part 'v1_validate_email_request.g.dart';
 class V1ValidateEmailRequest with _$V1ValidateEmailRequest {
   const factory V1ValidateEmailRequest({
     required String code,
+    required String dataId,
   }) = _V1ValidateEmailRequest;
   
   factory V1ValidateEmailRequest.fromJson(Map<String, Object?> json) => _$V1ValidateEmailRequestFromJson(json);

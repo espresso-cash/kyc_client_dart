@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cross_file/cross_file.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter/foundation.dart';
@@ -38,7 +36,9 @@ class WalletAppState extends ChangeNotifier {
   Future<void> createWallet() async {
     _wallet = await Ed25519HDKeyPair.random();
 
-    // _wallet = await Ed25519HDKeyPair.fromMnemonic('');
+    // _wallet = await Ed25519HDKeyPair.fromMnemonic(
+    //   'genre enlist initial body uncle business congress bench sad right shuffle little',
+    // );
 
     _client = KycUserClient(
       sign: (data) async {
@@ -55,10 +55,6 @@ class WalletAppState extends ChangeNotifier {
     notifyListeners();
 
     await fetchData();
-
-    // const orderId = '68f98607-e6ba-4557-b2c8-cfab91d10963';
-    // _orderId = orderId;
-    // await fetchOrder(orderId);
   }
 
   Future<void> grantPartnerAccess(String partnerPK) async {
@@ -72,35 +68,39 @@ class WalletAppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  String _emailId = '';
+  String _phoneId = '';
+  String _selfieId = '';
+
   Future<void> updateData({
     required String email,
     required String phone,
     XFile? file,
   }) async {
     await _client.setData(
-      data: V1UserData(
-        email: email,
-        phone: phone,
-      ),
-      selfie: await file?.readAsBytes(),
-      idCard: null,
+      email: Email(value: email, id: _emailId),
+      phone: Phone(value: phone, id: _phoneId),
+      selfie: file != null
+          ? Selfie(value: await file.readAsBytes(), id: _selfieId)
+          : null,
     );
 
-    _email = email;
-    _phone = phone;
-
-    notifyListeners();
+    await fetchData();
   }
 
   Future<void> fetchData() async {
     try {
-      final data = await _client.getData(
+      final data = await _client.getUserData(
         userPK: _authPublicKey,
         secretKey: _rawSecretKey,
       );
 
-      _email = data['email'] as String? ?? '-';
-      _phone = data['phone'] as String? ?? '-';
+      _emailId = data.email?.first.id ?? '';
+      _phoneId = data.phone?.first.id ?? '';
+      _selfieId = data.selfie?.first.id ?? '';
+
+      _email = data.email?.first.value ?? '-';
+      _phone = data.phone?.first.value ?? '-';
 
       notifyListeners();
     } on Exception {
@@ -109,19 +109,19 @@ class WalletAppState extends ChangeNotifier {
   }
 
   Future<void> initEmailValidation() async {
-    await _client.initEmailValidation();
+    await _client.initEmailValidation(dataId: _emailId);
   }
 
   Future<void> initPhoneValidation() async {
-    await _client.initPhoneValidation();
+    await _client.initPhoneValidation(dataId: _phoneId);
   }
 
   Future<void> validateEmail(String code) async {
-    await _client.validateEmail(code: code);
+    await _client.validateEmail(code: code, dataId: _emailId);
   }
 
   Future<void> validatePhone(String code) async {
-    await _client.validatePhone(code: code);
+    await _client.validatePhone(code: code, dataId: _phoneId);
   }
 
   Future<void> createOnRampOrder({
@@ -163,7 +163,7 @@ class WalletAppState extends ChangeNotifier {
   }
 
   Future<void> fetchOrder(String orderId) async {
-    final data = await _client.getOrder(orderId);
+    final data = await _client.getOrder(orderId: OrderId.fromOrderId(orderId));
 
     print(data.toJson());
   }
@@ -171,7 +171,7 @@ class WalletAppState extends ChangeNotifier {
   Future<void> fetchUserOrders() async {
     final data = await _client.getOrders();
 
-    _orders = data.orders.map((e) => e.toJson().toString()).toList();
+    _orders = data.map((e) => e.toJson().toString()).toList();
 
     notifyListeners();
   }
@@ -180,11 +180,7 @@ class WalletAppState extends ChangeNotifier {
 class PartnerAppState extends ChangeNotifier {
   String get authPublicKey => _authPublicKey;
   String get userSecretKey => _userSecretKey;
-  String get email => _email;
-  String get phone => _phone;
-  XFile? get file => _file;
-
-  String? get validationResult => _validationResult;
+  Map<String, dynamic>? get userData => _userData;
 
   String? get onRampOrderData => _onRampOrderData;
   String? get offRampOrderData => _offRampOrderData;
@@ -205,11 +201,8 @@ class PartnerAppState extends ChangeNotifier {
 
   late String _authPublicKey = '';
   late String _userSecretKey = '';
-  late String _email = '';
-  late String _phone = '';
-  XFile? _file;
 
-  String? _validationResult;
+  Map<String, dynamic>? _userData;
 
   String? _onRampOrderData;
   String? _offRampOrderData;
@@ -237,20 +230,20 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setValidationResult({
-    required String message,
+  Future<void> createCustomValidationResult({
+    required String type,
+    required String result,
     required String userPK,
     required String secretKey,
   }) async {
     await _client.setValidationResult(
-      value: V1ValidationData(kycSmileId: message),
+      value: CustomValidationResult(
+        type: type,
+        value: result,
+      ),
       userPK: userPK,
       secretKey: secretKey,
     );
-  }
-
-  Future<void> getUserInfo(String userPK) async {
-    await _client.getUserInfo(userPK);
   }
 
   Future<void> getUserSecretKey(String userPK) async {
@@ -258,41 +251,13 @@ class PartnerAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getValidationResult({
-    required String secretKey,
-    required String userPK,
-  }) async {
-    final kycValidationResult = await _client.getValidationResult(
-      key: 'kycSmileId',
-      userPK: userPK,
-      secretKey: secretKey,
-    );
-
-    final email = await _client.getEmail(userPK: userPK, secretKey: secretKey);
-    final phone = await _client.getPhone(userPK: userPK, secretKey: secretKey);
-
-    final emailValidationResult = jsonEncode(email);
-    final phoneValidationResult = jsonEncode(phone);
-
-    _validationResult =
-        'kyc: $kycValidationResult\nemail: $emailValidationResult\nphone: $phoneValidationResult';
-    notifyListeners();
-  }
-
   Future<void> fetchData(String secretKey, String userPK) async {
-    final data = await _client.getData(
+    final data = await _client.getUserData(
       userPK: userPK,
       secretKey: secretKey,
     );
 
-    _email = data['email'] as String? ?? '-';
-    _phone = data['phone'] as String? ?? '-';
-
-    final selfie = data['photoSelfie'];
-
-    if (selfie != null && selfie is Uint8List) {
-      _file = XFile.fromData(selfie);
-    }
+    _userData = data.toJson();
 
     notifyListeners();
   }
@@ -302,8 +267,7 @@ class PartnerAppState extends ChangeNotifier {
     String? externalId,
   }) async {
     final data = await _client.getOrder(
-      orderId: orderId,
-      externalId: externalId,
+      orderId: OrderId.from(orderId: orderId, externalId: externalId),
     );
 
     _onRampOrderData = data.toJson().toString();
@@ -316,8 +280,7 @@ class PartnerAppState extends ChangeNotifier {
     String? externalId,
   }) async {
     final data = await _client.getOrder(
-      orderId: orderId,
-      externalId: externalId,
+      orderId: OrderId.from(orderId: orderId, externalId: externalId),
     );
 
     _offRampOrderData = data.toJson().toString();
@@ -328,7 +291,7 @@ class PartnerAppState extends ChangeNotifier {
   Future<void> fetchPartnerOrders() async {
     final data = await _client.getPartnerOrders();
 
-    _orders = data.orders.map((e) => e.toJson().toString()).toList();
+    _orders = data.map((e) => e.toJson().toString()).toList();
 
     notifyListeners();
   }
@@ -341,10 +304,9 @@ class PartnerAppState extends ChangeNotifier {
     _onRampExternalId = const Uuid().v4();
 
     await _client.acceptOnRampOrder(
-      orderId: orderId,
+      orderId: OrderId.from(orderId: orderId, externalId: _onRampExternalId),
       bankName: bankName,
       bankAccount: bankAccount,
-      externalId: _onRampExternalId,
     );
   }
 
@@ -355,9 +317,8 @@ class PartnerAppState extends ChangeNotifier {
     _offRampExternalId = const Uuid().v4();
 
     await _client.acceptOffRampOrder(
-      orderId: orderId,
+      orderId: OrderId.from(orderId: orderId, externalId: _offRampExternalId),
       cryptoWalletAddress: cryptoWalletAddress,
-      externalId: _offRampExternalId,
     );
   }
 
@@ -367,8 +328,7 @@ class PartnerAppState extends ChangeNotifier {
     required String transactionId,
   }) async {
     await _client.completeOnRampOrder(
-      orderId: orderId,
-      externalId: externalId,
+      orderId: OrderId.from(orderId: orderId, externalId: externalId),
       transactionId: transactionId,
     );
   }
@@ -378,8 +338,7 @@ class PartnerAppState extends ChangeNotifier {
     String? externalId,
   }) async {
     await _client.completeOffRampOrder(
-      orderId: orderId,
-      externalId: externalId,
+      orderId: OrderId.from(orderId: orderId, externalId: externalId),
     );
   }
 
@@ -389,8 +348,7 @@ class PartnerAppState extends ChangeNotifier {
     required String reason,
   }) async {
     await _client.failOrder(
-      orderId: orderId,
-      externalId: externalId,
+      orderId: OrderId.from(orderId: orderId, externalId: externalId),
       reason: reason,
     );
   }

@@ -21,10 +21,10 @@ V1AcceptOrderRequest _$V1AcceptOrderRequestFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$V1AcceptOrderRequest {
   String get orderId => throw _privateConstructorUsedError;
-  String? get bankName => throw _privateConstructorUsedError;
-  String? get bankAccount => throw _privateConstructorUsedError;
-  String? get cryptoWalletAddress => throw _privateConstructorUsedError;
-  String? get externalId => throw _privateConstructorUsedError;
+  String get bankName => throw _privateConstructorUsedError;
+  String get bankAccount => throw _privateConstructorUsedError;
+  String get cryptoWalletAddress => throw _privateConstructorUsedError;
+  String get externalId => throw _privateConstructorUsedError;
 
   /// Serializes this V1AcceptOrderRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,10 +44,10 @@ abstract class $V1AcceptOrderRequestCopyWith<$Res> {
   @useResult
   $Res call(
       {String orderId,
-      String? bankName,
-      String? bankAccount,
-      String? cryptoWalletAddress,
-      String? externalId});
+      String bankName,
+      String bankAccount,
+      String cryptoWalletAddress,
+      String externalId});
 }
 
 /// @nodoc
@@ -67,32 +67,32 @@ class _$V1AcceptOrderRequestCopyWithImpl<$Res,
   @override
   $Res call({
     Object? orderId = null,
-    Object? bankName = freezed,
-    Object? bankAccount = freezed,
-    Object? cryptoWalletAddress = freezed,
-    Object? externalId = freezed,
+    Object? bankName = null,
+    Object? bankAccount = null,
+    Object? cryptoWalletAddress = null,
+    Object? externalId = null,
   }) {
     return _then(_value.copyWith(
       orderId: null == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
               as String,
-      bankName: freezed == bankName
+      bankName: null == bankName
           ? _value.bankName
           : bankName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      bankAccount: freezed == bankAccount
+              as String,
+      bankAccount: null == bankAccount
           ? _value.bankAccount
           : bankAccount // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cryptoWalletAddress: freezed == cryptoWalletAddress
+              as String,
+      cryptoWalletAddress: null == cryptoWalletAddress
           ? _value.cryptoWalletAddress
           : cryptoWalletAddress // ignore: cast_nullable_to_non_nullable
-              as String?,
-      externalId: freezed == externalId
+              as String,
+      externalId: null == externalId
           ? _value.externalId
           : externalId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ) as $Val);
   }
 }
@@ -107,10 +107,10 @@ abstract class _$$V1AcceptOrderRequestImplCopyWith<$Res>
   @useResult
   $Res call(
       {String orderId,
-      String? bankName,
-      String? bankAccount,
-      String? cryptoWalletAddress,
-      String? externalId});
+      String bankName,
+      String bankAccount,
+      String cryptoWalletAddress,
+      String externalId});
 }
 
 /// @nodoc
@@ -127,32 +127,32 @@ class __$$V1AcceptOrderRequestImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? orderId = null,
-    Object? bankName = freezed,
-    Object? bankAccount = freezed,
-    Object? cryptoWalletAddress = freezed,
-    Object? externalId = freezed,
+    Object? bankName = null,
+    Object? bankAccount = null,
+    Object? cryptoWalletAddress = null,
+    Object? externalId = null,
   }) {
     return _then(_$V1AcceptOrderRequestImpl(
       orderId: null == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
               as String,
-      bankName: freezed == bankName
+      bankName: null == bankName
           ? _value.bankName
           : bankName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      bankAccount: freezed == bankAccount
+              as String,
+      bankAccount: null == bankAccount
           ? _value.bankAccount
           : bankAccount // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cryptoWalletAddress: freezed == cryptoWalletAddress
+              as String,
+      cryptoWalletAddress: null == cryptoWalletAddress
           ? _value.cryptoWalletAddress
           : cryptoWalletAddress // ignore: cast_nullable_to_non_nullable
-              as String?,
-      externalId: freezed == externalId
+              as String,
+      externalId: null == externalId
           ? _value.externalId
           : externalId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
@@ -162,10 +162,10 @@ class __$$V1AcceptOrderRequestImplCopyWithImpl<$Res>
 class _$V1AcceptOrderRequestImpl implements _V1AcceptOrderRequest {
   const _$V1AcceptOrderRequestImpl(
       {required this.orderId,
-      this.bankName,
-      this.bankAccount,
-      this.cryptoWalletAddress,
-      this.externalId});
+      required this.bankName,
+      required this.bankAccount,
+      required this.cryptoWalletAddress,
+      required this.externalId});
 
   factory _$V1AcceptOrderRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1AcceptOrderRequestImplFromJson(json);
@@ -173,13 +173,13 @@ class _$V1AcceptOrderRequestImpl implements _V1AcceptOrderRequest {
   @override
   final String orderId;
   @override
-  final String? bankName;
+  final String bankName;
   @override
-  final String? bankAccount;
+  final String bankAccount;
   @override
-  final String? cryptoWalletAddress;
+  final String cryptoWalletAddress;
   @override
-  final String? externalId;
+  final String externalId;
 
   @override
   String toString() {
@@ -228,10 +228,10 @@ class _$V1AcceptOrderRequestImpl implements _V1AcceptOrderRequest {
 abstract class _V1AcceptOrderRequest implements V1AcceptOrderRequest {
   const factory _V1AcceptOrderRequest(
       {required final String orderId,
-      final String? bankName,
-      final String? bankAccount,
-      final String? cryptoWalletAddress,
-      final String? externalId}) = _$V1AcceptOrderRequestImpl;
+      required final String bankName,
+      required final String bankAccount,
+      required final String cryptoWalletAddress,
+      required final String externalId}) = _$V1AcceptOrderRequestImpl;
 
   factory _V1AcceptOrderRequest.fromJson(Map<String, dynamic> json) =
       _$V1AcceptOrderRequestImpl.fromJson;
@@ -239,13 +239,13 @@ abstract class _V1AcceptOrderRequest implements V1AcceptOrderRequest {
   @override
   String get orderId;
   @override
-  String? get bankName;
+  String get bankName;
   @override
-  String? get bankAccount;
+  String get bankAccount;
   @override
-  String? get cryptoWalletAddress;
+  String get cryptoWalletAddress;
   @override
-  String? get externalId;
+  String get externalId;
 
   /// Create a copy of V1AcceptOrderRequest
   /// with the given fields replaced by the non-null parameter values.
