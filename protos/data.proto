@@ -1,7 +1,6 @@
 syntax = "proto3";
 
 package espressocash.data.v1;
-option go_package = "kyc.espressocash.com/gen/data";
 
 import "google/protobuf/timestamp.proto";
 
