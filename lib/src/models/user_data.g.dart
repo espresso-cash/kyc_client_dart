@@ -118,6 +118,7 @@ _$DocumentImpl _$$DocumentImplFromJson(Map<String, dynamic> json) =>
     _$DocumentImpl(
       type: $enumDecode(_$IdTypeEnumMap, json['type']),
       number: json['number'] as String,
+      countryCode: json['countryCode'] as String,
       id: json['id'] as String? ?? '',
       verified: json['verified'] as bool?,
     );
@@ -126,6 +127,7 @@ Map<String, dynamic> _$$DocumentImplToJson(_$DocumentImpl instance) =>
     <String, dynamic>{
       'type': _$IdTypeEnumMap[instance.type]!,
       'number': instance.number,
+      'countryCode': instance.countryCode,
       'id': instance.id,
       'verified': instance.verified,
     };

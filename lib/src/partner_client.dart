@@ -117,8 +117,14 @@ class KycPartnerClient {
     required String secretKey,
   }) async {
     final wrappedData = switch (value) {
-      HashValidationResult() =>
-        WrappedValidation(hash: generateHash(value.value)),
+      HashValidationResult() => WrappedValidation(
+          hash: HashValidation(
+            status: ValidationStatus.VALIDATION_STATUS_APPROVED,
+            hash: generateHash(
+              value.value,
+            ),
+          ),
+        ),
       CustomValidationResult() => WrappedValidation(
           custom: CustomValidation(
             type: value.type,

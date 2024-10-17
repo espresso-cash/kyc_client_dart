@@ -82,7 +82,8 @@ Future<UserData> processUserData({
     final result = switch (wrappedData.whichData()) {
       proto.WrappedValidation_Data.hash => HashValidationResult(
           dataId: encryptedData.dataId,
-          value: wrappedData.hash,
+          value: wrappedData.hash.hash,
+          status: wrappedData.hash.status,
         ),
       proto.WrappedValidation_Data.custom => CustomValidationResult(
           type: wrappedData.custom.type,
@@ -124,7 +125,9 @@ Future<UserData> processUserData({
     bool verified = false;
     if (verificationData != null) {
       final hash = generateHash(utf8.decode(wrappedData.writeToBuffer()));
-      verified = hash == verificationData.value;
+      verified = hash == verificationData.value &&
+          verificationData.status ==
+              proto.ValidationStatus.VALIDATION_STATUS_APPROVED;
     }
 
     switch (wrappedData.whichData()) {
@@ -171,6 +174,7 @@ Future<UserData> processUserData({
           Document(
             type: wrappedData.document.type.toIdType(),
             number: wrappedData.document.number,
+            countryCode: wrappedData.document.countryCode,
             id: id,
             verified: verified,
           ),

@@ -1340,6 +1340,7 @@ Document _$DocumentFromJson(Map<String, dynamic> json) {
 mixin _$Document {
   IdType get type => throw _privateConstructorUsedError;
   String get number => throw _privateConstructorUsedError;
+  String get countryCode => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
   bool? get verified => throw _privateConstructorUsedError;
 
@@ -1358,7 +1359,12 @@ abstract class $DocumentCopyWith<$Res> {
   factory $DocumentCopyWith(Document value, $Res Function(Document) then) =
       _$DocumentCopyWithImpl<$Res, Document>;
   @useResult
-  $Res call({IdType type, String number, String id, bool? verified});
+  $Res call(
+      {IdType type,
+      String number,
+      String countryCode,
+      String id,
+      bool? verified});
 }
 
 /// @nodoc
@@ -1378,6 +1384,7 @@ class _$DocumentCopyWithImpl<$Res, $Val extends Document>
   $Res call({
     Object? type = null,
     Object? number = null,
+    Object? countryCode = null,
     Object? id = null,
     Object? verified = freezed,
   }) {
@@ -1389,6 +1396,10 @@ class _$DocumentCopyWithImpl<$Res, $Val extends Document>
       number: null == number
           ? _value.number
           : number // ignore: cast_nullable_to_non_nullable
+              as String,
+      countryCode: null == countryCode
+          ? _value.countryCode
+          : countryCode // ignore: cast_nullable_to_non_nullable
               as String,
       id: null == id
           ? _value.id
@@ -1410,7 +1421,12 @@ abstract class _$$DocumentImplCopyWith<$Res>
       __$$DocumentImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({IdType type, String number, String id, bool? verified});
+  $Res call(
+      {IdType type,
+      String number,
+      String countryCode,
+      String id,
+      bool? verified});
 }
 
 /// @nodoc
@@ -1428,6 +1444,7 @@ class __$$DocumentImplCopyWithImpl<$Res>
   $Res call({
     Object? type = null,
     Object? number = null,
+    Object? countryCode = null,
     Object? id = null,
     Object? verified = freezed,
   }) {
@@ -1439,6 +1456,10 @@ class __$$DocumentImplCopyWithImpl<$Res>
       number: null == number
           ? _value.number
           : number // ignore: cast_nullable_to_non_nullable
+              as String,
+      countryCode: null == countryCode
+          ? _value.countryCode
+          : countryCode // ignore: cast_nullable_to_non_nullable
               as String,
       id: null == id
           ? _value.id
@@ -1456,7 +1477,11 @@ class __$$DocumentImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DocumentImpl implements _Document {
   const _$DocumentImpl(
-      {required this.type, required this.number, this.id = '', this.verified});
+      {required this.type,
+      required this.number,
+      required this.countryCode,
+      this.id = '',
+      this.verified});
 
   factory _$DocumentImpl.fromJson(Map<String, dynamic> json) =>
       _$$DocumentImplFromJson(json);
@@ -1466,6 +1491,8 @@ class _$DocumentImpl implements _Document {
   @override
   final String number;
   @override
+  final String countryCode;
+  @override
   @JsonKey()
   final String id;
   @override
@@ -1473,7 +1500,7 @@ class _$DocumentImpl implements _Document {
 
   @override
   String toString() {
-    return 'Document(type: $type, number: $number, id: $id, verified: $verified)';
+    return 'Document(type: $type, number: $number, countryCode: $countryCode, id: $id, verified: $verified)';
   }
 
   @override
@@ -1483,6 +1510,8 @@ class _$DocumentImpl implements _Document {
             other is _$DocumentImpl &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.number, number) || other.number == number) &&
+            (identical(other.countryCode, countryCode) ||
+                other.countryCode == countryCode) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.verified, verified) ||
                 other.verified == verified));
@@ -1490,7 +1519,8 @@ class _$DocumentImpl implements _Document {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, type, number, id, verified);
+  int get hashCode =>
+      Object.hash(runtimeType, type, number, countryCode, id, verified);
 
   /// Create a copy of Document
   /// with the given fields replaced by the non-null parameter values.
@@ -1512,6 +1542,7 @@ abstract class _Document implements Document {
   const factory _Document(
       {required final IdType type,
       required final String number,
+      required final String countryCode,
       final String id,
       final bool? verified}) = _$DocumentImpl;
 
@@ -1522,6 +1553,8 @@ abstract class _Document implements Document {
   IdType get type;
   @override
   String get number;
+  @override
+  String get countryCode;
   @override
   String get id;
   @override

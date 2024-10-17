@@ -83,6 +83,7 @@ class Document with _$Document {
   const factory Document({
     required IdType type,
     required String number,
+    required String countryCode,
     @Default('') String id,
     bool? verified,
   }) = _Document;
