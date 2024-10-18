@@ -218,6 +218,7 @@ class KycUserClient {
             document: proto.Document(
               number: document.number,
               type: document.type.toDocumentType(),
+              countryCode: document.countryCode,
             ),
           ),
           id: document.id,

@@ -119,10 +119,8 @@ class KycPartnerClient {
     final wrappedData = switch (value) {
       HashValidationResult() => WrappedValidation(
           hash: HashValidation(
-            status: ValidationStatus.VALIDATION_STATUS_APPROVED,
-            hash: generateHash(
-              value.value,
-            ),
+            status: value.status,
+            hash: generateHash(value.value),
           ),
         ),
       CustomValidationResult() => WrappedValidation(
