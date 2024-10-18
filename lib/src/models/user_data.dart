@@ -27,7 +27,7 @@ class Email with _$Email {
   const factory Email({
     required String value,
     @Default('') String id,
-    ValidationStatus status,
+    required ValidationStatus status,
   }) = _Email;
 
   factory Email.fromJson(Map<String, dynamic> json) => _$EmailFromJson(json);
@@ -38,7 +38,7 @@ class Phone with _$Phone {
   const factory Phone({
     required String value,
     @Default('') String id,
-    ValidationStatus status,
+    required ValidationStatus status,
   }) = _Phone;
 
   factory Phone.fromJson(Map<String, dynamic> json) => _$PhoneFromJson(json);
@@ -49,7 +49,7 @@ class Selfie with _$Selfie {
   const factory Selfie({
     required List<int> value,
     @Default('') String id,
-    ValidationStatus status,
+    required ValidationStatus status,
   }) = _Selfie;
 
   factory Selfie.fromJson(Map<String, dynamic> json) => _$SelfieFromJson(json);
@@ -61,7 +61,7 @@ class Name with _$Name {
     required String firstName,
     required String lastName,
     @Default('') String id,
-    ValidationStatus status,
+    required ValidationStatus status,
   }) = _Name;
 
   factory Name.fromJson(Map<String, dynamic> json) => _$NameFromJson(json);
@@ -72,7 +72,7 @@ class BirthDate with _$BirthDate {
   const factory BirthDate({
     required DateTime value,
     @Default('') String id,
-    ValidationStatus status,
+    required ValidationStatus status,
   }) = _BirthDate;
 
   factory BirthDate.fromJson(Map<String, dynamic> json) =>
@@ -86,7 +86,7 @@ class Document with _$Document {
     required String number,
     required String countryCode,
     @Default('') String id,
-    ValidationStatus status,
+    required ValidationStatus status,
   }) = _Document;
 
   factory Document.fromJson(Map<String, dynamic> json) =>
@@ -100,7 +100,7 @@ class BankInfo with _$BankInfo {
     required String bankCode,
     required String accountNumber,
     @Default('') String id,
-    ValidationStatus? status,
+    required ValidationStatus? status,
   }) = _BankInfo;
 
   factory BankInfo.fromJson(Map<String, dynamic> json) =>

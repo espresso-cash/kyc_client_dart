@@ -395,8 +395,7 @@ Email _$EmailFromJson(Map<String, dynamic> json) {
 mixin _$Email {
   String get value => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  @ValidationStatusConverter()
-  ValidationStatus? get status => throw _privateConstructorUsedError;
+  ValidationStatus get status => throw _privateConstructorUsedError;
 
   /// Serializes this Email to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -412,10 +411,7 @@ abstract class $EmailCopyWith<$Res> {
   factory $EmailCopyWith(Email value, $Res Function(Email) then) =
       _$EmailCopyWithImpl<$Res, Email>;
   @useResult
-  $Res call(
-      {String value,
-      String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+  $Res call({String value, String id, ValidationStatus status});
 }
 
 /// @nodoc
@@ -435,7 +431,7 @@ class _$EmailCopyWithImpl<$Res, $Val extends Email>
   $Res call({
     Object? value = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       value: null == value
@@ -446,10 +442,10 @@ class _$EmailCopyWithImpl<$Res, $Val extends Email>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ) as $Val);
   }
 }
@@ -461,10 +457,7 @@ abstract class _$$EmailImplCopyWith<$Res> implements $EmailCopyWith<$Res> {
       __$$EmailImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String value,
-      String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+  $Res call({String value, String id, ValidationStatus status});
 }
 
 /// @nodoc
@@ -482,7 +475,7 @@ class __$$EmailImplCopyWithImpl<$Res>
   $Res call({
     Object? value = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_$EmailImpl(
       value: null == value
@@ -493,10 +486,10 @@ class __$$EmailImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ));
   }
 }
@@ -504,10 +497,7 @@ class __$$EmailImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$EmailImpl implements _Email {
-  const _$EmailImpl(
-      {required this.value,
-      this.id = '',
-      @ValidationStatusConverter() this.status});
+  const _$EmailImpl({required this.value, this.id = '', required this.status});
 
   factory _$EmailImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmailImplFromJson(json);
@@ -518,8 +508,7 @@ class _$EmailImpl implements _Email {
   @JsonKey()
   final String id;
   @override
-  @ValidationStatusConverter()
-  final ValidationStatus? status;
+  final ValidationStatus status;
 
   @override
   String toString() {
@@ -558,10 +547,9 @@ class _$EmailImpl implements _Email {
 
 abstract class _Email implements Email {
   const factory _Email(
-          {required final String value,
-          final String id,
-          @ValidationStatusConverter() final ValidationStatus? status}) =
-      _$EmailImpl;
+      {required final String value,
+      final String id,
+      required final ValidationStatus status}) = _$EmailImpl;
 
   factory _Email.fromJson(Map<String, dynamic> json) = _$EmailImpl.fromJson;
 
@@ -570,8 +558,7 @@ abstract class _Email implements Email {
   @override
   String get id;
   @override
-  @ValidationStatusConverter()
-  ValidationStatus? get status;
+  ValidationStatus get status;
 
   /// Create a copy of Email
   /// with the given fields replaced by the non-null parameter values.
@@ -589,8 +576,7 @@ Phone _$PhoneFromJson(Map<String, dynamic> json) {
 mixin _$Phone {
   String get value => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  @ValidationStatusConverter()
-  ValidationStatus? get status => throw _privateConstructorUsedError;
+  ValidationStatus get status => throw _privateConstructorUsedError;
 
   /// Serializes this Phone to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -606,10 +592,7 @@ abstract class $PhoneCopyWith<$Res> {
   factory $PhoneCopyWith(Phone value, $Res Function(Phone) then) =
       _$PhoneCopyWithImpl<$Res, Phone>;
   @useResult
-  $Res call(
-      {String value,
-      String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+  $Res call({String value, String id, ValidationStatus status});
 }
 
 /// @nodoc
@@ -629,7 +612,7 @@ class _$PhoneCopyWithImpl<$Res, $Val extends Phone>
   $Res call({
     Object? value = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       value: null == value
@@ -640,10 +623,10 @@ class _$PhoneCopyWithImpl<$Res, $Val extends Phone>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ) as $Val);
   }
 }
@@ -655,10 +638,7 @@ abstract class _$$PhoneImplCopyWith<$Res> implements $PhoneCopyWith<$Res> {
       __$$PhoneImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String value,
-      String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+  $Res call({String value, String id, ValidationStatus status});
 }
 
 /// @nodoc
@@ -676,7 +656,7 @@ class __$$PhoneImplCopyWithImpl<$Res>
   $Res call({
     Object? value = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_$PhoneImpl(
       value: null == value
@@ -687,10 +667,10 @@ class __$$PhoneImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ));
   }
 }
@@ -698,10 +678,7 @@ class __$$PhoneImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$PhoneImpl implements _Phone {
-  const _$PhoneImpl(
-      {required this.value,
-      this.id = '',
-      @ValidationStatusConverter() this.status});
+  const _$PhoneImpl({required this.value, this.id = '', required this.status});
 
   factory _$PhoneImpl.fromJson(Map<String, dynamic> json) =>
       _$$PhoneImplFromJson(json);
@@ -712,8 +689,7 @@ class _$PhoneImpl implements _Phone {
   @JsonKey()
   final String id;
   @override
-  @ValidationStatusConverter()
-  final ValidationStatus? status;
+  final ValidationStatus status;
 
   @override
   String toString() {
@@ -752,10 +728,9 @@ class _$PhoneImpl implements _Phone {
 
 abstract class _Phone implements Phone {
   const factory _Phone(
-          {required final String value,
-          final String id,
-          @ValidationStatusConverter() final ValidationStatus? status}) =
-      _$PhoneImpl;
+      {required final String value,
+      final String id,
+      required final ValidationStatus status}) = _$PhoneImpl;
 
   factory _Phone.fromJson(Map<String, dynamic> json) = _$PhoneImpl.fromJson;
 
@@ -764,8 +739,7 @@ abstract class _Phone implements Phone {
   @override
   String get id;
   @override
-  @ValidationStatusConverter()
-  ValidationStatus? get status;
+  ValidationStatus get status;
 
   /// Create a copy of Phone
   /// with the given fields replaced by the non-null parameter values.
@@ -783,8 +757,7 @@ Selfie _$SelfieFromJson(Map<String, dynamic> json) {
 mixin _$Selfie {
   List<int> get value => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  @ValidationStatusConverter()
-  ValidationStatus? get status => throw _privateConstructorUsedError;
+  ValidationStatus get status => throw _privateConstructorUsedError;
 
   /// Serializes this Selfie to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -800,10 +773,7 @@ abstract class $SelfieCopyWith<$Res> {
   factory $SelfieCopyWith(Selfie value, $Res Function(Selfie) then) =
       _$SelfieCopyWithImpl<$Res, Selfie>;
   @useResult
-  $Res call(
-      {List<int> value,
-      String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+  $Res call({List<int> value, String id, ValidationStatus status});
 }
 
 /// @nodoc
@@ -823,7 +793,7 @@ class _$SelfieCopyWithImpl<$Res, $Val extends Selfie>
   $Res call({
     Object? value = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       value: null == value
@@ -834,10 +804,10 @@ class _$SelfieCopyWithImpl<$Res, $Val extends Selfie>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ) as $Val);
   }
 }
@@ -849,10 +819,7 @@ abstract class _$$SelfieImplCopyWith<$Res> implements $SelfieCopyWith<$Res> {
       __$$SelfieImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {List<int> value,
-      String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+  $Res call({List<int> value, String id, ValidationStatus status});
 }
 
 /// @nodoc
@@ -870,7 +837,7 @@ class __$$SelfieImplCopyWithImpl<$Res>
   $Res call({
     Object? value = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_$SelfieImpl(
       value: null == value
@@ -881,10 +848,10 @@ class __$$SelfieImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ));
   }
 }
@@ -893,9 +860,7 @@ class __$$SelfieImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SelfieImpl implements _Selfie {
   const _$SelfieImpl(
-      {required final List<int> value,
-      this.id = '',
-      @ValidationStatusConverter() this.status})
+      {required final List<int> value, this.id = '', required this.status})
       : _value = value;
 
   factory _$SelfieImpl.fromJson(Map<String, dynamic> json) =>
@@ -913,8 +878,7 @@ class _$SelfieImpl implements _Selfie {
   @JsonKey()
   final String id;
   @override
-  @ValidationStatusConverter()
-  final ValidationStatus? status;
+  final ValidationStatus status;
 
   @override
   String toString() {
@@ -954,10 +918,9 @@ class _$SelfieImpl implements _Selfie {
 
 abstract class _Selfie implements Selfie {
   const factory _Selfie(
-          {required final List<int> value,
-          final String id,
-          @ValidationStatusConverter() final ValidationStatus? status}) =
-      _$SelfieImpl;
+      {required final List<int> value,
+      final String id,
+      required final ValidationStatus status}) = _$SelfieImpl;
 
   factory _Selfie.fromJson(Map<String, dynamic> json) = _$SelfieImpl.fromJson;
 
@@ -966,8 +929,7 @@ abstract class _Selfie implements Selfie {
   @override
   String get id;
   @override
-  @ValidationStatusConverter()
-  ValidationStatus? get status;
+  ValidationStatus get status;
 
   /// Create a copy of Selfie
   /// with the given fields replaced by the non-null parameter values.
@@ -986,8 +948,7 @@ mixin _$Name {
   String get firstName => throw _privateConstructorUsedError;
   String get lastName => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  @ValidationStatusConverter()
-  ValidationStatus? get status => throw _privateConstructorUsedError;
+  ValidationStatus get status => throw _privateConstructorUsedError;
 
   /// Serializes this Name to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1004,10 +965,7 @@ abstract class $NameCopyWith<$Res> {
       _$NameCopyWithImpl<$Res, Name>;
   @useResult
   $Res call(
-      {String firstName,
-      String lastName,
-      String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+      {String firstName, String lastName, String id, ValidationStatus status});
 }
 
 /// @nodoc
@@ -1028,7 +986,7 @@ class _$NameCopyWithImpl<$Res, $Val extends Name>
     Object? firstName = null,
     Object? lastName = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       firstName: null == firstName
@@ -1043,10 +1001,10 @@ class _$NameCopyWithImpl<$Res, $Val extends Name>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ) as $Val);
   }
 }
@@ -1059,10 +1017,7 @@ abstract class _$$NameImplCopyWith<$Res> implements $NameCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String firstName,
-      String lastName,
-      String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+      {String firstName, String lastName, String id, ValidationStatus status});
 }
 
 /// @nodoc
@@ -1080,7 +1035,7 @@ class __$$NameImplCopyWithImpl<$Res>
     Object? firstName = null,
     Object? lastName = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_$NameImpl(
       firstName: null == firstName
@@ -1095,10 +1050,10 @@ class __$$NameImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ));
   }
 }
@@ -1110,7 +1065,7 @@ class _$NameImpl implements _Name {
       {required this.firstName,
       required this.lastName,
       this.id = '',
-      @ValidationStatusConverter() this.status});
+      required this.status});
 
   factory _$NameImpl.fromJson(Map<String, dynamic> json) =>
       _$$NameImplFromJson(json);
@@ -1123,8 +1078,7 @@ class _$NameImpl implements _Name {
   @JsonKey()
   final String id;
   @override
-  @ValidationStatusConverter()
-  final ValidationStatus? status;
+  final ValidationStatus status;
 
   @override
   String toString() {
@@ -1166,11 +1120,10 @@ class _$NameImpl implements _Name {
 
 abstract class _Name implements Name {
   const factory _Name(
-          {required final String firstName,
-          required final String lastName,
-          final String id,
-          @ValidationStatusConverter() final ValidationStatus? status}) =
-      _$NameImpl;
+      {required final String firstName,
+      required final String lastName,
+      final String id,
+      required final ValidationStatus status}) = _$NameImpl;
 
   factory _Name.fromJson(Map<String, dynamic> json) = _$NameImpl.fromJson;
 
@@ -1181,8 +1134,7 @@ abstract class _Name implements Name {
   @override
   String get id;
   @override
-  @ValidationStatusConverter()
-  ValidationStatus? get status;
+  ValidationStatus get status;
 
   /// Create a copy of Name
   /// with the given fields replaced by the non-null parameter values.
@@ -1200,8 +1152,7 @@ BirthDate _$BirthDateFromJson(Map<String, dynamic> json) {
 mixin _$BirthDate {
   DateTime get value => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  @ValidationStatusConverter()
-  ValidationStatus? get status => throw _privateConstructorUsedError;
+  ValidationStatus get status => throw _privateConstructorUsedError;
 
   /// Serializes this BirthDate to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1218,10 +1169,7 @@ abstract class $BirthDateCopyWith<$Res> {
   factory $BirthDateCopyWith(BirthDate value, $Res Function(BirthDate) then) =
       _$BirthDateCopyWithImpl<$Res, BirthDate>;
   @useResult
-  $Res call(
-      {DateTime value,
-      String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+  $Res call({DateTime value, String id, ValidationStatus status});
 }
 
 /// @nodoc
@@ -1241,7 +1189,7 @@ class _$BirthDateCopyWithImpl<$Res, $Val extends BirthDate>
   $Res call({
     Object? value = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       value: null == value
@@ -1252,10 +1200,10 @@ class _$BirthDateCopyWithImpl<$Res, $Val extends BirthDate>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ) as $Val);
   }
 }
@@ -1268,10 +1216,7 @@ abstract class _$$BirthDateImplCopyWith<$Res>
       __$$BirthDateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {DateTime value,
-      String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+  $Res call({DateTime value, String id, ValidationStatus status});
 }
 
 /// @nodoc
@@ -1289,7 +1234,7 @@ class __$$BirthDateImplCopyWithImpl<$Res>
   $Res call({
     Object? value = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_$BirthDateImpl(
       value: null == value
@@ -1300,10 +1245,10 @@ class __$$BirthDateImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ));
   }
 }
@@ -1312,9 +1257,7 @@ class __$$BirthDateImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$BirthDateImpl implements _BirthDate {
   const _$BirthDateImpl(
-      {required this.value,
-      this.id = '',
-      @ValidationStatusConverter() this.status});
+      {required this.value, this.id = '', required this.status});
 
   factory _$BirthDateImpl.fromJson(Map<String, dynamic> json) =>
       _$$BirthDateImplFromJson(json);
@@ -1325,8 +1268,7 @@ class _$BirthDateImpl implements _BirthDate {
   @JsonKey()
   final String id;
   @override
-  @ValidationStatusConverter()
-  final ValidationStatus? status;
+  final ValidationStatus status;
 
   @override
   String toString() {
@@ -1365,10 +1307,9 @@ class _$BirthDateImpl implements _BirthDate {
 
 abstract class _BirthDate implements BirthDate {
   const factory _BirthDate(
-          {required final DateTime value,
-          final String id,
-          @ValidationStatusConverter() final ValidationStatus? status}) =
-      _$BirthDateImpl;
+      {required final DateTime value,
+      final String id,
+      required final ValidationStatus status}) = _$BirthDateImpl;
 
   factory _BirthDate.fromJson(Map<String, dynamic> json) =
       _$BirthDateImpl.fromJson;
@@ -1378,8 +1319,7 @@ abstract class _BirthDate implements BirthDate {
   @override
   String get id;
   @override
-  @ValidationStatusConverter()
-  ValidationStatus? get status;
+  ValidationStatus get status;
 
   /// Create a copy of BirthDate
   /// with the given fields replaced by the non-null parameter values.
@@ -1399,8 +1339,7 @@ mixin _$Document {
   String get number => throw _privateConstructorUsedError;
   String get countryCode => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  @ValidationStatusConverter()
-  ValidationStatus? get status => throw _privateConstructorUsedError;
+  ValidationStatus get status => throw _privateConstructorUsedError;
 
   /// Serializes this Document to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1422,7 +1361,7 @@ abstract class $DocumentCopyWith<$Res> {
       String number,
       String countryCode,
       String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+      ValidationStatus status});
 }
 
 /// @nodoc
@@ -1444,7 +1383,7 @@ class _$DocumentCopyWithImpl<$Res, $Val extends Document>
     Object? number = null,
     Object? countryCode = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       type: null == type
@@ -1463,10 +1402,10 @@ class _$DocumentCopyWithImpl<$Res, $Val extends Document>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ) as $Val);
   }
 }
@@ -1484,7 +1423,7 @@ abstract class _$$DocumentImplCopyWith<$Res>
       String number,
       String countryCode,
       String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+      ValidationStatus status});
 }
 
 /// @nodoc
@@ -1504,7 +1443,7 @@ class __$$DocumentImplCopyWithImpl<$Res>
     Object? number = null,
     Object? countryCode = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_$DocumentImpl(
       type: null == type
@@ -1523,10 +1462,10 @@ class __$$DocumentImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ));
   }
 }
@@ -1539,7 +1478,7 @@ class _$DocumentImpl implements _Document {
       required this.number,
       required this.countryCode,
       this.id = '',
-      @ValidationStatusConverter() this.status});
+      required this.status});
 
   factory _$DocumentImpl.fromJson(Map<String, dynamic> json) =>
       _$$DocumentImplFromJson(json);
@@ -1554,8 +1493,7 @@ class _$DocumentImpl implements _Document {
   @JsonKey()
   final String id;
   @override
-  @ValidationStatusConverter()
-  final ValidationStatus? status;
+  final ValidationStatus status;
 
   @override
   String toString() {
@@ -1598,12 +1536,11 @@ class _$DocumentImpl implements _Document {
 
 abstract class _Document implements Document {
   const factory _Document(
-          {required final IdType type,
-          required final String number,
-          required final String countryCode,
-          final String id,
-          @ValidationStatusConverter() final ValidationStatus? status}) =
-      _$DocumentImpl;
+      {required final IdType type,
+      required final String number,
+      required final String countryCode,
+      final String id,
+      required final ValidationStatus status}) = _$DocumentImpl;
 
   factory _Document.fromJson(Map<String, dynamic> json) =
       _$DocumentImpl.fromJson;
@@ -1617,8 +1554,7 @@ abstract class _Document implements Document {
   @override
   String get id;
   @override
-  @ValidationStatusConverter()
-  ValidationStatus? get status;
+  ValidationStatus get status;
 
   /// Create a copy of Document
   /// with the given fields replaced by the non-null parameter values.
@@ -1638,7 +1574,6 @@ mixin _$BankInfo {
   String get bankCode => throw _privateConstructorUsedError;
   String get accountNumber => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  @ValidationStatusConverter()
   ValidationStatus? get status => throw _privateConstructorUsedError;
 
   /// Serializes this BankInfo to a JSON map.
@@ -1661,7 +1596,7 @@ abstract class $BankInfoCopyWith<$Res> {
       String bankCode,
       String accountNumber,
       String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+      ValidationStatus? status});
 }
 
 /// @nodoc
@@ -1723,7 +1658,7 @@ abstract class _$$BankInfoImplCopyWith<$Res>
       String bankCode,
       String accountNumber,
       String id,
-      @ValidationStatusConverter() ValidationStatus? status});
+      ValidationStatus? status});
 }
 
 /// @nodoc
@@ -1778,7 +1713,7 @@ class _$BankInfoImpl implements _BankInfo {
       required this.bankCode,
       required this.accountNumber,
       this.id = '',
-      @ValidationStatusConverter() this.status});
+      required this.status});
 
   factory _$BankInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$BankInfoImplFromJson(json);
@@ -1793,7 +1728,6 @@ class _$BankInfoImpl implements _BankInfo {
   @JsonKey()
   final String id;
   @override
-  @ValidationStatusConverter()
   final ValidationStatus? status;
 
   @override
@@ -1839,12 +1773,11 @@ class _$BankInfoImpl implements _BankInfo {
 
 abstract class _BankInfo implements BankInfo {
   const factory _BankInfo(
-          {required final String bankName,
-          required final String bankCode,
-          required final String accountNumber,
-          final String id,
-          @ValidationStatusConverter() final ValidationStatus? status}) =
-      _$BankInfoImpl;
+      {required final String bankName,
+      required final String bankCode,
+      required final String accountNumber,
+      final String id,
+      required final ValidationStatus? status}) = _$BankInfoImpl;
 
   factory _BankInfo.fromJson(Map<String, dynamic> json) =
       _$BankInfoImpl.fromJson;
@@ -1858,7 +1791,6 @@ abstract class _BankInfo implements BankInfo {
   @override
   String get id;
   @override
-  @ValidationStatusConverter()
   ValidationStatus? get status;
 
   /// Create a copy of BankInfo
