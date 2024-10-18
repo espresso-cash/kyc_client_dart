@@ -274,7 +274,7 @@ class Document extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Document', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
     ..e<DocumentType>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: DocumentType.DOCUMENT_TYPE_UNSPECIFIED, valueOf: DocumentType.valueOf, enumValues: DocumentType.values)
     ..aOS(2, _omitFieldNames ? '' : 'number')
-    ..aOS(8, _omitFieldNames ? '' : 'countryCode')
+    ..aOS(3, _omitFieldNames ? '' : 'countryCode')
     ..hasRequiredFields = false
   ;
 
@@ -317,14 +317,14 @@ class Document extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearNumber() => clearField(2);
 
-  @$pb.TagNumber(8)
+  @$pb.TagNumber(3)
   $core.String get countryCode => $_getSZ(2);
-  @$pb.TagNumber(8)
+  @$pb.TagNumber(3)
   set countryCode($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(8)
+  @$pb.TagNumber(3)
   $core.bool hasCountryCode() => $_has(2);
-  @$pb.TagNumber(8)
-  void clearCountryCode() => clearField(8);
+  @$pb.TagNumber(3)
+  void clearCountryCode() => clearField(3);
 }
 
 class BankInfo extends $pb.GeneratedMessage {

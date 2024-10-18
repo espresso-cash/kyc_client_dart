@@ -91,14 +91,14 @@ const Document$json = {
   '2': [
     {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.espressocash.data.v1.DocumentType', '10': 'type'},
     {'1': 'number', '3': 2, '4': 1, '5': 9, '10': 'number'},
-    {'1': 'country_code', '3': 8, '4': 1, '5': 9, '10': 'countryCode'},
+    {'1': 'country_code', '3': 3, '4': 1, '5': 9, '10': 'countryCode'},
   ],
 };
 
 /// Descriptor for `Document`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List documentDescriptor = $convert.base64Decode(
     'CghEb2N1bWVudBI2CgR0eXBlGAEgASgOMiIuZXNwcmVzc29jYXNoLmRhdGEudjEuRG9jdW1lbn'
-    'RUeXBlUgR0eXBlEhYKBm51bWJlchgCIAEoCVIGbnVtYmVyEiEKDGNvdW50cnlfY29kZRgIIAEo'
+    'RUeXBlUgR0eXBlEhYKBm51bWJlchgCIAEoCVIGbnVtYmVyEiEKDGNvdW50cnlfY29kZRgDIAEo'
     'CVILY291bnRyeUNvZGU=');
 
 @$core.Deprecated('Use bankInfoDescriptor instead')

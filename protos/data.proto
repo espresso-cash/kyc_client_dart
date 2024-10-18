@@ -24,7 +24,7 @@ message Name {
 message Document {
   DocumentType type = 1;
   string number = 2;
-  string country_code = 8;
+  string country_code = 3;
 }
 
 enum DocumentType {
