@@ -24,6 +24,7 @@ message Name {
 message Document {
   DocumentType type = 1;
   string number = 2;
+  string country_code = 3;
 }
 
 enum DocumentType {
@@ -39,9 +40,21 @@ message BankInfo {
 
 message WrappedValidation {
   oneof data {
-    string hash = 1;
+    HashValidation hash = 1;
     CustomValidation custom = 2;
   }
+}
+
+message HashValidation {
+  string hash = 1;
+  ValidationStatus status = 2;
+}
+
+enum ValidationStatus {
+  VALIDATION_STATUS_UNSPECIFIED = 0;
+  VALIDATION_STATUS_PENDING = 1;
+  VALIDATION_STATUS_APPROVED = 2;
+  VALIDATION_STATUS_REJECTED = 3;
 }
 
 message CustomValidation {

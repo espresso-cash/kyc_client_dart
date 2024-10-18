@@ -5,6 +5,7 @@ import 'package:convert/convert.dart';
 import 'package:kyc_client_dart/src/api/export.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/models/export.dart';
+import 'package:kyc_client_dart/src/models/validation_status.dart';
 import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
@@ -82,7 +83,8 @@ Future<UserData> processUserData({
     final result = switch (wrappedData.whichData()) {
       proto.WrappedValidation_Data.hash => HashValidationResult(
           dataId: encryptedData.dataId,
-          value: wrappedData.hash,
+          value: wrappedData.hash.hash,
+          status: wrappedData.hash.status,
         ),
       proto.WrappedValidation_Data.custom => CustomValidationResult(
           type: wrappedData.custom.type,
@@ -121,10 +123,13 @@ Future<UserData> processUserData({
     final id = encryptedData.id;
     final verificationData = validationMap[id] as HashValidationResult?;
 
-    bool verified = false;
+    ValidationStatus status = ValidationStatus.unspecified;
     if (verificationData != null) {
       final hash = generateHash(utf8.decode(wrappedData.writeToBuffer()));
-      verified = hash == verificationData.value;
+      final bool hashMatching = hash == verificationData.value;
+      status = hashMatching
+          ? verificationData.status.toValidationStatus()
+          : ValidationStatus.unverified;
     }
 
     switch (wrappedData.whichData()) {
@@ -134,7 +139,7 @@ Future<UserData> processUserData({
           Email(
             value: wrappedData.email,
             id: id,
-            verified: verified,
+            status: status,
           ),
         );
       case proto.WrappedData_Data.name:
@@ -144,7 +149,7 @@ Future<UserData> processUserData({
             firstName: wrappedData.name.firstName,
             lastName: wrappedData.name.lastName,
             id: id,
-            verified: verified,
+            status: status,
           ),
         );
       case proto.WrappedData_Data.birthDate:
@@ -153,7 +158,7 @@ Future<UserData> processUserData({
           BirthDate(
             value: wrappedData.birthDate.toDateTime(),
             id: id,
-            verified: verified,
+            status: status,
           ),
         );
       case proto.WrappedData_Data.phone:
@@ -162,7 +167,7 @@ Future<UserData> processUserData({
           Phone(
             value: wrappedData.phone,
             id: id,
-            verified: verified,
+            status: status,
           ),
         );
       case proto.WrappedData_Data.document:
@@ -171,8 +176,9 @@ Future<UserData> processUserData({
           Document(
             type: wrappedData.document.type.toIdType(),
             number: wrappedData.document.number,
+            countryCode: wrappedData.document.countryCode,
             id: id,
-            verified: verified,
+            status: status,
           ),
         );
       case proto.WrappedData_Data.bankInfo:
@@ -183,7 +189,7 @@ Future<UserData> processUserData({
             accountNumber: wrappedData.bankInfo.accountNumber,
             bankCode: wrappedData.bankInfo.bankCode,
             id: id,
-            verified: verified,
+            status: status,
           ),
         );
       case proto.WrappedData_Data.selfieImage:
@@ -192,7 +198,7 @@ Future<UserData> processUserData({
           Selfie(
             value: wrappedData.selfieImage,
             id: id,
-            verified: verified,
+            status: status,
           ),
         );
       case proto.WrappedData_Data.notSet:

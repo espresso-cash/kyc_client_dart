@@ -27,6 +27,23 @@ final $typed_data.Uint8List documentTypeDescriptor = $convert.base64Decode(
     'CgxEb2N1bWVudFR5cGUSHQoZRE9DVU1FTlRfVFlQRV9VTlNQRUNJRklFRBAAEhoKFkRPQ1VNRU'
     '5UX1RZUEVfVk9URVJfSUQQAQ==');
 
+@$core.Deprecated('Use validationStatusDescriptor instead')
+const ValidationStatus$json = {
+  '1': 'ValidationStatus',
+  '2': [
+    {'1': 'VALIDATION_STATUS_UNSPECIFIED', '2': 0},
+    {'1': 'VALIDATION_STATUS_PENDING', '2': 1},
+    {'1': 'VALIDATION_STATUS_APPROVED', '2': 2},
+    {'1': 'VALIDATION_STATUS_REJECTED', '2': 3},
+  ],
+};
+
+/// Descriptor for `ValidationStatus`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List validationStatusDescriptor = $convert.base64Decode(
+    'ChBWYWxpZGF0aW9uU3RhdHVzEiEKHVZBTElEQVRJT05fU1RBVFVTX1VOU1BFQ0lGSUVEEAASHQ'
+    'oZVkFMSURBVElPTl9TVEFUVVNfUEVORElORxABEh4KGlZBTElEQVRJT05fU1RBVFVTX0FQUFJP'
+    'VkVEEAISHgoaVkFMSURBVElPTl9TVEFUVVNfUkVKRUNURUQQAw==');
+
 @$core.Deprecated('Use wrappedDataDescriptor instead')
 const WrappedData$json = {
   '1': 'WrappedData',
@@ -74,13 +91,15 @@ const Document$json = {
   '2': [
     {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.espressocash.data.v1.DocumentType', '10': 'type'},
     {'1': 'number', '3': 2, '4': 1, '5': 9, '10': 'number'},
+    {'1': 'country_code', '3': 3, '4': 1, '5': 9, '10': 'countryCode'},
   ],
 };
 
 /// Descriptor for `Document`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List documentDescriptor = $convert.base64Decode(
     'CghEb2N1bWVudBI2CgR0eXBlGAEgASgOMiIuZXNwcmVzc29jYXNoLmRhdGEudjEuRG9jdW1lbn'
-    'RUeXBlUgR0eXBlEhYKBm51bWJlchgCIAEoCVIGbnVtYmVy');
+    'RUeXBlUgR0eXBlEhYKBm51bWJlchgCIAEoCVIGbnVtYmVyEiEKDGNvdW50cnlfY29kZRgDIAEo'
+    'CVILY291bnRyeUNvZGU=');
 
 @$core.Deprecated('Use bankInfoDescriptor instead')
 const BankInfo$json = {
@@ -101,7 +120,7 @@ final $typed_data.Uint8List bankInfoDescriptor = $convert.base64Decode(
 const WrappedValidation$json = {
   '1': 'WrappedValidation',
   '2': [
-    {'1': 'hash', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'hash'},
+    {'1': 'hash', '3': 1, '4': 1, '5': 11, '6': '.espressocash.data.v1.HashValidation', '9': 0, '10': 'hash'},
     {'1': 'custom', '3': 2, '4': 1, '5': 11, '6': '.espressocash.data.v1.CustomValidation', '9': 0, '10': 'custom'},
   ],
   '8': [
@@ -111,9 +130,23 @@ const WrappedValidation$json = {
 
 /// Descriptor for `WrappedValidation`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List wrappedValidationDescriptor = $convert.base64Decode(
-    'ChFXcmFwcGVkVmFsaWRhdGlvbhIUCgRoYXNoGAEgASgJSABSBGhhc2gSQAoGY3VzdG9tGAIgAS'
-    'gLMiYuZXNwcmVzc29jYXNoLmRhdGEudjEuQ3VzdG9tVmFsaWRhdGlvbkgAUgZjdXN0b21CBgoE'
-    'ZGF0YQ==');
+    'ChFXcmFwcGVkVmFsaWRhdGlvbhI6CgRoYXNoGAEgASgLMiQuZXNwcmVzc29jYXNoLmRhdGEudj'
+    'EuSGFzaFZhbGlkYXRpb25IAFIEaGFzaBJACgZjdXN0b20YAiABKAsyJi5lc3ByZXNzb2Nhc2gu'
+    'ZGF0YS52MS5DdXN0b21WYWxpZGF0aW9uSABSBmN1c3RvbUIGCgRkYXRh');
+
+@$core.Deprecated('Use hashValidationDescriptor instead')
+const HashValidation$json = {
+  '1': 'HashValidation',
+  '2': [
+    {'1': 'hash', '3': 1, '4': 1, '5': 9, '10': 'hash'},
+    {'1': 'status', '3': 2, '4': 1, '5': 14, '6': '.espressocash.data.v1.ValidationStatus', '10': 'status'},
+  ],
+};
+
+/// Descriptor for `HashValidation`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List hashValidationDescriptor = $convert.base64Decode(
+    'Cg5IYXNoVmFsaWRhdGlvbhISCgRoYXNoGAEgASgJUgRoYXNoEj4KBnN0YXR1cxgCIAEoDjImLm'
+    'VzcHJlc3NvY2FzaC5kYXRhLnYxLlZhbGlkYXRpb25TdGF0dXNSBnN0YXR1cw==');
 
 @$core.Deprecated('Use customValidationDescriptor instead')
 const CustomValidation$json = {

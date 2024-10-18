@@ -12,6 +12,7 @@ import 'package:kyc_client_dart/src/common.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
+import 'package:uuid/uuid.dart';
 
 class KycPartnerClient {
   KycPartnerClient({
@@ -117,8 +118,12 @@ class KycPartnerClient {
     required String secretKey,
   }) async {
     final wrappedData = switch (value) {
-      HashValidationResult() =>
-        WrappedValidation(hash: generateHash(value.value)),
+      HashValidationResult() => WrappedValidation(
+          hash: HashValidation(
+            status: value.status,
+            hash: generateHash(value.value),
+          ),
+        ),
       CustomValidationResult() => WrappedValidation(
           custom: CustomValidation(
             type: value.type,
@@ -133,13 +138,12 @@ class KycPartnerClient {
       secretBox: SecretBox(Uint8List.fromList(base58.decode(secretKey))),
       signingKey: _signingKey,
     );
-
     await _kycClient.kycServiceSetValidationData(
       body: V1SetValidationDataRequest(
         encryptedData: base64Encode(encryptedData),
         userPublicKey: userPK,
         dataId: value.dataId,
-        id: '',
+        id: const Uuid().v4(),
       ),
     );
   }

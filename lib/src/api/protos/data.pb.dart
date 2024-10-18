@@ -253,6 +253,7 @@ class Document extends $pb.GeneratedMessage {
   factory Document({
     DocumentType? type,
     $core.String? number,
+    $core.String? countryCode,
   }) {
     final $result = create();
     if (type != null) {
@@ -260,6 +261,9 @@ class Document extends $pb.GeneratedMessage {
     }
     if (number != null) {
       $result.number = number;
+    }
+    if (countryCode != null) {
+      $result.countryCode = countryCode;
     }
     return $result;
   }
@@ -270,6 +274,7 @@ class Document extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Document', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
     ..e<DocumentType>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: DocumentType.DOCUMENT_TYPE_UNSPECIFIED, valueOf: DocumentType.valueOf, enumValues: DocumentType.values)
     ..aOS(2, _omitFieldNames ? '' : 'number')
+    ..aOS(3, _omitFieldNames ? '' : 'countryCode')
     ..hasRequiredFields = false
   ;
 
@@ -311,6 +316,15 @@ class Document extends $pb.GeneratedMessage {
   $core.bool hasNumber() => $_has(1);
   @$pb.TagNumber(2)
   void clearNumber() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get countryCode => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set countryCode($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCountryCode() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCountryCode() => clearField(3);
 }
 
 class BankInfo extends $pb.GeneratedMessage {
@@ -399,7 +413,7 @@ enum WrappedValidation_Data {
 
 class WrappedValidation extends $pb.GeneratedMessage {
   factory WrappedValidation({
-    $core.String? hash,
+    HashValidation? hash,
     CustomValidation? custom,
   }) {
     final $result = create();
@@ -422,7 +436,7 @@ class WrappedValidation extends $pb.GeneratedMessage {
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'WrappedValidation', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
     ..oo(0, [1, 2])
-    ..aOS(1, _omitFieldNames ? '' : 'hash')
+    ..aOM<HashValidation>(1, _omitFieldNames ? '' : 'hash', subBuilder: HashValidation.create)
     ..aOM<CustomValidation>(2, _omitFieldNames ? '' : 'custom', subBuilder: CustomValidation.create)
     ..hasRequiredFields = false
   ;
@@ -452,13 +466,15 @@ class WrappedValidation extends $pb.GeneratedMessage {
   void clearData() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
-  $core.String get hash => $_getSZ(0);
+  HashValidation get hash => $_getN(0);
   @$pb.TagNumber(1)
-  set hash($core.String v) { $_setString(0, v); }
+  set hash(HashValidation v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasHash() => $_has(0);
   @$pb.TagNumber(1)
   void clearHash() => clearField(1);
+  @$pb.TagNumber(1)
+  HashValidation ensureHash() => $_ensure(0);
 
   @$pb.TagNumber(2)
   CustomValidation get custom => $_getN(1);
@@ -470,6 +486,70 @@ class WrappedValidation extends $pb.GeneratedMessage {
   void clearCustom() => clearField(2);
   @$pb.TagNumber(2)
   CustomValidation ensureCustom() => $_ensure(1);
+}
+
+class HashValidation extends $pb.GeneratedMessage {
+  factory HashValidation({
+    $core.String? hash,
+    ValidationStatus? status,
+  }) {
+    final $result = create();
+    if (hash != null) {
+      $result.hash = hash;
+    }
+    if (status != null) {
+      $result.status = status;
+    }
+    return $result;
+  }
+  HashValidation._() : super();
+  factory HashValidation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory HashValidation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'HashValidation', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'hash')
+    ..e<ValidationStatus>(2, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: ValidationStatus.VALIDATION_STATUS_UNSPECIFIED, valueOf: ValidationStatus.valueOf, enumValues: ValidationStatus.values)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  HashValidation clone() => HashValidation()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  HashValidation copyWith(void Function(HashValidation) updates) => super.copyWith((message) => updates(message as HashValidation)) as HashValidation;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static HashValidation create() => HashValidation._();
+  HashValidation createEmptyInstance() => create();
+  static $pb.PbList<HashValidation> createRepeated() => $pb.PbList<HashValidation>();
+  @$core.pragma('dart2js:noInline')
+  static HashValidation getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<HashValidation>(create);
+  static HashValidation? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get hash => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set hash($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasHash() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearHash() => clearField(1);
+
+  @$pb.TagNumber(2)
+  ValidationStatus get status => $_getN(1);
+  @$pb.TagNumber(2)
+  set status(ValidationStatus v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasStatus() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearStatus() => clearField(2);
 }
 
 class CustomValidation extends $pb.GeneratedMessage {
