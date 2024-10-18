@@ -47,27 +47,43 @@ Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
 _$EmailImpl _$$EmailImplFromJson(Map<String, dynamic> json) => _$EmailImpl(
       value: json['value'] as String,
       id: json['id'] as String? ?? '',
-      verified: json['verified'] as bool?,
+      status: _$JsonConverterFromJson<String, ValidationStatus>(
+          json['status'], const ValidationStatusConverter().fromJson),
     );
 
 Map<String, dynamic> _$$EmailImplToJson(_$EmailImpl instance) =>
     <String, dynamic>{
       'value': instance.value,
       'id': instance.id,
-      'verified': instance.verified,
+      'status': _$JsonConverterToJson<String, ValidationStatus>(
+          instance.status, const ValidationStatusConverter().toJson),
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 _$PhoneImpl _$$PhoneImplFromJson(Map<String, dynamic> json) => _$PhoneImpl(
       value: json['value'] as String,
       id: json['id'] as String? ?? '',
-      verified: json['verified'] as bool?,
+      status: _$JsonConverterFromJson<String, ValidationStatus>(
+          json['status'], const ValidationStatusConverter().fromJson),
     );
 
 Map<String, dynamic> _$$PhoneImplToJson(_$PhoneImpl instance) =>
     <String, dynamic>{
       'value': instance.value,
       'id': instance.id,
-      'verified': instance.verified,
+      'status': _$JsonConverterToJson<String, ValidationStatus>(
+          instance.status, const ValidationStatusConverter().toJson),
     };
 
 _$SelfieImpl _$$SelfieImplFromJson(Map<String, dynamic> json) => _$SelfieImpl(
@@ -75,21 +91,24 @@ _$SelfieImpl _$$SelfieImplFromJson(Map<String, dynamic> json) => _$SelfieImpl(
           .map((e) => (e as num).toInt())
           .toList(),
       id: json['id'] as String? ?? '',
-      verified: json['verified'] as bool?,
+      status: _$JsonConverterFromJson<String, ValidationStatus>(
+          json['status'], const ValidationStatusConverter().fromJson),
     );
 
 Map<String, dynamic> _$$SelfieImplToJson(_$SelfieImpl instance) =>
     <String, dynamic>{
       'value': instance.value,
       'id': instance.id,
-      'verified': instance.verified,
+      'status': _$JsonConverterToJson<String, ValidationStatus>(
+          instance.status, const ValidationStatusConverter().toJson),
     };
 
 _$NameImpl _$$NameImplFromJson(Map<String, dynamic> json) => _$NameImpl(
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
       id: json['id'] as String? ?? '',
-      verified: json['verified'] as bool?,
+      status: _$JsonConverterFromJson<String, ValidationStatus>(
+          json['status'], const ValidationStatusConverter().fromJson),
     );
 
 Map<String, dynamic> _$$NameImplToJson(_$NameImpl instance) =>
@@ -97,21 +116,24 @@ Map<String, dynamic> _$$NameImplToJson(_$NameImpl instance) =>
       'firstName': instance.firstName,
       'lastName': instance.lastName,
       'id': instance.id,
-      'verified': instance.verified,
+      'status': _$JsonConverterToJson<String, ValidationStatus>(
+          instance.status, const ValidationStatusConverter().toJson),
     };
 
 _$BirthDateImpl _$$BirthDateImplFromJson(Map<String, dynamic> json) =>
     _$BirthDateImpl(
       value: DateTime.parse(json['value'] as String),
       id: json['id'] as String? ?? '',
-      verified: json['verified'] as bool?,
+      status: _$JsonConverterFromJson<String, ValidationStatus>(
+          json['status'], const ValidationStatusConverter().fromJson),
     );
 
 Map<String, dynamic> _$$BirthDateImplToJson(_$BirthDateImpl instance) =>
     <String, dynamic>{
       'value': instance.value.toIso8601String(),
       'id': instance.id,
-      'verified': instance.verified,
+      'status': _$JsonConverterToJson<String, ValidationStatus>(
+          instance.status, const ValidationStatusConverter().toJson),
     };
 
 _$DocumentImpl _$$DocumentImplFromJson(Map<String, dynamic> json) =>
@@ -120,7 +142,8 @@ _$DocumentImpl _$$DocumentImplFromJson(Map<String, dynamic> json) =>
       number: json['number'] as String,
       countryCode: json['countryCode'] as String,
       id: json['id'] as String? ?? '',
-      verified: json['verified'] as bool?,
+      status: _$JsonConverterFromJson<String, ValidationStatus>(
+          json['status'], const ValidationStatusConverter().fromJson),
     );
 
 Map<String, dynamic> _$$DocumentImplToJson(_$DocumentImpl instance) =>
@@ -129,7 +152,8 @@ Map<String, dynamic> _$$DocumentImplToJson(_$DocumentImpl instance) =>
       'number': instance.number,
       'countryCode': instance.countryCode,
       'id': instance.id,
-      'verified': instance.verified,
+      'status': _$JsonConverterToJson<String, ValidationStatus>(
+          instance.status, const ValidationStatusConverter().toJson),
     };
 
 const _$IdTypeEnumMap = {
@@ -145,7 +169,8 @@ _$BankInfoImpl _$$BankInfoImplFromJson(Map<String, dynamic> json) =>
       bankCode: json['bankCode'] as String,
       accountNumber: json['accountNumber'] as String,
       id: json['id'] as String? ?? '',
-      verified: json['verified'] as bool?,
+      status: _$JsonConverterFromJson<String, ValidationStatus>(
+          json['status'], const ValidationStatusConverter().fromJson),
     );
 
 Map<String, dynamic> _$$BankInfoImplToJson(_$BankInfoImpl instance) =>
@@ -154,5 +179,6 @@ Map<String, dynamic> _$$BankInfoImplToJson(_$BankInfoImpl instance) =>
       'bankCode': instance.bankCode,
       'accountNumber': instance.accountNumber,
       'id': instance.id,
-      'verified': instance.verified,
+      'status': _$JsonConverterToJson<String, ValidationStatus>(
+          instance.status, const ValidationStatusConverter().toJson),
     };
