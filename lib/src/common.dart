@@ -5,12 +5,11 @@ import 'package:convert/convert.dart';
 import 'package:kyc_client_dart/src/api/export.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/models/export.dart';
+import 'package:kyc_client_dart/src/models/validation_status.dart';
 import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
-
-import 'models/validation_status.dart';
 
 export 'models/order_id.dart';
 export 'models/validation_result.dart';
