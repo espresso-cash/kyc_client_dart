@@ -47,7 +47,8 @@ Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
 _$EmailImpl _$$EmailImplFromJson(Map<String, dynamic> json) => _$EmailImpl(
       value: json['value'] as String,
       id: json['id'] as String? ?? '',
-      status: $enumDecode(_$ValidationStatusEnumMap, json['status']),
+      status: $enumDecodeNullable(_$ValidationStatusEnumMap, json['status']) ??
+          ValidationStatus.unspecified,
     );
 
 Map<String, dynamic> _$$EmailImplToJson(_$EmailImpl instance) =>
@@ -68,7 +69,8 @@ const _$ValidationStatusEnumMap = {
 _$PhoneImpl _$$PhoneImplFromJson(Map<String, dynamic> json) => _$PhoneImpl(
       value: json['value'] as String,
       id: json['id'] as String? ?? '',
-      status: $enumDecode(_$ValidationStatusEnumMap, json['status']),
+      status: $enumDecodeNullable(_$ValidationStatusEnumMap, json['status']) ??
+          ValidationStatus.unspecified,
     );
 
 Map<String, dynamic> _$$PhoneImplToJson(_$PhoneImpl instance) =>
@@ -83,7 +85,8 @@ _$SelfieImpl _$$SelfieImplFromJson(Map<String, dynamic> json) => _$SelfieImpl(
           .map((e) => (e as num).toInt())
           .toList(),
       id: json['id'] as String? ?? '',
-      status: $enumDecode(_$ValidationStatusEnumMap, json['status']),
+      status: $enumDecodeNullable(_$ValidationStatusEnumMap, json['status']) ??
+          ValidationStatus.unspecified,
     );
 
 Map<String, dynamic> _$$SelfieImplToJson(_$SelfieImpl instance) =>
@@ -97,7 +100,8 @@ _$NameImpl _$$NameImplFromJson(Map<String, dynamic> json) => _$NameImpl(
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
       id: json['id'] as String? ?? '',
-      status: $enumDecode(_$ValidationStatusEnumMap, json['status']),
+      status: $enumDecodeNullable(_$ValidationStatusEnumMap, json['status']) ??
+          ValidationStatus.unspecified,
     );
 
 Map<String, dynamic> _$$NameImplToJson(_$NameImpl instance) =>
@@ -112,7 +116,8 @@ _$BirthDateImpl _$$BirthDateImplFromJson(Map<String, dynamic> json) =>
     _$BirthDateImpl(
       value: DateTime.parse(json['value'] as String),
       id: json['id'] as String? ?? '',
-      status: $enumDecode(_$ValidationStatusEnumMap, json['status']),
+      status: $enumDecodeNullable(_$ValidationStatusEnumMap, json['status']) ??
+          ValidationStatus.unspecified,
     );
 
 Map<String, dynamic> _$$BirthDateImplToJson(_$BirthDateImpl instance) =>
@@ -128,7 +133,8 @@ _$DocumentImpl _$$DocumentImplFromJson(Map<String, dynamic> json) =>
       number: json['number'] as String,
       countryCode: json['countryCode'] as String,
       id: json['id'] as String? ?? '',
-      status: $enumDecode(_$ValidationStatusEnumMap, json['status']),
+      status: $enumDecodeNullable(_$ValidationStatusEnumMap, json['status']) ??
+          ValidationStatus.unspecified,
     );
 
 Map<String, dynamic> _$$DocumentImplToJson(_$DocumentImpl instance) =>
@@ -153,7 +159,8 @@ _$BankInfoImpl _$$BankInfoImplFromJson(Map<String, dynamic> json) =>
       bankCode: json['bankCode'] as String,
       accountNumber: json['accountNumber'] as String,
       id: json['id'] as String? ?? '',
-      status: $enumDecodeNullable(_$ValidationStatusEnumMap, json['status']),
+      status: $enumDecodeNullable(_$ValidationStatusEnumMap, json['status']) ??
+          ValidationStatus.unspecified,
     );
 
 Map<String, dynamic> _$$BankInfoImplToJson(_$BankInfoImpl instance) =>
@@ -162,5 +169,5 @@ Map<String, dynamic> _$$BankInfoImplToJson(_$BankInfoImpl instance) =>
       'bankCode': instance.bankCode,
       'accountNumber': instance.accountNumber,
       'id': instance.id,
-      'status': _$ValidationStatusEnumMap[instance.status],
+      'status': _$ValidationStatusEnumMap[instance.status]!,
     };

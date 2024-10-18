@@ -497,7 +497,10 @@ class __$$EmailImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$EmailImpl implements _Email {
-  const _$EmailImpl({required this.value, this.id = '', required this.status});
+  const _$EmailImpl(
+      {required this.value,
+      this.id = '',
+      this.status = ValidationStatus.unspecified});
 
   factory _$EmailImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmailImplFromJson(json);
@@ -508,6 +511,7 @@ class _$EmailImpl implements _Email {
   @JsonKey()
   final String id;
   @override
+  @JsonKey()
   final ValidationStatus status;
 
   @override
@@ -549,7 +553,7 @@ abstract class _Email implements Email {
   const factory _Email(
       {required final String value,
       final String id,
-      required final ValidationStatus status}) = _$EmailImpl;
+      final ValidationStatus status}) = _$EmailImpl;
 
   factory _Email.fromJson(Map<String, dynamic> json) = _$EmailImpl.fromJson;
 
@@ -678,7 +682,10 @@ class __$$PhoneImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$PhoneImpl implements _Phone {
-  const _$PhoneImpl({required this.value, this.id = '', required this.status});
+  const _$PhoneImpl(
+      {required this.value,
+      this.id = '',
+      this.status = ValidationStatus.unspecified});
 
   factory _$PhoneImpl.fromJson(Map<String, dynamic> json) =>
       _$$PhoneImplFromJson(json);
@@ -689,6 +696,7 @@ class _$PhoneImpl implements _Phone {
   @JsonKey()
   final String id;
   @override
+  @JsonKey()
   final ValidationStatus status;
 
   @override
@@ -730,7 +738,7 @@ abstract class _Phone implements Phone {
   const factory _Phone(
       {required final String value,
       final String id,
-      required final ValidationStatus status}) = _$PhoneImpl;
+      final ValidationStatus status}) = _$PhoneImpl;
 
   factory _Phone.fromJson(Map<String, dynamic> json) = _$PhoneImpl.fromJson;
 
@@ -860,7 +868,9 @@ class __$$SelfieImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SelfieImpl implements _Selfie {
   const _$SelfieImpl(
-      {required final List<int> value, this.id = '', required this.status})
+      {required final List<int> value,
+      this.id = '',
+      this.status = ValidationStatus.unspecified})
       : _value = value;
 
   factory _$SelfieImpl.fromJson(Map<String, dynamic> json) =>
@@ -878,6 +888,7 @@ class _$SelfieImpl implements _Selfie {
   @JsonKey()
   final String id;
   @override
+  @JsonKey()
   final ValidationStatus status;
 
   @override
@@ -920,7 +931,7 @@ abstract class _Selfie implements Selfie {
   const factory _Selfie(
       {required final List<int> value,
       final String id,
-      required final ValidationStatus status}) = _$SelfieImpl;
+      final ValidationStatus status}) = _$SelfieImpl;
 
   factory _Selfie.fromJson(Map<String, dynamic> json) = _$SelfieImpl.fromJson;
 
@@ -1065,7 +1076,7 @@ class _$NameImpl implements _Name {
       {required this.firstName,
       required this.lastName,
       this.id = '',
-      required this.status});
+      this.status = ValidationStatus.unspecified});
 
   factory _$NameImpl.fromJson(Map<String, dynamic> json) =>
       _$$NameImplFromJson(json);
@@ -1078,6 +1089,7 @@ class _$NameImpl implements _Name {
   @JsonKey()
   final String id;
   @override
+  @JsonKey()
   final ValidationStatus status;
 
   @override
@@ -1123,7 +1135,7 @@ abstract class _Name implements Name {
       {required final String firstName,
       required final String lastName,
       final String id,
-      required final ValidationStatus status}) = _$NameImpl;
+      final ValidationStatus status}) = _$NameImpl;
 
   factory _Name.fromJson(Map<String, dynamic> json) = _$NameImpl.fromJson;
 
@@ -1257,7 +1269,9 @@ class __$$BirthDateImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$BirthDateImpl implements _BirthDate {
   const _$BirthDateImpl(
-      {required this.value, this.id = '', required this.status});
+      {required this.value,
+      this.id = '',
+      this.status = ValidationStatus.unspecified});
 
   factory _$BirthDateImpl.fromJson(Map<String, dynamic> json) =>
       _$$BirthDateImplFromJson(json);
@@ -1268,6 +1282,7 @@ class _$BirthDateImpl implements _BirthDate {
   @JsonKey()
   final String id;
   @override
+  @JsonKey()
   final ValidationStatus status;
 
   @override
@@ -1309,7 +1324,7 @@ abstract class _BirthDate implements BirthDate {
   const factory _BirthDate(
       {required final DateTime value,
       final String id,
-      required final ValidationStatus status}) = _$BirthDateImpl;
+      final ValidationStatus status}) = _$BirthDateImpl;
 
   factory _BirthDate.fromJson(Map<String, dynamic> json) =
       _$BirthDateImpl.fromJson;
@@ -1478,7 +1493,7 @@ class _$DocumentImpl implements _Document {
       required this.number,
       required this.countryCode,
       this.id = '',
-      required this.status});
+      this.status = ValidationStatus.unspecified});
 
   factory _$DocumentImpl.fromJson(Map<String, dynamic> json) =>
       _$$DocumentImplFromJson(json);
@@ -1493,6 +1508,7 @@ class _$DocumentImpl implements _Document {
   @JsonKey()
   final String id;
   @override
+  @JsonKey()
   final ValidationStatus status;
 
   @override
@@ -1540,7 +1556,7 @@ abstract class _Document implements Document {
       required final String number,
       required final String countryCode,
       final String id,
-      required final ValidationStatus status}) = _$DocumentImpl;
+      final ValidationStatus status}) = _$DocumentImpl;
 
   factory _Document.fromJson(Map<String, dynamic> json) =
       _$DocumentImpl.fromJson;
@@ -1574,7 +1590,7 @@ mixin _$BankInfo {
   String get bankCode => throw _privateConstructorUsedError;
   String get accountNumber => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  ValidationStatus? get status => throw _privateConstructorUsedError;
+  ValidationStatus get status => throw _privateConstructorUsedError;
 
   /// Serializes this BankInfo to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1596,7 +1612,7 @@ abstract class $BankInfoCopyWith<$Res> {
       String bankCode,
       String accountNumber,
       String id,
-      ValidationStatus? status});
+      ValidationStatus status});
 }
 
 /// @nodoc
@@ -1618,7 +1634,7 @@ class _$BankInfoCopyWithImpl<$Res, $Val extends BankInfo>
     Object? bankCode = null,
     Object? accountNumber = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       bankName: null == bankName
@@ -1637,10 +1653,10 @@ class _$BankInfoCopyWithImpl<$Res, $Val extends BankInfo>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ) as $Val);
   }
 }
@@ -1658,7 +1674,7 @@ abstract class _$$BankInfoImplCopyWith<$Res>
       String bankCode,
       String accountNumber,
       String id,
-      ValidationStatus? status});
+      ValidationStatus status});
 }
 
 /// @nodoc
@@ -1678,7 +1694,7 @@ class __$$BankInfoImplCopyWithImpl<$Res>
     Object? bankCode = null,
     Object? accountNumber = null,
     Object? id = null,
-    Object? status = freezed,
+    Object? status = null,
   }) {
     return _then(_$BankInfoImpl(
       bankName: null == bankName
@@ -1697,10 +1713,10 @@ class __$$BankInfoImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ValidationStatus?,
+              as ValidationStatus,
     ));
   }
 }
@@ -1713,7 +1729,7 @@ class _$BankInfoImpl implements _BankInfo {
       required this.bankCode,
       required this.accountNumber,
       this.id = '',
-      required this.status});
+      this.status = ValidationStatus.unspecified});
 
   factory _$BankInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$BankInfoImplFromJson(json);
@@ -1728,7 +1744,8 @@ class _$BankInfoImpl implements _BankInfo {
   @JsonKey()
   final String id;
   @override
-  final ValidationStatus? status;
+  @JsonKey()
+  final ValidationStatus status;
 
   @override
   String toString() {
@@ -1777,7 +1794,7 @@ abstract class _BankInfo implements BankInfo {
       required final String bankCode,
       required final String accountNumber,
       final String id,
-      required final ValidationStatus? status}) = _$BankInfoImpl;
+      final ValidationStatus status}) = _$BankInfoImpl;
 
   factory _BankInfo.fromJson(Map<String, dynamic> json) =
       _$BankInfoImpl.fromJson;
@@ -1791,7 +1808,7 @@ abstract class _BankInfo implements BankInfo {
   @override
   String get id;
   @override
-  ValidationStatus? get status;
+  ValidationStatus get status;
 
   /// Create a copy of BankInfo
   /// with the given fields replaced by the non-null parameter values.
