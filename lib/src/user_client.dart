@@ -273,8 +273,20 @@ class KycUserClient {
         secretKey: secretKey,
       );
 
-  Future<void> initDocumentValidation() async {
-    await _validatorClient.validatorServiceInitDocumentValidation();
+  Future<void> initDocumentValidation({
+    required String nameId,
+    required String birthDateId,
+    required String documentId,
+    required String selfieImageId,
+  }) async {
+    await _validatorClient.validatorServiceInitDocumentValidation(
+      body: V1InitDocumentValidationRequest(
+        name: nameId,
+        birthDate: birthDateId,
+        document: documentId,
+        selfieImage: selfieImageId,
+      ),
+    );
   }
 
   Future<void> initEmailValidation({required String dataId}) async {

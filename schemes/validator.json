@@ -207,7 +207,21 @@
       }
     },
     "v1InitDocumentValidationRequest": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        },
+        "birthDate": {
+          "type": "string"
+        },
+        "selfieImage": {
+          "type": "string"
+        }
+      }
     },
     "v1InitDocumentValidationResponse": {
       "type": "object"

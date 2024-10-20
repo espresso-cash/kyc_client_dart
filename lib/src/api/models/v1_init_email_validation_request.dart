@@ -12,7 +12,6 @@ class V1InitEmailValidationRequest with _$V1InitEmailValidationRequest {
   const factory V1InitEmailValidationRequest({
     required String dataId,
   }) = _V1InitEmailValidationRequest;
-
-  factory V1InitEmailValidationRequest.fromJson(Map<String, Object?> json) =>
-      _$V1InitEmailValidationRequestFromJson(json);
+  
+  factory V1InitEmailValidationRequest.fromJson(Map<String, Object?> json) => _$V1InitEmailValidationRequestFromJson(json);
 }

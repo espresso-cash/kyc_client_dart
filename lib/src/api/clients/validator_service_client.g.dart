@@ -22,11 +22,13 @@ class _ValidatorServiceClient implements ValidatorServiceClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<dynamic> validatorServiceInitDocumentValidation() async {
+  Future<dynamic> validatorServiceInitDocumentValidation(
+      {required V1InitDocumentValidationRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
     final _options = _setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,

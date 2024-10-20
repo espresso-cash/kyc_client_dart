@@ -20,12 +20,12 @@ part 'validator_service_client.g.dart';
 
 @RestApi()
 abstract class ValidatorServiceClient {
-  factory ValidatorServiceClient(Dio dio, {String? baseUrl}) =
-      _ValidatorServiceClient;
+  factory ValidatorServiceClient(Dio dio, {String? baseUrl}) = _ValidatorServiceClient;
 
   @POST('/v1/initDocumentValidation')
-  Future<V1InitDocumentValidationResponse>
-      validatorServiceInitDocumentValidation();
+  Future<V1InitDocumentValidationResponse> validatorServiceInitDocumentValidation({
+    @Body() required V1InitDocumentValidationRequest body,
+  });
 
   @POST('/v1/initEmailValidation')
   Future<V1InitEmailValidationResponse> validatorServiceInitEmailValidation({
