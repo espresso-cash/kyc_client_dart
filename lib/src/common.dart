@@ -4,8 +4,8 @@ import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
 import 'package:kyc_client_dart/src/api/export.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
+import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
 import 'package:kyc_client_dart/src/models/export.dart';
-import 'package:kyc_client_dart/src/models/validation_status.dart';
 import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
@@ -18,9 +18,14 @@ const defaultKycBaseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/';
 const defaultValidatorBaseUrl = 'https://validator.espressocash.com/';
 
 String generateHash(proto.WrappedData data) {
-  final bytes = data.writeToBuffer();
+  // Normalize Dart timestamp serialization to avoid nanos
+  if (data.whichData() == proto.WrappedData_Data.birthDate) {
+    data.birthDate = Timestamp()..seconds = data.birthDate.seconds;
+  }
 
+  final bytes = data.writeToBuffer();
   final digest = Hash.sha256(bytes);
+
   return hex.encode(digest);
 }
 
