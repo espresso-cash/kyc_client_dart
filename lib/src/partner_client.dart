@@ -121,7 +121,9 @@ class KycPartnerClient {
       HashValidationResult() => WrappedValidation(
           hash: HashValidation(
             status: value.status,
-            hash: generateHash(value.value),
+            // TODO
+            hash: '',
+            // hash: generateHash(value.value),
           ),
         ),
       CustomValidationResult() => WrappedValidation(

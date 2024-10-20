@@ -17,8 +17,9 @@ export 'models/validation_result.dart';
 const defaultKycBaseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/';
 const defaultValidatorBaseUrl = 'https://validator.espressocash.com/';
 
-String generateHash(String value) {
-  final bytes = utf8.encode(value);
+String generateHash(proto.WrappedData data) {
+  final bytes = data.writeToBuffer();
+
   final digest = Hash.sha256(bytes);
   return hex.encode(digest);
 }
@@ -125,8 +126,9 @@ Future<UserData> processUserData({
 
     ValidationStatus status = ValidationStatus.unspecified;
     if (verificationData != null) {
-      final hash = generateHash(utf8.decode(wrappedData.writeToBuffer()));
+      final hash = generateHash(wrappedData);
       final bool hashMatching = hash == verificationData.value;
+
       status = hashMatching
           ? verificationData.status.toValidationStatus()
           : ValidationStatus.unverified;
