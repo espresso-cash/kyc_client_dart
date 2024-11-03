@@ -4,8 +4,23 @@ import 'package:bs58/bs58.dart';
 import 'package:cryptography/cryptography.dart' hide PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
-import 'package:kyc_client_dart/src/api/export.dart';
+import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
+import 'package:kyc_client_dart/src/api/clients/order_service_client.dart';
+import 'package:kyc_client_dart/src/api/clients/validator_service_client.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
+import 'package:kyc_client_dart/src/api/models/v1_create_off_ramp_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_create_on_ramp_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_info_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_partner_info_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_grant_access_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_init_document_validation_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_init_email_validation_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_init_phone_validation_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_init_storage_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_set_user_data_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_validate_email_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_validate_phone_request.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
 import 'package:kyc_client_dart/src/common.dart';
@@ -21,10 +36,12 @@ class KycUserClient {
     required this.sign,
     this.kycBaseUrl = defaultKycBaseUrl,
     this.validatorBaseUrl = defaultValidatorBaseUrl,
+    this.orderBaseUrl = defaultOrderBaseUrl,
   });
 
   final String? kycBaseUrl;
   final String? validatorBaseUrl;
+  final String? orderBaseUrl;
   final SignRequest sign;
 
   static const _seedMessage = 'hello';
@@ -41,6 +58,7 @@ class KycUserClient {
 
   late final KycServiceClient _kycClient;
   late final ValidatorServiceClient _validatorClient;
+  late final OrderServiceClient _orderClient;
 
   String get authPublicKey => _authPublicKey;
 
@@ -51,6 +69,7 @@ class KycUserClient {
     await _initializeKeys(seed);
     await _initializeKycClient();
     await _initializeValidatorClient();
+    await _initializeOrderClient();
 
     try {
       final getInfo = await _kycClient.kycServiceGetInfo(
@@ -92,6 +111,11 @@ class KycUserClient {
   Future<void> _initializeValidatorClient() async {
     final dio = await _createAuthenticatedClient('validator.espressocash.com');
     _validatorClient = ValidatorServiceClient(dio, baseUrl: validatorBaseUrl);
+  }
+
+  Future<void> _initializeOrderClient() async {
+    final dio = await _createAuthenticatedClient('orders.espressocash.com');
+    _orderClient = OrderServiceClient(dio, baseUrl: orderBaseUrl);
   }
 
   Future<Dio> _createAuthenticatedClient(String audience) async {
@@ -326,7 +350,7 @@ class KycUserClient {
     required String fiatAmount,
     required String fiatCurrency,
   }) async {
-    final response = await _kycClient.kycServiceCreateOnRampOrder(
+    final response = await _orderClient.orderServiceCreateOnRampOrder(
       body: V1CreateOnRampOrderRequest(
         partnerPublicKey: partnerPK,
         cryptoAmount: cryptoAmount,
@@ -348,7 +372,7 @@ class KycUserClient {
     required String bankName,
     required String bankAccount,
   }) async {
-    final response = await _kycClient.kycServiceCreateOffRampOrder(
+    final response = await _orderClient.orderServiceCreateOffRampOrder(
       body: V1CreateOffRampOrderRequest(
         partnerPublicKey: partnerPK,
         cryptoAmount: cryptoAmount,
@@ -366,7 +390,7 @@ class KycUserClient {
   Future<Order> getOrder({
     required OrderId orderId,
   }) async {
-    final response = await _kycClient.kycServiceGetOrder(
+    final response = await _orderClient.orderServiceGetOrder(
       body: V1GetOrderRequest(
         orderId: orderId.orderId,
         externalId: orderId.externalId,
@@ -377,7 +401,7 @@ class KycUserClient {
   }
 
   Future<List<Order>> getOrders() async {
-    final response = await _kycClient.kycServiceGetOrders();
+    final response = await _orderClient.orderServiceGetOrders();
 
     return response.orders.map(Order.fromV1GetOrderResponse).toList();
   }
