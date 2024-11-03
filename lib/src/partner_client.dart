@@ -5,8 +5,16 @@ import 'package:cryptography/cryptography.dart' hide Hash, PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
 import 'package:kyc_client_dart/kyc_client_dart.dart';
-import 'package:kyc_client_dart/src/api/export.dart';
+import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
+import 'package:kyc_client_dart/src/api/clients/order_service_client.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
+import 'package:kyc_client_dart/src/api/models/v1_accept_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_complete_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_fail_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_info_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_reject_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_set_validation_data_request.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
 import 'package:kyc_client_dart/src/common.dart';
 import 'package:pinenacl/ed25519.dart';
@@ -17,16 +25,18 @@ import 'package:uuid/uuid.dart';
 class KycPartnerClient {
   KycPartnerClient({
     required this.authKeyPair,
-    this.baseUrl = defaultKycBaseUrl,
+    this.kycBaseUrl = defaultKycBaseUrl,
+    this.orderBaseUrl = defaultOrderBaseUrl,
   });
 
   final SimpleKeyPair authKeyPair;
-  final String? baseUrl;
+  final String? kycBaseUrl;
+  final String? orderBaseUrl;
 
   late String _authPublicKey;
 
-  late String _token;
   late KycServiceClient _kycClient;
+  late OrderServiceClient _orderClient;
 
   late SigningKey _signingKey;
 
@@ -50,11 +60,29 @@ class KycPartnerClient {
         .then((value) => Uint8List.fromList(value.bytes))
         .then(base58.encode);
 
-    final partnerTokenData = jwt.JWT(
-      <String, dynamic>{'iss': _authPublicKey, 'aud': 'kyc.espressocash.com'},
+    await _initializeKycClient();
+    await _initializeOrderClient();
+  }
+
+  Future<void> _initializeKycClient() async {
+    final dio = await _createAuthenticatedClient('kyc.espressocash.com');
+    _kycClient = KycServiceClient(dio, baseUrl: kycBaseUrl);
+  }
+
+  Future<void> _initializeOrderClient() async {
+    final dio = await _createAuthenticatedClient('orders.espressocash.com');
+    _orderClient = OrderServiceClient(dio, baseUrl: orderBaseUrl);
+  }
+
+  Future<Dio> _createAuthenticatedClient(String audience) async {
+    final payload = jwt.JWT(
+      <String, dynamic>{
+        'iss': _authPublicKey,
+        'aud': audience,
+      },
     );
 
-    _token = partnerTokenData.sign(
+    final token = payload.sign(
       jwt.EdDSAPrivateKey(
         await authKeyPair.extractPrivateKeyBytes() +
             base58.decode(_authPublicKey),
@@ -62,8 +90,7 @@ class KycPartnerClient {
       algorithm: jwt.JWTAlgorithm.EdDSA,
     );
 
-    final dio = Dio()..interceptors.add(AuthInterceptor(_token));
-    _kycClient = KycServiceClient(dio, baseUrl: baseUrl);
+    return Dio()..interceptors.add(AuthInterceptor(token));
   }
 
   Future<String> getUserSecretKey(String userPK) async {
@@ -153,7 +180,7 @@ class KycPartnerClient {
   Future<Order> getOrder({
     required OrderId orderId,
   }) async {
-    final response = await _kycClient.kycServiceGetOrder(
+    final response = await _orderClient.orderServiceGetOrder(
       body: V1GetOrderRequest(
         orderId: orderId.orderId,
         externalId: orderId.externalId,
@@ -164,7 +191,7 @@ class KycPartnerClient {
   }
 
   Future<List<Order>> getPartnerOrders() async {
-    final response = await _kycClient.kycServiceGetPartnerOrders();
+    final response = await _orderClient.orderServiceGetPartnerOrders();
 
     return response.orders.map(Order.fromV1GetOrderResponse).toList();
   }
@@ -174,7 +201,7 @@ class KycPartnerClient {
     required String bankName,
     required String bankAccount,
   }) async =>
-      _kycClient.kycServiceAcceptOrder(
+      _orderClient.orderServiceAcceptOrder(
         body: V1AcceptOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -188,7 +215,7 @@ class KycPartnerClient {
     required OrderId orderId,
     required String cryptoWalletAddress,
   }) async =>
-      _kycClient.kycServiceAcceptOrder(
+      _orderClient.orderServiceAcceptOrder(
         body: V1AcceptOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -202,7 +229,7 @@ class KycPartnerClient {
     required OrderId orderId,
     required String transactionId,
   }) async =>
-      _kycClient.kycServiceCompleteOrder(
+      _orderClient.orderServiceCompleteOrder(
         body: V1CompleteOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -213,7 +240,7 @@ class KycPartnerClient {
   Future<void> completeOffRampOrder({
     required OrderId orderId,
   }) async =>
-      _kycClient.kycServiceCompleteOrder(
+      _orderClient.orderServiceCompleteOrder(
         body: V1CompleteOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -225,7 +252,7 @@ class KycPartnerClient {
     required OrderId orderId,
     required String reason,
   }) async =>
-      _kycClient.kycServiceFailOrder(
+      _orderClient.orderServiceFailOrder(
         body: V1FailOrderRequest(
           orderId: orderId.orderId,
           externalId: orderId.externalId,
@@ -237,7 +264,7 @@ class KycPartnerClient {
     required String orderId,
     required String reason,
   }) async =>
-      _kycClient.kycServiceRejectOrder(
+      _orderClient.orderServiceRejectOrder(
         body: V1RejectOrderRequest(orderId: orderId, reason: reason),
       );
 }

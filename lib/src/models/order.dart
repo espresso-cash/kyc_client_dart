@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:kyc_client_dart/src/api/export.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_order_response.dart';
 
 part 'order.freezed.dart';
 part 'order.g.dart';

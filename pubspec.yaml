@@ -37,9 +37,18 @@ swagger_parser:
       root_client: false
       put_in_folder: true
       put_clients_in_folder: true
-
+      export_file: false
+      
     - schema_path: schemes/kyc.json
       json_serializer: freezed
       root_client: false
       put_in_folder: true
       put_clients_in_folder: true
+      export_file: false
+
+    - schema_path: schemes/order.json
+      json_serializer: freezed
+      root_client: false
+      put_in_folder: true
+      put_clients_in_folder: true
+      export_file: false

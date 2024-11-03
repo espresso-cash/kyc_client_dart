@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'kyc_service_client.dart';
+part of 'order_service_client.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'kyc_service_client.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
-class _KycServiceClient implements KycServiceClient {
-  _KycServiceClient(
+class _OrderServiceClient implements OrderServiceClient {
+  _OrderServiceClient(
     this._dio, {
     this.baseUrl,
     this.errorLogger,
@@ -22,113 +22,8 @@ class _KycServiceClient implements KycServiceClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<V1GetInfoResponse> kycServiceGetInfo(
-      {required V1GetInfoRequest body}) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body.toJson());
-    final _options = _setStreamType<V1GetInfoResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/v1/getInfo',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late V1GetInfoResponse _value;
-    try {
-      _value = V1GetInfoResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<V1GetPartnerInfoResponse> kycServiceGetPartnerInfo(
-      {required V1GetPartnerInfoRequest body}) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body.toJson());
-    final _options = _setStreamType<V1GetPartnerInfoResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/v1/getPartnerInfo',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late V1GetPartnerInfoResponse _value;
-    try {
-      _value = V1GetPartnerInfoResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<V1GetUserDataResponse> kycServiceGetUserData(
-      {required V1GetUserDataRequest body}) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body.toJson());
-    final _options = _setStreamType<V1GetUserDataResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/v1/getUserData',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late V1GetUserDataResponse _value;
-    try {
-      _value = V1GetUserDataResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<dynamic> kycServiceGrantAccess(
-      {required V1GrantAccessRequest body}) async {
+  Future<dynamic> orderServiceAcceptOrder(
+      {required V1AcceptOrderRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -141,7 +36,7 @@ class _KycServiceClient implements KycServiceClient {
     )
         .compose(
           _dio.options,
-          '/v1/grantAccess',
+          '/v1/acceptOrder',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -156,8 +51,8 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<dynamic> kycServiceInitStorage(
-      {required V1InitStorageRequest body}) async {
+  Future<dynamic> orderServiceCompleteOrder(
+      {required V1CompleteOrderRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -170,7 +65,7 @@ class _KycServiceClient implements KycServiceClient {
     )
         .compose(
           _dio.options,
-          '/v1/initStorage',
+          '/v1/completeOrder',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -185,8 +80,78 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<dynamic> kycServiceSetUserData(
-      {required V1SetUserDataRequest body}) async {
+  Future<V1CreateOffRampOrderResponse> orderServiceCreateOffRampOrder(
+      {required V1CreateOffRampOrderRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _options = _setStreamType<V1CreateOffRampOrderResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/createOffRampOrder',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late V1CreateOffRampOrderResponse _value;
+    try {
+      _value = V1CreateOffRampOrderResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<V1CreateOnRampOrderResponse> orderServiceCreateOnRampOrder(
+      {required V1CreateOnRampOrderRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _options = _setStreamType<V1CreateOnRampOrderResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/createOnRampOrder',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late V1CreateOnRampOrderResponse _value;
+    try {
+      _value = V1CreateOnRampOrderResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<dynamic> orderServiceFailOrder(
+      {required V1FailOrderRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -199,7 +164,7 @@ class _KycServiceClient implements KycServiceClient {
     )
         .compose(
           _dio.options,
-          '/v1/setUserData',
+          '/v1/failOrder',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -214,8 +179,109 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<dynamic> kycServiceSetValidationData(
-      {required V1SetValidationDataRequest body}) async {
+  Future<V1GetOrderResponse> orderServiceGetOrder(
+      {required V1GetOrderRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _options = _setStreamType<V1GetOrderResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/getOrder',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late V1GetOrderResponse _value;
+    try {
+      _value = V1GetOrderResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<V1GetOrdersResponse> orderServiceGetOrders() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<V1GetOrdersResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/getOrders',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late V1GetOrdersResponse _value;
+    try {
+      _value = V1GetOrdersResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<V1GetPartnerOrdersResponse> orderServiceGetPartnerOrders() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<V1GetPartnerOrdersResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/getPartnerOrders',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late V1GetPartnerOrdersResponse _value;
+    try {
+      _value = V1GetPartnerOrdersResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<dynamic> orderServiceRejectOrder(
+      {required V1RejectOrderRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -228,7 +294,7 @@ class _KycServiceClient implements KycServiceClient {
     )
         .compose(
           _dio.options,
-          '/v1/setValidationData',
+          '/v1/rejectOrder',
           queryParameters: queryParameters,
           data: _data,
         )
