@@ -350,6 +350,15 @@ class KycUserClient {
     required String fiatAmount,
     required String fiatCurrency,
   }) async {
+    final signatureMessage = createUserOnRampMessage(
+      cryptoAmount: cryptoAmount,
+      cryptoCurrency: cryptoCurrency,
+      fiatAmount: fiatAmount,
+      fiatCurrency: fiatCurrency,
+    );
+    final signature = _signingKey.sign(utf8.encode(signatureMessage));
+    print(base58.encode(signature.signature.asTypedList));
+
     final response = await _orderClient.orderServiceCreateOnRampOrder(
       body: V1CreateOnRampOrderRequest(
         partnerPublicKey: partnerPK,
@@ -357,6 +366,7 @@ class KycUserClient {
         cryptoCurrency: cryptoCurrency,
         fiatAmount: fiatAmount,
         fiatCurrency: fiatCurrency,
+        // userSignature: base58.encode(signature.signature.asTypedList),  //TODO
       ),
     );
 
@@ -386,6 +396,18 @@ class KycUserClient {
       ),
     );
 
+    final signatureMessage = createUserOffRampMessage(
+      cryptoAmount: cryptoAmount,
+      cryptoCurrency: cryptoCurrency,
+      fiatAmount: fiatAmount,
+      fiatCurrency: fiatCurrency,
+      bankName: bankName,
+      bankAccount: bankAccount,
+    );
+    final signature = _signingKey.sign(utf8.encode(signatureMessage));
+
+    print(base58.encode(signature.signature.asTypedList));
+
     final response = await _orderClient.orderServiceCreateOffRampOrder(
       body: V1CreateOffRampOrderRequest(
         partnerPublicKey: partnerPK,
@@ -395,6 +417,7 @@ class KycUserClient {
         fiatCurrency: fiatCurrency,
         bankName: encryptedBankName,
         bankAccount: encryptedBankAccount,
+        // userSignature: base58.encode(signature.signature.asTypedList),  //TODO
       ),
     );
 

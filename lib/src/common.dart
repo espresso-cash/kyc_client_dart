@@ -283,6 +283,61 @@ Order processOrderData({
     );
   }
 
+  if (order.userSignature != null && order.userSignature!.isNotEmpty) {
+    final verifyKey =
+        VerifyKey(Uint8List.fromList(base58.decode(order.userPublicKey)));
+    final userMessage = order.type == 'ON_RAMP'
+        ? createUserOnRampMessage(
+            cryptoAmount: order.cryptoAmount,
+            cryptoCurrency: order.cryptoCurrency,
+            fiatAmount: order.fiatAmount,
+            fiatCurrency: order.fiatCurrency,
+          )
+        : createUserOffRampMessage(
+            cryptoAmount: order.cryptoAmount,
+            cryptoCurrency: order.cryptoCurrency,
+            fiatAmount: order.fiatAmount,
+            fiatCurrency: order.fiatCurrency,
+            bankName: bankName,
+            bankAccount: bankAccount,
+          );
+
+    if (!verifyKey.verify(
+      signature: Signature(base58.decode(order.userSignature!)),
+      message: Uint8List.fromList(utf8.encode(userMessage)),
+    )) {
+      throw Exception('Invalid user signature');
+    }
+  }
+
+  if (order.partnerSignature != null && order.partnerSignature!.isNotEmpty) {
+    final verifyKey =
+        VerifyKey(Uint8List.fromList(base58.decode(order.partnerPublicKey)));
+    final partnerMessage = order.type == 'ON_RAMP'
+        ? createPartnerOnRampMessage(
+            cryptoAmount: order.cryptoAmount,
+            cryptoCurrency: order.cryptoCurrency,
+            fiatAmount: order.fiatAmount,
+            fiatCurrency: order.fiatCurrency,
+            bankName: bankName,
+            bankAccount: bankAccount,
+          )
+        : createPartnerOffRampMessage(
+            cryptoAmount: order.cryptoAmount,
+            cryptoCurrency: order.cryptoCurrency,
+            fiatAmount: order.fiatAmount,
+            fiatCurrency: order.fiatCurrency,
+            cryptoWalletAddress: order.cryptoWalletAddress,
+          );
+
+    if (!verifyKey.verify(
+      signature: Signature(base58.decode(order.partnerSignature!)),
+      message: Uint8List.fromList(utf8.encode(partnerMessage)),
+    )) {
+      throw Exception('Invalid partner signature');
+    }
+  }
+
   return Order.fromV1GetOrderResponse(
     order.copyWith(
       bankName: bankName,
@@ -290,3 +345,40 @@ Order processOrderData({
     ),
   );
 }
+
+String createUserOnRampMessage({
+  required String cryptoAmount,
+  required String cryptoCurrency,
+  required String fiatAmount,
+  required String fiatCurrency,
+}) =>
+    '$cryptoAmount|$cryptoCurrency|$fiatAmount|$fiatCurrency';
+
+String createUserOffRampMessage({
+  required String cryptoAmount,
+  required String cryptoCurrency,
+  required String fiatAmount,
+  required String fiatCurrency,
+  required String bankName,
+  required String bankAccount,
+}) =>
+    '$cryptoAmount|$cryptoCurrency|$fiatAmount|$fiatCurrency|$bankName|$bankAccount';
+
+String createPartnerOnRampMessage({
+  required String cryptoAmount,
+  required String cryptoCurrency,
+  required String fiatAmount,
+  required String fiatCurrency,
+  required String bankName,
+  required String bankAccount,
+}) =>
+    '$cryptoAmount|$cryptoCurrency|$fiatAmount|$fiatCurrency|$bankName|$bankAccount';
+
+String createPartnerOffRampMessage({
+  required String cryptoAmount,
+  required String cryptoCurrency,
+  required String fiatAmount,
+  required String fiatCurrency,
+  required String cryptoWalletAddress,
+}) =>
+    '$cryptoAmount|$cryptoCurrency|$fiatAmount|$fiatCurrency|$cryptoWalletAddress';

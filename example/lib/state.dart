@@ -308,7 +308,7 @@ class PartnerAppState extends ChangeNotifier {
       orderId: OrderId.from(orderId: orderId, externalId: _onRampExternalId),
       bankName: bankName,
       bankAccount: bankAccount,
-      secretKey: secretKey,
+      userSecretKey: secretKey,
     );
   }
 
