@@ -177,9 +177,7 @@ class KycPartnerClient {
     );
   }
 
-  Future<Order> getOrder({
-    required OrderId orderId,
-  }) async {
+  Future<Order> getOrder({required OrderId orderId}) async {
     final response = await _orderClient.orderServiceGetOrder(
       body: V1GetOrderRequest(
         orderId: orderId.orderId,
@@ -187,29 +185,63 @@ class KycPartnerClient {
       ),
     );
 
-    return Order.fromV1GetOrderResponse(response);
+    final secretKey = await getUserSecretKey(response.userPublicKey);
+
+    return processOrderData(
+      order: response,
+      secretKey: secretKey,
+    );
   }
 
   Future<List<Order>> getPartnerOrders() async {
     final response = await _orderClient.orderServiceGetPartnerOrders();
 
-    return response.orders.map(Order.fromV1GetOrderResponse).toList();
+    return Future.wait(
+      response.orders.map(
+        (order) async {
+          final secretKey = await getUserSecretKey(order.userPublicKey);
+
+          return processOrderData(
+            order: order,
+            secretKey: secretKey,
+          );
+        },
+      ),
+    );
   }
 
   Future<void> acceptOnRampOrder({
     required OrderId orderId,
     required String bankName,
     required String bankAccount,
-  }) async =>
-      _orderClient.orderServiceAcceptOrder(
-        body: V1AcceptOrderRequest(
-          orderId: orderId.orderId,
-          externalId: orderId.externalId,
-          bankName: bankName,
-          bankAccount: bankAccount,
-          cryptoWalletAddress: '',
-        ),
-      );
+    required String secretKey,
+  }) async {
+    final secretBox = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
+
+    final encryptedBankName = base64Encode(
+      encryptOnly(
+        data: utf8.encode(bankName),
+        secretBox: secretBox,
+      ),
+    );
+
+    final encryptedBankAccount = base64Encode(
+      encryptOnly(
+        data: utf8.encode(bankAccount),
+        secretBox: secretBox,
+      ),
+    );
+
+    await _orderClient.orderServiceAcceptOrder(
+      body: V1AcceptOrderRequest(
+        orderId: orderId.orderId,
+        externalId: orderId.externalId,
+        bankName: encryptedBankName,
+        bankAccount: encryptedBankAccount,
+        cryptoWalletAddress: '',
+      ),
+    );
+  }
 
   Future<void> acceptOffRampOrder({
     required OrderId orderId,

@@ -300,6 +300,7 @@ class PartnerAppState extends ChangeNotifier {
     required String orderId,
     required String bankName,
     required String bankAccount,
+    required String secretKey,
   }) async {
     _onRampExternalId = const Uuid().v4();
 
@@ -307,6 +308,7 @@ class PartnerAppState extends ChangeNotifier {
       orderId: OrderId.from(orderId: orderId, externalId: _onRampExternalId),
       bankName: bankName,
       bankAccount: bankAccount,
+      secretKey: secretKey,
     );
   }
 

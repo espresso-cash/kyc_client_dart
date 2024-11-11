@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
 import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_order_response.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
@@ -66,6 +67,39 @@ Uint8List verifyAndDecrypt({
   );
 
   return decrypted;
+}
+
+Uint8List encryptOnly({
+  required Uint8List data,
+  required SecretBox secretBox,
+}) {
+  final cipherText = secretBox.encrypt(data);
+
+  return Uint8List.fromList([
+    ...cipherText.nonce,
+    ...cipherText.cipherText,
+  ]);
+}
+
+String decryptOnly({
+  required String encryptedData,
+  required String secretKey,
+}) {
+  try {
+    final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
+    final data = base64Decode(encryptedData);
+
+    final decrypted = box.decrypt(
+      EncryptedMessage(
+        nonce: data.sublist(0, TweetNaCl.nonceLength),
+        cipherText: data.sublist(TweetNaCl.nonceLength),
+      ),
+    );
+
+    return utf8.decode(decrypted);
+  } on Object catch (_) {
+    return encryptedData;
+  }
 }
 
 Future<UserData> processUserData({
@@ -225,5 +259,34 @@ Future<UserData> processUserData({
     bankInfo: bankInfo,
     selfie: selfie,
     custom: custom,
+  );
+}
+
+Order processOrderData({
+  required V1GetOrderResponse order,
+  required String secretKey,
+}) {
+  String bankName = order.bankName;
+  String bankAccount = order.bankAccount;
+
+  if (bankName.isNotEmpty) {
+    bankName = decryptOnly(
+      encryptedData: bankName,
+      secretKey: secretKey,
+    );
+  }
+
+  if (bankAccount.isNotEmpty) {
+    bankAccount = decryptOnly(
+      encryptedData: bankAccount,
+      secretKey: secretKey,
+    );
+  }
+
+  return Order.fromV1GetOrderResponse(
+    order.copyWith(
+      bankName: bankName,
+      bankAccount: bankAccount,
+    ),
   );
 }
