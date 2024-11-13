@@ -244,7 +244,6 @@ class KycPartnerClient {
       bankAccount: bankAccount,
     );
     final signature = _signingKey.sign(utf8.encode(signatureMessage));
-    print(base58.encode(signature.asTypedList));
 
     await _orderClient.orderServiceAcceptOrder(
       body: V1AcceptOrderRequest(
@@ -253,7 +252,7 @@ class KycPartnerClient {
         bankName: encryptedBankName,
         bankAccount: encryptedBankAccount,
         cryptoWalletAddress: '',
-        // partnerSignature: base58.encode(signature.asTypedList),  //TODO
+        partnerSignature: base58.encode(signature.signature.asTypedList),
       ),
     );
   }
@@ -271,7 +270,6 @@ class KycPartnerClient {
       cryptoWalletAddress: cryptoWalletAddress,
     );
     final signature = _signingKey.sign(utf8.encode(signatureMessage));
-    print(base58.encode(signature.asTypedList));
 
     await _orderClient.orderServiceAcceptOrder(
       body: V1AcceptOrderRequest(
@@ -280,7 +278,7 @@ class KycPartnerClient {
         cryptoWalletAddress: cryptoWalletAddress,
         bankName: '',
         bankAccount: '',
-        // partnerSignature: base58.encode(signature.asTypedList), //TODO
+        partnerSignature: base58.encode(signature.signature.asTypedList),
       ),
     );
   }

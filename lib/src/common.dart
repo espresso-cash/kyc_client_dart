@@ -283,7 +283,7 @@ Order processOrderData({
     );
   }
 
-  if (order.userSignature != null && order.userSignature!.isNotEmpty) {
+  if (order.userSignature.isNotEmpty) {
     final verifyKey =
         VerifyKey(Uint8List.fromList(base58.decode(order.userPublicKey)));
     final userMessage = order.type == 'ON_RAMP'
@@ -303,14 +303,14 @@ Order processOrderData({
           );
 
     if (!verifyKey.verify(
-      signature: Signature(base58.decode(order.userSignature!)),
+      signature: Signature(base58.decode(order.userSignature)),
       message: Uint8List.fromList(utf8.encode(userMessage)),
     )) {
       throw Exception('Invalid user signature');
     }
   }
 
-  if (order.partnerSignature != null && order.partnerSignature!.isNotEmpty) {
+  if (order.partnerSignature.isNotEmpty) {
     final verifyKey =
         VerifyKey(Uint8List.fromList(base58.decode(order.partnerPublicKey)));
     final partnerMessage = order.type == 'ON_RAMP'
@@ -331,7 +331,7 @@ Order processOrderData({
           );
 
     if (!verifyKey.verify(
-      signature: Signature(base58.decode(order.partnerSignature!)),
+      signature: Signature(base58.decode(order.partnerSignature)),
       message: Uint8List.fromList(utf8.encode(partnerMessage)),
     )) {
       throw Exception('Invalid partner signature');
