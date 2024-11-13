@@ -56,16 +56,23 @@ Future<Uint8List> verifyAndDecrypt({
   required String userPK,
   required String secretKey,
 }) async {
+  final start = DateTime.now();
+
   final verifyKey = VerifyKey(Uint8List.fromList(base58.decode(userPK)));
   final signedMessage = SignedMessage.fromList(
     signedMessage: base64Decode(signedEncryptedData),
   );
 
+  final verifyStart = DateTime.now();
   if (!verifyKey.verifySignedMessage(signedMessage: signedMessage)) {
     throw Exception('Invalid signature for user data');
   }
+  print(
+    'Verification took: ${DateTime.now().difference(verifyStart).inMilliseconds}ms',
+  );
 
-  return Isolate.run(
+  final decryptStart = DateTime.now();
+  final result = await Isolate.run(
     () => cryptoWorker(
       CryptoMessage(
         signedMessage.message.asTypedList,
@@ -74,6 +81,14 @@ Future<Uint8List> verifyAndDecrypt({
       ),
     ),
   );
+  print(
+    'Decryption took: ${DateTime.now().difference(decryptStart).inMilliseconds}ms',
+  );
+
+  print(
+    'Total verify/decrypt: ${DateTime.now().difference(start).inMilliseconds}ms',
+  );
+  return result;
 }
 
 Future<UserData> processUserData({
@@ -81,20 +96,32 @@ Future<UserData> processUserData({
   required String userPK,
   required String secretKey,
 }) async {
+  final totalStart = DateTime.now();
+  print('Starting processUserData');
+
   final response = await kycClient.kycServiceGetUserData(
     body: V1GetUserDataRequest(userPublicKey: userPK),
+  );
+  print(
+    'Got API response in: ${DateTime.now().difference(totalStart).inMilliseconds}ms',
   );
 
   final validationMap = <String, ValidationResult>{};
   Map<String, dynamic>? custom;
 
   // Process validation data
+  final validationStart = DateTime.now();
   for (final encryptedData in response.validationData) {
+    final decryptStart = DateTime.now();
     final decryptedData = await verifyAndDecrypt(
       signedEncryptedData: encryptedData.encryptedData,
       secretKey: secretKey,
       userPK: encryptedData.validatorPublicKey,
     );
+    print(
+      'Validation decrypt took: ${DateTime.now().difference(decryptStart).inMilliseconds}ms',
+    );
+
     final wrappedData = proto.WrappedValidation.fromBuffer(decryptedData);
 
     final result = switch (wrappedData.whichData()) {
@@ -119,6 +146,9 @@ Future<UserData> processUserData({
       }
     }
   }
+  print(
+    'Total validation processing: ${DateTime.now().difference(validationStart).inMilliseconds}ms',
+  );
 
   List<Email>? email;
   List<Phone>? phone;
@@ -129,13 +159,25 @@ Future<UserData> processUserData({
   List<Selfie>? selfie;
 
   // Process user data
+  final userDataStart = DateTime.now();
   for (final encryptedData in response.userData) {
+    final decryptStart = DateTime.now();
     final decryptedData = await verifyAndDecrypt(
       signedEncryptedData: encryptedData.encryptedData,
       secretKey: secretKey,
       userPK: userPK,
     );
+    print(
+      'User data decrypt took: ${DateTime.now().difference(decryptStart).inMilliseconds}ms',
+    );
+
     final wrappedData = proto.WrappedData.fromBuffer(decryptedData);
+
+    if (wrappedData.whichData() == proto.WrappedData_Data.selfieImage) {
+      print(
+        'Processing selfie of size: ${wrappedData.selfieImage.length} bytes',
+      );
+    }
 
     final id = encryptedData.id;
     final verificationData = validationMap[id] as HashValidationResult?;
@@ -223,8 +265,11 @@ Future<UserData> processUserData({
         break;
     }
   }
+  print(
+    'Total user data processing: ${DateTime.now().difference(userDataStart).inMilliseconds}ms',
+  );
 
-  return UserData(
+  final result = UserData(
     email: email,
     phone: phone,
     name: name,
@@ -234,4 +279,9 @@ Future<UserData> processUserData({
     selfie: selfie,
     custom: custom,
   );
+
+  print(
+    'Total processing time: ${DateTime.now().difference(totalStart).inMilliseconds}ms',
+  );
+  return result;
 }
