@@ -5,12 +5,13 @@ import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
 import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_user_data_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_user_data_response.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
-import 'package:kyc_client_dart/src/isolate_helper.dart';
 import 'package:kyc_client_dart/src/models/export.dart';
 import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
+import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
 
 export 'models/order_id.dart';
@@ -33,32 +34,23 @@ String generateHash(proto.WrappedData data) {
   return hex.encode(digest);
 }
 
-Future<SignedMessage> encryptAndSign({
+SignedMessage encryptAndSign({
   required Uint8List data,
   required SecretBox secretBox,
   required SigningKey signingKey,
-}) async {
-  final encrypted = await Isolate.run(
-    () => cryptoWorker(
-      CryptoMessage(
-        data,
-        secretBox.key.asTypedList,
-        true,
-      ),
-    ),
-  );
-
-  return Isolate.run(() => signingKey.sign(Uint8List.fromList(encrypted)));
+}) {
+  final encrypted = secretBox.encrypt(data);
+  return signingKey.sign(Uint8List.fromList(encrypted));
 }
 
-Future<Uint8List> verifyAndDecrypt({
+Uint8List verifyAndDecrypt({
   required String signedEncryptedData,
   required String userPK,
   required String secretKey,
-}) async {
-  final start = DateTime.now();
-
+}) {
   final verifyKey = VerifyKey(Uint8List.fromList(base58.decode(userPK)));
+  final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
+
   final signedMessage = SignedMessage.fromList(
     signedMessage: base64Decode(signedEncryptedData),
   );
@@ -67,20 +59,15 @@ Future<Uint8List> verifyAndDecrypt({
     throw Exception('Invalid signature for user data');
   }
 
-  final result = await Isolate.run(
-    () => cryptoWorker(
-      CryptoMessage(
-        signedMessage.message.asTypedList,
-        base58.decode(secretKey),
-        false,
-      ),
+  final encryptedData = Uint8List.fromList(signedMessage.message);
+  final decrypted = box.decrypt(
+    EncryptedMessage(
+      nonce: encryptedData.sublist(0, TweetNaCl.nonceLength),
+      cipherText: encryptedData.sublist(TweetNaCl.nonceLength),
     ),
   );
 
-  print(
-    'Crypto operation took: ${DateTime.now().difference(start).inMilliseconds}ms',
-  );
-  return result;
+  return decrypted;
 }
 
 Future<UserData> processUserData({
@@ -98,13 +85,36 @@ Future<UserData> processUserData({
     'Got API response in: ${DateTime.now().difference(totalStart).inMilliseconds}ms',
   );
 
+  final processingStart = DateTime.now();
+
+  final userData = await Isolate.run(
+    () => _processDataInIsolate(
+      response: response,
+      userPK: userPK,
+      secretKey: secretKey,
+    ),
+  );
+
+  print(
+    'Total processing time: ${DateTime.now().difference(processingStart).inMilliseconds}ms',
+  );
+  print(
+    'Total time: ${DateTime.now().difference(totalStart).inMilliseconds}ms',
+  );
+  return userData;
+}
+
+UserData _processDataInIsolate({
+  required V1GetUserDataResponse response,
+  required String userPK,
+  required String secretKey,
+}) {
   final validationMap = <String, ValidationResult>{};
   Map<String, dynamic>? custom;
 
   // Process validation data
-  final validationStart = DateTime.now();
   for (final encryptedData in response.validationData) {
-    final decryptedData = await verifyAndDecrypt(
+    final decryptedData = verifyAndDecrypt(
       signedEncryptedData: encryptedData.encryptedData,
       secretKey: secretKey,
       userPK: encryptedData.validatorPublicKey,
@@ -133,9 +143,6 @@ Future<UserData> processUserData({
       }
     }
   }
-  print(
-    'Total validation processing: ${DateTime.now().difference(validationStart).inMilliseconds}ms',
-  );
 
   List<Email>? email;
   List<Phone>? phone;
@@ -146,9 +153,8 @@ Future<UserData> processUserData({
   List<Selfie>? selfie;
 
   // Process user data
-  final userDataStart = DateTime.now();
   for (final encryptedData in response.userData) {
-    final decryptedData = await verifyAndDecrypt(
+    final decryptedData = verifyAndDecrypt(
       signedEncryptedData: encryptedData.encryptedData,
       secretKey: secretKey,
       userPK: userPK,
@@ -241,12 +247,6 @@ Future<UserData> processUserData({
         break;
     }
   }
-  print(
-    'Total user data processing: ${DateTime.now().difference(userDataStart).inMilliseconds}ms',
-  );
-  print(
-    'Total processing time: ${DateTime.now().difference(totalStart).inMilliseconds}ms',
-  );
 
   return UserData(
     email: email,
