@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
@@ -6,10 +7,10 @@ import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
+import 'package:kyc_client_dart/src/isolate_helper.dart';
 import 'package:kyc_client_dart/src/models/export.dart';
 import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
-import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
 
 export 'models/order_id.dart';
@@ -32,23 +33,30 @@ String generateHash(proto.WrappedData data) {
   return hex.encode(digest);
 }
 
-SignedMessage encryptAndSign({
+Future<SignedMessage> encryptAndSign({
   required Uint8List data,
   required SecretBox secretBox,
   required SigningKey signingKey,
-}) {
-  final encrypted = secretBox.encrypt(data);
-  return signingKey.sign(Uint8List.fromList(encrypted));
+}) async {
+  final encrypted = await Isolate.run(
+    () => cryptoWorker(
+      CryptoMessage(
+        data,
+        secretBox.key.asTypedList,
+        true,
+      ),
+    ),
+  );
+
+  return Isolate.run(() => signingKey.sign(Uint8List.fromList(encrypted)));
 }
 
-Uint8List verifyAndDecrypt({
+Future<Uint8List> verifyAndDecrypt({
   required String signedEncryptedData,
   required String userPK,
   required String secretKey,
-}) {
+}) async {
   final verifyKey = VerifyKey(Uint8List.fromList(base58.decode(userPK)));
-  final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
-
   final signedMessage = SignedMessage.fromList(
     signedMessage: base64Decode(signedEncryptedData),
   );
@@ -57,15 +65,15 @@ Uint8List verifyAndDecrypt({
     throw Exception('Invalid signature for user data');
   }
 
-  final encryptedData = Uint8List.fromList(signedMessage.message);
-  final decrypted = box.decrypt(
-    EncryptedMessage(
-      nonce: encryptedData.sublist(0, TweetNaCl.nonceLength),
-      cipherText: encryptedData.sublist(TweetNaCl.nonceLength),
+  return Isolate.run(
+    () => cryptoWorker(
+      CryptoMessage(
+        signedMessage.message.asTypedList,
+        base58.decode(secretKey),
+        false,
+      ),
     ),
   );
-
-  return decrypted;
 }
 
 Future<UserData> processUserData({
@@ -82,7 +90,7 @@ Future<UserData> processUserData({
 
   // Process validation data
   for (final encryptedData in response.validationData) {
-    final decryptedData = verifyAndDecrypt(
+    final decryptedData = await verifyAndDecrypt(
       signedEncryptedData: encryptedData.encryptedData,
       secretKey: secretKey,
       userPK: encryptedData.validatorPublicKey,
@@ -122,7 +130,7 @@ Future<UserData> processUserData({
 
   // Process user data
   for (final encryptedData in response.userData) {
-    final decryptedData = verifyAndDecrypt(
+    final decryptedData = await verifyAndDecrypt(
       signedEncryptedData: encryptedData.encryptedData,
       secretKey: secretKey,
       userPK: userPK,
