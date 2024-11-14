@@ -3,8 +3,6 @@ import 'dart:isolate';
 
 import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
-import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
-import 'package:kyc_client_dart/src/api/models/v1_get_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_user_data_response.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
@@ -34,7 +32,31 @@ String generateHash(proto.WrappedData data) {
   return hex.encode(digest);
 }
 
-SignedMessage encryptAndSign({
+Future<SignedMessage> encryptAndSignAsync({
+  required Uint8List data,
+  required SecretBox secretBox,
+  required SigningKey signingKey,
+}) {
+  if (isWeb) {
+    return Future.value(
+      encryptAndSignSync(
+        data: data,
+        secretBox: secretBox,
+        signingKey: signingKey,
+      ),
+    );
+  }
+
+  return Isolate.run(
+    () => encryptAndSignSync(
+      data: data,
+      secretBox: secretBox,
+      signingKey: signingKey,
+    ),
+  );
+}
+
+SignedMessage encryptAndSignSync({
   required Uint8List data,
   required SecretBox secretBox,
   required SigningKey signingKey,
@@ -71,40 +93,28 @@ Uint8List verifyAndDecrypt({
 }
 
 Future<UserData> processUserData({
-  required KycServiceClient kycClient,
+  required V1GetUserDataResponse response,
   required String userPK,
   required String secretKey,
 }) async {
-  final totalStart = DateTime.now();
-  print('Starting processUserData');
+  if (isWeb) {
+    return _processUserData(
+      response: response,
+      userPK: userPK,
+      secretKey: secretKey,
+    );
+  }
 
-  final response = await kycClient.kycServiceGetUserData(
-    body: V1GetUserDataRequest(userPublicKey: userPK),
-  );
-  print(
-    'Got API response in: ${DateTime.now().difference(totalStart).inMilliseconds}ms',
-  );
-
-  final processingStart = DateTime.now();
-
-  final userData = await Isolate.run(
-    () => _processDataInIsolate(
+  return Isolate.run(
+    () => _processUserData(
       response: response,
       userPK: userPK,
       secretKey: secretKey,
     ),
   );
-
-  print(
-    'Total processing time: ${DateTime.now().difference(processingStart).inMilliseconds}ms',
-  );
-  print(
-    'Total time: ${DateTime.now().difference(totalStart).inMilliseconds}ms',
-  );
-  return userData;
 }
 
-UserData _processDataInIsolate({
+UserData _processUserData({
   required V1GetUserDataResponse response,
   required String userPK,
   required String secretKey,
@@ -259,3 +269,5 @@ UserData _processDataInIsolate({
     custom: custom,
   );
 }
+
+const bool isWeb = identical(0, 0.0);
