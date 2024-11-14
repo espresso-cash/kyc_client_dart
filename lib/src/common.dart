@@ -33,31 +33,23 @@ String generateHash(proto.WrappedData data) {
   return hex.encode(digest);
 }
 
-Future<SignedMessage> encryptAndSignAsync({
+Future<SignedMessage> encryptAndSign({
   required Uint8List data,
   required SecretBox secretBox,
   required SigningKey signingKey,
 }) {
-  if (isWeb) {
-    return Future.value(
-      encryptAndSignSync(
+  final shouldRunAsync = !_isWeb && data.length > _encryptionAsyncThreshold;
+
+  SignedMessage encrypt() => _encryptAndSignSync(
         data: data,
         secretBox: secretBox,
         signingKey: signingKey,
-      ),
-    );
-  }
+      );
 
-  return Isolate.run(
-    () => encryptAndSignSync(
-      data: data,
-      secretBox: secretBox,
-      signingKey: signingKey,
-    ),
-  );
+  return shouldRunAsync ? Isolate.run(encrypt) : Future.value(encrypt());
 }
 
-SignedMessage encryptAndSignSync({
+SignedMessage _encryptAndSignSync({
   required Uint8List data,
   required SecretBox secretBox,
   required SigningKey signingKey,
@@ -131,7 +123,7 @@ Future<UserData> processUserData({
   required String userPK,
   required String secretKey,
 }) async {
-  if (isWeb) {
+  if (_isWeb) {
     return _processUserData(
       response: response,
       userPK: userPK,
@@ -425,4 +417,5 @@ String createPartnerOffRampMessage({
 }) =>
     '$cryptoAmount|$cryptoCurrency|$fiatAmount|$fiatCurrency|$cryptoWalletAddress';
 
-const bool isWeb = identical(0, 0.0);
+const bool _isWeb = identical(0, 0.0);
+const _encryptionAsyncThreshold = 1024 * 1024; // 1MB

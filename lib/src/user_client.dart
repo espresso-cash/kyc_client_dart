@@ -273,7 +273,7 @@ class KycUserClient {
 
     for (final item in dataList) {
       final protoData = item.data.writeToBuffer();
-      final encryptedData = encryptAndSignSync(
+      final encryptedData = await encryptAndSign(
         data: protoData,
         secretBox: _secretBox,
         signingKey: _signingKey,

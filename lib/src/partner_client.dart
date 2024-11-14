@@ -168,7 +168,7 @@ class KycPartnerClient {
     }
         .writeToBuffer();
 
-    final encryptedData = encryptAndSignSync(
+    final encryptedData = await encryptAndSign(
       data: wrappedData,
       secretBox: SecretBox(Uint8List.fromList(base58.decode(secretKey))),
       signingKey: _signingKey,
