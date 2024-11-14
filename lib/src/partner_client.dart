@@ -13,6 +13,7 @@ import 'package:kyc_client_dart/src/api/models/v1_complete_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_fail_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_info_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_reject_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_set_validation_data_request.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
@@ -132,12 +133,17 @@ class KycPartnerClient {
   Future<UserData> getUserData({
     required String userPK,
     required String secretKey,
-  }) async =>
-      processUserData(
-        kycClient: _kycClient,
-        userPK: userPK,
-        secretKey: secretKey,
-      );
+  }) async {
+    final response = await _kycClient.kycServiceGetUserData(
+      body: V1GetUserDataRequest(userPublicKey: userPK),
+    );
+
+    return processUserData(
+      response: response,
+      userPK: userPK,
+      secretKey: secretKey,
+    );
+  }
 
   Future<void> setValidationResult({
     required ValidationResult value,
@@ -162,7 +168,7 @@ class KycPartnerClient {
     }
         .writeToBuffer();
 
-    final encryptedData = encryptAndSign(
+    final encryptedData = await encryptAndSign(
       data: wrappedData,
       secretBox: SecretBox(Uint8List.fromList(base58.decode(secretKey))),
       signingKey: _signingKey,

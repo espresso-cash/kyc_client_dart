@@ -13,6 +13,7 @@ import 'package:kyc_client_dart/src/api/models/v1_create_on_ramp_order_request.d
 import 'package:kyc_client_dart/src/api/models/v1_get_info_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_partner_info_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_grant_access_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_init_document_validation_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_init_email_validation_request.dart';
@@ -272,7 +273,7 @@ class KycUserClient {
 
     for (final item in dataList) {
       final protoData = item.data.writeToBuffer();
-      final encryptedData = encryptAndSign(
+      final encryptedData = await encryptAndSign(
         data: protoData,
         secretBox: _secretBox,
         signingKey: _signingKey,
@@ -290,12 +291,17 @@ class KycUserClient {
   Future<UserData> getUserData({
     required String userPK,
     required String secretKey,
-  }) async =>
-      processUserData(
-        kycClient: _kycClient,
-        userPK: userPK,
-        secretKey: secretKey,
-      );
+  }) async {
+    final response = await _kycClient.kycServiceGetUserData(
+      body: V1GetUserDataRequest(userPublicKey: userPK),
+    );
+
+    return processUserData(
+      response: response,
+      userPK: userPK,
+      secretKey: secretKey,
+    );
+  }
 
   Future<void> initDocumentValidation({
     required String nameId,

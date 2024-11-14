@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
-import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_order_response.dart';
-import 'package:kyc_client_dart/src/api/models/v1_get_user_data_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_user_data_response.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
 import 'package:kyc_client_dart/src/models/export.dart';
@@ -33,7 +33,23 @@ String generateHash(proto.WrappedData data) {
   return hex.encode(digest);
 }
 
-SignedMessage encryptAndSign({
+Future<SignedMessage> encryptAndSign({
+  required Uint8List data,
+  required SecretBox secretBox,
+  required SigningKey signingKey,
+}) {
+  final shouldRunAsync = !_isWeb && data.length > _encryptionAsyncThreshold;
+
+  SignedMessage encrypt() => _encryptAndSignSync(
+        data: data,
+        secretBox: secretBox,
+        signingKey: signingKey,
+      );
+
+  return shouldRunAsync ? Isolate.run(encrypt) : Future.value(encrypt());
+}
+
+SignedMessage _encryptAndSignSync({
   required Uint8List data,
   required SecretBox secretBox,
   required SigningKey signingKey,
@@ -103,14 +119,32 @@ String decryptOnly({
 }
 
 Future<UserData> processUserData({
-  required KycServiceClient kycClient,
+  required V1GetUserDataResponse response,
   required String userPK,
   required String secretKey,
 }) async {
-  final response = await kycClient.kycServiceGetUserData(
-    body: V1GetUserDataRequest(userPublicKey: userPK),
-  );
+  if (_isWeb) {
+    return _processUserData(
+      response: response,
+      userPK: userPK,
+      secretKey: secretKey,
+    );
+  }
 
+  return Isolate.run(
+    () => _processUserData(
+      response: response,
+      userPK: userPK,
+      secretKey: secretKey,
+    ),
+  );
+}
+
+UserData _processUserData({
+  required V1GetUserDataResponse response,
+  required String userPK,
+  required String secretKey,
+}) {
   final validationMap = <String, ValidationResult>{};
   Map<String, dynamic>? custom;
 
@@ -382,3 +416,6 @@ String createPartnerOffRampMessage({
   required String cryptoWalletAddress,
 }) =>
     '$cryptoAmount|$cryptoCurrency|$fiatAmount|$fiatCurrency|$cryptoWalletAddress';
+
+const bool _isWeb = identical(0, 0.0);
+const _encryptionAsyncThreshold = 1024 * 1024; // 1MB
