@@ -350,6 +350,14 @@ class KycUserClient {
     required String fiatAmount,
     required String fiatCurrency,
   }) async {
+    final signatureMessage = createUserOnRampMessage(
+      cryptoAmount: cryptoAmount,
+      cryptoCurrency: cryptoCurrency,
+      fiatAmount: fiatAmount,
+      fiatCurrency: fiatCurrency,
+    );
+    final signature = _signingKey.sign(utf8.encode(signatureMessage));
+
     final response = await _orderClient.orderServiceCreateOnRampOrder(
       body: V1CreateOnRampOrderRequest(
         partnerPublicKey: partnerPK,
@@ -357,6 +365,7 @@ class KycUserClient {
         cryptoCurrency: cryptoCurrency,
         fiatAmount: fiatAmount,
         fiatCurrency: fiatCurrency,
+        userSignature: base58.encode(signature.signature.asTypedList),
       ),
     );
 
@@ -372,6 +381,30 @@ class KycUserClient {
     required String bankName,
     required String bankAccount,
   }) async {
+    final encryptedBankName = base64Encode(
+      encryptOnly(
+        data: utf8.encode(bankName),
+        secretBox: _secretBox,
+      ),
+    );
+
+    final encryptedBankAccount = base64Encode(
+      encryptOnly(
+        data: utf8.encode(bankAccount),
+        secretBox: _secretBox,
+      ),
+    );
+
+    final signatureMessage = createUserOffRampMessage(
+      cryptoAmount: cryptoAmount,
+      cryptoCurrency: cryptoCurrency,
+      fiatAmount: fiatAmount,
+      fiatCurrency: fiatCurrency,
+      bankName: bankName,
+      bankAccount: bankAccount,
+    );
+    final signature = _signingKey.sign(utf8.encode(signatureMessage));
+
     final response = await _orderClient.orderServiceCreateOffRampOrder(
       body: V1CreateOffRampOrderRequest(
         partnerPublicKey: partnerPK,
@@ -379,8 +412,9 @@ class KycUserClient {
         cryptoCurrency: cryptoCurrency,
         fiatAmount: fiatAmount,
         fiatCurrency: fiatCurrency,
-        bankName: bankName,
-        bankAccount: bankAccount,
+        bankName: encryptedBankName,
+        bankAccount: encryptedBankAccount,
+        userSignature: base58.encode(signature.signature.asTypedList),
       ),
     );
 
@@ -397,12 +431,22 @@ class KycUserClient {
       ),
     );
 
-    return Order.fromV1GetOrderResponse(response);
+    return processOrderData(
+      order: response,
+      secretKey: rawSecretKey,
+    );
   }
 
   Future<List<Order>> getOrders() async {
     final response = await _orderClient.orderServiceGetOrders();
 
-    return response.orders.map(Order.fromV1GetOrderResponse).toList();
+    return response.orders
+        .map(
+          (order) => processOrderData(
+            order: order,
+            secretKey: rawSecretKey,
+          ),
+        )
+        .toList();
   }
 }

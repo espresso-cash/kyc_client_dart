@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
 import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_order_response.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
@@ -66,6 +67,39 @@ Uint8List verifyAndDecrypt({
   );
 
   return decrypted;
+}
+
+Uint8List encryptOnly({
+  required Uint8List data,
+  required SecretBox secretBox,
+}) {
+  final cipherText = secretBox.encrypt(data);
+
+  return Uint8List.fromList([
+    ...cipherText.nonce,
+    ...cipherText.cipherText,
+  ]);
+}
+
+String decryptOnly({
+  required String encryptedData,
+  required String secretKey,
+}) {
+  try {
+    final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
+    final data = base64Decode(encryptedData);
+
+    final decrypted = box.decrypt(
+      EncryptedMessage(
+        nonce: data.sublist(0, TweetNaCl.nonceLength),
+        cipherText: data.sublist(TweetNaCl.nonceLength),
+      ),
+    );
+
+    return utf8.decode(decrypted);
+  } on Object catch (_) {
+    return encryptedData;
+  }
 }
 
 Future<UserData> processUserData({
@@ -227,3 +261,124 @@ Future<UserData> processUserData({
     custom: custom,
   );
 }
+
+Order processOrderData({
+  required V1GetOrderResponse order,
+  required String secretKey,
+}) {
+  String bankName = order.bankName;
+  String bankAccount = order.bankAccount;
+
+  if (bankName.isNotEmpty) {
+    bankName = decryptOnly(
+      encryptedData: bankName,
+      secretKey: secretKey,
+    );
+  }
+
+  if (bankAccount.isNotEmpty) {
+    bankAccount = decryptOnly(
+      encryptedData: bankAccount,
+      secretKey: secretKey,
+    );
+  }
+
+  if (order.userSignature.isNotEmpty) {
+    final verifyKey =
+        VerifyKey(Uint8List.fromList(base58.decode(order.userPublicKey)));
+    final userMessage = order.type == 'ON_RAMP'
+        ? createUserOnRampMessage(
+            cryptoAmount: order.cryptoAmount,
+            cryptoCurrency: order.cryptoCurrency,
+            fiatAmount: order.fiatAmount,
+            fiatCurrency: order.fiatCurrency,
+          )
+        : createUserOffRampMessage(
+            cryptoAmount: order.cryptoAmount,
+            cryptoCurrency: order.cryptoCurrency,
+            fiatAmount: order.fiatAmount,
+            fiatCurrency: order.fiatCurrency,
+            bankName: bankName,
+            bankAccount: bankAccount,
+          );
+
+    if (!verifyKey.verify(
+      signature: Signature(base58.decode(order.userSignature)),
+      message: Uint8List.fromList(utf8.encode(userMessage)),
+    )) {
+      throw Exception('Invalid user signature');
+    }
+  }
+
+  if (order.partnerSignature.isNotEmpty) {
+    final verifyKey =
+        VerifyKey(Uint8List.fromList(base58.decode(order.partnerPublicKey)));
+    final partnerMessage = order.type == 'ON_RAMP'
+        ? createPartnerOnRampMessage(
+            cryptoAmount: order.cryptoAmount,
+            cryptoCurrency: order.cryptoCurrency,
+            fiatAmount: order.fiatAmount,
+            fiatCurrency: order.fiatCurrency,
+            bankName: bankName,
+            bankAccount: bankAccount,
+          )
+        : createPartnerOffRampMessage(
+            cryptoAmount: order.cryptoAmount,
+            cryptoCurrency: order.cryptoCurrency,
+            fiatAmount: order.fiatAmount,
+            fiatCurrency: order.fiatCurrency,
+            cryptoWalletAddress: order.cryptoWalletAddress,
+          );
+
+    if (!verifyKey.verify(
+      signature: Signature(base58.decode(order.partnerSignature)),
+      message: Uint8List.fromList(utf8.encode(partnerMessage)),
+    )) {
+      throw Exception('Invalid partner signature');
+    }
+  }
+
+  return Order.fromV1GetOrderResponse(
+    order.copyWith(
+      bankName: bankName,
+      bankAccount: bankAccount,
+    ),
+  );
+}
+
+String createUserOnRampMessage({
+  required String cryptoAmount,
+  required String cryptoCurrency,
+  required String fiatAmount,
+  required String fiatCurrency,
+}) =>
+    '$cryptoAmount|$cryptoCurrency|$fiatAmount|$fiatCurrency';
+
+String createUserOffRampMessage({
+  required String cryptoAmount,
+  required String cryptoCurrency,
+  required String fiatAmount,
+  required String fiatCurrency,
+  required String bankName,
+  required String bankAccount,
+}) =>
+    '$cryptoAmount|$cryptoCurrency|$fiatAmount|$fiatCurrency|$bankName|$bankAccount';
+
+String createPartnerOnRampMessage({
+  required String cryptoAmount,
+  required String cryptoCurrency,
+  required String fiatAmount,
+  required String fiatCurrency,
+  required String bankName,
+  required String bankAccount,
+}) =>
+    '$cryptoAmount|$cryptoCurrency|$fiatAmount|$fiatCurrency|$bankName|$bankAccount';
+
+String createPartnerOffRampMessage({
+  required String cryptoAmount,
+  required String cryptoCurrency,
+  required String fiatAmount,
+  required String fiatCurrency,
+  required String cryptoWalletAddress,
+}) =>
+    '$cryptoAmount|$cryptoCurrency|$fiatAmount|$fiatCurrency|$cryptoWalletAddress';

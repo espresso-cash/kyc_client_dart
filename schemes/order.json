@@ -1,587 +1,602 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "title": "espressocash/orders/v1/orders.proto",
-      "version": "version not set"
-    },
-    "tags": [
-      {
-        "name": "OrderService"
-      }
-    ],
-    "consumes": [
-      "application/json"
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "paths": {
-      "/v1/acceptOrder": {
-        "post": {
-          "operationId": "OrderService_AcceptOrder",
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "schema": {
-                "$ref": "#/definitions/v1AcceptOrderResponse"
-              }
-            },
-            "default": {
-              "description": "An unexpected error response.",
-              "schema": {
-                "$ref": "#/definitions/rpcStatus"
-              }
+  "swagger": "2.0",
+  "info": {
+    "title": "espressocash/orders/v1/orders.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "OrderService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/acceptOrder": {
+      "post": {
+        "operationId": "OrderService_AcceptOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AcceptOrderResponse"
             }
           },
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/v1AcceptOrderRequest"
-              }
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
-          ],
-          "tags": [
-            "OrderService"
-          ]
-        }
-      },
-      "/v1/completeOrder": {
-        "post": {
-          "operationId": "OrderService_CompleteOrder",
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "schema": {
-                "$ref": "#/definitions/v1CompleteOrderResponse"
-              }
-            },
-            "default": {
-              "description": "An unexpected error response.",
-              "schema": {
-                "$ref": "#/definitions/rpcStatus"
-              }
-            }
-          },
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/v1CompleteOrderRequest"
-              }
-            }
-          ],
-          "tags": [
-            "OrderService"
-          ]
-        }
-      },
-      "/v1/createOffRampOrder": {
-        "post": {
-          "operationId": "OrderService_CreateOffRampOrder",
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "schema": {
-                "$ref": "#/definitions/v1CreateOffRampOrderResponse"
-              }
-            },
-            "default": {
-              "description": "An unexpected error response.",
-              "schema": {
-                "$ref": "#/definitions/rpcStatus"
-              }
-            }
-          },
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/v1CreateOffRampOrderRequest"
-              }
-            }
-          ],
-          "tags": [
-            "OrderService"
-          ]
-        }
-      },
-      "/v1/createOnRampOrder": {
-        "post": {
-          "operationId": "OrderService_CreateOnRampOrder",
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "schema": {
-                "$ref": "#/definitions/v1CreateOnRampOrderResponse"
-              }
-            },
-            "default": {
-              "description": "An unexpected error response.",
-              "schema": {
-                "$ref": "#/definitions/rpcStatus"
-              }
-            }
-          },
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/v1CreateOnRampOrderRequest"
-              }
-            }
-          ],
-          "tags": [
-            "OrderService"
-          ]
-        }
-      },
-      "/v1/failOrder": {
-        "post": {
-          "operationId": "OrderService_FailOrder",
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "schema": {
-                "$ref": "#/definitions/v1FailOrderResponse"
-              }
-            },
-            "default": {
-              "description": "An unexpected error response.",
-              "schema": {
-                "$ref": "#/definitions/rpcStatus"
-              }
-            }
-          },
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/v1FailOrderRequest"
-              }
-            }
-          ],
-          "tags": [
-            "OrderService"
-          ]
-        }
-      },
-      "/v1/getOrder": {
-        "post": {
-          "operationId": "OrderService_GetOrder",
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "schema": {
-                "$ref": "#/definitions/v1GetOrderResponse"
-              }
-            },
-            "default": {
-              "description": "An unexpected error response.",
-              "schema": {
-                "$ref": "#/definitions/rpcStatus"
-              }
-            }
-          },
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/v1GetOrderRequest"
-              }
-            }
-          ],
-          "tags": [
-            "OrderService"
-          ]
-        }
-      },
-      "/v1/getOrders": {
-        "post": {
-          "operationId": "OrderService_GetOrders",
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "schema": {
-                "$ref": "#/definitions/v1GetOrdersResponse"
-              }
-            },
-            "default": {
-              "description": "An unexpected error response.",
-              "schema": {
-                "$ref": "#/definitions/rpcStatus"
-              }
-            }
-          },
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/v1GetOrdersRequest"
-              }
-            }
-          ],
-          "tags": [
-            "OrderService"
-          ]
-        }
-      },
-      "/v1/getPartnerOrders": {
-        "post": {
-          "operationId": "OrderService_GetPartnerOrders",
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "schema": {
-                "$ref": "#/definitions/v1GetPartnerOrdersResponse"
-              }
-            },
-            "default": {
-              "description": "An unexpected error response.",
-              "schema": {
-                "$ref": "#/definitions/rpcStatus"
-              }
-            }
-          },
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/v1GetPartnerOrdersRequest"
-              }
-            }
-          ],
-          "tags": [
-            "OrderService"
-          ]
-        }
-      },
-      "/v1/rejectOrder": {
-        "post": {
-          "operationId": "OrderService_RejectOrder",
-          "responses": {
-            "200": {
-              "description": "A successful response.",
-              "schema": {
-                "$ref": "#/definitions/v1RejectOrderResponse"
-              }
-            },
-            "default": {
-              "description": "An unexpected error response.",
-              "schema": {
-                "$ref": "#/definitions/rpcStatus"
-              }
-            }
-          },
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/v1RejectOrderRequest"
-              }
-            }
-          ],
-          "tags": [
-            "OrderService"
-          ]
-        }
-      }
-    },
-    "definitions": {
-      "protobufAny": {
-        "type": "object",
-        "properties": {
-          "@type": {
-            "type": "string"
           }
         },
-        "additionalProperties": {}
-      },
-      "rpcStatus": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          },
-          "details": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/definitions/protobufAny"
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AcceptOrderRequest"
             }
           }
-        }
-      },
-      "v1AcceptOrderRequest": {
-        "type": "object",
-        "properties": {
-          "orderId": {
-            "type": "string"
-          },
-          "bankName": {
-            "type": "string"
-          },
-          "bankAccount": {
-            "type": "string"
-          },
-          "cryptoWalletAddress": {
-            "type": "string"
-          },
-          "externalId": {
-            "type": "string"
-          }
-        }
-      },
-      "v1AcceptOrderResponse": {
-        "type": "object"
-      },
-      "v1CompleteOrderRequest": {
-        "type": "object",
-        "properties": {
-          "orderId": {
-            "type": "string"
-          },
-          "transactionId": {
-            "type": "string"
-          },
-          "externalId": {
-            "type": "string"
-          }
-        }
-      },
-      "v1CompleteOrderResponse": {
-        "type": "object"
-      },
-      "v1CreateOffRampOrderRequest": {
-        "type": "object",
-        "properties": {
-          "partnerPublicKey": {
-            "type": "string"
-          },
-          "cryptoAmount": {
-            "type": "string",
-            "format": "int64"
-          },
-          "cryptoCurrency": {
-            "type": "string"
-          },
-          "fiatAmount": {
-            "type": "string",
-            "format": "int64"
-          },
-          "fiatCurrency": {
-            "type": "string"
-          },
-          "bankName": {
-            "type": "string"
-          },
-          "bankAccount": {
-            "type": "string"
-          }
-        }
-      },
-      "v1CreateOffRampOrderResponse": {
-        "type": "object",
-        "properties": {
-          "orderId": {
-            "type": "string"
-          }
-        }
-      },
-      "v1CreateOnRampOrderRequest": {
-        "type": "object",
-        "properties": {
-          "partnerPublicKey": {
-            "type": "string"
-          },
-          "cryptoAmount": {
-            "type": "string",
-            "format": "int64"
-          },
-          "cryptoCurrency": {
-            "type": "string"
-          },
-          "fiatAmount": {
-            "type": "string",
-            "format": "int64"
-          },
-          "fiatCurrency": {
-            "type": "string"
-          }
-        }
-      },
-      "v1CreateOnRampOrderResponse": {
-        "type": "object",
-        "properties": {
-          "orderId": {
-            "type": "string"
-          }
-        }
-      },
-      "v1FailOrderRequest": {
-        "type": "object",
-        "properties": {
-          "orderId": {
-            "type": "string"
-          },
-          "reason": {
-            "type": "string"
-          },
-          "externalId": {
-            "type": "string"
-          }
-        }
-      },
-      "v1FailOrderResponse": {
-        "type": "object"
-      },
-      "v1GetOrderRequest": {
-        "type": "object",
-        "properties": {
-          "orderId": {
-            "type": "string"
-          },
-          "externalId": {
-            "type": "string"
-          }
-        }
-      },
-      "v1GetOrderResponse": {
-        "type": "object",
-        "properties": {
-          "orderId": {
-            "type": "string"
-          },
-          "created": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          },
-          "partnerPublicKey": {
-            "type": "string"
-          },
-          "userPublicKey": {
-            "type": "string"
-          },
-          "comment": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "cryptoAmount": {
-            "type": "string",
-            "format": "int64"
-          },
-          "cryptoCurrency": {
-            "type": "string"
-          },
-          "fiatAmount": {
-            "type": "string",
-            "format": "int64"
-          },
-          "fiatCurrency": {
-            "type": "string"
-          },
-          "bankName": {
-            "type": "string"
-          },
-          "bankAccount": {
-            "type": "string"
-          },
-          "cryptoWalletAddress": {
-            "type": "string"
-          },
-          "transaction": {
-            "type": "string"
-          },
-          "transactionId": {
-            "type": "string"
-          },
-          "externalId": {
-            "type": "string"
-          }
-        }
-      },
-      "v1GetOrdersRequest": {
-        "type": "object"
-      },
-      "v1GetOrdersResponse": {
-        "type": "object",
-        "properties": {
-          "orders": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/definitions/v1GetOrderResponse"
-            }
-          }
-        }
-      },
-      "v1GetPartnerOrdersRequest": {
-        "type": "object"
-      },
-      "v1GetPartnerOrdersResponse": {
-        "type": "object",
-        "properties": {
-          "orders": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/definitions/v1GetOrderResponse"
-            }
-          }
-        }
-      },
-      "v1RejectOrderRequest": {
-        "type": "object",
-        "properties": {
-          "orderId": {
-            "type": "string"
-          },
-          "reason": {
-            "type": "string"
-          }
-        }
-      },
-      "v1RejectOrderResponse": {
-        "type": "object"
+        ],
+        "tags": [
+          "OrderService"
+        ]
       }
     },
-    "securityDefinitions": {
-      "bearer": {
-        "type": "apiKey",
-        "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
-        "name": "Authorization",
-        "in": "header"
+    "/v1/completeOrder": {
+      "post": {
+        "operationId": "OrderService_CompleteOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CompleteOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CompleteOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrderService"
+        ]
       }
     },
-    "security": [
-      {
-        "bearer": []
+    "/v1/createOffRampOrder": {
+      "post": {
+        "operationId": "OrderService_CreateOffRampOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOffRampOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOffRampOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrderService"
+        ]
       }
-    ]
-  }
+    },
+    "/v1/createOnRampOrder": {
+      "post": {
+        "operationId": "OrderService_CreateOnRampOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOnRampOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOnRampOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrderService"
+        ]
+      }
+    },
+    "/v1/failOrder": {
+      "post": {
+        "operationId": "OrderService_FailOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1FailOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1FailOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrderService"
+        ]
+      }
+    },
+    "/v1/getOrder": {
+      "post": {
+        "operationId": "OrderService_GetOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrderService"
+        ]
+      }
+    },
+    "/v1/getOrders": {
+      "post": {
+        "operationId": "OrderService_GetOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOrdersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetOrdersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrderService"
+        ]
+      }
+    },
+    "/v1/getPartnerOrders": {
+      "post": {
+        "operationId": "OrderService_GetPartnerOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetPartnerOrdersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetPartnerOrdersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrderService"
+        ]
+      }
+    },
+    "/v1/rejectOrder": {
+      "post": {
+        "operationId": "OrderService_RejectOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RejectOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RejectOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "OrderService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1AcceptOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "bankAccount": {
+          "type": "string"
+        },
+        "cryptoWalletAddress": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "partnerSignature": {
+          "type": "string"
+        }
+      }
+    },
+    "v1AcceptOrderResponse": {
+      "type": "object"
+    },
+    "v1CompleteOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "transactionId": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompleteOrderResponse": {
+      "type": "object"
+    },
+    "v1CreateOffRampOrderRequest": {
+      "type": "object",
+      "properties": {
+        "partnerPublicKey": {
+          "type": "string"
+        },
+        "cryptoAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "cryptoCurrency": {
+          "type": "string"
+        },
+        "fiatAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "fiatCurrency": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "bankAccount": {
+          "type": "string"
+        },
+        "userSignature": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateOffRampOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateOnRampOrderRequest": {
+      "type": "object",
+      "properties": {
+        "partnerPublicKey": {
+          "type": "string"
+        },
+        "cryptoAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "cryptoCurrency": {
+          "type": "string"
+        },
+        "fiatAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "fiatCurrency": {
+          "type": "string"
+        },
+        "userSignature": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateOnRampOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1FailOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1FailOrderResponse": {
+      "type": "object"
+    },
+    "v1GetOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "partnerPublicKey": {
+          "type": "string"
+        },
+        "userPublicKey": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "cryptoAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "cryptoCurrency": {
+          "type": "string"
+        },
+        "fiatAmount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "fiatCurrency": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "bankAccount": {
+          "type": "string"
+        },
+        "cryptoWalletAddress": {
+          "type": "string"
+        },
+        "transaction": {
+          "type": "string"
+        },
+        "transactionId": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "userSignature": {
+          "type": "string"
+        },
+        "partnerSignature": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetOrdersRequest": {
+      "type": "object"
+    },
+    "v1GetOrdersResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GetOrderResponse"
+          }
+        }
+      }
+    },
+    "v1GetPartnerOrdersRequest": {
+      "type": "object"
+    },
+    "v1GetPartnerOrdersResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GetOrderResponse"
+          }
+        }
+      }
+    },
+    "v1RejectOrderRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RejectOrderResponse": {
+      "type": "object"
+    }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}
