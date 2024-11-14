@@ -248,6 +248,7 @@ class _PartnerViewState extends State<PartnerView> {
                                   orderId: orderId!,
                                   bankName: 'bankName',
                                   bankAccount: '123456789',
+                                  secretKey: walletState.rawSecretKey,
                                 );
                                 await partnerState.fetchOnRampOrder(
                                   orderId: orderId,

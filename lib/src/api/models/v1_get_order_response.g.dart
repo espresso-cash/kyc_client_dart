@@ -26,6 +26,8 @@ _$V1GetOrderResponseImpl _$$V1GetOrderResponseImplFromJson(
       transaction: json['transaction'] as String,
       transactionId: json['transactionId'] as String,
       externalId: json['externalId'] as String,
+      userSignature: json['userSignature'] as String,
+      partnerSignature: json['partnerSignature'] as String,
     );
 
 Map<String, dynamic> _$$V1GetOrderResponseImplToJson(
@@ -48,4 +50,6 @@ Map<String, dynamic> _$$V1GetOrderResponseImplToJson(
       'transaction': instance.transaction,
       'transactionId': instance.transactionId,
       'externalId': instance.externalId,
+      'userSignature': instance.userSignature,
+      'partnerSignature': instance.partnerSignature,
     };

@@ -25,6 +25,7 @@ mixin _$V1AcceptOrderRequest {
   String get bankAccount => throw _privateConstructorUsedError;
   String get cryptoWalletAddress => throw _privateConstructorUsedError;
   String get externalId => throw _privateConstructorUsedError;
+  String get partnerSignature => throw _privateConstructorUsedError;
 
   /// Serializes this V1AcceptOrderRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,7 +48,8 @@ abstract class $V1AcceptOrderRequestCopyWith<$Res> {
       String bankName,
       String bankAccount,
       String cryptoWalletAddress,
-      String externalId});
+      String externalId,
+      String partnerSignature});
 }
 
 /// @nodoc
@@ -71,6 +73,7 @@ class _$V1AcceptOrderRequestCopyWithImpl<$Res,
     Object? bankAccount = null,
     Object? cryptoWalletAddress = null,
     Object? externalId = null,
+    Object? partnerSignature = null,
   }) {
     return _then(_value.copyWith(
       orderId: null == orderId
@@ -93,6 +96,10 @@ class _$V1AcceptOrderRequestCopyWithImpl<$Res,
           ? _value.externalId
           : externalId // ignore: cast_nullable_to_non_nullable
               as String,
+      partnerSignature: null == partnerSignature
+          ? _value.partnerSignature
+          : partnerSignature // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -110,7 +117,8 @@ abstract class _$$V1AcceptOrderRequestImplCopyWith<$Res>
       String bankName,
       String bankAccount,
       String cryptoWalletAddress,
-      String externalId});
+      String externalId,
+      String partnerSignature});
 }
 
 /// @nodoc
@@ -131,6 +139,7 @@ class __$$V1AcceptOrderRequestImplCopyWithImpl<$Res>
     Object? bankAccount = null,
     Object? cryptoWalletAddress = null,
     Object? externalId = null,
+    Object? partnerSignature = null,
   }) {
     return _then(_$V1AcceptOrderRequestImpl(
       orderId: null == orderId
@@ -153,6 +162,10 @@ class __$$V1AcceptOrderRequestImplCopyWithImpl<$Res>
           ? _value.externalId
           : externalId // ignore: cast_nullable_to_non_nullable
               as String,
+      partnerSignature: null == partnerSignature
+          ? _value.partnerSignature
+          : partnerSignature // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -165,7 +178,8 @@ class _$V1AcceptOrderRequestImpl implements _V1AcceptOrderRequest {
       required this.bankName,
       required this.bankAccount,
       required this.cryptoWalletAddress,
-      required this.externalId});
+      required this.externalId,
+      required this.partnerSignature});
 
   factory _$V1AcceptOrderRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1AcceptOrderRequestImplFromJson(json);
@@ -180,10 +194,12 @@ class _$V1AcceptOrderRequestImpl implements _V1AcceptOrderRequest {
   final String cryptoWalletAddress;
   @override
   final String externalId;
+  @override
+  final String partnerSignature;
 
   @override
   String toString() {
-    return 'V1AcceptOrderRequest(orderId: $orderId, bankName: $bankName, bankAccount: $bankAccount, cryptoWalletAddress: $cryptoWalletAddress, externalId: $externalId)';
+    return 'V1AcceptOrderRequest(orderId: $orderId, bankName: $bankName, bankAccount: $bankAccount, cryptoWalletAddress: $cryptoWalletAddress, externalId: $externalId, partnerSignature: $partnerSignature)';
   }
 
   @override
@@ -199,13 +215,15 @@ class _$V1AcceptOrderRequestImpl implements _V1AcceptOrderRequest {
             (identical(other.cryptoWalletAddress, cryptoWalletAddress) ||
                 other.cryptoWalletAddress == cryptoWalletAddress) &&
             (identical(other.externalId, externalId) ||
-                other.externalId == externalId));
+                other.externalId == externalId) &&
+            (identical(other.partnerSignature, partnerSignature) ||
+                other.partnerSignature == partnerSignature));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, orderId, bankName, bankAccount,
-      cryptoWalletAddress, externalId);
+      cryptoWalletAddress, externalId, partnerSignature);
 
   /// Create a copy of V1AcceptOrderRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -231,7 +249,8 @@ abstract class _V1AcceptOrderRequest implements V1AcceptOrderRequest {
       required final String bankName,
       required final String bankAccount,
       required final String cryptoWalletAddress,
-      required final String externalId}) = _$V1AcceptOrderRequestImpl;
+      required final String externalId,
+      required final String partnerSignature}) = _$V1AcceptOrderRequestImpl;
 
   factory _V1AcceptOrderRequest.fromJson(Map<String, dynamic> json) =
       _$V1AcceptOrderRequestImpl.fromJson;
@@ -246,6 +265,8 @@ abstract class _V1AcceptOrderRequest implements V1AcceptOrderRequest {
   String get cryptoWalletAddress;
   @override
   String get externalId;
+  @override
+  String get partnerSignature;
 
   /// Create a copy of V1AcceptOrderRequest
   /// with the given fields replaced by the non-null parameter values.

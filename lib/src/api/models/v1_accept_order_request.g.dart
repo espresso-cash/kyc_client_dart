@@ -14,6 +14,7 @@ _$V1AcceptOrderRequestImpl _$$V1AcceptOrderRequestImplFromJson(
       bankAccount: json['bankAccount'] as String,
       cryptoWalletAddress: json['cryptoWalletAddress'] as String,
       externalId: json['externalId'] as String,
+      partnerSignature: json['partnerSignature'] as String,
     );
 
 Map<String, dynamic> _$$V1AcceptOrderRequestImplToJson(
@@ -24,4 +25,5 @@ Map<String, dynamic> _$$V1AcceptOrderRequestImplToJson(
       'bankAccount': instance.bankAccount,
       'cryptoWalletAddress': instance.cryptoWalletAddress,
       'externalId': instance.externalId,
+      'partnerSignature': instance.partnerSignature,
     };
