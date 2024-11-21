@@ -5,6 +5,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/v1_get_granted_access_partners_request.dart';
+import '../models/v1_get_granted_access_partners_response.dart';
 import '../models/v1_get_info_request.dart';
 import '../models/v1_get_info_response.dart';
 import '../models/v1_get_partner_info_request.dart';
@@ -15,6 +17,8 @@ import '../models/v1_grant_access_request.dart';
 import '../models/v1_grant_access_response.dart';
 import '../models/v1_init_storage_request.dart';
 import '../models/v1_init_storage_response.dart';
+import '../models/v1_revoke_access_request.dart';
+import '../models/v1_revoke_access_response.dart';
 import '../models/v1_set_user_data_request.dart';
 import '../models/v1_set_user_data_response.dart';
 import '../models/v1_set_validation_data_request.dart';
@@ -25,6 +29,10 @@ part 'kyc_service_client.g.dart';
 @RestApi()
 abstract class KycServiceClient {
   factory KycServiceClient(Dio dio, {String? baseUrl}) = _KycServiceClient;
+
+  @POST('/v1/getGrantedAccessPartners')
+  Future<V1GetGrantedAccessPartnersResponse>
+      kycServiceGetGrantedAccessPartners();
 
   @POST('/v1/getInfo')
   Future<V1GetInfoResponse> kycServiceGetInfo({
@@ -49,6 +57,11 @@ abstract class KycServiceClient {
   @POST('/v1/initStorage')
   Future<V1InitStorageResponse> kycServiceInitStorage({
     @Body() required V1InitStorageRequest body,
+  });
+
+  @POST('/v1/revokeAccess')
+  Future<V1RevokeAccessResponse> kycServiceRevokeAccess({
+    @Body() required V1RevokeAccessRequest body,
   });
 
   @POST('/v1/setUserData')

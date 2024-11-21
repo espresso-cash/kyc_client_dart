@@ -11,6 +11,7 @@ class WalletAppState extends ChangeNotifier {
   String get authPublicKey => _authPublicKey;
   String get rawSecretKey => _rawSecretKey;
   PartnerModel? get partnerInfo => _partnerInfo;
+  List<PartnerModel>? get grantedAccessPartners => _grantedAccessPartners;
   String? get orders => _orders?.map((order) => order).join('\n\n');
 
   Ed25519HDKeyPair? _wallet;
@@ -19,7 +20,7 @@ class WalletAppState extends ChangeNotifier {
   late String _rawSecretKey = '';
 
   PartnerModel? _partnerInfo;
-
+  List<PartnerModel>? _grantedAccessPartners;
   late KycUserClient _client;
 
   String? _email;
@@ -62,8 +63,19 @@ class WalletAppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> revokePartnerAccess(String partnerPK) async {
+    await _client.revokePartnerAccess(partnerPK);
+    notifyListeners();
+  }
+
   Future<void> fetchPartnerInfo(String partnerPK) async {
     _partnerInfo = await _client.getPartnerInfo(partnerPK: partnerPK);
+
+    notifyListeners();
+  }
+
+  Future<void> getGrantedAccessPartners() async {
+    _grantedAccessPartners = await _client.getGrantedAccessPartners();
 
     notifyListeners();
   }

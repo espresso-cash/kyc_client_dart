@@ -57,6 +57,7 @@ class _UserViewState extends State<UserView> {
               _buildWalletSection(state),
               _buildPartnerAccessSection(),
               _buildPartnerInfoSection(state),
+              _buildGrantedAccessPartnersSection(state),
               _buildUserDataSection(state),
               _buildVerificationSection(),
               _buildOnRampOrderSection(state),
@@ -245,11 +246,11 @@ class _UserViewState extends State<UserView> {
         ],
       );
 
-  Widget _buildPartnerAccessSection() => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Consumer<PartnerAppState>(
-            builder: (context, partnerState, _) => ElevatedButton(
+  Widget _buildPartnerAccessSection() => Consumer<PartnerAppState>(
+        builder: (context, partnerState, _) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ElevatedButton(
               onPressed: () async {
                 await context.read<WalletAppState>().grantPartnerAccess(
                       partnerState.authPublicKey,
@@ -259,11 +260,22 @@ class _UserViewState extends State<UserView> {
               },
               child: const Text('Grant partner access'),
             ),
-          ),
-          const SizedBox(height: 16),
-          const CustomDivider(),
-          const SizedBox(height: 16),
-        ],
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                await context.read<WalletAppState>().revokePartnerAccess(
+                      partnerState.authPublicKey,
+                    );
+                if (!context.mounted) return;
+                showSnackBar(context, message: 'Revoked partner access');
+              },
+              child: const Text('Revoke partner access'),
+            ),
+            const SizedBox(height: 16),
+            const CustomDivider(),
+            const SizedBox(height: 16),
+          ],
+        ),
       );
 
   Widget _buildPartnerInfoSection(WalletAppState state) => Column(
@@ -281,6 +293,29 @@ class _UserViewState extends State<UserView> {
                     partnerState.authPublicKey,
                   ),
               child: const Text('Fetch partner info'),
+            ),
+          ),
+          const SizedBox(height: 16),
+          const CustomDivider(),
+          const SizedBox(height: 16),
+        ],
+      );
+
+  Widget _buildGrantedAccessPartnersSection(WalletAppState state) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ValueField(
+            title: 'Granted access partners',
+            value: state.grantedAccessPartners != null
+                ? state.grantedAccessPartners?.map((e) => e.name).join('\n') ??
+                    ''
+                : '',
+          ),
+          Consumer<PartnerAppState>(
+            builder: (context, partnerState, _) => ElevatedButton(
+              onPressed: () =>
+                  context.read<WalletAppState>().getGrantedAccessPartners(),
+              child: const Text('Fetch granted access partners'),
             ),
           ),
           const SizedBox(height: 16),
