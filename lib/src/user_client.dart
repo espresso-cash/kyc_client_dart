@@ -25,6 +25,7 @@ import 'package:kyc_client_dart/src/api/models/v1_validate_phone_request.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
 import 'package:kyc_client_dart/src/api/protos/google/protobuf/timestamp.pb.dart';
 import 'package:kyc_client_dart/src/common.dart';
+import 'package:kyc_client_dart/src/config/config.dart';
 import 'package:kyc_client_dart/src/models/export.dart';
 import 'package:pinenacl/ed25519.dart' hide Signature;
 import 'package:pinenacl/tweetnacl.dart';
@@ -35,14 +36,10 @@ typedef SignRequest = Future<Signature> Function(Iterable<int> data);
 class KycUserClient {
   KycUserClient({
     required this.sign,
-    this.kycBaseUrl = defaultKycBaseUrl,
-    this.validatorBaseUrl = defaultValidatorBaseUrl,
-    this.orderBaseUrl = defaultOrderBaseUrl,
+    this.config = const AppConfig.demo(),
   });
 
-  final String? kycBaseUrl;
-  final String? validatorBaseUrl;
-  final String? orderBaseUrl;
+  final AppConfig config;
   final SignRequest sign;
 
   static const _seedMessage = 'hello';
@@ -106,17 +103,17 @@ class KycUserClient {
 
   Future<void> _initializeKycClient() async {
     final dio = await _createAuthenticatedClient('kyc.espressocash.com');
-    _kycClient = KycServiceClient(dio, baseUrl: kycBaseUrl);
+    _kycClient = KycServiceClient(dio, baseUrl: config.storageBaseUrl);
   }
 
   Future<void> _initializeValidatorClient() async {
     final dio = await _createAuthenticatedClient('validator.espressocash.com');
-    _validatorClient = ValidatorServiceClient(dio, baseUrl: validatorBaseUrl);
+    _validatorClient = ValidatorServiceClient(dio, baseUrl: config.validatorBaseUrl);
   }
 
   Future<void> _initializeOrderClient() async {
     final dio = await _createAuthenticatedClient('orders.espressocash.com');
-    _orderClient = OrderServiceClient(dio, baseUrl: orderBaseUrl);
+    _orderClient = OrderServiceClient(dio, baseUrl: config.orderBaseUrl);
   }
 
   Future<Dio> _createAuthenticatedClient(String audience) async {

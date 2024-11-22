@@ -26,13 +26,12 @@ import 'package:uuid/uuid.dart';
 class KycPartnerClient {
   KycPartnerClient({
     required this.authKeyPair,
-    this.kycBaseUrl = defaultKycBaseUrl,
-    this.orderBaseUrl = defaultOrderBaseUrl,
+    this.config = const AppConfig.demo(),
   });
 
+  final AppConfig config;
+
   final SimpleKeyPair authKeyPair;
-  final String? kycBaseUrl;
-  final String? orderBaseUrl;
 
   late String _authPublicKey;
 
@@ -67,12 +66,12 @@ class KycPartnerClient {
 
   Future<void> _initializeKycClient() async {
     final dio = await _createAuthenticatedClient('kyc.espressocash.com');
-    _kycClient = KycServiceClient(dio, baseUrl: kycBaseUrl);
+    _kycClient = KycServiceClient(dio, baseUrl: config.storageBaseUrl);
   }
 
   Future<void> _initializeOrderClient() async {
     final dio = await _createAuthenticatedClient('orders.espressocash.com');
-    _orderClient = OrderServiceClient(dio, baseUrl: orderBaseUrl);
+    _orderClient = OrderServiceClient(dio, baseUrl: config.orderBaseUrl);
   }
 
   Future<Dio> _createAuthenticatedClient(String audience) async {
