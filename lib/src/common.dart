@@ -16,11 +16,6 @@ import 'package:pinenacl/x25519.dart';
 export 'models/order_id.dart';
 export 'models/validation_result.dart';
 
-const defaultKycBaseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/';
-const defaultValidatorBaseUrl = 'https://validator.espressocash.com/';
-const defaultOrderBaseUrl =
-    'https://kyc-backend-orders-402681483920.europe-west1.run.app/';
-
 String generateHash(proto.WrappedData data) {
   // Normalize Dart timestamp serialization to avoid nanos
   if (data.whichData() == proto.WrappedData_Data.birthDate) {
