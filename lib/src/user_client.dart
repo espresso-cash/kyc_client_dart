@@ -215,6 +215,10 @@ class KycUserClient {
     );
   }
 
+  Future<void> deleteAllUserData() async {
+    await _kycClient.kycServiceDeleteAllUserData();
+  }
+
   Future<List<PartnerModel>> getGrantedAccessPartners() async {
     final response = await _kycClient.kycServiceGetGrantedAccessPartners();
 

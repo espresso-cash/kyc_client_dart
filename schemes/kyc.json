@@ -144,6 +144,38 @@
         ]
       }
     },
+    "/v1/deleteAllUserData": {
+      "post": {
+        "operationId": "KycService_DeleteAllUserData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteAllUserDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeleteAllUserDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
     "/v1/failOrder": {
       "post": {
         "operationId": "KycService_FailOrder",
@@ -727,6 +759,12 @@
           "type": "string"
         }
       }
+    },
+    "v1DeleteAllUserDataRequest": {
+      "type": "object"
+    },
+    "v1DeleteAllUserDataResponse": {
+      "type": "object"
     },
     "v1FailOrderRequest": {
       "type": "object",

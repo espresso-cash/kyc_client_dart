@@ -68,6 +68,11 @@ class WalletAppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteAllUserData() async {
+    await _client.deleteAllUserData();
+    notifyListeners();
+  }
+
   Future<void> fetchPartnerInfo(String partnerPK) async {
     _partnerInfo = await _client.getPartnerInfo(partnerPK: partnerPK);
 

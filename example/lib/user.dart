@@ -62,6 +62,7 @@ class _UserViewState extends State<UserView> {
               _buildVerificationSection(),
               _buildOnRampOrderSection(state),
               _buildUserOrdersSection(state),
+              _buildDeleteUserDataSection(state),
             ],
           ),
         ),
@@ -391,6 +392,23 @@ class _UserViewState extends State<UserView> {
           ElevatedButton(
             onPressed: state.fetchUserOrders,
             child: const Text('Fetch user orders'),
+          ),
+          const SizedBox(height: 16),
+          const CustomDivider(),
+          const SizedBox(height: 16),
+        ],
+      );
+
+  Widget _buildDeleteUserDataSection(WalletAppState state) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: state.deleteAllUserData,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
+            child: const Text('Delete All User Data'),
           ),
         ],
       );

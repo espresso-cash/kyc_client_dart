@@ -5,6 +5,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/v1_delete_all_user_data_request.dart';
+import '../models/v1_delete_all_user_data_response.dart';
 import '../models/v1_get_granted_access_partners_request.dart';
 import '../models/v1_get_granted_access_partners_response.dart';
 import '../models/v1_get_info_request.dart';
@@ -29,6 +31,9 @@ part 'kyc_service_client.g.dart';
 @RestApi()
 abstract class KycServiceClient {
   factory KycServiceClient(Dio dio, {String? baseUrl}) = _KycServiceClient;
+
+  @POST('/v1/deleteAllUserData')
+  Future<V1DeleteAllUserDataResponse> kycServiceDeleteAllUserData();
 
   @POST('/v1/getGrantedAccessPartners')
   Future<V1GetGrantedAccessPartnersResponse>
