@@ -1,9 +1,8 @@
 class AppConfig {
   const AppConfig.demo()
-      : storageBaseUrl = 'https://kyc-backend-oxvpvdtvzq-ew.a.run.app/',
-        validatorBaseUrl = 'https://validator.espressocash.com/',
-        orderBaseUrl =
-            'https://kyc-backend-orders-402681483920.europe-west1.run.app/';
+      : storageBaseUrl = 'https://storage-demo.brij.fi/',
+        validatorBaseUrl = 'https://verifier-demo.brij.fi/',
+        orderBaseUrl = 'https://orders-demo.brij.fi/';
 
   const AppConfig.production()
       : storageBaseUrl = 'https://storage.brij.fi/',
