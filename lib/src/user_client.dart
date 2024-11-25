@@ -10,6 +10,7 @@ import 'package:kyc_client_dart/src/api/clients/validator_service_client.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/api/models/v1_create_off_ramp_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_create_on_ramp_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_get_granted_access_partners_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_info_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_partner_info_request.dart';
@@ -19,6 +20,7 @@ import 'package:kyc_client_dart/src/api/models/v1_init_document_validation_reque
 import 'package:kyc_client_dart/src/api/models/v1_init_email_validation_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_init_phone_validation_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_init_storage_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_revoke_access_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_set_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_validate_email_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_validate_phone_request.dart';
@@ -202,6 +204,24 @@ class KycUserClient {
         encryptedSecretKey: encodedSecretKey,
       ),
     );
+  }
+
+  Future<void> revokePartnerAccess(String partnerPK) async {
+    await _kycClient.kycServiceRevokeAccess(
+      body: V1RevokeAccessRequest(validatorPublicKey: partnerPK),
+    );
+  }
+
+  Future<void> deleteAllUserData() async {
+    await _kycClient.kycServiceDeleteAllUserData();
+  }
+
+  Future<List<PartnerModel>> getGrantedAccessPartners() async {
+    final response = await _kycClient.kycServiceGetGrantedAccessPartners();
+
+    return response.partners
+        .map((e) => PartnerModel.fromJson(e.toJson()))
+        .toList();
   }
 
   Future<void> setData({

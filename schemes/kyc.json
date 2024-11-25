@@ -144,6 +144,38 @@
         ]
       }
     },
+    "/v1/deleteAllUserData": {
+      "post": {
+        "operationId": "KycService_DeleteAllUserData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteAllUserDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeleteAllUserDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
     "/v1/failOrder": {
       "post": {
         "operationId": "KycService_FailOrder",
@@ -168,6 +200,38 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1FailOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
+    "/v1/getGrantedAccessPartners": {
+      "post": {
+        "operationId": "KycService_GetGrantedAccessPartners",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetGrantedAccessPartnersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetGrantedAccessPartnersRequest"
             }
           }
         ],
@@ -464,6 +528,38 @@
         ]
       }
     },
+    "/v1/revokeAccess": {
+      "post": {
+        "operationId": "KycService_RevokeAccess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RevokeAccessResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RevokeAccessRequest"
+            }
+          }
+        ],
+        "tags": [
+          "KycService"
+        ]
+      }
+    },
     "/v1/setUserData": {
       "post": {
         "operationId": "KycService_SetUserData",
@@ -664,6 +760,12 @@
         }
       }
     },
+    "v1DeleteAllUserDataRequest": {
+      "type": "object"
+    },
+    "v1DeleteAllUserDataResponse": {
+      "type": "object"
+    },
     "v1FailOrderRequest": {
       "type": "object",
       "properties": {
@@ -680,6 +782,21 @@
     },
     "v1FailOrderResponse": {
       "type": "object"
+    },
+    "v1GetGrantedAccessPartnersRequest": {
+      "type": "object"
+    },
+    "v1GetGrantedAccessPartnersResponse": {
+      "type": "object",
+      "properties": {
+        "partners": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GetPartnerInfoResponse"
+          }
+        }
+      }
     },
     "v1GetInfoRequest": {
       "type": "object",
@@ -900,6 +1017,17 @@
       }
     },
     "v1RejectOrderResponse": {
+      "type": "object"
+    },
+    "v1RevokeAccessRequest": {
+      "type": "object",
+      "properties": {
+        "validatorPublicKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RevokeAccessResponse": {
       "type": "object"
     },
     "v1SetUserDataRequest": {
