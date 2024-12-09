@@ -16,7 +16,6 @@ dependencies:
   pinenacl: ^0.6.0
   protobuf: ^3.1.0
   retrofit: ^4.0.3
-  uuid: ^4.4.2
 
 dev_dependencies:
   build_runner: ^2.4.7

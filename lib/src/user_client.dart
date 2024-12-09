@@ -10,6 +10,7 @@ import 'package:kyc_client_dart/src/api/clients/validator_service_client.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/api/models/v1_create_off_ramp_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_create_on_ramp_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_data_type.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_info_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_partner_info_request.dart';
@@ -19,6 +20,7 @@ import 'package:kyc_client_dart/src/api/models/v1_init_document_validation_reque
 import 'package:kyc_client_dart/src/api/models/v1_init_email_validation_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_init_phone_validation_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_init_storage_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_remove_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_set_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_validate_email_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_validate_phone_request.dart';
@@ -220,71 +222,82 @@ class KycUserClient {
     final dataList = [
       if (email != null)
         (
-          data: proto.WrappedData(email: email.value),
+          data: proto.Email(value: email.value),
+          type: V1DataType.dataTypeEmail,
           id: email.id,
         ),
       if (phone != null)
         (
-          data: proto.WrappedData(phone: phone.value),
+          data: proto.Phone(value: phone.value),
+          type: V1DataType.dataTypePhone,
           id: phone.id,
         ),
       if (name != null)
         (
-          data: proto.WrappedData(
-            name: proto.Name(
-              firstName: name.firstName,
-              lastName: name.lastName,
-            ),
+          data: proto.Name(
+            firstName: name.firstName,
+            lastName: name.lastName,
           ),
+          type: V1DataType.dataTypeName,
           id: name.id,
         ),
       if (document != null)
         (
-          data: proto.WrappedData(
-            document: proto.Document(
-              number: document.number,
-              type: document.type.toDocumentType(),
-              countryCode: document.countryCode,
-            ),
+          data: proto.Document(
+            number: document.number,
+            type: document.type.toDocumentType(),
+            countryCode: document.countryCode,
           ),
+          type: V1DataType.dataTypeDocument,
           id: document.id,
         ),
       if (bankInfo != null)
         (
-          data: proto.WrappedData(
-            bankInfo: proto.BankInfo(
-              bankName: bankInfo.bankName,
-              accountNumber: bankInfo.accountNumber,
-              bankCode: bankInfo.bankCode,
-            ),
+          data: proto.BankInfo(
+            bankName: bankInfo.bankName,
+            accountNumber: bankInfo.accountNumber,
+            bankCode: bankInfo.bankCode,
           ),
+          type: V1DataType.dataTypeBankInfo,
           id: bankInfo.id,
         ),
       if (dob != null)
         (
-          data: proto.WrappedData(birthDate: Timestamp.fromDateTime(dob.value)),
+          data: proto.BirthDate(value: Timestamp.fromDateTime(dob.value)),
+          type: V1DataType.dataTypeBirthDate,
           id: dob.id
         ),
       if (selfie != null)
         (
-          data: proto.WrappedData(selfieImage: selfie.value),
+          data: proto.SelfieImage(value: selfie.value),
+          type: V1DataType.dataTypeSelfieImage,
           id: selfie.id,
         ),
     ];
 
     for (final item in dataList) {
       final protoData = item.data.writeToBuffer();
-      final encryptedData = await encryptAndSign(
+      final encryptedData = encryptOnly(
         data: protoData,
         secretBox: _secretBox,
-        signingKey: _signingKey,
       );
 
+      final hash = generateHash(item.data);
+      final message = '${item.type}|$hash';
+      final signature = _signingKey.sign(utf8.encode(message));
+
+      if (item.id.isNotEmpty) {
+        await _storageClient.storageServiceRemoveUserData(
+          body: V1RemoveUserDataRequest(dataId: item.id),
+        );
+      }
+
       await _storageClient.storageServiceSetUserData(
-        //TODO
         body: V1SetUserDataRequest(
-          id: item.id,
-          encryptedData: base64Encode(encryptedData),
+          type: item.type,
+          encryptedValue: base64Encode(encryptedData),
+          hash: hash,
+          signature: base58.encode(signature.signature.asTypedList),
         ),
       );
     }

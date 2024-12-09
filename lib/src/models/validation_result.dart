@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
+import 'package:kyc_client_dart/kyc_client_dart.dart';
 
 part 'validation_result.freezed.dart';
 
@@ -7,7 +7,6 @@ part 'validation_result.freezed.dart';
 sealed class ValidationResult with _$ValidationResult {
   const factory ValidationResult.hash({
     required String dataId,
-    required String value,
     required ValidationStatus status,
   }) = HashValidationResult;
 

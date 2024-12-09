@@ -15,13 +15,12 @@ import 'package:kyc_client_dart/src/api/models/v1_get_info_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_reject_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_set_custom_validation_data_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_set_validation_data_request.dart';
-import 'package:kyc_client_dart/src/api/protos/data.pb.dart';
 import 'package:kyc_client_dart/src/common.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
-import 'package:uuid/uuid.dart';
 
 class KycPartnerClient {
   KycPartnerClient({
@@ -153,38 +152,40 @@ class KycPartnerClient {
     required String userPK,
     required String secretKey,
   }) async {
-    final wrappedData = switch (value) {
-      HashValidationResult() => WrappedValidation(
-          hash: HashValidation(
-            status: value.status,
-            // TODO
-            hash: '',
-            // hash: generateHash(value.value),
-          ),
-        ),
-      CustomValidationResult() => WrappedValidation(
-          custom: CustomValidation(
-            type: value.type,
-            data: Uint8List.fromList(utf8.encode(value.value)),
-          ),
-        ),
-    }
-        .writeToBuffer();
+    //TODO call remove before set if exists
 
-    final encryptedData = await encryptAndSign(
-      data: wrappedData,
-      secretBox: SecretBox(Uint8List.fromList(base58.decode(secretKey))),
-      signingKey: _signingKey,
-    );
-    await _storageClient.storageServiceSetValidationData(
-      //TODO
-      body: V1SetValidationDataRequest(
-        encryptedData: base64Encode(encryptedData),
-        userPublicKey: userPK,
-        dataId: value.dataId,
-        id: const Uuid().v4(),
-      ),
-    );
+    if (value is HashValidationResult) {
+      const hash = 'TODO'; //TODO same as data table
+      final message = '${value.dataId}|$userPK|$hash|${value.status.toProto()}';
+      final signature = _signingKey.sign(utf8.encode(message));
+
+      await _storageClient.storageServiceSetValidationData(
+        body: V1SetValidationDataRequest(
+          dataId: value.dataId,
+          status: value.status.toApiValidationStatus(),
+          hash: hash,
+          signature: base58.encode(signature.signature.asTypedList),
+        ),
+      );
+    } else if (value is CustomValidationResult) {
+      const hash = 'TODO'; //TODO  same as data table
+      final message = '${value.type}|$hash|$userPK';
+      final signature = _signingKey.sign(utf8.encode(message));
+      final encryptedValue = encryptOnly(
+        data: Uint8List.fromList(utf8.encode(value.value)),
+        secretBox: SecretBox(Uint8List.fromList(base58.decode(secretKey))),
+      );
+
+      await _storageClient.storageServiceSetCustomValidationData(
+        body: V1SetCustomValidationDataRequest(
+          type: value.type,
+          encryptedValue: base64Encode(encryptedValue),
+          hash: hash,
+          signature: base58.encode(signature.signature.asTypedList),
+          userPublicKey: userPK,
+        ),
+      );
+    }
   }
 
   Future<Order> getOrder({required OrderId orderId}) async {

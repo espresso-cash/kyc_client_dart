@@ -3,6 +3,7 @@ import 'dart:isolate';
 
 import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
+import 'package:kyc_client_dart/src/api/models/v1_data_type.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_order_response.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_user_data_response.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
@@ -12,14 +13,16 @@ import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
+import 'package:protobuf/protobuf.dart';
 
 export 'models/order_id.dart';
 export 'models/validation_result.dart';
 
-String generateHash(proto.WrappedData data) {
+String generateHash(GeneratedMessage data) {
   // Normalize Dart timestamp serialization to avoid nanos
-  if (data.whichData() == proto.WrappedData_Data.birthDate) {
-    data.birthDate = Timestamp()..seconds = data.birthDate.seconds;
+  if (data.runtimeType == proto.BirthDate) {
+    final value = data as proto.BirthDate;
+    data = proto.BirthDate(value: Timestamp()..seconds = value.value.seconds);
   }
 
   final bytes = data.writeToBuffer();
@@ -144,138 +147,137 @@ UserData _processUserData({
   Map<String, dynamic>? custom;
 
   // Process validation data
-  for (final encryptedData in response.validationData) {
-    final decryptedData = verifyAndDecrypt(
-      signedEncryptedData: encryptedData.encryptedData,
-      secretKey: secretKey,
-      userPK: encryptedData.validatorPublicKey,
+  for (final data in response.validationData) {
+    // final decryptedData = verifyAndDecrypt(
+    //   signedEncryptedData: encryptedData.encryptedData,
+    //   secretKey: secretKey,
+    //   userPK: encryptedData.validatorPublicKey,
+    // );
+    // final wrappedData = proto.WrappedValidation.fromBuffer(decryptedData);
+
+    // final result = switch (wrappedData.whichData()) {
+    //   proto.WrappedValidation_Data.hash => HashValidationResult(
+    //       dataId: encryptedData.dataId,
+    //       value: wrappedData.hash.hash,
+    //       status: wrappedData.hash.status,
+    //     ),
+    //   proto.WrappedValidation_Data.custom => CustomValidationResult(
+    //       type: wrappedData.custom.type,
+    //       value: utf8.decode(wrappedData.custom.data),
+    //     ),
+    //   proto.WrappedValidation_Data.notSet => null,
+    // };
+
+    // if (result != null) {
+    //   if (result is HashValidationResult) {
+    //     validationMap[result.dataId] = result;
+    //   } else if (result is CustomValidationResult) {
+    //     custom ??= {};
+    //     custom[result.type] = result.value;
+    //   }
+    // }
+
+    validationMap[data.dataId] = HashValidationResult(
+      dataId: data.dataId,
+      status: data.status.toApiValidationStatus(),
     );
-    final wrappedData = proto.WrappedValidation.fromBuffer(decryptedData);
-
-    final result = switch (wrappedData.whichData()) {
-      proto.WrappedValidation_Data.hash => HashValidationResult(
-          dataId: encryptedData.dataId,
-          value: wrappedData.hash.hash,
-          status: wrappedData.hash.status,
-        ),
-      proto.WrappedValidation_Data.custom => CustomValidationResult(
-          type: wrappedData.custom.type,
-          value: utf8.decode(wrappedData.custom.data),
-        ),
-      proto.WrappedValidation_Data.notSet => null,
-    };
-
-    if (result != null) {
-      if (result is HashValidationResult) {
-        validationMap[result.dataId] = result;
-      } else if (result is CustomValidationResult) {
-        custom ??= {};
-        custom[result.type] = result.value;
-      }
-    }
   }
 
-  List<Email>? email;
-  List<Phone>? phone;
-  List<Name>? name;
-  List<BirthDate>? birthDate;
-  List<Document>? document;
-  List<BankInfo>? bankInfo;
-  List<Selfie>? selfie;
+  for (final data in response.customValidationData) {
+    validationMap[data.id] = CustomValidationResult(
+      dataId: data.id,
+      type: data.type,
+      value: data.encryptedValue,
+    );
+  }
+
+  Email? email;
+  Phone? phone;
+  Name? name;
+  BirthDate? birthDate;
+  Document? document;
+  BankInfo? bankInfo;
+  Selfie? selfie;
 
   // Process user data
   for (final encryptedData in response.userData) {
     final decryptedData = verifyAndDecrypt(
-      signedEncryptedData: encryptedData.encryptedData,
+      signedEncryptedData: encryptedData.encryptedValue,
       secretKey: secretKey,
       userPK: userPK,
     );
-    final wrappedData = proto.WrappedData.fromBuffer(decryptedData);
 
+    final type = encryptedData.type;
     final id = encryptedData.id;
-    final verificationData = validationMap[id] as HashValidationResult?;
+    // final verificationData = validationMap[id] as HashValidationResult?;
 
-    ValidationStatus status = ValidationStatus.unspecified;
-    if (verificationData != null) {
-      final hash = generateHash(wrappedData);
-      final bool hashMatching = hash == verificationData.value;
+    const ValidationStatus status = ValidationStatus.unspecified; //TODO
+    // if (verificationData != null) {
+    //   final hash = generateHash(wrappedData);
+    //   final bool hashMatching = hash == verificationData.value;
 
-      status = hashMatching
-          ? verificationData.status.toValidationStatus()
-          : ValidationStatus.unverified;
-    }
+    //   status = hashMatching
+    //       ? verificationData.status.toValidationStatus()
+    //       : ValidationStatus.unverified;
+    // }
 
-    switch (wrappedData.whichData()) {
-      case proto.WrappedData_Data.email:
-        email ??= [];
-        email.add(
-          Email(
-            value: wrappedData.email,
-            id: id,
-            status: status,
-          ),
+    switch (type) {
+      case V1DataType.dataTypeEmail:
+        final wrappedData = proto.Email.fromBuffer(decryptedData);
+        email = Email(
+          value: wrappedData.value,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.name:
-        name ??= [];
-        name.add(
-          Name(
-            firstName: wrappedData.name.firstName,
-            lastName: wrappedData.name.lastName,
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypeName:
+        final wrappedData = proto.Name.fromBuffer(decryptedData);
+        name = Name(
+          firstName: wrappedData.firstName,
+          lastName: wrappedData.lastName,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.birthDate:
-        birthDate ??= [];
-        birthDate.add(
-          BirthDate(
-            value: wrappedData.birthDate.toDateTime(),
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypeBirthDate:
+        final wrappedData = proto.BirthDate.fromBuffer(decryptedData);
+        birthDate = BirthDate(
+          value: wrappedData.value.toDateTime(),
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.phone:
-        phone ??= [];
-        phone.add(
-          Phone(
-            value: wrappedData.phone,
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypePhone:
+        final wrappedData = proto.Phone.fromBuffer(decryptedData);
+        phone = Phone(
+          value: wrappedData.value,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.document:
-        document ??= [];
-        document.add(
-          Document(
-            type: wrappedData.document.type.toIdType(),
-            number: wrappedData.document.number,
-            countryCode: wrappedData.document.countryCode,
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypeDocument:
+        final wrappedData = proto.Document.fromBuffer(decryptedData);
+        document = Document(
+          type: wrappedData.type.toIdType(),
+          number: wrappedData.number,
+          countryCode: wrappedData.countryCode,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.bankInfo:
-        bankInfo ??= [];
-        bankInfo.add(
-          BankInfo(
-            bankName: wrappedData.bankInfo.bankName,
-            accountNumber: wrappedData.bankInfo.accountNumber,
-            bankCode: wrappedData.bankInfo.bankCode,
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypeBankInfo:
+        final wrappedData = proto.BankInfo.fromBuffer(decryptedData);
+        bankInfo = BankInfo(
+          bankName: wrappedData.bankName,
+          accountNumber: wrappedData.accountNumber,
+          bankCode: wrappedData.bankCode,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.selfieImage:
-        selfie ??= [];
-        selfie.add(
-          Selfie(
-            value: wrappedData.selfieImage,
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypeSelfieImage:
+        final wrappedData = proto.SelfieImage.fromBuffer(decryptedData);
+        selfie = Selfie(
+          value: wrappedData.value,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.notSet:
-        break;
+      case V1DataType.dataTypeUnspecified:
+      case V1DataType.$unknown:
     }
   }
 

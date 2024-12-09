@@ -8,13 +8,13 @@ part 'user_data.g.dart';
 @freezed
 class UserData with _$UserData {
   const factory UserData({
-    List<Email>? email,
-    List<Phone>? phone,
-    List<Name>? name,
-    List<BirthDate>? birthDate,
-    List<Document>? document,
-    List<BankInfo>? bankInfo,
-    List<Selfie>? selfie,
+    Email? email,
+    Phone? phone,
+    Name? name,
+    BirthDate? birthDate,
+    Document? document,
+    BankInfo? bankInfo,
+    Selfie? selfie,
     Map<String, dynamic>? custom,
   }) = _UserData;
 
