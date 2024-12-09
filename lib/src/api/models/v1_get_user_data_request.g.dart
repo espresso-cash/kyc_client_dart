@@ -10,10 +10,12 @@ _$V1GetUserDataRequestImpl _$$V1GetUserDataRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$V1GetUserDataRequestImpl(
       userPublicKey: json['userPublicKey'] as String,
+      includeValues: json['includeValues'] as bool,
     );
 
 Map<String, dynamic> _$$V1GetUserDataRequestImplToJson(
         _$V1GetUserDataRequestImpl instance) =>
     <String, dynamic>{
       'userPublicKey': instance.userPublicKey,
+      'includeValues': instance.includeValues,
     };

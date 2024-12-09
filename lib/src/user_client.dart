@@ -4,8 +4,8 @@ import 'package:bs58/bs58.dart';
 import 'package:cryptography/cryptography.dart' hide PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
-import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
 import 'package:kyc_client_dart/src/api/clients/order_service_client.dart';
+import 'package:kyc_client_dart/src/api/clients/storage_service_client.dart';
 import 'package:kyc_client_dart/src/api/clients/validator_service_client.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/api/models/v1_create_off_ramp_order_request.dart';
@@ -54,7 +54,7 @@ class KycUserClient {
   late final SecretBox _secretBox;
   late final SigningKey _signingKey;
 
-  late final KycServiceClient _kycClient;
+  late final StorageServiceClient _storageClient;
   late final ValidatorServiceClient _validatorClient;
   late final OrderServiceClient _orderClient;
 
@@ -70,7 +70,7 @@ class KycUserClient {
     await _initializeOrderClient();
 
     try {
-      final getInfo = await _kycClient.kycServiceGetInfo(
+      final getInfo = await _storageClient.storageServiceGetInfo(
         body: V1GetInfoRequest(publicKey: _authPublicKey),
       );
       await _initializeEncryption(
@@ -103,12 +103,13 @@ class KycUserClient {
 
   Future<void> _initializeKycClient() async {
     final dio = await _createAuthenticatedClient('kyc.espressocash.com');
-    _kycClient = KycServiceClient(dio, baseUrl: config.storageBaseUrl);
+    _storageClient = StorageServiceClient(dio, baseUrl: config.storageBaseUrl);
   }
 
   Future<void> _initializeValidatorClient() async {
     final dio = await _createAuthenticatedClient('validator.espressocash.com');
-    _validatorClient = ValidatorServiceClient(dio, baseUrl: config.validatorBaseUrl);
+    _validatorClient =
+        ValidatorServiceClient(dio, baseUrl: config.validatorBaseUrl);
   }
 
   Future<void> _initializeOrderClient() async {
@@ -164,7 +165,7 @@ class KycUserClient {
 
   Future<void> _initStorage({required String walletAddress}) async {
     final proofSignature = await sign(utf8.encode(_proofMessage));
-    await _kycClient.kycServiceInitStorage(
+    await _storageClient.storageServiceInitStorage(
       body: V1InitStorageRequest(
         walletAddress: walletAddress,
         message: _seedMessage,
@@ -176,9 +177,12 @@ class KycUserClient {
     );
   }
 
-  Future<PartnerModel> getPartnerInfo({required String partnerPK}) => _kycClient
-      .kycServiceGetPartnerInfo(body: V1GetPartnerInfoRequest(id: partnerPK))
-      .then((e) => PartnerModel.fromJson(e.toJson()));
+  Future<PartnerModel> getPartnerInfo({required String partnerPK}) =>
+      _storageClient
+          .storageServiceGetPartnerInfo(
+            body: V1GetPartnerInfoRequest(id: partnerPK),
+          )
+          .then((e) => PartnerModel.fromJson(e.toJson()));
 
   Future<void> grantPartnerAccess(String partnerPK) async {
     final partnerEdPK = Uint8List.fromList(base58.decode(partnerPK));
@@ -196,9 +200,9 @@ class KycUserClient {
       sealedBox.encrypt(Uint8List.fromList(base58.decode(_rawSecretKey))),
     );
 
-    await _kycClient.kycServiceGrantAccess(
+    await _storageClient.storageServiceGrantAccess(
       body: V1GrantAccessRequest(
-        validatorPublicKey: partnerPK,
+        partnerPublicKey: partnerPK,
         encryptedSecretKey: encodedSecretKey,
       ),
     );
@@ -276,7 +280,8 @@ class KycUserClient {
         signingKey: _signingKey,
       );
 
-      await _kycClient.kycServiceSetUserData(
+      await _storageClient.storageServiceSetUserData(
+        //TODO
         body: V1SetUserDataRequest(
           id: item.id,
           encryptedData: base64Encode(encryptedData),
@@ -288,9 +293,13 @@ class KycUserClient {
   Future<UserData> getUserData({
     required String userPK,
     required String secretKey,
+    bool includeValues = true,
   }) async {
-    final response = await _kycClient.kycServiceGetUserData(
-      body: V1GetUserDataRequest(userPublicKey: userPK),
+    final response = await _storageClient.storageServiceGetUserData(
+      body: V1GetUserDataRequest(
+        userPublicKey: userPK,
+        includeValues: includeValues,
+      ),
     );
 
     return processUserData(

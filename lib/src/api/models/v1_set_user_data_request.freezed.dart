@@ -20,8 +20,10 @@ V1SetUserDataRequest _$V1SetUserDataRequestFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$V1SetUserDataRequest {
-  String get id => throw _privateConstructorUsedError;
-  String get encryptedData => throw _privateConstructorUsedError;
+  V1DataType get type => throw _privateConstructorUsedError;
+  String get encryptedValue => throw _privateConstructorUsedError;
+  String get hash => throw _privateConstructorUsedError;
+  String get signature => throw _privateConstructorUsedError;
 
   /// Serializes this V1SetUserDataRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +41,8 @@ abstract class $V1SetUserDataRequestCopyWith<$Res> {
           $Res Function(V1SetUserDataRequest) then) =
       _$V1SetUserDataRequestCopyWithImpl<$Res, V1SetUserDataRequest>;
   @useResult
-  $Res call({String id, String encryptedData});
+  $Res call(
+      {V1DataType type, String encryptedValue, String hash, String signature});
 }
 
 /// @nodoc
@@ -58,17 +61,27 @@ class _$V1SetUserDataRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? encryptedData = null,
+    Object? type = null,
+    Object? encryptedValue = null,
+    Object? hash = null,
+    Object? signature = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as V1DataType,
+      encryptedValue: null == encryptedValue
+          ? _value.encryptedValue
+          : encryptedValue // ignore: cast_nullable_to_non_nullable
               as String,
-      encryptedData: null == encryptedData
-          ? _value.encryptedData
-          : encryptedData // ignore: cast_nullable_to_non_nullable
+      hash: null == hash
+          ? _value.hash
+          : hash // ignore: cast_nullable_to_non_nullable
+              as String,
+      signature: null == signature
+          ? _value.signature
+          : signature // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -82,7 +95,8 @@ abstract class _$$V1SetUserDataRequestImplCopyWith<$Res>
       __$$V1SetUserDataRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String encryptedData});
+  $Res call(
+      {V1DataType type, String encryptedValue, String hash, String signature});
 }
 
 /// @nodoc
@@ -98,17 +112,27 @@ class __$$V1SetUserDataRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? encryptedData = null,
+    Object? type = null,
+    Object? encryptedValue = null,
+    Object? hash = null,
+    Object? signature = null,
   }) {
     return _then(_$V1SetUserDataRequestImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as V1DataType,
+      encryptedValue: null == encryptedValue
+          ? _value.encryptedValue
+          : encryptedValue // ignore: cast_nullable_to_non_nullable
               as String,
-      encryptedData: null == encryptedData
-          ? _value.encryptedData
-          : encryptedData // ignore: cast_nullable_to_non_nullable
+      hash: null == hash
+          ? _value.hash
+          : hash // ignore: cast_nullable_to_non_nullable
+              as String,
+      signature: null == signature
+          ? _value.signature
+          : signature // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -118,19 +142,26 @@ class __$$V1SetUserDataRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$V1SetUserDataRequestImpl implements _V1SetUserDataRequest {
   const _$V1SetUserDataRequestImpl(
-      {required this.id, required this.encryptedData});
+      {required this.type,
+      required this.encryptedValue,
+      required this.hash,
+      required this.signature});
 
   factory _$V1SetUserDataRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1SetUserDataRequestImplFromJson(json);
 
   @override
-  final String id;
+  final V1DataType type;
   @override
-  final String encryptedData;
+  final String encryptedValue;
+  @override
+  final String hash;
+  @override
+  final String signature;
 
   @override
   String toString() {
-    return 'V1SetUserDataRequest(id: $id, encryptedData: $encryptedData)';
+    return 'V1SetUserDataRequest(type: $type, encryptedValue: $encryptedValue, hash: $hash, signature: $signature)';
   }
 
   @override
@@ -138,14 +169,18 @@ class _$V1SetUserDataRequestImpl implements _V1SetUserDataRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$V1SetUserDataRequestImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.encryptedData, encryptedData) ||
-                other.encryptedData == encryptedData));
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.encryptedValue, encryptedValue) ||
+                other.encryptedValue == encryptedValue) &&
+            (identical(other.hash, hash) || other.hash == hash) &&
+            (identical(other.signature, signature) ||
+                other.signature == signature));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, encryptedData);
+  int get hashCode =>
+      Object.hash(runtimeType, type, encryptedValue, hash, signature);
 
   /// Create a copy of V1SetUserDataRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -167,16 +202,22 @@ class _$V1SetUserDataRequestImpl implements _V1SetUserDataRequest {
 
 abstract class _V1SetUserDataRequest implements V1SetUserDataRequest {
   const factory _V1SetUserDataRequest(
-      {required final String id,
-      required final String encryptedData}) = _$V1SetUserDataRequestImpl;
+      {required final V1DataType type,
+      required final String encryptedValue,
+      required final String hash,
+      required final String signature}) = _$V1SetUserDataRequestImpl;
 
   factory _V1SetUserDataRequest.fromJson(Map<String, dynamic> json) =
       _$V1SetUserDataRequestImpl.fromJson;
 
   @override
-  String get id;
+  V1DataType get type;
   @override
-  String get encryptedData;
+  String get encryptedValue;
+  @override
+  String get hash;
+  @override
+  String get signature;
 
   /// Create a copy of V1SetUserDataRequest
   /// with the given fields replaced by the non-null parameter values.

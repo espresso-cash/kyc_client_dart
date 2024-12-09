@@ -1,0 +1,14 @@
+syntax = 'proto3';
+
+package brij.storage.v1;
+
+option go_package = 'brij.fi/storage';
+
+message GetPartnerInfoRequest {
+  string id = 1;
+}
+
+message GetPartnerInfoResponse {
+  string name = 1;
+  string public_key = 2;
+}

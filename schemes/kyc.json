@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "espressocash/kyc/v1/kyc.proto",
+    "title": "service.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "KycService"
+      "name": "StorageService"
     }
   ],
   "consumes": [
@@ -16,169 +16,9 @@
     "application/json"
   ],
   "paths": {
-    "/v1/acceptOrder": {
-      "post": {
-        "operationId": "KycService_AcceptOrder",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1AcceptOrderResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1AcceptOrderRequest"
-            }
-          }
-        ],
-        "tags": [
-          "KycService"
-        ]
-      }
-    },
-    "/v1/completeOrder": {
-      "post": {
-        "operationId": "KycService_CompleteOrder",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CompleteOrderResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CompleteOrderRequest"
-            }
-          }
-        ],
-        "tags": [
-          "KycService"
-        ]
-      }
-    },
-    "/v1/createOffRampOrder": {
-      "post": {
-        "operationId": "KycService_CreateOffRampOrder",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CreateOffRampOrderResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateOffRampOrderRequest"
-            }
-          }
-        ],
-        "tags": [
-          "KycService"
-        ]
-      }
-    },
-    "/v1/createOnRampOrder": {
-      "post": {
-        "operationId": "KycService_CreateOnRampOrder",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CreateOnRampOrderResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateOnRampOrderRequest"
-            }
-          }
-        ],
-        "tags": [
-          "KycService"
-        ]
-      }
-    },
-    "/v1/failOrder": {
-      "post": {
-        "operationId": "KycService_FailOrder",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1FailOrderResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1FailOrderRequest"
-            }
-          }
-        ],
-        "tags": [
-          "KycService"
-        ]
-      }
-    },
     "/v1/getInfo": {
       "post": {
-        "operationId": "KycService_GetInfo",
+        "operationId": "StorageService_GetInfo",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -204,77 +44,13 @@
           }
         ],
         "tags": [
-          "KycService"
-        ]
-      }
-    },
-    "/v1/getOrder": {
-      "post": {
-        "operationId": "KycService_GetOrder",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetOrderResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetOrderRequest"
-            }
-          }
-        ],
-        "tags": [
-          "KycService"
-        ]
-      }
-    },
-    "/v1/getOrders": {
-      "post": {
-        "operationId": "KycService_GetOrders",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetOrdersResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetOrdersRequest"
-            }
-          }
-        ],
-        "tags": [
-          "KycService"
+          "StorageService"
         ]
       }
     },
     "/v1/getPartnerInfo": {
       "post": {
-        "operationId": "KycService_GetPartnerInfo",
+        "operationId": "StorageService_GetPartnerInfo",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -300,45 +76,13 @@
           }
         ],
         "tags": [
-          "KycService"
-        ]
-      }
-    },
-    "/v1/getPartnerOrders": {
-      "post": {
-        "operationId": "KycService_GetPartnerOrders",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetPartnerOrdersResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetPartnerOrdersRequest"
-            }
-          }
-        ],
-        "tags": [
-          "KycService"
+          "StorageService"
         ]
       }
     },
     "/v1/getUserData": {
       "post": {
-        "operationId": "KycService_GetUserData",
+        "operationId": "StorageService_GetUserData",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -364,13 +108,13 @@
           }
         ],
         "tags": [
-          "KycService"
+          "StorageService"
         ]
       }
     },
     "/v1/grantAccess": {
       "post": {
-        "operationId": "KycService_GrantAccess",
+        "operationId": "StorageService_GrantAccess",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -396,13 +140,13 @@
           }
         ],
         "tags": [
-          "KycService"
+          "StorageService"
         ]
       }
     },
     "/v1/initStorage": {
       "post": {
-        "operationId": "KycService_InitStorage",
+        "operationId": "StorageService_InitStorage",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -428,18 +172,18 @@
           }
         ],
         "tags": [
-          "KycService"
+          "StorageService"
         ]
       }
     },
-    "/v1/rejectOrder": {
+    "/v1/removeCustomValidationData": {
       "post": {
-        "operationId": "KycService_RejectOrder",
+        "operationId": "StorageService_RemoveCustomValidationData",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1RejectOrderResponse"
+              "$ref": "#/definitions/v1RemoveCustomValidationDataResponse"
             }
           },
           "default": {
@@ -455,18 +199,114 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1RejectOrderRequest"
+              "$ref": "#/definitions/v1RemoveCustomValidationDataRequest"
             }
           }
         ],
         "tags": [
-          "KycService"
+          "StorageService"
+        ]
+      }
+    },
+    "/v1/removeUserData": {
+      "post": {
+        "operationId": "StorageService_RemoveUserData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoveUserDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RemoveUserDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "StorageService"
+        ]
+      }
+    },
+    "/v1/removeValidationData": {
+      "post": {
+        "operationId": "StorageService_RemoveValidationData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoveValidationDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RemoveValidationDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "StorageService"
+        ]
+      }
+    },
+    "/v1/setCustomValidationData": {
+      "post": {
+        "operationId": "StorageService_SetCustomValidationData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SetCustomValidationDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SetCustomValidationDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "StorageService"
         ]
       }
     },
     "/v1/setUserData": {
       "post": {
-        "operationId": "KycService_SetUserData",
+        "operationId": "StorageService_SetUserData",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -492,13 +332,13 @@
           }
         ],
         "tags": [
-          "KycService"
+          "StorageService"
         ]
       }
     },
     "/v1/setValidationData": {
       "post": {
-        "operationId": "KycService_SetValidationData",
+        "operationId": "StorageService_SetValidationData",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -524,7 +364,7 @@
           }
         ],
         "tags": [
-          "KycService"
+          "StorageService"
         ]
       }
     }
@@ -558,128 +398,47 @@
         }
       }
     },
-    "v1AcceptOrderRequest": {
+    "v1CustomValidationDataField": {
       "type": "object",
       "properties": {
-        "orderId": {
+        "id": {
           "type": "string"
         },
-        "bankName": {
+        "validatorPublicKey": {
           "type": "string"
         },
-        "bankAccount": {
+        "type": {
           "type": "string"
         },
-        "cryptoWalletAddress": {
-          "type": "string"
-        },
-        "externalId": {
-          "type": "string"
-        }
-      }
-    },
-    "v1AcceptOrderResponse": {
-      "type": "object"
-    },
-    "v1CompleteOrderRequest": {
-      "type": "object",
-      "properties": {
-        "orderId": {
-          "type": "string"
-        },
-        "transactionId": {
-          "type": "string"
-        },
-        "externalId": {
-          "type": "string"
-        }
-      }
-    },
-    "v1CompleteOrderResponse": {
-      "type": "object"
-    },
-    "v1CreateOffRampOrderRequest": {
-      "type": "object",
-      "properties": {
-        "partnerPublicKey": {
-          "type": "string"
-        },
-        "cryptoAmount": {
+        "encryptedValue": {
           "type": "string",
-          "format": "int64"
+          "format": "byte"
         },
-        "cryptoCurrency": {
+        "hash": {
           "type": "string"
         },
-        "fiatAmount": {
+        "signature": {
+          "type": "string"
+        },
+        "createdAt": {
           "type": "string",
-          "format": "int64"
-        },
-        "fiatCurrency": {
-          "type": "string"
-        },
-        "bankName": {
-          "type": "string"
-        },
-        "bankAccount": {
-          "type": "string"
+          "format": "date-time"
         }
       }
     },
-    "v1CreateOffRampOrderResponse": {
-      "type": "object",
-      "properties": {
-        "orderId": {
-          "type": "string"
-        }
-      }
-    },
-    "v1CreateOnRampOrderRequest": {
-      "type": "object",
-      "properties": {
-        "partnerPublicKey": {
-          "type": "string"
-        },
-        "cryptoAmount": {
-          "type": "string",
-          "format": "int64"
-        },
-        "cryptoCurrency": {
-          "type": "string"
-        },
-        "fiatAmount": {
-          "type": "string",
-          "format": "int64"
-        },
-        "fiatCurrency": {
-          "type": "string"
-        }
-      }
-    },
-    "v1CreateOnRampOrderResponse": {
-      "type": "object",
-      "properties": {
-        "orderId": {
-          "type": "string"
-        }
-      }
-    },
-    "v1FailOrderRequest": {
-      "type": "object",
-      "properties": {
-        "orderId": {
-          "type": "string"
-        },
-        "reason": {
-          "type": "string"
-        },
-        "externalId": {
-          "type": "string"
-        }
-      }
-    },
-    "v1FailOrderResponse": {
-      "type": "object"
+    "v1DataType": {
+      "type": "string",
+      "enum": [
+        "DATA_TYPE_UNSPECIFIED",
+        "DATA_TYPE_PHONE",
+        "DATA_TYPE_EMAIL",
+        "DATA_TYPE_NAME",
+        "DATA_TYPE_BIRTH_DATE",
+        "DATA_TYPE_DOCUMENT",
+        "DATA_TYPE_BANK_INFO",
+        "DATA_TYPE_SELFIE_IMAGE"
+      ],
+      "default": "DATA_TYPE_UNSPECIFIED"
     },
     "v1GetInfoRequest": {
       "type": "object",
@@ -706,90 +465,6 @@
         }
       }
     },
-    "v1GetOrderRequest": {
-      "type": "object",
-      "properties": {
-        "orderId": {
-          "type": "string"
-        },
-        "externalId": {
-          "type": "string"
-        }
-      }
-    },
-    "v1GetOrderResponse": {
-      "type": "object",
-      "properties": {
-        "orderId": {
-          "type": "string"
-        },
-        "created": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "partnerPublicKey": {
-          "type": "string"
-        },
-        "userPublicKey": {
-          "type": "string"
-        },
-        "comment": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "cryptoAmount": {
-          "type": "string",
-          "format": "int64"
-        },
-        "cryptoCurrency": {
-          "type": "string"
-        },
-        "fiatAmount": {
-          "type": "string",
-          "format": "int64"
-        },
-        "fiatCurrency": {
-          "type": "string"
-        },
-        "bankName": {
-          "type": "string"
-        },
-        "bankAccount": {
-          "type": "string"
-        },
-        "cryptoWalletAddress": {
-          "type": "string"
-        },
-        "transaction": {
-          "type": "string"
-        },
-        "transactionId": {
-          "type": "string"
-        },
-        "externalId": {
-          "type": "string"
-        }
-      }
-    },
-    "v1GetOrdersRequest": {
-      "type": "object"
-    },
-    "v1GetOrdersResponse": {
-      "type": "object",
-      "properties": {
-        "orders": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1GetOrderResponse"
-          }
-        }
-      }
-    },
     "v1GetPartnerInfoRequest": {
       "type": "object",
       "properties": {
@@ -809,26 +484,14 @@
         }
       }
     },
-    "v1GetPartnerOrdersRequest": {
-      "type": "object"
-    },
-    "v1GetPartnerOrdersResponse": {
-      "type": "object",
-      "properties": {
-        "orders": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1GetOrderResponse"
-          }
-        }
-      }
-    },
     "v1GetUserDataRequest": {
       "type": "object",
       "properties": {
         "userPublicKey": {
           "type": "string"
+        },
+        "includeValues": {
+          "type": "boolean"
         }
       }
     },
@@ -848,13 +511,20 @@
             "type": "object",
             "$ref": "#/definitions/v1ValidationDataField"
           }
+        },
+        "customValidationData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CustomValidationDataField"
+          }
         }
       }
     },
     "v1GrantAccessRequest": {
       "type": "object",
       "properties": {
-        "validatorPublicKey": {
+        "partnerPublicKey": {
           "type": "string"
         },
         "encryptedSecretKey": {
@@ -888,27 +558,77 @@
     "v1InitStorageResponse": {
       "type": "object"
     },
-    "v1RejectOrderRequest": {
+    "v1RemoveCustomValidationDataRequest": {
       "type": "object",
       "properties": {
-        "orderId": {
-          "type": "string"
-        },
-        "reason": {
+        "dataId": {
           "type": "string"
         }
       }
     },
-    "v1RejectOrderResponse": {
+    "v1RemoveCustomValidationDataResponse": {
+      "type": "object"
+    },
+    "v1RemoveUserDataRequest": {
+      "type": "object",
+      "properties": {
+        "dataId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RemoveUserDataResponse": {
+      "type": "object"
+    },
+    "v1RemoveValidationDataRequest": {
+      "type": "object",
+      "properties": {
+        "dataId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RemoveValidationDataResponse": {
+      "type": "object"
+    },
+    "v1SetCustomValidationDataRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "encryptedValue": {
+          "type": "string",
+          "format": "byte"
+        },
+        "hash": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "userPublicKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SetCustomValidationDataResponse": {
       "type": "object"
     },
     "v1SetUserDataRequest": {
       "type": "object",
       "properties": {
-        "id": {
+        "type": {
+          "$ref": "#/definitions/v1DataType"
+        },
+        "encryptedValue": {
+          "type": "string",
+          "format": "byte"
+        },
+        "hash": {
           "type": "string"
         },
-        "encryptedData": {
+        "signature": {
           "type": "string"
         }
       }
@@ -919,16 +639,16 @@
     "v1SetValidationDataRequest": {
       "type": "object",
       "properties": {
-        "userPublicKey": {
-          "type": "string"
-        },
-        "encryptedData": {
-          "type": "string"
-        },
         "dataId": {
           "type": "string"
         },
-        "id": {
+        "status": {
+          "$ref": "#/definitions/v1ValidationStatus"
+        },
+        "hash": {
+          "type": "string"
+        },
+        "signature": {
           "type": "string"
         }
       }
@@ -942,24 +662,61 @@
         "id": {
           "type": "string"
         },
-        "encryptedData": {
+        "type": {
+          "$ref": "#/definitions/v1DataType"
+        },
+        "encryptedValue": {
+          "type": "string",
+          "format": "byte"
+        },
+        "hash": {
           "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
     "v1ValidationDataField": {
       "type": "object",
       "properties": {
-        "validatorPublicKey": {
+        "id": {
           "type": "string"
         },
-        "encryptedData": {
+        "validatorPublicKey": {
           "type": "string"
         },
         "dataId": {
           "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/v1ValidationStatus"
+        },
+        "hash": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "validatedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
+    },
+    "v1ValidationStatus": {
+      "type": "string",
+      "enum": [
+        "VALIDATION_STATUS_UNSPECIFIED",
+        "VALIDATION_STATUS_PENDING",
+        "VALIDATION_STATUS_APPROVED",
+        "VALIDATION_STATUS_REJECTED"
+      ],
+      "default": "VALIDATION_STATUS_UNSPECIFIED"
     }
   },
   "securityDefinitions": {

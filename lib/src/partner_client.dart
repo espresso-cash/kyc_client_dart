@@ -5,8 +5,8 @@ import 'package:cryptography/cryptography.dart' hide Hash, PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
 import 'package:kyc_client_dart/kyc_client_dart.dart';
-import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
 import 'package:kyc_client_dart/src/api/clients/order_service_client.dart';
+import 'package:kyc_client_dart/src/api/clients/storage_service_client.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/api/models/v1_accept_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_complete_order_request.dart';
@@ -35,7 +35,7 @@ class KycPartnerClient {
 
   late String _authPublicKey;
 
-  late KycServiceClient _kycClient;
+  late StorageServiceClient _storageClient;
   late OrderServiceClient _orderClient;
 
   late SigningKey _signingKey;
@@ -66,7 +66,7 @@ class KycPartnerClient {
 
   Future<void> _initializeKycClient() async {
     final dio = await _createAuthenticatedClient('kyc.espressocash.com');
-    _kycClient = KycServiceClient(dio, baseUrl: config.storageBaseUrl);
+    _storageClient = StorageServiceClient(dio, baseUrl: config.storageBaseUrl);
   }
 
   Future<void> _initializeOrderClient() async {
@@ -94,7 +94,7 @@ class KycPartnerClient {
   }
 
   Future<String> getUserSecretKey(String userPK) async {
-    final info = await _kycClient.kycServiceGetInfo(
+    final info = await _storageClient.storageServiceGetInfo(
       body: V1GetInfoRequest(publicKey: userPK),
     );
 
@@ -132,9 +132,13 @@ class KycPartnerClient {
   Future<UserData> getUserData({
     required String userPK,
     required String secretKey,
+    bool includeValues = true,
   }) async {
-    final response = await _kycClient.kycServiceGetUserData(
-      body: V1GetUserDataRequest(userPublicKey: userPK),
+    final response = await _storageClient.storageServiceGetUserData(
+      body: V1GetUserDataRequest(
+        userPublicKey: userPK,
+        includeValues: includeValues,
+      ),
     );
 
     return processUserData(
@@ -172,7 +176,8 @@ class KycPartnerClient {
       secretBox: SecretBox(Uint8List.fromList(base58.decode(secretKey))),
       signingKey: _signingKey,
     );
-    await _kycClient.kycServiceSetValidationData(
+    await _storageClient.storageServiceSetValidationData(
+      //TODO
       body: V1SetValidationDataRequest(
         encryptedData: base64Encode(encryptedData),
         userPublicKey: userPK,

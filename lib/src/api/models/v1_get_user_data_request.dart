@@ -11,6 +11,7 @@ part 'v1_get_user_data_request.g.dart';
 class V1GetUserDataRequest with _$V1GetUserDataRequest {
   const factory V1GetUserDataRequest({
     required String userPublicKey,
+    required bool includeValues,
   }) = _V1GetUserDataRequest;
   
   factory V1GetUserDataRequest.fromJson(Map<String, Object?> json) => _$V1GetUserDataRequestFromJson(json);

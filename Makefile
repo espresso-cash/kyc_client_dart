@@ -5,4 +5,4 @@ generate_api:
 	dart run swagger_parser
 
 generate_protos:
-	protoc -Iprotos protos/*.proto --dart_out=grpc:lib/src/api/protos google/protobuf/timestamp.proto
+	protoc -I protos -I third_party protos/*.proto --dart_out=grpc:lib/src/api/protos google/protobuf/timestamp.proto

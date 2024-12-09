@@ -10,7 +10,7 @@ part 'v1_grant_access_request.g.dart';
 @Freezed()
 class V1GrantAccessRequest with _$V1GrantAccessRequest {
   const factory V1GrantAccessRequest({
-    required String validatorPublicKey,
+    required String partnerPublicKey,
     required String encryptedSecretKey,
   }) = _V1GrantAccessRequest;
   

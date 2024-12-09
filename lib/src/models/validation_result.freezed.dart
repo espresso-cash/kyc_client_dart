@@ -92,7 +92,7 @@ class __$$HashValidationResultImplCopyWithImpl<$Res>
   $Res call({
     Object? dataId = null,
     Object? value = null,
-    Object? status = null,
+    Object? status = freezed,
   }) {
     return _then(_$HashValidationResultImpl(
       dataId: null == dataId
@@ -103,7 +103,7 @@ class __$$HashValidationResultImplCopyWithImpl<$Res>
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
               as String,
-      status: null == status
+      status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ValidationStatus,
@@ -136,11 +136,12 @@ class _$HashValidationResultImpl implements HashValidationResult {
             other is _$HashValidationResultImpl &&
             (identical(other.dataId, dataId) || other.dataId == dataId) &&
             (identical(other.value, value) || other.value == value) &&
-            (identical(other.status, status) || other.status == status));
+            const DeepCollectionEquality().equals(other.status, status));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, dataId, value, status);
+  int get hashCode => Object.hash(
+      runtimeType, dataId, value, const DeepCollectionEquality().hash(status));
 
   /// Create a copy of ValidationResult
   /// with the given fields replaced by the non-null parameter values.

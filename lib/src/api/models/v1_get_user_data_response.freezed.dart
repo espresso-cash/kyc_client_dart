@@ -24,6 +24,8 @@ mixin _$V1GetUserDataResponse {
   List<V1UserDataField> get userData => throw _privateConstructorUsedError;
   List<V1ValidationDataField> get validationData =>
       throw _privateConstructorUsedError;
+  List<V1CustomValidationDataField> get customValidationData =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this V1GetUserDataResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,7 +45,8 @@ abstract class $V1GetUserDataResponseCopyWith<$Res> {
   @useResult
   $Res call(
       {List<V1UserDataField> userData,
-      List<V1ValidationDataField> validationData});
+      List<V1ValidationDataField> validationData,
+      List<V1CustomValidationDataField> customValidationData});
 }
 
 /// @nodoc
@@ -64,6 +67,7 @@ class _$V1GetUserDataResponseCopyWithImpl<$Res,
   $Res call({
     Object? userData = null,
     Object? validationData = null,
+    Object? customValidationData = null,
   }) {
     return _then(_value.copyWith(
       userData: null == userData
@@ -74,6 +78,10 @@ class _$V1GetUserDataResponseCopyWithImpl<$Res,
           ? _value.validationData
           : validationData // ignore: cast_nullable_to_non_nullable
               as List<V1ValidationDataField>,
+      customValidationData: null == customValidationData
+          ? _value.customValidationData
+          : customValidationData // ignore: cast_nullable_to_non_nullable
+              as List<V1CustomValidationDataField>,
     ) as $Val);
   }
 }
@@ -89,7 +97,8 @@ abstract class _$$V1GetUserDataResponseImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<V1UserDataField> userData,
-      List<V1ValidationDataField> validationData});
+      List<V1ValidationDataField> validationData,
+      List<V1CustomValidationDataField> customValidationData});
 }
 
 /// @nodoc
@@ -108,6 +117,7 @@ class __$$V1GetUserDataResponseImplCopyWithImpl<$Res>
   $Res call({
     Object? userData = null,
     Object? validationData = null,
+    Object? customValidationData = null,
   }) {
     return _then(_$V1GetUserDataResponseImpl(
       userData: null == userData
@@ -118,6 +128,10 @@ class __$$V1GetUserDataResponseImplCopyWithImpl<$Res>
           ? _value._validationData
           : validationData // ignore: cast_nullable_to_non_nullable
               as List<V1ValidationDataField>,
+      customValidationData: null == customValidationData
+          ? _value._customValidationData
+          : customValidationData // ignore: cast_nullable_to_non_nullable
+              as List<V1CustomValidationDataField>,
     ));
   }
 }
@@ -127,9 +141,11 @@ class __$$V1GetUserDataResponseImplCopyWithImpl<$Res>
 class _$V1GetUserDataResponseImpl implements _V1GetUserDataResponse {
   const _$V1GetUserDataResponseImpl(
       {required final List<V1UserDataField> userData,
-      required final List<V1ValidationDataField> validationData})
+      required final List<V1ValidationDataField> validationData,
+      required final List<V1CustomValidationDataField> customValidationData})
       : _userData = userData,
-        _validationData = validationData;
+        _validationData = validationData,
+        _customValidationData = customValidationData;
 
   factory _$V1GetUserDataResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1GetUserDataResponseImplFromJson(json);
@@ -150,9 +166,18 @@ class _$V1GetUserDataResponseImpl implements _V1GetUserDataResponse {
     return EqualUnmodifiableListView(_validationData);
   }
 
+  final List<V1CustomValidationDataField> _customValidationData;
+  @override
+  List<V1CustomValidationDataField> get customValidationData {
+    if (_customValidationData is EqualUnmodifiableListView)
+      return _customValidationData;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_customValidationData);
+  }
+
   @override
   String toString() {
-    return 'V1GetUserDataResponse(userData: $userData, validationData: $validationData)';
+    return 'V1GetUserDataResponse(userData: $userData, validationData: $validationData, customValidationData: $customValidationData)';
   }
 
   @override
@@ -162,7 +187,9 @@ class _$V1GetUserDataResponseImpl implements _V1GetUserDataResponse {
             other is _$V1GetUserDataResponseImpl &&
             const DeepCollectionEquality().equals(other._userData, _userData) &&
             const DeepCollectionEquality()
-                .equals(other._validationData, _validationData));
+                .equals(other._validationData, _validationData) &&
+            const DeepCollectionEquality()
+                .equals(other._customValidationData, _customValidationData));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -170,7 +197,8 @@ class _$V1GetUserDataResponseImpl implements _V1GetUserDataResponse {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_userData),
-      const DeepCollectionEquality().hash(_validationData));
+      const DeepCollectionEquality().hash(_validationData),
+      const DeepCollectionEquality().hash(_customValidationData));
 
   /// Create a copy of V1GetUserDataResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -191,9 +219,10 @@ class _$V1GetUserDataResponseImpl implements _V1GetUserDataResponse {
 
 abstract class _V1GetUserDataResponse implements V1GetUserDataResponse {
   const factory _V1GetUserDataResponse(
-          {required final List<V1UserDataField> userData,
-          required final List<V1ValidationDataField> validationData}) =
-      _$V1GetUserDataResponseImpl;
+      {required final List<V1UserDataField> userData,
+      required final List<V1ValidationDataField> validationData,
+      required final List<V1CustomValidationDataField>
+          customValidationData}) = _$V1GetUserDataResponseImpl;
 
   factory _V1GetUserDataResponse.fromJson(Map<String, dynamic> json) =
       _$V1GetUserDataResponseImpl.fromJson;
@@ -202,6 +231,8 @@ abstract class _V1GetUserDataResponse implements V1GetUserDataResponse {
   List<V1UserDataField> get userData;
   @override
   List<V1ValidationDataField> get validationData;
+  @override
+  List<V1CustomValidationDataField> get customValidationData;
 
   /// Create a copy of V1GetUserDataResponse
   /// with the given fields replaced by the non-null parameter values.
