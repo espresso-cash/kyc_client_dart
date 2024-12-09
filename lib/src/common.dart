@@ -149,18 +149,15 @@ UserData _processUserData({
   required String userPK,
   required String secretKey,
 }) {
-  final validationMap = Map.fromEntries(
-    response.validationData.map(
-      (data) => MapEntry(
-        data.dataId,
-        HashValidationResult(
-          dataId: data.dataId,
-          hash: data.hash,
-          status: data.status.toApiValidationStatus(),
-        ),
+  final validationMap = {
+    for (final data in response.validationData)
+      data.dataId: HashValidationResult(
+        dataId: data.dataId,
+        hash: data.hash,
+        status: data.status.toApiValidationStatus(),
       ),
-    ),
-  );
+  };
+
   Email? email;
   Phone? phone;
   Name? name;
@@ -242,18 +239,14 @@ UserData _processUserData({
     }
   }
 
-  final customValidationData = Map.fromEntries(
-    response.customValidationData.map(
-      (data) => MapEntry(
-        data.id,
-        CustomValidationResult(
-          id: data.id,
-          type: data.type,
-          value: data.encryptedValue,
-        ),
+  final customValidationData = {
+    for (final data in response.customValidationData)
+      data.id: CustomValidationResult(
+        id: data.id,
+        type: data.type,
+        value: data.encryptedValue,
       ),
-    ),
-  );
+  };
 
   return UserData(
     email: email,
