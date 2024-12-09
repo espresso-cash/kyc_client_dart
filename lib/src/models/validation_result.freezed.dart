@@ -15,23 +15,13 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$ValidationResult {
-  String get dataId => throw _privateConstructorUsedError;
-
-  /// Create a copy of ValidationResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ValidationResultCopyWith<ValidationResult> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+mixin _$ValidationResult {}
 
 /// @nodoc
 abstract class $ValidationResultCopyWith<$Res> {
   factory $ValidationResultCopyWith(
           ValidationResult value, $Res Function(ValidationResult) then) =
       _$ValidationResultCopyWithImpl<$Res, ValidationResult>;
-  @useResult
-  $Res call({String dataId});
 }
 
 /// @nodoc
@@ -46,27 +36,13 @@ class _$ValidationResultCopyWithImpl<$Res, $Val extends ValidationResult>
 
   /// Create a copy of ValidationResult
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? dataId = null,
-  }) {
-    return _then(_value.copyWith(
-      dataId: null == dataId
-          ? _value.dataId
-          : dataId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$HashValidationResultImplCopyWith<$Res>
-    implements $ValidationResultCopyWith<$Res> {
+abstract class _$$HashValidationResultImplCopyWith<$Res> {
   factory _$$HashValidationResultImplCopyWith(_$HashValidationResultImpl value,
           $Res Function(_$HashValidationResultImpl) then) =
       __$$HashValidationResultImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({String dataId, ValidationStatus status});
 }
@@ -144,28 +120,24 @@ abstract class HashValidationResult implements ValidationResult {
       {required final String dataId,
       required final ValidationStatus status}) = _$HashValidationResultImpl;
 
-  @override
   String get dataId;
   ValidationStatus get status;
 
   /// Create a copy of ValidationResult
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HashValidationResultImplCopyWith<_$HashValidationResultImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$CustomValidationResultImplCopyWith<$Res>
-    implements $ValidationResultCopyWith<$Res> {
+abstract class _$$CustomValidationResultImplCopyWith<$Res> {
   factory _$$CustomValidationResultImplCopyWith(
           _$CustomValidationResultImpl value,
           $Res Function(_$CustomValidationResultImpl) then) =
       __$$CustomValidationResultImplCopyWithImpl<$Res>;
-  @override
   @useResult
-  $Res call({String dataId, String type, String value});
+  $Res call({String? id, String type, String value});
 }
 
 /// @nodoc
@@ -182,15 +154,15 @@ class __$$CustomValidationResultImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? dataId = null,
+    Object? id = freezed,
     Object? type = null,
     Object? value = null,
   }) {
     return _then(_$CustomValidationResultImpl(
-      dataId: null == dataId
-          ? _value.dataId
-          : dataId // ignore: cast_nullable_to_non_nullable
-              as String,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -207,11 +179,10 @@ class __$$CustomValidationResultImplCopyWithImpl<$Res>
 
 class _$CustomValidationResultImpl implements CustomValidationResult {
   const _$CustomValidationResultImpl(
-      {this.dataId = '', required this.type, required this.value});
+      {this.id, required this.type, required this.value});
 
   @override
-  @JsonKey()
-  final String dataId;
+  final String? id;
   @override
   final String type;
   @override
@@ -219,7 +190,7 @@ class _$CustomValidationResultImpl implements CustomValidationResult {
 
   @override
   String toString() {
-    return 'ValidationResult.custom(dataId: $dataId, type: $type, value: $value)';
+    return 'ValidationResult.custom(id: $id, type: $type, value: $value)';
   }
 
   @override
@@ -227,13 +198,13 @@ class _$CustomValidationResultImpl implements CustomValidationResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CustomValidationResultImpl &&
-            (identical(other.dataId, dataId) || other.dataId == dataId) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.value, value) || other.value == value));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, dataId, type, value);
+  int get hashCode => Object.hash(runtimeType, id, type, value);
 
   /// Create a copy of ValidationResult
   /// with the given fields replaced by the non-null parameter values.
@@ -247,18 +218,16 @@ class _$CustomValidationResultImpl implements CustomValidationResult {
 
 abstract class CustomValidationResult implements ValidationResult {
   const factory CustomValidationResult(
-      {final String dataId,
+      {final String? id,
       required final String type,
       required final String value}) = _$CustomValidationResultImpl;
 
-  @override
-  String get dataId;
+  String? get id;
   String get type;
   String get value;
 
   /// Create a copy of ValidationResult
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CustomValidationResultImplCopyWith<_$CustomValidationResultImpl>
       get copyWith => throw _privateConstructorUsedError;

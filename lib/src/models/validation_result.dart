@@ -11,7 +11,7 @@ sealed class ValidationResult with _$ValidationResult {
   }) = HashValidationResult;
 
   const factory ValidationResult.custom({
-    @Default('') String dataId,
+    String? id,
     required String type,
     required String value,
   }) = CustomValidationResult;

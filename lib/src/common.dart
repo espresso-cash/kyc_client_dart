@@ -143,54 +143,17 @@ UserData _processUserData({
   required String userPK,
   required String secretKey,
 }) {
-  final validationMap = <String, ValidationResult>{};
-  Map<String, dynamic>? custom;
-
-  // Process validation data
-  for (final data in response.validationData) {
-    // final decryptedData = verifyAndDecrypt(
-    //   signedEncryptedData: encryptedData.encryptedData,
-    //   secretKey: secretKey,
-    //   userPK: encryptedData.validatorPublicKey,
-    // );
-    // final wrappedData = proto.WrappedValidation.fromBuffer(decryptedData);
-
-    // final result = switch (wrappedData.whichData()) {
-    //   proto.WrappedValidation_Data.hash => HashValidationResult(
-    //       dataId: encryptedData.dataId,
-    //       value: wrappedData.hash.hash,
-    //       status: wrappedData.hash.status,
-    //     ),
-    //   proto.WrappedValidation_Data.custom => CustomValidationResult(
-    //       type: wrappedData.custom.type,
-    //       value: utf8.decode(wrappedData.custom.data),
-    //     ),
-    //   proto.WrappedValidation_Data.notSet => null,
-    // };
-
-    // if (result != null) {
-    //   if (result is HashValidationResult) {
-    //     validationMap[result.dataId] = result;
-    //   } else if (result is CustomValidationResult) {
-    //     custom ??= {};
-    //     custom[result.type] = result.value;
-    //   }
-    // }
-
-    validationMap[data.dataId] = HashValidationResult(
-      dataId: data.dataId,
-      status: data.status.toApiValidationStatus(),
-    );
-  }
-
-  for (final data in response.customValidationData) {
-    validationMap[data.id] = CustomValidationResult(
-      dataId: data.id,
-      type: data.type,
-      value: data.encryptedValue,
-    );
-  }
-
+  final validationMap = Map.fromEntries(
+    response.validationData.map(
+      (data) => MapEntry(
+        data.dataId,
+        HashValidationResult(
+          dataId: data.dataId,
+          status: data.status.toApiValidationStatus(),
+        ),
+      ),
+    ),
+  );
   Email? email;
   Phone? phone;
   Name? name;
@@ -207,21 +170,12 @@ UserData _processUserData({
       userPK: userPK,
     );
 
-    final type = encryptedData.type;
     final id = encryptedData.id;
-    // final verificationData = validationMap[id] as HashValidationResult?;
 
-    const ValidationStatus status = ValidationStatus.unspecified; //TODO
-    // if (verificationData != null) {
-    //   final hash = generateHash(wrappedData);
-    //   final bool hashMatching = hash == verificationData.value;
+    final verificationData = validationMap[id];
+    final status = verificationData?.status ?? ValidationStatus.unspecified;
 
-    //   status = hashMatching
-    //       ? verificationData.status.toValidationStatus()
-    //       : ValidationStatus.unverified;
-    // }
-
-    switch (type) {
+    switch (encryptedData.type) {
       case V1DataType.dataTypeEmail:
         final wrappedData = proto.Email.fromBuffer(decryptedData);
         email = Email(
@@ -281,6 +235,19 @@ UserData _processUserData({
     }
   }
 
+  final customValidationData = Map.fromEntries(
+    response.customValidationData.map(
+      (data) => MapEntry(
+        data.id,
+        CustomValidationResult(
+          id: data.id,
+          type: data.type,
+          value: data.encryptedValue,
+        ),
+      ),
+    ),
+  );
+
   return UserData(
     email: email,
     phone: phone,
@@ -289,7 +256,7 @@ UserData _processUserData({
     document: document,
     bankInfo: bankInfo,
     selfie: selfie,
-    custom: custom,
+    custom: customValidationData,
   );
 }
 
