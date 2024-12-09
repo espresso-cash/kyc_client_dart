@@ -282,7 +282,7 @@ class KycUserClient {
         secretBox: _secretBox,
       );
 
-      final hash = generateHash(item.data);
+      final hash = generateHashFromProto(item.data);
       final message = '${item.type}|$hash';
       final signature = _signingKey.sign(utf8.encode(message));
 

@@ -18,7 +18,7 @@ import 'package:protobuf/protobuf.dart';
 export 'models/order_id.dart';
 export 'models/validation_result.dart';
 
-String generateHash(GeneratedMessage data) {
+String generateHashFromProto(GeneratedMessage data) {
   // Normalize Dart timestamp serialization to avoid nanos
   if (data.runtimeType == proto.BirthDate) {
     final value = data as proto.BirthDate;
@@ -27,6 +27,12 @@ String generateHash(GeneratedMessage data) {
 
   final bytes = data.writeToBuffer();
   final digest = Hash.sha256(bytes);
+
+  return hex.encode(digest);
+}
+
+String generateHash(Uint8List data) {
+  final digest = Hash.sha256(data);
 
   return hex.encode(digest);
 }
@@ -149,6 +155,7 @@ UserData _processUserData({
         data.dataId,
         HashValidationResult(
           dataId: data.dataId,
+          hash: data.hash,
           status: data.status.toApiValidationStatus(),
         ),
       ),

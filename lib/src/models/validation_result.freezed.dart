@@ -44,7 +44,7 @@ abstract class _$$HashValidationResultImplCopyWith<$Res> {
           $Res Function(_$HashValidationResultImpl) then) =
       __$$HashValidationResultImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String dataId, ValidationStatus status});
+  $Res call({String dataId, ValidationStatus status, String hash});
 }
 
 /// @nodoc
@@ -62,6 +62,7 @@ class __$$HashValidationResultImplCopyWithImpl<$Res>
   $Res call({
     Object? dataId = null,
     Object? status = null,
+    Object? hash = null,
   }) {
     return _then(_$HashValidationResultImpl(
       dataId: null == dataId
@@ -72,6 +73,10 @@ class __$$HashValidationResultImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ValidationStatus,
+      hash: null == hash
+          ? _value.hash
+          : hash // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -80,16 +85,18 @@ class __$$HashValidationResultImplCopyWithImpl<$Res>
 
 class _$HashValidationResultImpl implements HashValidationResult {
   const _$HashValidationResultImpl(
-      {required this.dataId, required this.status});
+      {required this.dataId, required this.status, required this.hash});
 
   @override
   final String dataId;
   @override
   final ValidationStatus status;
+  @override
+  final String hash;
 
   @override
   String toString() {
-    return 'ValidationResult.hash(dataId: $dataId, status: $status)';
+    return 'ValidationResult.hash(dataId: $dataId, status: $status, hash: $hash)';
   }
 
   @override
@@ -98,11 +105,12 @@ class _$HashValidationResultImpl implements HashValidationResult {
         (other.runtimeType == runtimeType &&
             other is _$HashValidationResultImpl &&
             (identical(other.dataId, dataId) || other.dataId == dataId) &&
-            (identical(other.status, status) || other.status == status));
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.hash, hash) || other.hash == hash));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, dataId, status);
+  int get hashCode => Object.hash(runtimeType, dataId, status, hash);
 
   /// Create a copy of ValidationResult
   /// with the given fields replaced by the non-null parameter values.
@@ -118,10 +126,12 @@ class _$HashValidationResultImpl implements HashValidationResult {
 abstract class HashValidationResult implements ValidationResult {
   const factory HashValidationResult(
       {required final String dataId,
-      required final ValidationStatus status}) = _$HashValidationResultImpl;
+      required final ValidationStatus status,
+      required final String hash}) = _$HashValidationResultImpl;
 
   String get dataId;
   ValidationStatus get status;
+  String get hash;
 
   /// Create a copy of ValidationResult
   /// with the given fields replaced by the non-null parameter values.

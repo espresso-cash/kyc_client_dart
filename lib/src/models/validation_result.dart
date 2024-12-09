@@ -8,6 +8,7 @@ sealed class ValidationResult with _$ValidationResult {
   const factory ValidationResult.hash({
     required String dataId,
     required ValidationStatus status,
+    required String hash,
   }) = HashValidationResult;
 
   const factory ValidationResult.custom({
