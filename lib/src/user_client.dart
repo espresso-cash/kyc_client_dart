@@ -67,7 +67,7 @@ class KycUserClient {
   Future<void> init({required String walletAddress}) async {
     final seed = await _generateSeed();
     await _initializeKeys(seed);
-    await _initializeKycClient();
+    await _initializeStorageClient();
     await _initializeValidatorClient();
     await _initializeOrderClient();
 
@@ -103,8 +103,8 @@ class KycUserClient {
     );
   }
 
-  Future<void> _initializeKycClient() async {
-    final dio = await _createAuthenticatedClient('kyc.espressocash.com');
+  Future<void> _initializeStorageClient() async {
+    final dio = await _createAuthenticatedClient('storage.brij.fi');
     _storageClient = StorageServiceClient(dio, baseUrl: config.storageBaseUrl);
   }
 
