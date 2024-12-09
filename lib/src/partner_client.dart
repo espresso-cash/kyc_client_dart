@@ -59,12 +59,12 @@ class KycPartnerClient {
         .then((value) => Uint8List.fromList(value.bytes))
         .then(base58.encode);
 
-    await _initializeKycClient();
+    await _initializeStorageClient();
     await _initializeOrderClient();
   }
 
-  Future<void> _initializeKycClient() async {
-    final dio = await _createAuthenticatedClient('kyc.espressocash.com');
+  Future<void> _initializeStorageClient() async {
+    final dio = await _createAuthenticatedClient('storage.brij.fi');
     _storageClient = StorageServiceClient(dio, baseUrl: config.storageBaseUrl);
   }
 
