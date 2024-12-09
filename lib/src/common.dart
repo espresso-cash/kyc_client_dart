@@ -67,22 +67,21 @@ Uint8List verifyAndDecrypt({
   required String userPK,
   required String secretKey,
 }) {
-  final verifyKey = VerifyKey(Uint8List.fromList(base58.decode(userPK)));
   final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
 
-  final signedMessage = SignedMessage.fromList(
-    signedMessage: base64Decode(signedEncryptedData),
-  );
+  final decodedData = base64Decode(signedEncryptedData);
 
-  if (!verifyKey.verifySignedMessage(signedMessage: signedMessage)) {
-    throw Exception('Invalid signature for user data');
+  if (decodedData.length < TweetNaCl.nonceLength) {
+    throw Exception('encrypted message too short');
   }
 
-  final encryptedData = Uint8List.fromList(signedMessage.message);
+  final nonce = decodedData.sublist(0, TweetNaCl.nonceLength);
+  final cipherText = decodedData.sublist(TweetNaCl.nonceLength);
+
   final decrypted = box.decrypt(
     EncryptedMessage(
-      nonce: encryptedData.sublist(0, TweetNaCl.nonceLength),
-      cipherText: encryptedData.sublist(TweetNaCl.nonceLength),
+      nonce: nonce,
+      cipherText: cipherText,
     ),
   );
 
