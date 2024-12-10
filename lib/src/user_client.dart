@@ -109,7 +109,7 @@ class KycUserClient {
   }
 
   Future<void> _initializeValidatorClient() async {
-    final dio = await _createAuthenticatedClient('validator.espressocash.com');
+    final dio = await _createAuthenticatedClient('verifier.brij.fi');
     _validatorClient =
         ValidatorServiceClient(dio, baseUrl: config.validatorBaseUrl);
   }
