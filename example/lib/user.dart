@@ -229,7 +229,7 @@ class _UserViewState extends State<UserView> {
                       : () async {
                           await context
                               .read<WalletAppState>()
-                              .validateEmail(_phoneVerificationController.text);
+                              .validatePhone(_phoneVerificationController.text);
                           if (!context.mounted) return;
                           showSnackBar(
                             context,
