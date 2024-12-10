@@ -15,6 +15,10 @@ _$V1GetUserDataResponseImpl _$$V1GetUserDataResponseImplFromJson(
       validationData: (json['validationData'] as List<dynamic>)
           .map((e) => V1ValidationDataField.fromJson(e as Map<String, dynamic>))
           .toList(),
+      customValidationData: (json['customValidationData'] as List<dynamic>)
+          .map((e) =>
+              V1CustomValidationDataField.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$V1GetUserDataResponseImplToJson(
@@ -22,4 +26,5 @@ Map<String, dynamic> _$$V1GetUserDataResponseImplToJson(
     <String, dynamic>{
       'userData': instance.userData,
       'validationData': instance.validationData,
+      'customValidationData': instance.customValidationData,
     };

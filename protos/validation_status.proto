@@ -1,0 +1,12 @@
+syntax = 'proto3';
+
+package brij.storage.v1;
+
+option go_package = 'brij.fi/storage';
+
+enum ValidationStatus {
+  VALIDATION_STATUS_UNSPECIFIED = 0;
+  VALIDATION_STATUS_PENDING = 1;
+  VALIDATION_STATUS_APPROVED = 2;
+  VALIDATION_STATUS_REJECTED = 3;
+}

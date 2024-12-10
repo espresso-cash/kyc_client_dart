@@ -1,0 +1,11 @@
+syntax = 'proto3';
+
+package brij.storage.v1;
+
+option go_package = 'brij.fi/storage';
+
+message RemoveValidationDataRequest {
+  string data_id = 1;
+}
+
+message RemoveValidationDataResponse {}

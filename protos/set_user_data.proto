@@ -1,0 +1,16 @@
+syntax = 'proto3';
+
+package brij.storage.v1;
+
+option go_package = 'brij.fi/storage';
+
+import "data.proto";
+
+message SetUserDataRequest {
+  DataType type = 1;
+  bytes encrypted_value = 2;
+  string hash = 3;
+  string signature = 4;
+}
+
+message SetUserDataResponse {}

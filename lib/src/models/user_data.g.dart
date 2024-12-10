@@ -8,27 +8,27 @@ part of 'user_data.dart';
 
 _$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
     _$UserDataImpl(
-      email: (json['email'] as List<dynamic>?)
-          ?.map((e) => Email.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      phone: (json['phone'] as List<dynamic>?)
-          ?.map((e) => Phone.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      name: (json['name'] as List<dynamic>?)
-          ?.map((e) => Name.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      birthDate: (json['birthDate'] as List<dynamic>?)
-          ?.map((e) => BirthDate.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      document: (json['document'] as List<dynamic>?)
-          ?.map((e) => Document.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      bankInfo: (json['bankInfo'] as List<dynamic>?)
-          ?.map((e) => BankInfo.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      selfie: (json['selfie'] as List<dynamic>?)
-          ?.map((e) => Selfie.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      email: json['email'] == null
+          ? null
+          : Email.fromJson(json['email'] as Map<String, dynamic>),
+      phone: json['phone'] == null
+          ? null
+          : Phone.fromJson(json['phone'] as Map<String, dynamic>),
+      name: json['name'] == null
+          ? null
+          : Name.fromJson(json['name'] as Map<String, dynamic>),
+      birthDate: json['birthDate'] == null
+          ? null
+          : BirthDate.fromJson(json['birthDate'] as Map<String, dynamic>),
+      document: json['document'] == null
+          ? null
+          : Document.fromJson(json['document'] as Map<String, dynamic>),
+      bankInfo: json['bankInfo'] == null
+          ? null
+          : BankInfo.fromJson(json['bankInfo'] as Map<String, dynamic>),
+      selfie: json['selfie'] == null
+          ? null
+          : Selfie.fromJson(json['selfie'] as Map<String, dynamic>),
       custom: json['custom'] as Map<String, dynamic>?,
     );
 

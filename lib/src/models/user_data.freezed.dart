@@ -20,13 +20,13 @@ UserData _$UserDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserData {
-  List<Email>? get email => throw _privateConstructorUsedError;
-  List<Phone>? get phone => throw _privateConstructorUsedError;
-  List<Name>? get name => throw _privateConstructorUsedError;
-  List<BirthDate>? get birthDate => throw _privateConstructorUsedError;
-  List<Document>? get document => throw _privateConstructorUsedError;
-  List<BankInfo>? get bankInfo => throw _privateConstructorUsedError;
-  List<Selfie>? get selfie => throw _privateConstructorUsedError;
+  Email? get email => throw _privateConstructorUsedError;
+  Phone? get phone => throw _privateConstructorUsedError;
+  Name? get name => throw _privateConstructorUsedError;
+  BirthDate? get birthDate => throw _privateConstructorUsedError;
+  Document? get document => throw _privateConstructorUsedError;
+  BankInfo? get bankInfo => throw _privateConstructorUsedError;
+  Selfie? get selfie => throw _privateConstructorUsedError;
   Map<String, dynamic>? get custom => throw _privateConstructorUsedError;
 
   /// Serializes this UserData to a JSON map.
@@ -45,14 +45,22 @@ abstract class $UserDataCopyWith<$Res> {
       _$UserDataCopyWithImpl<$Res, UserData>;
   @useResult
   $Res call(
-      {List<Email>? email,
-      List<Phone>? phone,
-      List<Name>? name,
-      List<BirthDate>? birthDate,
-      List<Document>? document,
-      List<BankInfo>? bankInfo,
-      List<Selfie>? selfie,
+      {Email? email,
+      Phone? phone,
+      Name? name,
+      BirthDate? birthDate,
+      Document? document,
+      BankInfo? bankInfo,
+      Selfie? selfie,
       Map<String, dynamic>? custom});
+
+  $EmailCopyWith<$Res>? get email;
+  $PhoneCopyWith<$Res>? get phone;
+  $NameCopyWith<$Res>? get name;
+  $BirthDateCopyWith<$Res>? get birthDate;
+  $DocumentCopyWith<$Res>? get document;
+  $BankInfoCopyWith<$Res>? get bankInfo;
+  $SelfieCopyWith<$Res>? get selfie;
 }
 
 /// @nodoc
@@ -83,36 +91,134 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as List<Email>?,
+              as Email?,
       phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
-              as List<Phone>?,
+              as Phone?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as List<Name>?,
+              as Name?,
       birthDate: freezed == birthDate
           ? _value.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
-              as List<BirthDate>?,
+              as BirthDate?,
       document: freezed == document
           ? _value.document
           : document // ignore: cast_nullable_to_non_nullable
-              as List<Document>?,
+              as Document?,
       bankInfo: freezed == bankInfo
           ? _value.bankInfo
           : bankInfo // ignore: cast_nullable_to_non_nullable
-              as List<BankInfo>?,
+              as BankInfo?,
       selfie: freezed == selfie
           ? _value.selfie
           : selfie // ignore: cast_nullable_to_non_nullable
-              as List<Selfie>?,
+              as Selfie?,
       custom: freezed == custom
           ? _value.custom
           : custom // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>?,
     ) as $Val);
+  }
+
+  /// Create a copy of UserData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $EmailCopyWith<$Res>? get email {
+    if (_value.email == null) {
+      return null;
+    }
+
+    return $EmailCopyWith<$Res>(_value.email!, (value) {
+      return _then(_value.copyWith(email: value) as $Val);
+    });
+  }
+
+  /// Create a copy of UserData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PhoneCopyWith<$Res>? get phone {
+    if (_value.phone == null) {
+      return null;
+    }
+
+    return $PhoneCopyWith<$Res>(_value.phone!, (value) {
+      return _then(_value.copyWith(phone: value) as $Val);
+    });
+  }
+
+  /// Create a copy of UserData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $NameCopyWith<$Res>? get name {
+    if (_value.name == null) {
+      return null;
+    }
+
+    return $NameCopyWith<$Res>(_value.name!, (value) {
+      return _then(_value.copyWith(name: value) as $Val);
+    });
+  }
+
+  /// Create a copy of UserData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BirthDateCopyWith<$Res>? get birthDate {
+    if (_value.birthDate == null) {
+      return null;
+    }
+
+    return $BirthDateCopyWith<$Res>(_value.birthDate!, (value) {
+      return _then(_value.copyWith(birthDate: value) as $Val);
+    });
+  }
+
+  /// Create a copy of UserData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DocumentCopyWith<$Res>? get document {
+    if (_value.document == null) {
+      return null;
+    }
+
+    return $DocumentCopyWith<$Res>(_value.document!, (value) {
+      return _then(_value.copyWith(document: value) as $Val);
+    });
+  }
+
+  /// Create a copy of UserData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BankInfoCopyWith<$Res>? get bankInfo {
+    if (_value.bankInfo == null) {
+      return null;
+    }
+
+    return $BankInfoCopyWith<$Res>(_value.bankInfo!, (value) {
+      return _then(_value.copyWith(bankInfo: value) as $Val);
+    });
+  }
+
+  /// Create a copy of UserData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SelfieCopyWith<$Res>? get selfie {
+    if (_value.selfie == null) {
+      return null;
+    }
+
+    return $SelfieCopyWith<$Res>(_value.selfie!, (value) {
+      return _then(_value.copyWith(selfie: value) as $Val);
+    });
   }
 }
 
@@ -125,14 +231,29 @@ abstract class _$$UserDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<Email>? email,
-      List<Phone>? phone,
-      List<Name>? name,
-      List<BirthDate>? birthDate,
-      List<Document>? document,
-      List<BankInfo>? bankInfo,
-      List<Selfie>? selfie,
+      {Email? email,
+      Phone? phone,
+      Name? name,
+      BirthDate? birthDate,
+      Document? document,
+      BankInfo? bankInfo,
+      Selfie? selfie,
       Map<String, dynamic>? custom});
+
+  @override
+  $EmailCopyWith<$Res>? get email;
+  @override
+  $PhoneCopyWith<$Res>? get phone;
+  @override
+  $NameCopyWith<$Res>? get name;
+  @override
+  $BirthDateCopyWith<$Res>? get birthDate;
+  @override
+  $DocumentCopyWith<$Res>? get document;
+  @override
+  $BankInfoCopyWith<$Res>? get bankInfo;
+  @override
+  $SelfieCopyWith<$Res>? get selfie;
 }
 
 /// @nodoc
@@ -159,33 +280,33 @@ class __$$UserDataImplCopyWithImpl<$Res>
   }) {
     return _then(_$UserDataImpl(
       email: freezed == email
-          ? _value._email
+          ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as List<Email>?,
+              as Email?,
       phone: freezed == phone
-          ? _value._phone
+          ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
-              as List<Phone>?,
+              as Phone?,
       name: freezed == name
-          ? _value._name
+          ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as List<Name>?,
+              as Name?,
       birthDate: freezed == birthDate
-          ? _value._birthDate
+          ? _value.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
-              as List<BirthDate>?,
+              as BirthDate?,
       document: freezed == document
-          ? _value._document
+          ? _value.document
           : document // ignore: cast_nullable_to_non_nullable
-              as List<Document>?,
+              as Document?,
       bankInfo: freezed == bankInfo
-          ? _value._bankInfo
+          ? _value.bankInfo
           : bankInfo // ignore: cast_nullable_to_non_nullable
-              as List<BankInfo>?,
+              as BankInfo?,
       selfie: freezed == selfie
-          ? _value._selfie
+          ? _value.selfie
           : selfie // ignore: cast_nullable_to_non_nullable
-              as List<Selfie>?,
+              as Selfie?,
       custom: freezed == custom
           ? _value._custom
           : custom // ignore: cast_nullable_to_non_nullable
@@ -198,96 +319,33 @@ class __$$UserDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserDataImpl implements _UserData {
   const _$UserDataImpl(
-      {final List<Email>? email,
-      final List<Phone>? phone,
-      final List<Name>? name,
-      final List<BirthDate>? birthDate,
-      final List<Document>? document,
-      final List<BankInfo>? bankInfo,
-      final List<Selfie>? selfie,
+      {this.email,
+      this.phone,
+      this.name,
+      this.birthDate,
+      this.document,
+      this.bankInfo,
+      this.selfie,
       final Map<String, dynamic>? custom})
-      : _email = email,
-        _phone = phone,
-        _name = name,
-        _birthDate = birthDate,
-        _document = document,
-        _bankInfo = bankInfo,
-        _selfie = selfie,
-        _custom = custom;
+      : _custom = custom;
 
   factory _$UserDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDataImplFromJson(json);
 
-  final List<Email>? _email;
   @override
-  List<Email>? get email {
-    final value = _email;
-    if (value == null) return null;
-    if (_email is EqualUnmodifiableListView) return _email;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<Phone>? _phone;
+  final Email? email;
   @override
-  List<Phone>? get phone {
-    final value = _phone;
-    if (value == null) return null;
-    if (_phone is EqualUnmodifiableListView) return _phone;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<Name>? _name;
+  final Phone? phone;
   @override
-  List<Name>? get name {
-    final value = _name;
-    if (value == null) return null;
-    if (_name is EqualUnmodifiableListView) return _name;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<BirthDate>? _birthDate;
+  final Name? name;
   @override
-  List<BirthDate>? get birthDate {
-    final value = _birthDate;
-    if (value == null) return null;
-    if (_birthDate is EqualUnmodifiableListView) return _birthDate;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<Document>? _document;
+  final BirthDate? birthDate;
   @override
-  List<Document>? get document {
-    final value = _document;
-    if (value == null) return null;
-    if (_document is EqualUnmodifiableListView) return _document;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<BankInfo>? _bankInfo;
+  final Document? document;
   @override
-  List<BankInfo>? get bankInfo {
-    final value = _bankInfo;
-    if (value == null) return null;
-    if (_bankInfo is EqualUnmodifiableListView) return _bankInfo;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<Selfie>? _selfie;
+  final BankInfo? bankInfo;
   @override
-  List<Selfie>? get selfie {
-    final value = _selfie;
-    if (value == null) return null;
-    if (_selfie is EqualUnmodifiableListView) return _selfie;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
+  final Selfie? selfie;
   final Map<String, dynamic>? _custom;
   @override
   Map<String, dynamic>? get custom {
@@ -308,29 +366,23 @@ class _$UserDataImpl implements _UserData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserDataImpl &&
-            const DeepCollectionEquality().equals(other._email, _email) &&
-            const DeepCollectionEquality().equals(other._phone, _phone) &&
-            const DeepCollectionEquality().equals(other._name, _name) &&
-            const DeepCollectionEquality()
-                .equals(other._birthDate, _birthDate) &&
-            const DeepCollectionEquality().equals(other._document, _document) &&
-            const DeepCollectionEquality().equals(other._bankInfo, _bankInfo) &&
-            const DeepCollectionEquality().equals(other._selfie, _selfie) &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.birthDate, birthDate) ||
+                other.birthDate == birthDate) &&
+            (identical(other.document, document) ||
+                other.document == document) &&
+            (identical(other.bankInfo, bankInfo) ||
+                other.bankInfo == bankInfo) &&
+            (identical(other.selfie, selfie) || other.selfie == selfie) &&
             const DeepCollectionEquality().equals(other._custom, _custom));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_email),
-      const DeepCollectionEquality().hash(_phone),
-      const DeepCollectionEquality().hash(_name),
-      const DeepCollectionEquality().hash(_birthDate),
-      const DeepCollectionEquality().hash(_document),
-      const DeepCollectionEquality().hash(_bankInfo),
-      const DeepCollectionEquality().hash(_selfie),
-      const DeepCollectionEquality().hash(_custom));
+  int get hashCode => Object.hash(runtimeType, email, phone, name, birthDate,
+      document, bankInfo, selfie, const DeepCollectionEquality().hash(_custom));
 
   /// Create a copy of UserData
   /// with the given fields replaced by the non-null parameter values.
@@ -350,32 +402,32 @@ class _$UserDataImpl implements _UserData {
 
 abstract class _UserData implements UserData {
   const factory _UserData(
-      {final List<Email>? email,
-      final List<Phone>? phone,
-      final List<Name>? name,
-      final List<BirthDate>? birthDate,
-      final List<Document>? document,
-      final List<BankInfo>? bankInfo,
-      final List<Selfie>? selfie,
+      {final Email? email,
+      final Phone? phone,
+      final Name? name,
+      final BirthDate? birthDate,
+      final Document? document,
+      final BankInfo? bankInfo,
+      final Selfie? selfie,
       final Map<String, dynamic>? custom}) = _$UserDataImpl;
 
   factory _UserData.fromJson(Map<String, dynamic> json) =
       _$UserDataImpl.fromJson;
 
   @override
-  List<Email>? get email;
+  Email? get email;
   @override
-  List<Phone>? get phone;
+  Phone? get phone;
   @override
-  List<Name>? get name;
+  Name? get name;
   @override
-  List<BirthDate>? get birthDate;
+  BirthDate? get birthDate;
   @override
-  List<Document>? get document;
+  Document? get document;
   @override
-  List<BankInfo>? get bankInfo;
+  BankInfo? get bankInfo;
   @override
-  List<Selfie>? get selfie;
+  Selfie? get selfie;
   @override
   Map<String, dynamic>? get custom;
 

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'kyc_service_client.dart';
+part of 'storage_service_client.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'kyc_service_client.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
-class _KycServiceClient implements KycServiceClient {
-  _KycServiceClient(
+class _StorageServiceClient implements StorageServiceClient {
+  _StorageServiceClient(
     this._dio, {
     this.baseUrl,
     this.errorLogger,
@@ -22,7 +22,7 @@ class _KycServiceClient implements KycServiceClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<V1GetInfoResponse> kycServiceGetInfo(
+  Future<V1GetInfoResponse> storageServiceGetInfo(
       {required V1GetInfoRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -57,7 +57,7 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetPartnerInfoResponse> kycServiceGetPartnerInfo(
+  Future<V1GetPartnerInfoResponse> storageServiceGetPartnerInfo(
       {required V1GetPartnerInfoRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -92,7 +92,7 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<V1GetUserDataResponse> kycServiceGetUserData(
+  Future<V1GetUserDataResponse> storageServiceGetUserData(
       {required V1GetUserDataRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -127,7 +127,7 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<dynamic> kycServiceGrantAccess(
+  Future<dynamic> storageServiceGrantAccess(
       {required V1GrantAccessRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -156,7 +156,7 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<dynamic> kycServiceInitStorage(
+  Future<dynamic> storageServiceInitStorage(
       {required V1InitStorageRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -185,7 +185,123 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<dynamic> kycServiceSetUserData(
+  Future<dynamic> storageServiceRemoveCustomValidationData(
+      {required V1RemoveCustomValidationDataRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/removeCustomValidationData',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> storageServiceRemoveUserData(
+      {required V1RemoveUserDataRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/removeUserData',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> storageServiceRemoveValidationData(
+      {required V1RemoveValidationDataRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/removeValidationData',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> storageServiceSetCustomValidationData(
+      {required V1SetCustomValidationDataRequest body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/v1/setCustomValidationData',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> storageServiceSetUserData(
       {required V1SetUserDataRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -214,7 +330,7 @@ class _KycServiceClient implements KycServiceClient {
   }
 
   @override
-  Future<dynamic> kycServiceSetValidationData(
+  Future<dynamic> storageServiceSetValidationData(
       {required V1SetValidationDataRequest body}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

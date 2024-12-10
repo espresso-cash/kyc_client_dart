@@ -9,17 +9,26 @@ part of 'v1_set_validation_data_request.dart';
 _$V1SetValidationDataRequestImpl _$$V1SetValidationDataRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$V1SetValidationDataRequestImpl(
-      userPublicKey: json['userPublicKey'] as String,
-      encryptedData: json['encryptedData'] as String,
       dataId: json['dataId'] as String,
-      id: json['id'] as String,
+      status: V1ValidationStatus.fromJson(json['status'] as String),
+      hash: json['hash'] as String,
+      signature: json['signature'] as String,
     );
 
 Map<String, dynamic> _$$V1SetValidationDataRequestImplToJson(
         _$V1SetValidationDataRequestImpl instance) =>
     <String, dynamic>{
-      'userPublicKey': instance.userPublicKey,
-      'encryptedData': instance.encryptedData,
       'dataId': instance.dataId,
-      'id': instance.id,
+      'status': _$V1ValidationStatusEnumMap[instance.status]!,
+      'hash': instance.hash,
+      'signature': instance.signature,
     };
+
+const _$V1ValidationStatusEnumMap = {
+  V1ValidationStatus.validationStatusUnspecified:
+      'VALIDATION_STATUS_UNSPECIFIED',
+  V1ValidationStatus.validationStatusPending: 'VALIDATION_STATUS_PENDING',
+  V1ValidationStatus.validationStatusApproved: 'VALIDATION_STATUS_APPROVED',
+  V1ValidationStatus.validationStatusRejected: 'VALIDATION_STATUS_REJECTED',
+  V1ValidationStatus.$unknown: r'$unknown',
+};

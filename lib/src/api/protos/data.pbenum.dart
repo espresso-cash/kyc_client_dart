@@ -13,6 +13,33 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class DataType extends $pb.ProtobufEnum {
+  static const DataType DATA_TYPE_UNSPECIFIED = DataType._(0, _omitEnumNames ? '' : 'DATA_TYPE_UNSPECIFIED');
+  static const DataType DATA_TYPE_PHONE = DataType._(1, _omitEnumNames ? '' : 'DATA_TYPE_PHONE');
+  static const DataType DATA_TYPE_EMAIL = DataType._(2, _omitEnumNames ? '' : 'DATA_TYPE_EMAIL');
+  static const DataType DATA_TYPE_NAME = DataType._(3, _omitEnumNames ? '' : 'DATA_TYPE_NAME');
+  static const DataType DATA_TYPE_BIRTH_DATE = DataType._(4, _omitEnumNames ? '' : 'DATA_TYPE_BIRTH_DATE');
+  static const DataType DATA_TYPE_DOCUMENT = DataType._(5, _omitEnumNames ? '' : 'DATA_TYPE_DOCUMENT');
+  static const DataType DATA_TYPE_BANK_INFO = DataType._(6, _omitEnumNames ? '' : 'DATA_TYPE_BANK_INFO');
+  static const DataType DATA_TYPE_SELFIE_IMAGE = DataType._(7, _omitEnumNames ? '' : 'DATA_TYPE_SELFIE_IMAGE');
+
+  static const $core.List<DataType> values = <DataType> [
+    DATA_TYPE_UNSPECIFIED,
+    DATA_TYPE_PHONE,
+    DATA_TYPE_EMAIL,
+    DATA_TYPE_NAME,
+    DATA_TYPE_BIRTH_DATE,
+    DATA_TYPE_DOCUMENT,
+    DATA_TYPE_BANK_INFO,
+    DATA_TYPE_SELFIE_IMAGE,
+  ];
+
+  static final $core.Map<$core.int, DataType> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static DataType? valueOf($core.int value) => _byValue[value];
+
+  const DataType._($core.int v, $core.String n) : super(v, n);
+}
+
 class DocumentType extends $pb.ProtobufEnum {
   static const DocumentType DOCUMENT_TYPE_UNSPECIFIED = DocumentType._(0, _omitEnumNames ? '' : 'DOCUMENT_TYPE_UNSPECIFIED');
   static const DocumentType DOCUMENT_TYPE_VOTER_ID = DocumentType._(1, _omitEnumNames ? '' : 'DOCUMENT_TYPE_VOTER_ID');
@@ -26,25 +53,6 @@ class DocumentType extends $pb.ProtobufEnum {
   static DocumentType? valueOf($core.int value) => _byValue[value];
 
   const DocumentType._($core.int v, $core.String n) : super(v, n);
-}
-
-class ValidationStatus extends $pb.ProtobufEnum {
-  static const ValidationStatus VALIDATION_STATUS_UNSPECIFIED = ValidationStatus._(0, _omitEnumNames ? '' : 'VALIDATION_STATUS_UNSPECIFIED');
-  static const ValidationStatus VALIDATION_STATUS_PENDING = ValidationStatus._(1, _omitEnumNames ? '' : 'VALIDATION_STATUS_PENDING');
-  static const ValidationStatus VALIDATION_STATUS_APPROVED = ValidationStatus._(2, _omitEnumNames ? '' : 'VALIDATION_STATUS_APPROVED');
-  static const ValidationStatus VALIDATION_STATUS_REJECTED = ValidationStatus._(3, _omitEnumNames ? '' : 'VALIDATION_STATUS_REJECTED');
-
-  static const $core.List<ValidationStatus> values = <ValidationStatus> [
-    VALIDATION_STATUS_UNSPECIFIED,
-    VALIDATION_STATUS_PENDING,
-    VALIDATION_STATUS_APPROVED,
-    VALIDATION_STATUS_REJECTED,
-  ];
-
-  static final $core.Map<$core.int, ValidationStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static ValidationStatus? valueOf($core.int value) => _byValue[value];
-
-  const ValidationStatus._($core.int v, $core.String n) : super(v, n);
 }
 
 

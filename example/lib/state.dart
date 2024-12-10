@@ -47,7 +47,11 @@ class WalletAppState extends ChangeNotifier {
       },
     );
 
-    await _client.init(walletAddress: _wallet!.publicKey.toString());
+    try {
+      await _client.init(walletAddress: _wallet!.publicKey.toString());
+    } catch (e) {
+      rethrow;
+    }
 
     _rawSecretKey = _client.rawSecretKey;
     _authPublicKey = _client.authPublicKey;
@@ -95,12 +99,12 @@ class WalletAppState extends ChangeNotifier {
         secretKey: _rawSecretKey,
       );
 
-      _emailId = data.email?.first.id ?? '';
-      _phoneId = data.phone?.first.id ?? '';
-      _selfieId = data.selfie?.first.id ?? '';
+      _emailId = data.email?.id ?? '';
+      _phoneId = data.phone?.id ?? '';
+      _selfieId = data.selfie?.id ?? '';
 
-      _email = data.email?.first.value ?? '-';
-      _phone = data.phone?.first.value ?? '-';
+      _email = data.email?.value ?? '-';
+      _phone = data.phone?.value ?? '-';
 
       notifyListeners();
     } on Exception {

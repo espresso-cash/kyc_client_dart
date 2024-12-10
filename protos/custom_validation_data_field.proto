@@ -1,0 +1,17 @@
+syntax = 'proto3';
+
+package brij.storage.v1;
+
+option go_package = 'brij.fi/storage';
+
+import "google/protobuf/timestamp.proto";
+
+message CustomValidationDataField {
+  string id = 1;
+  string validator_public_key = 2;
+  string type = 3;
+  bytes encrypted_value = 4;
+  string hash = 5;
+  string signature = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
