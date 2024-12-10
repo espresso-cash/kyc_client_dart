@@ -155,7 +155,6 @@ class KycPartnerClient {
     required String secretKey,
   }) async {
     if (value is HashValidationResult) {
-      //TODO confirm that this is correct
       await _storageClient.storageServiceRemoveValidationData(
         body: V1RemoveValidationDataRequest(id: value.dataId),
       );
@@ -176,7 +175,6 @@ class KycPartnerClient {
       final id = value.id;
 
       if (id != null) {
-        //TODO confirm that this is correct
         await _storageClient.storageServiceRemoveCustomValidationData(
           body: V1RemoveCustomValidationDataRequest(id: id),
         );
