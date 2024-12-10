@@ -10,7 +10,7 @@ part 'v1_remove_user_data_request.g.dart';
 @Freezed()
 class V1RemoveUserDataRequest with _$V1RemoveUserDataRequest {
   const factory V1RemoveUserDataRequest({
-    required String dataId,
+    required String id,
   }) = _V1RemoveUserDataRequest;
   
   factory V1RemoveUserDataRequest.fromJson(Map<String, Object?> json) => _$V1RemoveUserDataRequestFromJson(json);

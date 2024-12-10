@@ -21,7 +21,7 @@ V1RemoveValidationDataRequest _$V1RemoveValidationDataRequestFromJson(
 
 /// @nodoc
 mixin _$V1RemoveValidationDataRequest {
-  String get dataId => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
 
   /// Serializes this V1RemoveValidationDataRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $V1RemoveValidationDataRequestCopyWith<$Res> {
       _$V1RemoveValidationDataRequestCopyWithImpl<$Res,
           V1RemoveValidationDataRequest>;
   @useResult
-  $Res call({String dataId});
+  $Res call({String id});
 }
 
 /// @nodoc
@@ -60,12 +60,12 @@ class _$V1RemoveValidationDataRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? dataId = null,
+    Object? id = null,
   }) {
     return _then(_value.copyWith(
-      dataId: null == dataId
-          ? _value.dataId
-          : dataId // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -80,7 +80,7 @@ abstract class _$$V1RemoveValidationDataRequestImplCopyWith<$Res>
       __$$V1RemoveValidationDataRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String dataId});
+  $Res call({String id});
 }
 
 /// @nodoc
@@ -98,12 +98,12 @@ class __$$V1RemoveValidationDataRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? dataId = null,
+    Object? id = null,
   }) {
     return _then(_$V1RemoveValidationDataRequestImpl(
-      dataId: null == dataId
-          ? _value.dataId
-          : dataId // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -113,18 +113,18 @@ class __$$V1RemoveValidationDataRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$V1RemoveValidationDataRequestImpl
     implements _V1RemoveValidationDataRequest {
-  const _$V1RemoveValidationDataRequestImpl({required this.dataId});
+  const _$V1RemoveValidationDataRequestImpl({required this.id});
 
   factory _$V1RemoveValidationDataRequestImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$V1RemoveValidationDataRequestImplFromJson(json);
 
   @override
-  final String dataId;
+  final String id;
 
   @override
   String toString() {
-    return 'V1RemoveValidationDataRequest(dataId: $dataId)';
+    return 'V1RemoveValidationDataRequest(id: $id)';
   }
 
   @override
@@ -132,12 +132,12 @@ class _$V1RemoveValidationDataRequestImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$V1RemoveValidationDataRequestImpl &&
-            (identical(other.dataId, dataId) || other.dataId == dataId));
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, dataId);
+  int get hashCode => Object.hash(runtimeType, id);
 
   /// Create a copy of V1RemoveValidationDataRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -159,14 +159,14 @@ class _$V1RemoveValidationDataRequestImpl
 
 abstract class _V1RemoveValidationDataRequest
     implements V1RemoveValidationDataRequest {
-  const factory _V1RemoveValidationDataRequest({required final String dataId}) =
+  const factory _V1RemoveValidationDataRequest({required final String id}) =
       _$V1RemoveValidationDataRequestImpl;
 
   factory _V1RemoveValidationDataRequest.fromJson(Map<String, dynamic> json) =
       _$V1RemoveValidationDataRequestImpl.fromJson;
 
   @override
-  String get dataId;
+  String get id;
 
   /// Create a copy of V1RemoveValidationDataRequest
   /// with the given fields replaced by the non-null parameter values.

@@ -157,7 +157,7 @@ class KycPartnerClient {
     if (value is HashValidationResult) {
       //TODO confirm that this is correct
       await _storageClient.storageServiceRemoveValidationData(
-        body: V1RemoveValidationDataRequest(dataId: value.dataId),
+        body: V1RemoveValidationDataRequest(id: value.dataId),
       );
 
       final hash = value.hash;
@@ -178,7 +178,7 @@ class KycPartnerClient {
       if (id != null) {
         //TODO confirm that this is correct
         await _storageClient.storageServiceRemoveCustomValidationData(
-          body: V1RemoveCustomValidationDataRequest(dataId: id),
+          body: V1RemoveCustomValidationDataRequest(id: id),
         );
       }
 

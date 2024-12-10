@@ -10,7 +10,7 @@ part 'v1_remove_validation_data_request.g.dart';
 @Freezed()
 class V1RemoveValidationDataRequest with _$V1RemoveValidationDataRequest {
   const factory V1RemoveValidationDataRequest({
-    required String dataId,
+    required String id,
   }) = _V1RemoveValidationDataRequest;
   
   factory V1RemoveValidationDataRequest.fromJson(Map<String, Object?> json) => _$V1RemoveValidationDataRequestFromJson(json);

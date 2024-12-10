@@ -10,11 +10,11 @@ _$V1RemoveCustomValidationDataRequestImpl
     _$$V1RemoveCustomValidationDataRequestImplFromJson(
             Map<String, dynamic> json) =>
         _$V1RemoveCustomValidationDataRequestImpl(
-          dataId: json['dataId'] as String,
+          id: json['id'] as String,
         );
 
 Map<String, dynamic> _$$V1RemoveCustomValidationDataRequestImplToJson(
         _$V1RemoveCustomValidationDataRequestImpl instance) =>
     <String, dynamic>{
-      'dataId': instance.dataId,
+      'id': instance.id,
     };

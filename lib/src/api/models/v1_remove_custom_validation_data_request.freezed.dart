@@ -21,7 +21,7 @@ V1RemoveCustomValidationDataRequest
 
 /// @nodoc
 mixin _$V1RemoveCustomValidationDataRequest {
-  String get dataId => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
 
   /// Serializes this V1RemoveCustomValidationDataRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,7 +42,7 @@ abstract class $V1RemoveCustomValidationDataRequestCopyWith<$Res> {
       _$V1RemoveCustomValidationDataRequestCopyWithImpl<$Res,
           V1RemoveCustomValidationDataRequest>;
   @useResult
-  $Res call({String dataId});
+  $Res call({String id});
 }
 
 /// @nodoc
@@ -61,12 +61,12 @@ class _$V1RemoveCustomValidationDataRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? dataId = null,
+    Object? id = null,
   }) {
     return _then(_value.copyWith(
-      dataId: null == dataId
-          ? _value.dataId
-          : dataId // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -81,7 +81,7 @@ abstract class _$$V1RemoveCustomValidationDataRequestImplCopyWith<$Res>
       __$$V1RemoveCustomValidationDataRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String dataId});
+  $Res call({String id});
 }
 
 /// @nodoc
@@ -99,12 +99,12 @@ class __$$V1RemoveCustomValidationDataRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? dataId = null,
+    Object? id = null,
   }) {
     return _then(_$V1RemoveCustomValidationDataRequestImpl(
-      dataId: null == dataId
-          ? _value.dataId
-          : dataId // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -114,18 +114,18 @@ class __$$V1RemoveCustomValidationDataRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$V1RemoveCustomValidationDataRequestImpl
     implements _V1RemoveCustomValidationDataRequest {
-  const _$V1RemoveCustomValidationDataRequestImpl({required this.dataId});
+  const _$V1RemoveCustomValidationDataRequestImpl({required this.id});
 
   factory _$V1RemoveCustomValidationDataRequestImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$V1RemoveCustomValidationDataRequestImplFromJson(json);
 
   @override
-  final String dataId;
+  final String id;
 
   @override
   String toString() {
-    return 'V1RemoveCustomValidationDataRequest(dataId: $dataId)';
+    return 'V1RemoveCustomValidationDataRequest(id: $id)';
   }
 
   @override
@@ -133,12 +133,12 @@ class _$V1RemoveCustomValidationDataRequestImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$V1RemoveCustomValidationDataRequestImpl &&
-            (identical(other.dataId, dataId) || other.dataId == dataId));
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, dataId);
+  int get hashCode => Object.hash(runtimeType, id);
 
   /// Create a copy of V1RemoveCustomValidationDataRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -161,15 +161,14 @@ class _$V1RemoveCustomValidationDataRequestImpl
 abstract class _V1RemoveCustomValidationDataRequest
     implements V1RemoveCustomValidationDataRequest {
   const factory _V1RemoveCustomValidationDataRequest(
-          {required final String dataId}) =
-      _$V1RemoveCustomValidationDataRequestImpl;
+      {required final String id}) = _$V1RemoveCustomValidationDataRequestImpl;
 
   factory _V1RemoveCustomValidationDataRequest.fromJson(
           Map<String, dynamic> json) =
       _$V1RemoveCustomValidationDataRequestImpl.fromJson;
 
   @override
-  String get dataId;
+  String get id;
 
   /// Create a copy of V1RemoveCustomValidationDataRequest
   /// with the given fields replaced by the non-null parameter values.

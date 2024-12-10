@@ -288,7 +288,7 @@ class KycUserClient {
 
       if (item.id.isNotEmpty) {
         await _storageClient.storageServiceRemoveUserData(
-          body: V1RemoveUserDataRequest(dataId: item.id),
+          body: V1RemoveUserDataRequest(id: item.id),
         );
       }
 
