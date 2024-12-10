@@ -263,7 +263,11 @@ class KycUserClient {
         ),
       if (dob != null)
         (
-          data: proto.BirthDate(value: Timestamp.fromDateTime(dob.value)),
+          data: proto.BirthDate(
+            value: Timestamp.fromDateTime(
+              DateTime.utc(dob.value.year, dob.value.month, dob.value.day),
+            ),
+          ),
           type: V1DataType.dataTypeBirthDate,
           id: dob.id
         ),
