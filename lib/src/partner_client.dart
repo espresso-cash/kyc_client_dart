@@ -182,7 +182,7 @@ class KycPartnerClient {
         );
       }
 
-      final encryptedValue = encryptOnly(
+      final encryptedValue = encrypt(
         data: Uint8List.fromList(utf8.encode(value.value)),
         secretBox: SecretBox(Uint8List.fromList(base58.decode(secretKey))),
       );
@@ -245,14 +245,14 @@ class KycPartnerClient {
         SecretBox(Uint8List.fromList(base58.decode(userSecretKey)));
 
     final encryptedBankName = base64Encode(
-      encryptOnly(
+      encrypt(
         data: utf8.encode(bankName),
         secretBox: secretBox,
       ),
     );
 
     final encryptedBankAccount = base64Encode(
-      encryptOnly(
+      encrypt(
         data: utf8.encode(bankAccount),
         secretBox: secretBox,
       ),

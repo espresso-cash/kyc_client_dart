@@ -18,77 +18,26 @@ import 'package:protobuf/protobuf.dart';
 export 'models/order_id.dart';
 export 'models/validation_result.dart';
 
-String generateHashFromProto(GeneratedMessage data) {
-  // Normalize Dart timestamp serialization to avoid nanos
+String generateHash(Object data) {
+  final bytes = switch (data) {
+    GeneratedMessage() => _serializeProto(data),
+    Uint8List() => data,
+    String() => Uint8List.fromList(utf8.encode(data)),
+    _ => throw ArgumentError('Unsupported type: ${data.runtimeType}')
+  };
+
+  return hex.encode(Hash.sha256(bytes));
+}
+
+Uint8List _serializeProto(GeneratedMessage data) {
   if (data.runtimeType == proto.BirthDate) {
     final value = data as proto.BirthDate;
     data = proto.BirthDate(value: Timestamp()..seconds = value.value.seconds);
   }
-
-  final bytes = data.writeToBuffer();
-  final digest = Hash.sha256(bytes);
-
-  return hex.encode(digest);
+  return data.writeToBuffer();
 }
 
-String generateHash(Uint8List data) {
-  final digest = Hash.sha256(data);
-
-  return hex.encode(digest);
-}
-
-Future<SignedMessage> encryptAndSign({
-  required Uint8List data,
-  required SecretBox secretBox,
-  required SigningKey signingKey,
-}) {
-  final shouldRunAsync = !_isWeb && data.length > _encryptionAsyncThreshold;
-
-  SignedMessage encrypt() => _encryptAndSignSync(
-        data: data,
-        secretBox: secretBox,
-        signingKey: signingKey,
-      );
-
-  return shouldRunAsync ? Isolate.run(encrypt) : Future.value(encrypt());
-}
-
-SignedMessage _encryptAndSignSync({
-  required Uint8List data,
-  required SecretBox secretBox,
-  required SigningKey signingKey,
-}) {
-  final encrypted = secretBox.encrypt(data);
-  return signingKey.sign(Uint8List.fromList(encrypted));
-}
-
-Uint8List verifyAndDecrypt({
-  required String signedEncryptedData,
-  required String userPK,
-  required String secretKey,
-}) {
-  final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
-
-  final decodedData = base64Decode(signedEncryptedData);
-
-  if (decodedData.length < TweetNaCl.nonceLength) {
-    throw Exception('encrypted message too short');
-  }
-
-  final nonce = decodedData.sublist(0, TweetNaCl.nonceLength);
-  final cipherText = decodedData.sublist(TweetNaCl.nonceLength);
-
-  final decrypted = box.decrypt(
-    EncryptedMessage(
-      nonce: nonce,
-      cipherText: cipherText,
-    ),
-  );
-
-  return decrypted;
-}
-
-Uint8List encryptOnly({
+Uint8List encrypt({
   required Uint8List data,
   required SecretBox secretBox,
 }) {
@@ -100,25 +49,25 @@ Uint8List encryptOnly({
   ]);
 }
 
-String decryptOnly({
+Uint8List decrypt({
   required String encryptedData,
   required String secretKey,
 }) {
-  try {
-    final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
-    final data = base64Decode(encryptedData);
+  final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
+  final data = base64Decode(encryptedData);
 
-    final decrypted = box.decrypt(
-      EncryptedMessage(
-        nonce: data.sublist(0, TweetNaCl.nonceLength),
-        cipherText: data.sublist(TweetNaCl.nonceLength),
-      ),
-    );
-
-    return utf8.decode(decrypted);
-  } on Object catch (_) {
-    return encryptedData;
+  if (data.length < TweetNaCl.nonceLength) {
+    throw Exception('encrypted message too short');
   }
+
+  final decrypted = box.decrypt(
+    EncryptedMessage(
+      nonce: data.sublist(0, TweetNaCl.nonceLength),
+      cipherText: data.sublist(TweetNaCl.nonceLength),
+    ),
+  );
+
+  return decrypted;
 }
 
 Future<UserData> processUserData({
@@ -167,10 +116,9 @@ UserData _processUserData({
 
   // Process user data
   for (final encryptedData in response.userData) {
-    final decryptedData = verifyAndDecrypt(
-      signedEncryptedData: encryptedData.encryptedValue,
+    final decryptedData = decrypt(
+      encryptedData: encryptedData.encryptedValue,
       secretKey: secretKey,
-      userPK: userPK,
     );
 
     final id = encryptedData.id;
@@ -243,7 +191,12 @@ UserData _processUserData({
       data.id: CustomValidationResult(
         id: data.id,
         type: data.type,
-        value: data.encryptedValue,
+        value: utf8.decode(
+          decrypt(
+            encryptedData: data.encryptedValue,
+            secretKey: secretKey,
+          ),
+        ),
       ),
   };
 
@@ -267,16 +220,20 @@ Order processOrderData({
   String bankAccount = order.bankAccount;
 
   if (bankName.isNotEmpty) {
-    bankName = decryptOnly(
-      encryptedData: bankName,
-      secretKey: secretKey,
+    bankName = utf8.decode(
+      decrypt(
+        encryptedData: bankName,
+        secretKey: secretKey,
+      ),
     );
   }
 
   if (bankAccount.isNotEmpty) {
-    bankAccount = decryptOnly(
-      encryptedData: bankAccount,
-      secretKey: secretKey,
+    bankAccount = utf8.decode(
+      decrypt(
+        encryptedData: bankAccount,
+        secretKey: secretKey,
+      ),
     );
   }
 

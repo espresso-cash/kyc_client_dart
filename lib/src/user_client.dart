@@ -277,12 +277,12 @@ class KycUserClient {
 
     for (final item in dataList) {
       final protoData = item.data.writeToBuffer();
-      final encryptedData = encryptOnly(
+      final encryptedData = encrypt(
         data: protoData,
         secretBox: _secretBox,
       );
 
-      final hash = generateHashFromProto(item.data);
+      final hash = generateHash(item.data);
       final message = '${item.type}|$hash';
       final signature = _signingKey.sign(utf8.encode(message));
 
@@ -407,14 +407,14 @@ class KycUserClient {
     required String bankAccount,
   }) async {
     final encryptedBankName = base64Encode(
-      encryptOnly(
+      encrypt(
         data: utf8.encode(bankName),
         secretBox: _secretBox,
       ),
     );
 
     final encryptedBankAccount = base64Encode(
-      encryptOnly(
+      encrypt(
         data: utf8.encode(bankAccount),
         secretBox: _secretBox,
       ),
