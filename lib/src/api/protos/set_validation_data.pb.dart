@@ -13,12 +13,12 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'validation_status.pbenum.dart' as $13;
+import 'validation_status.pbenum.dart' as $2;
 
 class SetValidationDataRequest extends $pb.GeneratedMessage {
   factory SetValidationDataRequest({
     $core.String? dataId,
-    $13.ValidationStatus? status,
+    $2.ValidationStatus? status,
     $core.String? hash,
     $core.String? signature,
   }) {
@@ -43,7 +43,7 @@ class SetValidationDataRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SetValidationDataRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'dataId')
-    ..e<$13.ValidationStatus>(2, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $13.ValidationStatus.VALIDATION_STATUS_UNSPECIFIED, valueOf: $13.ValidationStatus.valueOf, enumValues: $13.ValidationStatus.values)
+    ..e<$2.ValidationStatus>(2, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $2.ValidationStatus.VALIDATION_STATUS_UNSPECIFIED, valueOf: $2.ValidationStatus.valueOf, enumValues: $2.ValidationStatus.values)
     ..aOS(3, _omitFieldNames ? '' : 'hash')
     ..aOS(4, _omitFieldNames ? '' : 'signature')
     ..hasRequiredFields = false
@@ -80,9 +80,9 @@ class SetValidationDataRequest extends $pb.GeneratedMessage {
   void clearDataId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $13.ValidationStatus get status => $_getN(1);
+  $2.ValidationStatus get status => $_getN(1);
   @$pb.TagNumber(2)
-  set status($13.ValidationStatus v) { setField(2, v); }
+  set status($2.ValidationStatus v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasStatus() => $_has(1);
   @$pb.TagNumber(2)

@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'google/protobuf/timestamp.pb.dart' as $11;
+import 'google/protobuf/timestamp.pb.dart' as $0;
 
 class CustomValidationDataField extends $pb.GeneratedMessage {
   factory CustomValidationDataField({
@@ -23,7 +23,7 @@ class CustomValidationDataField extends $pb.GeneratedMessage {
     $core.List<$core.int>? encryptedValue,
     $core.String? hash,
     $core.String? signature,
-    $11.Timestamp? createdAt,
+    $0.Timestamp? createdAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -60,7 +60,7 @@ class CustomValidationDataField extends $pb.GeneratedMessage {
     ..a<$core.List<$core.int>>(4, _omitFieldNames ? '' : 'encryptedValue', $pb.PbFieldType.OY)
     ..aOS(5, _omitFieldNames ? '' : 'hash')
     ..aOS(6, _omitFieldNames ? '' : 'signature')
-    ..aOM<$11.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $11.Timestamp.create)
+    ..aOM<$0.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $0.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -140,15 +140,15 @@ class CustomValidationDataField extends $pb.GeneratedMessage {
   void clearSignature() => clearField(6);
 
   @$pb.TagNumber(7)
-  $11.Timestamp get createdAt => $_getN(6);
+  $0.Timestamp get createdAt => $_getN(6);
   @$pb.TagNumber(7)
-  set createdAt($11.Timestamp v) { setField(7, v); }
+  set createdAt($0.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasCreatedAt() => $_has(6);
   @$pb.TagNumber(7)
   void clearCreatedAt() => clearField(7);
   @$pb.TagNumber(7)
-  $11.Timestamp ensureCreatedAt() => $_ensure(6);
+  $0.Timestamp ensureCreatedAt() => $_ensure(6);
 }
 
 

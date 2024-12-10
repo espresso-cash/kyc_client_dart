@@ -14,7 +14,7 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'data.pbenum.dart';
-import 'google/protobuf/timestamp.pb.dart' as $11;
+import 'google/protobuf/timestamp.pb.dart' as $0;
 
 export 'data.pbenum.dart';
 
@@ -84,7 +84,7 @@ class Name extends $pb.GeneratedMessage {
 
 class BirthDate extends $pb.GeneratedMessage {
   factory BirthDate({
-    $11.Timestamp? value,
+    $0.Timestamp? value,
   }) {
     final $result = create();
     if (value != null) {
@@ -97,7 +97,7 @@ class BirthDate extends $pb.GeneratedMessage {
   factory BirthDate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BirthDate', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
-    ..aOM<$11.Timestamp>(1, _omitFieldNames ? '' : 'value', subBuilder: $11.Timestamp.create)
+    ..aOM<$0.Timestamp>(1, _omitFieldNames ? '' : 'value', subBuilder: $0.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -123,15 +123,15 @@ class BirthDate extends $pb.GeneratedMessage {
   static BirthDate? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $11.Timestamp get value => $_getN(0);
+  $0.Timestamp get value => $_getN(0);
   @$pb.TagNumber(1)
-  set value($11.Timestamp v) { setField(1, v); }
+  set value($0.Timestamp v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasValue() => $_has(0);
   @$pb.TagNumber(1)
   void clearValue() => clearField(1);
   @$pb.TagNumber(1)
-  $11.Timestamp ensureValue() => $_ensure(0);
+  $0.Timestamp ensureValue() => $_ensure(0);
 }
 
 class Document extends $pb.GeneratedMessage {

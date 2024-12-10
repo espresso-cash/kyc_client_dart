@@ -13,17 +13,17 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'data.pbenum.dart' as $12;
-import 'google/protobuf/timestamp.pb.dart' as $11;
+import 'data.pbenum.dart' as $1;
+import 'google/protobuf/timestamp.pb.dart' as $0;
 
 class UserDataField extends $pb.GeneratedMessage {
   factory UserDataField({
     $core.String? id,
-    $12.DataType? type,
+    $1.DataType? type,
     $core.List<$core.int>? encryptedValue,
     $core.String? hash,
     $core.String? signature,
-    $11.Timestamp? createdAt,
+    $0.Timestamp? createdAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -52,11 +52,11 @@ class UserDataField extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UserDataField', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..e<$12.DataType>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: $12.DataType.DATA_TYPE_UNSPECIFIED, valueOf: $12.DataType.valueOf, enumValues: $12.DataType.values)
+    ..e<$1.DataType>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: $1.DataType.DATA_TYPE_UNSPECIFIED, valueOf: $1.DataType.valueOf, enumValues: $1.DataType.values)
     ..a<$core.List<$core.int>>(3, _omitFieldNames ? '' : 'encryptedValue', $pb.PbFieldType.OY)
     ..aOS(4, _omitFieldNames ? '' : 'hash')
     ..aOS(5, _omitFieldNames ? '' : 'signature')
-    ..aOM<$11.Timestamp>(6, _omitFieldNames ? '' : 'createdAt', subBuilder: $11.Timestamp.create)
+    ..aOM<$0.Timestamp>(6, _omitFieldNames ? '' : 'createdAt', subBuilder: $0.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -91,9 +91,9 @@ class UserDataField extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $12.DataType get type => $_getN(1);
+  $1.DataType get type => $_getN(1);
   @$pb.TagNumber(2)
-  set type($12.DataType v) { setField(2, v); }
+  set type($1.DataType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasType() => $_has(1);
   @$pb.TagNumber(2)
@@ -127,15 +127,15 @@ class UserDataField extends $pb.GeneratedMessage {
   void clearSignature() => clearField(5);
 
   @$pb.TagNumber(6)
-  $11.Timestamp get createdAt => $_getN(5);
+  $0.Timestamp get createdAt => $_getN(5);
   @$pb.TagNumber(6)
-  set createdAt($11.Timestamp v) { setField(6, v); }
+  set createdAt($0.Timestamp v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasCreatedAt() => $_has(5);
   @$pb.TagNumber(6)
   void clearCreatedAt() => clearField(6);
   @$pb.TagNumber(6)
-  $11.Timestamp ensureCreatedAt() => $_ensure(5);
+  $0.Timestamp ensureCreatedAt() => $_ensure(5);
 }
 
 

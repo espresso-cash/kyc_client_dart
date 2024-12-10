@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "service.proto",
+    "title": "brij/storage/v1/service.proto",
     "version": "version not set"
   },
   "tags": [
@@ -561,7 +561,7 @@
     "v1RemoveCustomValidationDataRequest": {
       "type": "object",
       "properties": {
-        "dataId": {
+        "id": {
           "type": "string"
         }
       }
@@ -572,7 +572,7 @@
     "v1RemoveUserDataRequest": {
       "type": "object",
       "properties": {
-        "dataId": {
+        "id": {
           "type": "string"
         }
       }
@@ -583,7 +583,7 @@
     "v1RemoveValidationDataRequest": {
       "type": "object",
       "properties": {
-        "dataId": {
+        "id": {
           "type": "string"
         }
       }

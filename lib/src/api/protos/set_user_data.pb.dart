@@ -13,11 +13,11 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'data.pbenum.dart' as $12;
+import 'data.pbenum.dart' as $1;
 
 class SetUserDataRequest extends $pb.GeneratedMessage {
   factory SetUserDataRequest({
-    $12.DataType? type,
+    $1.DataType? type,
     $core.List<$core.int>? encryptedValue,
     $core.String? hash,
     $core.String? signature,
@@ -42,7 +42,7 @@ class SetUserDataRequest extends $pb.GeneratedMessage {
   factory SetUserDataRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SetUserDataRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
-    ..e<$12.DataType>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: $12.DataType.DATA_TYPE_UNSPECIFIED, valueOf: $12.DataType.valueOf, enumValues: $12.DataType.values)
+    ..e<$1.DataType>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: $1.DataType.DATA_TYPE_UNSPECIFIED, valueOf: $1.DataType.valueOf, enumValues: $1.DataType.values)
     ..a<$core.List<$core.int>>(2, _omitFieldNames ? '' : 'encryptedValue', $pb.PbFieldType.OY)
     ..aOS(3, _omitFieldNames ? '' : 'hash')
     ..aOS(4, _omitFieldNames ? '' : 'signature')
@@ -71,9 +71,9 @@ class SetUserDataRequest extends $pb.GeneratedMessage {
   static SetUserDataRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $12.DataType get type => $_getN(0);
+  $1.DataType get type => $_getN(0);
   @$pb.TagNumber(1)
-  set type($12.DataType v) { setField(1, v); }
+  set type($1.DataType v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasType() => $_has(0);
   @$pb.TagNumber(1)

@@ -13,18 +13,18 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'google/protobuf/timestamp.pb.dart' as $11;
-import 'validation_status.pbenum.dart' as $13;
+import 'google/protobuf/timestamp.pb.dart' as $0;
+import 'validation_status.pbenum.dart' as $2;
 
 class ValidationDataField extends $pb.GeneratedMessage {
   factory ValidationDataField({
     $core.String? id,
     $core.String? validatorPublicKey,
     $core.String? dataId,
-    $13.ValidationStatus? status,
+    $2.ValidationStatus? status,
     $core.String? hash,
     $core.String? signature,
-    $11.Timestamp? validatedAt,
+    $0.Timestamp? validatedAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -58,10 +58,10 @@ class ValidationDataField extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'validatorPublicKey')
     ..aOS(3, _omitFieldNames ? '' : 'dataId')
-    ..e<$13.ValidationStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $13.ValidationStatus.VALIDATION_STATUS_UNSPECIFIED, valueOf: $13.ValidationStatus.valueOf, enumValues: $13.ValidationStatus.values)
+    ..e<$2.ValidationStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $2.ValidationStatus.VALIDATION_STATUS_UNSPECIFIED, valueOf: $2.ValidationStatus.valueOf, enumValues: $2.ValidationStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'hash')
     ..aOS(6, _omitFieldNames ? '' : 'signature')
-    ..aOM<$11.Timestamp>(7, _omitFieldNames ? '' : 'validatedAt', subBuilder: $11.Timestamp.create)
+    ..aOM<$0.Timestamp>(7, _omitFieldNames ? '' : 'validatedAt', subBuilder: $0.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -114,9 +114,9 @@ class ValidationDataField extends $pb.GeneratedMessage {
   void clearDataId() => clearField(3);
 
   @$pb.TagNumber(4)
-  $13.ValidationStatus get status => $_getN(3);
+  $2.ValidationStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status($13.ValidationStatus v) { setField(4, v); }
+  set status($2.ValidationStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
@@ -141,15 +141,15 @@ class ValidationDataField extends $pb.GeneratedMessage {
   void clearSignature() => clearField(6);
 
   @$pb.TagNumber(7)
-  $11.Timestamp get validatedAt => $_getN(6);
+  $0.Timestamp get validatedAt => $_getN(6);
   @$pb.TagNumber(7)
-  set validatedAt($11.Timestamp v) { setField(7, v); }
+  set validatedAt($0.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasValidatedAt() => $_has(6);
   @$pb.TagNumber(7)
   void clearValidatedAt() => clearField(7);
   @$pb.TagNumber(7)
-  $11.Timestamp ensureValidatedAt() => $_ensure(6);
+  $0.Timestamp ensureValidatedAt() => $_ensure(6);
 }
 
 
