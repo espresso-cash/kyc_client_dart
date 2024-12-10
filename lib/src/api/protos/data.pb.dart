@@ -18,173 +18,6 @@ import 'google/protobuf/timestamp.pb.dart' as $0;
 
 export 'data.pbenum.dart';
 
-enum WrappedData_Data {
-  email, 
-  name, 
-  birthDate, 
-  phone, 
-  document, 
-  bankInfo, 
-  selfieImage, 
-  notSet
-}
-
-class WrappedData extends $pb.GeneratedMessage {
-  factory WrappedData({
-    $core.String? email,
-    Name? name,
-    $0.Timestamp? birthDate,
-    $core.String? phone,
-    Document? document,
-    BankInfo? bankInfo,
-    $core.List<$core.int>? selfieImage,
-  }) {
-    final $result = create();
-    if (email != null) {
-      $result.email = email;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    if (birthDate != null) {
-      $result.birthDate = birthDate;
-    }
-    if (phone != null) {
-      $result.phone = phone;
-    }
-    if (document != null) {
-      $result.document = document;
-    }
-    if (bankInfo != null) {
-      $result.bankInfo = bankInfo;
-    }
-    if (selfieImage != null) {
-      $result.selfieImage = selfieImage;
-    }
-    return $result;
-  }
-  WrappedData._() : super();
-  factory WrappedData.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory WrappedData.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static const $core.Map<$core.int, WrappedData_Data> _WrappedData_DataByTag = {
-    1 : WrappedData_Data.email,
-    2 : WrappedData_Data.name,
-    3 : WrappedData_Data.birthDate,
-    4 : WrappedData_Data.phone,
-    5 : WrappedData_Data.document,
-    6 : WrappedData_Data.bankInfo,
-    7 : WrappedData_Data.selfieImage,
-    0 : WrappedData_Data.notSet
-  };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'WrappedData', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7])
-    ..aOS(1, _omitFieldNames ? '' : 'email')
-    ..aOM<Name>(2, _omitFieldNames ? '' : 'name', subBuilder: Name.create)
-    ..aOM<$0.Timestamp>(3, _omitFieldNames ? '' : 'birthDate', subBuilder: $0.Timestamp.create)
-    ..aOS(4, _omitFieldNames ? '' : 'phone')
-    ..aOM<Document>(5, _omitFieldNames ? '' : 'document', subBuilder: Document.create)
-    ..aOM<BankInfo>(6, _omitFieldNames ? '' : 'bankInfo', subBuilder: BankInfo.create)
-    ..a<$core.List<$core.int>>(7, _omitFieldNames ? '' : 'selfieImage', $pb.PbFieldType.OY)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  WrappedData clone() => WrappedData()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  WrappedData copyWith(void Function(WrappedData) updates) => super.copyWith((message) => updates(message as WrappedData)) as WrappedData;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static WrappedData create() => WrappedData._();
-  WrappedData createEmptyInstance() => create();
-  static $pb.PbList<WrappedData> createRepeated() => $pb.PbList<WrappedData>();
-  @$core.pragma('dart2js:noInline')
-  static WrappedData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WrappedData>(create);
-  static WrappedData? _defaultInstance;
-
-  WrappedData_Data whichData() => _WrappedData_DataByTag[$_whichOneof(0)]!;
-  void clearData() => clearField($_whichOneof(0));
-
-  @$pb.TagNumber(1)
-  $core.String get email => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set email($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasEmail() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearEmail() => clearField(1);
-
-  @$pb.TagNumber(2)
-  Name get name => $_getN(1);
-  @$pb.TagNumber(2)
-  set name(Name v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearName() => clearField(2);
-  @$pb.TagNumber(2)
-  Name ensureName() => $_ensure(1);
-
-  @$pb.TagNumber(3)
-  $0.Timestamp get birthDate => $_getN(2);
-  @$pb.TagNumber(3)
-  set birthDate($0.Timestamp v) { setField(3, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasBirthDate() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearBirthDate() => clearField(3);
-  @$pb.TagNumber(3)
-  $0.Timestamp ensureBirthDate() => $_ensure(2);
-
-  @$pb.TagNumber(4)
-  $core.String get phone => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set phone($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasPhone() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearPhone() => clearField(4);
-
-  @$pb.TagNumber(5)
-  Document get document => $_getN(4);
-  @$pb.TagNumber(5)
-  set document(Document v) { setField(5, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasDocument() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearDocument() => clearField(5);
-  @$pb.TagNumber(5)
-  Document ensureDocument() => $_ensure(4);
-
-  @$pb.TagNumber(6)
-  BankInfo get bankInfo => $_getN(5);
-  @$pb.TagNumber(6)
-  set bankInfo(BankInfo v) { setField(6, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasBankInfo() => $_has(5);
-  @$pb.TagNumber(6)
-  void clearBankInfo() => clearField(6);
-  @$pb.TagNumber(6)
-  BankInfo ensureBankInfo() => $_ensure(5);
-
-  @$pb.TagNumber(7)
-  $core.List<$core.int> get selfieImage => $_getN(6);
-  @$pb.TagNumber(7)
-  set selfieImage($core.List<$core.int> v) { $_setBytes(6, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasSelfieImage() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearSelfieImage() => clearField(7);
-}
-
 class Name extends $pb.GeneratedMessage {
   factory Name({
     $core.String? firstName,
@@ -203,7 +36,7 @@ class Name extends $pb.GeneratedMessage {
   factory Name.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Name.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Name', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Name', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'firstName')
     ..aOS(2, _omitFieldNames ? '' : 'lastName')
     ..hasRequiredFields = false
@@ -249,6 +82,58 @@ class Name extends $pb.GeneratedMessage {
   void clearLastName() => clearField(2);
 }
 
+class BirthDate extends $pb.GeneratedMessage {
+  factory BirthDate({
+    $0.Timestamp? value,
+  }) {
+    final $result = create();
+    if (value != null) {
+      $result.value = value;
+    }
+    return $result;
+  }
+  BirthDate._() : super();
+  factory BirthDate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory BirthDate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BirthDate', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
+    ..aOM<$0.Timestamp>(1, _omitFieldNames ? '' : 'value', subBuilder: $0.Timestamp.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  BirthDate clone() => BirthDate()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  BirthDate copyWith(void Function(BirthDate) updates) => super.copyWith((message) => updates(message as BirthDate)) as BirthDate;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static BirthDate create() => BirthDate._();
+  BirthDate createEmptyInstance() => create();
+  static $pb.PbList<BirthDate> createRepeated() => $pb.PbList<BirthDate>();
+  @$core.pragma('dart2js:noInline')
+  static BirthDate getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BirthDate>(create);
+  static BirthDate? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $0.Timestamp get value => $_getN(0);
+  @$pb.TagNumber(1)
+  set value($0.Timestamp v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasValue() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearValue() => clearField(1);
+  @$pb.TagNumber(1)
+  $0.Timestamp ensureValue() => $_ensure(0);
+}
+
 class Document extends $pb.GeneratedMessage {
   factory Document({
     DocumentType? type,
@@ -271,7 +156,7 @@ class Document extends $pb.GeneratedMessage {
   factory Document.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Document.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Document', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Document', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
     ..e<DocumentType>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: DocumentType.DOCUMENT_TYPE_UNSPECIFIED, valueOf: DocumentType.valueOf, enumValues: DocumentType.values)
     ..aOS(2, _omitFieldNames ? '' : 'number')
     ..aOS(3, _omitFieldNames ? '' : 'countryCode')
@@ -349,7 +234,7 @@ class BankInfo extends $pb.GeneratedMessage {
   factory BankInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory BankInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BankInfo', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BankInfo', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'accountNumber')
     ..aOS(2, _omitFieldNames ? '' : 'bankCode')
     ..aOS(3, _omitFieldNames ? '' : 'bankName')
@@ -405,39 +290,22 @@ class BankInfo extends $pb.GeneratedMessage {
   void clearBankName() => clearField(3);
 }
 
-enum WrappedValidation_Data {
-  hash, 
-  custom, 
-  notSet
-}
-
-class WrappedValidation extends $pb.GeneratedMessage {
-  factory WrappedValidation({
-    HashValidation? hash,
-    CustomValidation? custom,
+class Email extends $pb.GeneratedMessage {
+  factory Email({
+    $core.String? value,
   }) {
     final $result = create();
-    if (hash != null) {
-      $result.hash = hash;
-    }
-    if (custom != null) {
-      $result.custom = custom;
+    if (value != null) {
+      $result.value = value;
     }
     return $result;
   }
-  WrappedValidation._() : super();
-  factory WrappedValidation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory WrappedValidation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  Email._() : super();
+  factory Email.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Email.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static const $core.Map<$core.int, WrappedValidation_Data> _WrappedValidation_DataByTag = {
-    1 : WrappedValidation_Data.hash,
-    2 : WrappedValidation_Data.custom,
-    0 : WrappedValidation_Data.notSet
-  };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'WrappedValidation', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
-    ..oo(0, [1, 2])
-    ..aOM<HashValidation>(1, _omitFieldNames ? '' : 'hash', subBuilder: HashValidation.create)
-    ..aOM<CustomValidation>(2, _omitFieldNames ? '' : 'custom', subBuilder: CustomValidation.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Email', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'value')
     ..hasRequiredFields = false
   ;
 
@@ -445,70 +313,49 @@ class WrappedValidation extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  WrappedValidation clone() => WrappedValidation()..mergeFromMessage(this);
+  Email clone() => Email()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  WrappedValidation copyWith(void Function(WrappedValidation) updates) => super.copyWith((message) => updates(message as WrappedValidation)) as WrappedValidation;
+  Email copyWith(void Function(Email) updates) => super.copyWith((message) => updates(message as Email)) as Email;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static WrappedValidation create() => WrappedValidation._();
-  WrappedValidation createEmptyInstance() => create();
-  static $pb.PbList<WrappedValidation> createRepeated() => $pb.PbList<WrappedValidation>();
+  static Email create() => Email._();
+  Email createEmptyInstance() => create();
+  static $pb.PbList<Email> createRepeated() => $pb.PbList<Email>();
   @$core.pragma('dart2js:noInline')
-  static WrappedValidation getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WrappedValidation>(create);
-  static WrappedValidation? _defaultInstance;
-
-  WrappedValidation_Data whichData() => _WrappedValidation_DataByTag[$_whichOneof(0)]!;
-  void clearData() => clearField($_whichOneof(0));
+  static Email getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Email>(create);
+  static Email? _defaultInstance;
 
   @$pb.TagNumber(1)
-  HashValidation get hash => $_getN(0);
+  $core.String get value => $_getSZ(0);
   @$pb.TagNumber(1)
-  set hash(HashValidation v) { setField(1, v); }
+  set value($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasHash() => $_has(0);
+  $core.bool hasValue() => $_has(0);
   @$pb.TagNumber(1)
-  void clearHash() => clearField(1);
-  @$pb.TagNumber(1)
-  HashValidation ensureHash() => $_ensure(0);
-
-  @$pb.TagNumber(2)
-  CustomValidation get custom => $_getN(1);
-  @$pb.TagNumber(2)
-  set custom(CustomValidation v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasCustom() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearCustom() => clearField(2);
-  @$pb.TagNumber(2)
-  CustomValidation ensureCustom() => $_ensure(1);
+  void clearValue() => clearField(1);
 }
 
-class HashValidation extends $pb.GeneratedMessage {
-  factory HashValidation({
-    $core.String? hash,
-    ValidationStatus? status,
+class SelfieImage extends $pb.GeneratedMessage {
+  factory SelfieImage({
+    $core.List<$core.int>? value,
   }) {
     final $result = create();
-    if (hash != null) {
-      $result.hash = hash;
-    }
-    if (status != null) {
-      $result.status = status;
+    if (value != null) {
+      $result.value = value;
     }
     return $result;
   }
-  HashValidation._() : super();
-  factory HashValidation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory HashValidation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  SelfieImage._() : super();
+  factory SelfieImage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory SelfieImage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'HashValidation', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'hash')
-    ..e<ValidationStatus>(2, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: ValidationStatus.VALIDATION_STATUS_UNSPECIFIED, valueOf: ValidationStatus.valueOf, enumValues: ValidationStatus.values)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SelfieImage', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
+    ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'value', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -516,63 +363,49 @@ class HashValidation extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  HashValidation clone() => HashValidation()..mergeFromMessage(this);
+  SelfieImage clone() => SelfieImage()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  HashValidation copyWith(void Function(HashValidation) updates) => super.copyWith((message) => updates(message as HashValidation)) as HashValidation;
+  SelfieImage copyWith(void Function(SelfieImage) updates) => super.copyWith((message) => updates(message as SelfieImage)) as SelfieImage;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static HashValidation create() => HashValidation._();
-  HashValidation createEmptyInstance() => create();
-  static $pb.PbList<HashValidation> createRepeated() => $pb.PbList<HashValidation>();
+  static SelfieImage create() => SelfieImage._();
+  SelfieImage createEmptyInstance() => create();
+  static $pb.PbList<SelfieImage> createRepeated() => $pb.PbList<SelfieImage>();
   @$core.pragma('dart2js:noInline')
-  static HashValidation getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<HashValidation>(create);
-  static HashValidation? _defaultInstance;
+  static SelfieImage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SelfieImage>(create);
+  static SelfieImage? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get hash => $_getSZ(0);
+  $core.List<$core.int> get value => $_getN(0);
   @$pb.TagNumber(1)
-  set hash($core.String v) { $_setString(0, v); }
+  set value($core.List<$core.int> v) { $_setBytes(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasHash() => $_has(0);
+  $core.bool hasValue() => $_has(0);
   @$pb.TagNumber(1)
-  void clearHash() => clearField(1);
-
-  @$pb.TagNumber(2)
-  ValidationStatus get status => $_getN(1);
-  @$pb.TagNumber(2)
-  set status(ValidationStatus v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasStatus() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearStatus() => clearField(2);
+  void clearValue() => clearField(1);
 }
 
-class CustomValidation extends $pb.GeneratedMessage {
-  factory CustomValidation({
-    $core.String? type,
-    $core.List<$core.int>? data,
+class Phone extends $pb.GeneratedMessage {
+  factory Phone({
+    $core.String? value,
   }) {
     final $result = create();
-    if (type != null) {
-      $result.type = type;
-    }
-    if (data != null) {
-      $result.data = data;
+    if (value != null) {
+      $result.value = value;
     }
     return $result;
   }
-  CustomValidation._() : super();
-  factory CustomValidation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CustomValidation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  Phone._() : super();
+  factory Phone.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Phone.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CustomValidation', package: const $pb.PackageName(_omitMessageNames ? '' : 'espressocash.data.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'type')
-    ..a<$core.List<$core.int>>(2, _omitFieldNames ? '' : 'data', $pb.PbFieldType.OY)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Phone', package: const $pb.PackageName(_omitMessageNames ? '' : 'brij.storage.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'value')
     ..hasRequiredFields = false
   ;
 
@@ -580,40 +413,31 @@ class CustomValidation extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  CustomValidation clone() => CustomValidation()..mergeFromMessage(this);
+  Phone clone() => Phone()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CustomValidation copyWith(void Function(CustomValidation) updates) => super.copyWith((message) => updates(message as CustomValidation)) as CustomValidation;
+  Phone copyWith(void Function(Phone) updates) => super.copyWith((message) => updates(message as Phone)) as Phone;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static CustomValidation create() => CustomValidation._();
-  CustomValidation createEmptyInstance() => create();
-  static $pb.PbList<CustomValidation> createRepeated() => $pb.PbList<CustomValidation>();
+  static Phone create() => Phone._();
+  Phone createEmptyInstance() => create();
+  static $pb.PbList<Phone> createRepeated() => $pb.PbList<Phone>();
   @$core.pragma('dart2js:noInline')
-  static CustomValidation getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CustomValidation>(create);
-  static CustomValidation? _defaultInstance;
+  static Phone getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Phone>(create);
+  static Phone? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get type => $_getSZ(0);
+  $core.String get value => $_getSZ(0);
   @$pb.TagNumber(1)
-  set type($core.String v) { $_setString(0, v); }
+  set value($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasType() => $_has(0);
+  $core.bool hasValue() => $_has(0);
   @$pb.TagNumber(1)
-  void clearType() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.List<$core.int> get data => $_getN(1);
-  @$pb.TagNumber(2)
-  set data($core.List<$core.int> v) { $_setBytes(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasData() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearData() => clearField(2);
+  void clearValue() => clearField(1);
 }
 
 

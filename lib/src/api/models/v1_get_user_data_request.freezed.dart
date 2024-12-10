@@ -21,6 +21,7 @@ V1GetUserDataRequest _$V1GetUserDataRequestFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$V1GetUserDataRequest {
   String get userPublicKey => throw _privateConstructorUsedError;
+  bool get includeValues => throw _privateConstructorUsedError;
 
   /// Serializes this V1GetUserDataRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -38,7 +39,7 @@ abstract class $V1GetUserDataRequestCopyWith<$Res> {
           $Res Function(V1GetUserDataRequest) then) =
       _$V1GetUserDataRequestCopyWithImpl<$Res, V1GetUserDataRequest>;
   @useResult
-  $Res call({String userPublicKey});
+  $Res call({String userPublicKey, bool includeValues});
 }
 
 /// @nodoc
@@ -58,12 +59,17 @@ class _$V1GetUserDataRequestCopyWithImpl<$Res,
   @override
   $Res call({
     Object? userPublicKey = null,
+    Object? includeValues = null,
   }) {
     return _then(_value.copyWith(
       userPublicKey: null == userPublicKey
           ? _value.userPublicKey
           : userPublicKey // ignore: cast_nullable_to_non_nullable
               as String,
+      includeValues: null == includeValues
+          ? _value.includeValues
+          : includeValues // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -76,7 +82,7 @@ abstract class _$$V1GetUserDataRequestImplCopyWith<$Res>
       __$$V1GetUserDataRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String userPublicKey});
+  $Res call({String userPublicKey, bool includeValues});
 }
 
 /// @nodoc
@@ -93,12 +99,17 @@ class __$$V1GetUserDataRequestImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userPublicKey = null,
+    Object? includeValues = null,
   }) {
     return _then(_$V1GetUserDataRequestImpl(
       userPublicKey: null == userPublicKey
           ? _value.userPublicKey
           : userPublicKey // ignore: cast_nullable_to_non_nullable
               as String,
+      includeValues: null == includeValues
+          ? _value.includeValues
+          : includeValues // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -106,17 +117,20 @@ class __$$V1GetUserDataRequestImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$V1GetUserDataRequestImpl implements _V1GetUserDataRequest {
-  const _$V1GetUserDataRequestImpl({required this.userPublicKey});
+  const _$V1GetUserDataRequestImpl(
+      {required this.userPublicKey, required this.includeValues});
 
   factory _$V1GetUserDataRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$V1GetUserDataRequestImplFromJson(json);
 
   @override
   final String userPublicKey;
+  @override
+  final bool includeValues;
 
   @override
   String toString() {
-    return 'V1GetUserDataRequest(userPublicKey: $userPublicKey)';
+    return 'V1GetUserDataRequest(userPublicKey: $userPublicKey, includeValues: $includeValues)';
   }
 
   @override
@@ -125,12 +139,14 @@ class _$V1GetUserDataRequestImpl implements _V1GetUserDataRequest {
         (other.runtimeType == runtimeType &&
             other is _$V1GetUserDataRequestImpl &&
             (identical(other.userPublicKey, userPublicKey) ||
-                other.userPublicKey == userPublicKey));
+                other.userPublicKey == userPublicKey) &&
+            (identical(other.includeValues, includeValues) ||
+                other.includeValues == includeValues));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, userPublicKey);
+  int get hashCode => Object.hash(runtimeType, userPublicKey, includeValues);
 
   /// Create a copy of V1GetUserDataRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -151,14 +167,17 @@ class _$V1GetUserDataRequestImpl implements _V1GetUserDataRequest {
 }
 
 abstract class _V1GetUserDataRequest implements V1GetUserDataRequest {
-  const factory _V1GetUserDataRequest({required final String userPublicKey}) =
-      _$V1GetUserDataRequestImpl;
+  const factory _V1GetUserDataRequest(
+      {required final String userPublicKey,
+      required final bool includeValues}) = _$V1GetUserDataRequestImpl;
 
   factory _V1GetUserDataRequest.fromJson(Map<String, dynamic> json) =
       _$V1GetUserDataRequestImpl.fromJson;
 
   @override
   String get userPublicKey;
+  @override
+  bool get includeValues;
 
   /// Create a copy of V1GetUserDataRequest
   /// with the given fields replaced by the non-null parameter values.

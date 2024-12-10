@@ -21,10 +21,10 @@ V1SetValidationDataRequest _$V1SetValidationDataRequestFromJson(
 
 /// @nodoc
 mixin _$V1SetValidationDataRequest {
-  String get userPublicKey => throw _privateConstructorUsedError;
-  String get encryptedData => throw _privateConstructorUsedError;
   String get dataId => throw _privateConstructorUsedError;
-  String get id => throw _privateConstructorUsedError;
+  V1ValidationStatus get status => throw _privateConstructorUsedError;
+  String get hash => throw _privateConstructorUsedError;
+  String get signature => throw _privateConstructorUsedError;
 
   /// Serializes this V1SetValidationDataRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,7 +44,10 @@ abstract class $V1SetValidationDataRequestCopyWith<$Res> {
           V1SetValidationDataRequest>;
   @useResult
   $Res call(
-      {String userPublicKey, String encryptedData, String dataId, String id});
+      {String dataId,
+      V1ValidationStatus status,
+      String hash,
+      String signature});
 }
 
 /// @nodoc
@@ -63,27 +66,27 @@ class _$V1SetValidationDataRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userPublicKey = null,
-    Object? encryptedData = null,
     Object? dataId = null,
-    Object? id = null,
+    Object? status = null,
+    Object? hash = null,
+    Object? signature = null,
   }) {
     return _then(_value.copyWith(
-      userPublicKey: null == userPublicKey
-          ? _value.userPublicKey
-          : userPublicKey // ignore: cast_nullable_to_non_nullable
-              as String,
-      encryptedData: null == encryptedData
-          ? _value.encryptedData
-          : encryptedData // ignore: cast_nullable_to_non_nullable
-              as String,
       dataId: null == dataId
           ? _value.dataId
           : dataId // ignore: cast_nullable_to_non_nullable
               as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as V1ValidationStatus,
+      hash: null == hash
+          ? _value.hash
+          : hash // ignore: cast_nullable_to_non_nullable
+              as String,
+      signature: null == signature
+          ? _value.signature
+          : signature // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -99,7 +102,10 @@ abstract class _$$V1SetValidationDataRequestImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String userPublicKey, String encryptedData, String dataId, String id});
+      {String dataId,
+      V1ValidationStatus status,
+      String hash,
+      String signature});
 }
 
 /// @nodoc
@@ -117,27 +123,27 @@ class __$$V1SetValidationDataRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userPublicKey = null,
-    Object? encryptedData = null,
     Object? dataId = null,
-    Object? id = null,
+    Object? status = null,
+    Object? hash = null,
+    Object? signature = null,
   }) {
     return _then(_$V1SetValidationDataRequestImpl(
-      userPublicKey: null == userPublicKey
-          ? _value.userPublicKey
-          : userPublicKey // ignore: cast_nullable_to_non_nullable
-              as String,
-      encryptedData: null == encryptedData
-          ? _value.encryptedData
-          : encryptedData // ignore: cast_nullable_to_non_nullable
-              as String,
       dataId: null == dataId
           ? _value.dataId
           : dataId // ignore: cast_nullable_to_non_nullable
               as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as V1ValidationStatus,
+      hash: null == hash
+          ? _value.hash
+          : hash // ignore: cast_nullable_to_non_nullable
+              as String,
+      signature: null == signature
+          ? _value.signature
+          : signature // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -147,27 +153,27 @@ class __$$V1SetValidationDataRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$V1SetValidationDataRequestImpl implements _V1SetValidationDataRequest {
   const _$V1SetValidationDataRequestImpl(
-      {required this.userPublicKey,
-      required this.encryptedData,
-      required this.dataId,
-      required this.id});
+      {required this.dataId,
+      required this.status,
+      required this.hash,
+      required this.signature});
 
   factory _$V1SetValidationDataRequestImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$V1SetValidationDataRequestImplFromJson(json);
 
   @override
-  final String userPublicKey;
-  @override
-  final String encryptedData;
-  @override
   final String dataId;
   @override
-  final String id;
+  final V1ValidationStatus status;
+  @override
+  final String hash;
+  @override
+  final String signature;
 
   @override
   String toString() {
-    return 'V1SetValidationDataRequest(userPublicKey: $userPublicKey, encryptedData: $encryptedData, dataId: $dataId, id: $id)';
+    return 'V1SetValidationDataRequest(dataId: $dataId, status: $status, hash: $hash, signature: $signature)';
   }
 
   @override
@@ -175,18 +181,16 @@ class _$V1SetValidationDataRequestImpl implements _V1SetValidationDataRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$V1SetValidationDataRequestImpl &&
-            (identical(other.userPublicKey, userPublicKey) ||
-                other.userPublicKey == userPublicKey) &&
-            (identical(other.encryptedData, encryptedData) ||
-                other.encryptedData == encryptedData) &&
             (identical(other.dataId, dataId) || other.dataId == dataId) &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.hash, hash) || other.hash == hash) &&
+            (identical(other.signature, signature) ||
+                other.signature == signature));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, userPublicKey, encryptedData, dataId, id);
+  int get hashCode => Object.hash(runtimeType, dataId, status, hash, signature);
 
   /// Create a copy of V1SetValidationDataRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -208,22 +212,22 @@ class _$V1SetValidationDataRequestImpl implements _V1SetValidationDataRequest {
 abstract class _V1SetValidationDataRequest
     implements V1SetValidationDataRequest {
   const factory _V1SetValidationDataRequest(
-      {required final String userPublicKey,
-      required final String encryptedData,
-      required final String dataId,
-      required final String id}) = _$V1SetValidationDataRequestImpl;
+      {required final String dataId,
+      required final V1ValidationStatus status,
+      required final String hash,
+      required final String signature}) = _$V1SetValidationDataRequestImpl;
 
   factory _V1SetValidationDataRequest.fromJson(Map<String, dynamic> json) =
       _$V1SetValidationDataRequestImpl.fromJson;
 
   @override
-  String get userPublicKey;
-  @override
-  String get encryptedData;
-  @override
   String get dataId;
   @override
-  String get id;
+  V1ValidationStatus get status;
+  @override
+  String get hash;
+  @override
+  String get signature;
 
   /// Create a copy of V1SetValidationDataRequest
   /// with the given fields replaced by the non-null parameter values.

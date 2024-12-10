@@ -3,6 +3,7 @@ import 'dart:isolate';
 
 import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
+import 'package:kyc_client_dart/src/api/models/v1_data_type.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_order_response.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_user_data_response.dart';
 import 'package:kyc_client_dart/src/api/protos/data.pb.dart' as proto;
@@ -12,75 +13,31 @@ import 'package:pinenacl/digests.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:pinenacl/tweetnacl.dart';
 import 'package:pinenacl/x25519.dart';
+import 'package:protobuf/protobuf.dart';
 
 export 'models/order_id.dart';
 export 'models/validation_result.dart';
 
-String generateHash(proto.WrappedData data) {
-  // Normalize Dart timestamp serialization to avoid nanos
-  if (data.whichData() == proto.WrappedData_Data.birthDate) {
-    data.birthDate = Timestamp()..seconds = data.birthDate.seconds;
+String generateHash(Object data) {
+  final bytes = switch (data) {
+    GeneratedMessage() => _serializeProto(data),
+    Uint8List() => data,
+    String() => Uint8List.fromList(utf8.encode(data)),
+    _ => throw ArgumentError('Unsupported type: ${data.runtimeType}')
+  };
+
+  return hex.encode(Hash.sha256(bytes));
+}
+
+Uint8List _serializeProto(GeneratedMessage data) {
+  if (data.runtimeType == proto.BirthDate) {
+    final value = data as proto.BirthDate;
+    data = proto.BirthDate(value: Timestamp()..seconds = value.value.seconds);
   }
-
-  final bytes = data.writeToBuffer();
-  final digest = Hash.sha256(bytes);
-
-  return hex.encode(digest);
+  return data.writeToBuffer();
 }
 
-Future<SignedMessage> encryptAndSign({
-  required Uint8List data,
-  required SecretBox secretBox,
-  required SigningKey signingKey,
-}) {
-  final shouldRunAsync = !_isWeb && data.length > _encryptionAsyncThreshold;
-
-  SignedMessage encrypt() => _encryptAndSignSync(
-        data: data,
-        secretBox: secretBox,
-        signingKey: signingKey,
-      );
-
-  return shouldRunAsync ? Isolate.run(encrypt) : Future.value(encrypt());
-}
-
-SignedMessage _encryptAndSignSync({
-  required Uint8List data,
-  required SecretBox secretBox,
-  required SigningKey signingKey,
-}) {
-  final encrypted = secretBox.encrypt(data);
-  return signingKey.sign(Uint8List.fromList(encrypted));
-}
-
-Uint8List verifyAndDecrypt({
-  required String signedEncryptedData,
-  required String userPK,
-  required String secretKey,
-}) {
-  final verifyKey = VerifyKey(Uint8List.fromList(base58.decode(userPK)));
-  final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
-
-  final signedMessage = SignedMessage.fromList(
-    signedMessage: base64Decode(signedEncryptedData),
-  );
-
-  if (!verifyKey.verifySignedMessage(signedMessage: signedMessage)) {
-    throw Exception('Invalid signature for user data');
-  }
-
-  final encryptedData = Uint8List.fromList(signedMessage.message);
-  final decrypted = box.decrypt(
-    EncryptedMessage(
-      nonce: encryptedData.sublist(0, TweetNaCl.nonceLength),
-      cipherText: encryptedData.sublist(TweetNaCl.nonceLength),
-    ),
-  );
-
-  return decrypted;
-}
-
-Uint8List encryptOnly({
+Uint8List encrypt({
   required Uint8List data,
   required SecretBox secretBox,
 }) {
@@ -92,25 +49,29 @@ Uint8List encryptOnly({
   ]);
 }
 
-String decryptOnly({
+Uint8List decrypt({
   required String encryptedData,
   required String secretKey,
 }) {
-  try {
-    final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
-    final data = base64Decode(encryptedData);
-
-    final decrypted = box.decrypt(
-      EncryptedMessage(
-        nonce: data.sublist(0, TweetNaCl.nonceLength),
-        cipherText: data.sublist(TweetNaCl.nonceLength),
-      ),
-    );
-
-    return utf8.decode(decrypted);
-  } on Object catch (_) {
-    return encryptedData;
+  if (encryptedData.isEmpty) {
+    return Uint8List(0);
   }
+
+  final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
+  final data = base64Decode(encryptedData);
+
+  if (data.length < TweetNaCl.nonceLength) {
+    throw Exception('encrypted message too short');
+  }
+
+  final decrypted = box.decrypt(
+    EncryptedMessage(
+      nonce: data.sublist(0, TweetNaCl.nonceLength),
+      cipherText: data.sublist(TweetNaCl.nonceLength),
+    ),
+  );
+
+  return decrypted;
 }
 
 Future<UserData> processUserData({
@@ -140,144 +101,107 @@ UserData _processUserData({
   required String userPK,
   required String secretKey,
 }) {
-  final validationMap = <String, ValidationResult>{};
-  Map<String, dynamic>? custom;
+  final validationMap = {
+    for (final data in response.validationData)
+      data.dataId: HashValidationResult(
+        dataId: data.dataId,
+        hash: data.hash,
+        status: data.status.toApiValidationStatus(),
+      ),
+  };
 
-  // Process validation data
-  for (final encryptedData in response.validationData) {
-    final decryptedData = verifyAndDecrypt(
-      signedEncryptedData: encryptedData.encryptedData,
-      secretKey: secretKey,
-      userPK: encryptedData.validatorPublicKey,
-    );
-    final wrappedData = proto.WrappedValidation.fromBuffer(decryptedData);
+  Email? email;
+  Phone? phone;
+  Name? name;
+  BirthDate? birthDate;
+  Document? document;
+  BankInfo? bankInfo;
+  Selfie? selfie;
 
-    final result = switch (wrappedData.whichData()) {
-      proto.WrappedValidation_Data.hash => HashValidationResult(
-          dataId: encryptedData.dataId,
-          value: wrappedData.hash.hash,
-          status: wrappedData.hash.status,
-        ),
-      proto.WrappedValidation_Data.custom => CustomValidationResult(
-          type: wrappedData.custom.type,
-          value: utf8.decode(wrappedData.custom.data),
-        ),
-      proto.WrappedValidation_Data.notSet => null,
-    };
-
-    if (result != null) {
-      if (result is HashValidationResult) {
-        validationMap[result.dataId] = result;
-      } else if (result is CustomValidationResult) {
-        custom ??= {};
-        custom[result.type] = result.value;
-      }
-    }
-  }
-
-  List<Email>? email;
-  List<Phone>? phone;
-  List<Name>? name;
-  List<BirthDate>? birthDate;
-  List<Document>? document;
-  List<BankInfo>? bankInfo;
-  List<Selfie>? selfie;
-
-  // Process user data
   for (final encryptedData in response.userData) {
-    final decryptedData = verifyAndDecrypt(
-      signedEncryptedData: encryptedData.encryptedData,
+    final decryptedData = decrypt(
+      encryptedData: encryptedData.encryptedValue,
       secretKey: secretKey,
-      userPK: userPK,
     );
-    final wrappedData = proto.WrappedData.fromBuffer(decryptedData);
 
     final id = encryptedData.id;
-    final verificationData = validationMap[id] as HashValidationResult?;
 
-    ValidationStatus status = ValidationStatus.unspecified;
-    if (verificationData != null) {
-      final hash = generateHash(wrappedData);
-      final bool hashMatching = hash == verificationData.value;
+    final verificationData = validationMap[id];
+    final status = verificationData?.status ?? ValidationStatus.unspecified;
 
-      status = hashMatching
-          ? verificationData.status.toValidationStatus()
-          : ValidationStatus.unverified;
-    }
-
-    switch (wrappedData.whichData()) {
-      case proto.WrappedData_Data.email:
-        email ??= [];
-        email.add(
-          Email(
-            value: wrappedData.email,
-            id: id,
-            status: status,
-          ),
+    switch (encryptedData.type) {
+      case V1DataType.dataTypeEmail:
+        final wrappedData = proto.Email.fromBuffer(decryptedData);
+        email = Email(
+          value: wrappedData.value,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.name:
-        name ??= [];
-        name.add(
-          Name(
-            firstName: wrappedData.name.firstName,
-            lastName: wrappedData.name.lastName,
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypeName:
+        final wrappedData = proto.Name.fromBuffer(decryptedData);
+        name = Name(
+          firstName: wrappedData.firstName,
+          lastName: wrappedData.lastName,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.birthDate:
-        birthDate ??= [];
-        birthDate.add(
-          BirthDate(
-            value: wrappedData.birthDate.toDateTime(),
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypeBirthDate:
+        final wrappedData = proto.BirthDate.fromBuffer(decryptedData);
+        birthDate = BirthDate(
+          value: wrappedData.value.toDateTime(),
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.phone:
-        phone ??= [];
-        phone.add(
-          Phone(
-            value: wrappedData.phone,
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypePhone:
+        final wrappedData = proto.Phone.fromBuffer(decryptedData);
+        phone = Phone(
+          value: wrappedData.value,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.document:
-        document ??= [];
-        document.add(
-          Document(
-            type: wrappedData.document.type.toIdType(),
-            number: wrappedData.document.number,
-            countryCode: wrappedData.document.countryCode,
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypeDocument:
+        final wrappedData = proto.Document.fromBuffer(decryptedData);
+        document = Document(
+          type: wrappedData.type.toIdType(),
+          number: wrappedData.number,
+          countryCode: wrappedData.countryCode,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.bankInfo:
-        bankInfo ??= [];
-        bankInfo.add(
-          BankInfo(
-            bankName: wrappedData.bankInfo.bankName,
-            accountNumber: wrappedData.bankInfo.accountNumber,
-            bankCode: wrappedData.bankInfo.bankCode,
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypeBankInfo:
+        final wrappedData = proto.BankInfo.fromBuffer(decryptedData);
+        bankInfo = BankInfo(
+          bankName: wrappedData.bankName,
+          accountNumber: wrappedData.accountNumber,
+          bankCode: wrappedData.bankCode,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.selfieImage:
-        selfie ??= [];
-        selfie.add(
-          Selfie(
-            value: wrappedData.selfieImage,
-            id: id,
-            status: status,
-          ),
+      case V1DataType.dataTypeSelfieImage:
+        final wrappedData = proto.SelfieImage.fromBuffer(decryptedData);
+        selfie = Selfie(
+          value: wrappedData.value,
+          id: id,
+          status: status,
         );
-      case proto.WrappedData_Data.notSet:
-        break;
+      case V1DataType.dataTypeUnspecified:
+      case V1DataType.$unknown:
     }
   }
+
+  final customValidationData = {
+    for (final data in response.customValidationData)
+      data.id: CustomValidationResult(
+        id: data.id,
+        type: data.type,
+        value: utf8.decode(
+          decrypt(
+            encryptedData: data.encryptedValue,
+            secretKey: secretKey,
+          ),
+        ),
+      ),
+  };
 
   return UserData(
     email: email,
@@ -287,7 +211,7 @@ UserData _processUserData({
     document: document,
     bankInfo: bankInfo,
     selfie: selfie,
-    custom: custom,
+    custom: customValidationData,
   );
 }
 
@@ -299,16 +223,20 @@ Order processOrderData({
   String bankAccount = order.bankAccount;
 
   if (bankName.isNotEmpty) {
-    bankName = decryptOnly(
-      encryptedData: bankName,
-      secretKey: secretKey,
+    bankName = utf8.decode(
+      decrypt(
+        encryptedData: bankName,
+        secretKey: secretKey,
+      ),
     );
   }
 
   if (bankAccount.isNotEmpty) {
-    bankAccount = decryptOnly(
-      encryptedData: bankAccount,
-      secretKey: secretKey,
+    bankAccount = utf8.decode(
+      decrypt(
+        encryptedData: bankAccount,
+        secretKey: secretKey,
+      ),
     );
   }
 

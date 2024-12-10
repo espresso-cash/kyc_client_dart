@@ -4,12 +4,13 @@ import 'package:bs58/bs58.dart';
 import 'package:cryptography/cryptography.dart' hide PublicKey, SecretBox;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' as jwt;
 import 'package:dio/dio.dart';
-import 'package:kyc_client_dart/src/api/clients/kyc_service_client.dart';
 import 'package:kyc_client_dart/src/api/clients/order_service_client.dart';
+import 'package:kyc_client_dart/src/api/clients/storage_service_client.dart';
 import 'package:kyc_client_dart/src/api/clients/validator_service_client.dart';
 import 'package:kyc_client_dart/src/api/intercetor.dart';
 import 'package:kyc_client_dart/src/api/models/v1_create_off_ramp_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_create_on_ramp_order_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_data_type.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_info_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_order_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_get_partner_info_request.dart';
@@ -19,6 +20,7 @@ import 'package:kyc_client_dart/src/api/models/v1_init_document_validation_reque
 import 'package:kyc_client_dart/src/api/models/v1_init_email_validation_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_init_phone_validation_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_init_storage_request.dart';
+import 'package:kyc_client_dart/src/api/models/v1_remove_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_set_user_data_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_validate_email_request.dart';
 import 'package:kyc_client_dart/src/api/models/v1_validate_phone_request.dart';
@@ -54,7 +56,7 @@ class KycUserClient {
   late final SecretBox _secretBox;
   late final SigningKey _signingKey;
 
-  late final KycServiceClient _kycClient;
+  late final StorageServiceClient _storageClient;
   late final ValidatorServiceClient _validatorClient;
   late final OrderServiceClient _orderClient;
 
@@ -65,12 +67,12 @@ class KycUserClient {
   Future<void> init({required String walletAddress}) async {
     final seed = await _generateSeed();
     await _initializeKeys(seed);
-    await _initializeKycClient();
+    await _initializeStorageClient();
     await _initializeValidatorClient();
     await _initializeOrderClient();
 
     try {
-      final getInfo = await _kycClient.kycServiceGetInfo(
+      final getInfo = await _storageClient.storageServiceGetInfo(
         body: V1GetInfoRequest(publicKey: _authPublicKey),
       );
       await _initializeEncryption(
@@ -101,14 +103,15 @@ class KycUserClient {
     );
   }
 
-  Future<void> _initializeKycClient() async {
-    final dio = await _createAuthenticatedClient('kyc.espressocash.com');
-    _kycClient = KycServiceClient(dio, baseUrl: config.storageBaseUrl);
+  Future<void> _initializeStorageClient() async {
+    final dio = await _createAuthenticatedClient('storage.brij.fi');
+    _storageClient = StorageServiceClient(dio, baseUrl: config.storageBaseUrl);
   }
 
   Future<void> _initializeValidatorClient() async {
-    final dio = await _createAuthenticatedClient('validator.espressocash.com');
-    _validatorClient = ValidatorServiceClient(dio, baseUrl: config.validatorBaseUrl);
+    final dio = await _createAuthenticatedClient('verifier.brij.fi');
+    _validatorClient =
+        ValidatorServiceClient(dio, baseUrl: config.validatorBaseUrl);
   }
 
   Future<void> _initializeOrderClient() async {
@@ -164,7 +167,7 @@ class KycUserClient {
 
   Future<void> _initStorage({required String walletAddress}) async {
     final proofSignature = await sign(utf8.encode(_proofMessage));
-    await _kycClient.kycServiceInitStorage(
+    await _storageClient.storageServiceInitStorage(
       body: V1InitStorageRequest(
         walletAddress: walletAddress,
         message: _seedMessage,
@@ -176,9 +179,12 @@ class KycUserClient {
     );
   }
 
-  Future<PartnerModel> getPartnerInfo({required String partnerPK}) => _kycClient
-      .kycServiceGetPartnerInfo(body: V1GetPartnerInfoRequest(id: partnerPK))
-      .then((e) => PartnerModel.fromJson(e.toJson()));
+  Future<PartnerModel> getPartnerInfo({required String partnerPK}) =>
+      _storageClient
+          .storageServiceGetPartnerInfo(
+            body: V1GetPartnerInfoRequest(id: partnerPK),
+          )
+          .then((e) => PartnerModel.fromJson(e.toJson()));
 
   Future<void> grantPartnerAccess(String partnerPK) async {
     final partnerEdPK = Uint8List.fromList(base58.decode(partnerPK));
@@ -196,9 +202,9 @@ class KycUserClient {
       sealedBox.encrypt(Uint8List.fromList(base58.decode(_rawSecretKey))),
     );
 
-    await _kycClient.kycServiceGrantAccess(
+    await _storageClient.storageServiceGrantAccess(
       body: V1GrantAccessRequest(
-        validatorPublicKey: partnerPK,
+        partnerPublicKey: partnerPK,
         encryptedSecretKey: encodedSecretKey,
       ),
     );
@@ -216,70 +222,86 @@ class KycUserClient {
     final dataList = [
       if (email != null)
         (
-          data: proto.WrappedData(email: email.value),
+          data: proto.Email(value: email.value),
+          type: V1DataType.dataTypeEmail,
           id: email.id,
         ),
       if (phone != null)
         (
-          data: proto.WrappedData(phone: phone.value),
+          data: proto.Phone(value: phone.value),
+          type: V1DataType.dataTypePhone,
           id: phone.id,
         ),
       if (name != null)
         (
-          data: proto.WrappedData(
-            name: proto.Name(
-              firstName: name.firstName,
-              lastName: name.lastName,
-            ),
+          data: proto.Name(
+            firstName: name.firstName,
+            lastName: name.lastName,
           ),
+          type: V1DataType.dataTypeName,
           id: name.id,
         ),
       if (document != null)
         (
-          data: proto.WrappedData(
-            document: proto.Document(
-              number: document.number,
-              type: document.type.toDocumentType(),
-              countryCode: document.countryCode,
-            ),
+          data: proto.Document(
+            number: document.number,
+            type: document.type.toDocumentType(),
+            countryCode: document.countryCode,
           ),
+          type: V1DataType.dataTypeDocument,
           id: document.id,
         ),
       if (bankInfo != null)
         (
-          data: proto.WrappedData(
-            bankInfo: proto.BankInfo(
-              bankName: bankInfo.bankName,
-              accountNumber: bankInfo.accountNumber,
-              bankCode: bankInfo.bankCode,
-            ),
+          data: proto.BankInfo(
+            bankName: bankInfo.bankName,
+            accountNumber: bankInfo.accountNumber,
+            bankCode: bankInfo.bankCode,
           ),
+          type: V1DataType.dataTypeBankInfo,
           id: bankInfo.id,
         ),
       if (dob != null)
         (
-          data: proto.WrappedData(birthDate: Timestamp.fromDateTime(dob.value)),
+          data: proto.BirthDate(
+            value: Timestamp.fromDateTime(
+              DateTime.utc(dob.value.year, dob.value.month, dob.value.day),
+            ),
+          ),
+          type: V1DataType.dataTypeBirthDate,
           id: dob.id
         ),
       if (selfie != null)
         (
-          data: proto.WrappedData(selfieImage: selfie.value),
+          data: proto.SelfieImage(value: selfie.value),
+          type: V1DataType.dataTypeSelfieImage,
           id: selfie.id,
         ),
     ];
 
     for (final item in dataList) {
       final protoData = item.data.writeToBuffer();
-      final encryptedData = await encryptAndSign(
+      final encryptedData = encrypt(
         data: protoData,
         secretBox: _secretBox,
-        signingKey: _signingKey,
       );
 
-      await _kycClient.kycServiceSetUserData(
+      final hash = generateHash(item.data);
+      final message = '${item.type}|$hash';
+      final signature = _signingKey.sign(utf8.encode(message));
+
+      if (item.id.isNotEmpty) {
+        await _storageClient.storageServiceRemoveUserData(
+          body: V1RemoveUserDataRequest(id: item.id),
+        );
+      }
+
+      await _storageClient.storageServiceSetUserData(
         body: V1SetUserDataRequest(
-          id: item.id,
-          encryptedData: base64Encode(encryptedData),
+          type: item.type,
+          encryptedValue: base64Encode(encryptedData),
+          hash: hash,
+          signature: base58.encode(signature.signature.asTypedList),
         ),
       );
     }
@@ -288,9 +310,13 @@ class KycUserClient {
   Future<UserData> getUserData({
     required String userPK,
     required String secretKey,
+    bool includeValues = true,
   }) async {
-    final response = await _kycClient.kycServiceGetUserData(
-      body: V1GetUserDataRequest(userPublicKey: userPK),
+    final response = await _storageClient.storageServiceGetUserData(
+      body: V1GetUserDataRequest(
+        userPublicKey: userPK,
+        includeValues: includeValues,
+      ),
     );
 
     return processUserData(
@@ -385,14 +411,14 @@ class KycUserClient {
     required String bankAccount,
   }) async {
     final encryptedBankName = base64Encode(
-      encryptOnly(
+      encrypt(
         data: utf8.encode(bankName),
         secretBox: _secretBox,
       ),
     );
 
     final encryptedBankAccount = base64Encode(
-      encryptOnly(
+      encrypt(
         data: utf8.encode(bankAccount),
         secretBox: _secretBox,
       ),
