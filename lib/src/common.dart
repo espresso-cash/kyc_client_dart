@@ -53,6 +53,10 @@ Uint8List decrypt({
   required String encryptedData,
   required String secretKey,
 }) {
+  if (encryptedData.isEmpty) {
+    return Uint8List(0);
+  }
+
   final box = SecretBox(Uint8List.fromList(base58.decode(secretKey)));
   final data = base64Decode(encryptedData);
 
@@ -114,7 +118,6 @@ UserData _processUserData({
   BankInfo? bankInfo;
   Selfie? selfie;
 
-  // Process user data
   for (final encryptedData in response.userData) {
     final decryptedData = decrypt(
       encryptedData: encryptedData.encryptedValue,
